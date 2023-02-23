@@ -15,7 +15,7 @@ const { subscribe: subscribe_logs, update: update_logs } = writable<string[]>([]
 type StoreType = Parameters<typeof subscribe>["0"] extends (value: infer ActualType) => unknown ? ActualType : never;
 
 function merge_state(state: Partial<StoreType>) {
-	update(previous_state => ({ ...previous_state, state }));
+	update(previous_state => ({ ...previous_state, ...state }));
 }
 
 export const logs = { subscribe: subscribe_logs };
@@ -41,6 +41,7 @@ export const webcontainer = {
 	async run_dev_server() {
 		webcontainer_instance.spawn("npm", ["run", "dev"]);
 		webcontainer_instance.on("server-ready", (port, url) => {
+			console.log({ url });
 			merge_state({ iframe_url: url });
 		});
 	}

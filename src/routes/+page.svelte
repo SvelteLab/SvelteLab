@@ -2,21 +2,22 @@
 	import { webcontainer, logs } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	onMount(async () => {
-		debugger;
-		// await webcontainer.install_dependencies();
-		// webcontainer.run_dev_server();
+		await webcontainer.install_dependencies();
+		webcontainer.run_dev_server();
 	});
 </script>
 
-test
-
-<!-- <textarea
+<textarea
 	value={$webcontainer.current_file}
 	on:input={(e) => {
 		webcontainer.update_file($webcontainer.current_path, e.currentTarget.value);
 	}}
 />
-<iframe title="content" src={$webcontainer.iframe_url} />
-{#each $logs as log}
-	<div>{log}</div>
-{/each} -->
+{#key $webcontainer.iframe_url}
+	<iframe title="content" src={$webcontainer.iframe_url} />
+{/key}
+<div style="max-height: 10rem; overflow-y: auto;">
+	{#each $logs as log}
+		<div>{log}</div>
+	{/each}
+</div>

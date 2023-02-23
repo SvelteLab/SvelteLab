@@ -1,10 +1,9 @@
 export const vite_config = `import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
+import type { UserConfig } from 'vite';
 
-export default defineConfig({
-	plugins: [sveltekit()],
-	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
-	}
-});
+const config: UserConfig = {
+    plugins: [sveltekit()],
+};
+
+export default config;
 `; 
