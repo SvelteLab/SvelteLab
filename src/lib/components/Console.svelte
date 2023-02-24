@@ -12,6 +12,8 @@
 
 <style>
 	ul {
+		width: 100%;
+		height: 100%;
 		background-color: #222;
 		color: #eee;
 		margin: 0;

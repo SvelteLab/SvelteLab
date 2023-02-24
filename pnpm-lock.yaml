@@ -15,6 +15,7 @@ specifiers:
   prettier-plugin-svelte: ^2.8.1
   svelte: ^3.54.0
   svelte-check: ^3.0.1
+  svelte-splitpanes: ^0.7.12
   tslib: ^2.4.1
   typescript: ^4.9.3
   vite: ^4.0.0
@@ -23,6 +24,7 @@ specifiers:
 dependencies:
   '@webcontainer/api': 1.0.2
   ansi-to-html: 0.7.2
+  svelte-splitpanes: 0.7.12_svelte@3.55.1
 
 devDependencies:
   '@playwright/test': 1.31.1
@@ -1729,10 +1731,17 @@ packages:
       typescript: 4.9.5
     dev: true
 
+  /svelte-splitpanes/0.7.12_svelte@3.55.1:
+    resolution: {integrity: sha512-RvsuquOw66AYWNxZZH1POWufrVcb3qwh2ZnlVUEF8qnHyH4kW7jNStxNFdpWMVevv3s3wTGuQz5a6nrx1hkUZA==}
+    peerDependencies:
+      svelte: ^3.54.0
+    dependencies:
+      svelte: 3.55.1
+    dev: false
+
   /svelte/3.55.1:
     resolution: {integrity: sha512-S+87/P0Ve67HxKkEV23iCdAh/SX1xiSfjF1HOglno/YTbSTW7RniICMCofWGdJJbdjw3S+0PfFb1JtGfTXE0oQ==}
     engines: {node: '>= 8'}
-    dev: true
 
   /text-table/0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
