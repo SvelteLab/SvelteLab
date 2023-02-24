@@ -45,6 +45,6 @@
 	}
 	.console {
 		grid-column: 1/-1;
-		overflow: auto;
+		overflow: hidden;
 	}
 </style>
