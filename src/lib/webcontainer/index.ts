@@ -7,7 +7,7 @@ import { files } from './files';
  * the web container.
  */
 const recursive_warning_proxy_traps: ProxyHandler<never> = {
-	get(_, field) {
+	get() {
 		return new Proxy(new Function(), recursive_warning_proxy_traps);
 	},
 	apply() {
