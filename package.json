@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@webcontainer/api": "^1.0.2"
+		"@webcontainer/api": "^1.0.2",
+		"ansi-to-html": "^0.7.2"
 	}
 }
