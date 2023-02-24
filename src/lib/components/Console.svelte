@@ -3,7 +3,9 @@
 	import { logs } from '$lib/webcontainer';
 	import Convert from 'ansi-to-html';
 	import DOMPurify from 'dompurify';
+	import { tick } from 'svelte';
 	import VirtualList from 'svelte-tiny-virtual-list';
+	import { onMount } from 'svelte';
 
 	const convert = new Convert();
 	const VOID_LINES = 3;
@@ -15,6 +17,11 @@
 	export const update_height = () => {
 		height = ul ? +getComputedStyle(ul).height.replace('px', '') : 0;
 	};
+
+	onMount(async () => {
+		await tick();
+		update_height();
+	});
 </script>
 
 <ul bind:this={ul}>
