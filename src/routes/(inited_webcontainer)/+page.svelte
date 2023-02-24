@@ -1,16 +1,23 @@
 <script lang="ts">
-	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Console from '$lib/components/Console.svelte';
 	import Editor from '$lib/components/Editor.svelte';
-	import { webcontainer, logs } from '$lib/webcontainer';
+	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
+	import { Pane, Splitpanes } from 'svelte-splitpanes';
+
 	onMount(async () => {
 		await webcontainer.install_dependencies();
 		webcontainer.run_dev_server();
 	});
+
+	function handle_pane() {
+		update_height();
+	}
+
+	let update_height: () => void;
 </script>
 
-<Splitpanes horizontal>
+<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 	<Pane>
 		<Splitpanes>
 			<Pane>
@@ -23,7 +30,7 @@
 			</Pane>
 		</Splitpanes>
 	</Pane>
-	<Pane><Console /></Pane>
+	<Pane><Console bind:update_height /></Pane>
 </Splitpanes>
 
 <style>
