@@ -1,14 +1,27 @@
 <script lang="ts">
-	import { logs } from '$lib/webcontainer';
 	import { UNICODE_CONSOLE_CONTROLS } from '$lib/utils/regex';
-	import VirtualList from 'svelte-tiny-virtual-list';
+	import { logs } from '$lib/webcontainer';
 	import Convert from 'ansi-to-html';
 	import DOMPurify from 'dompurify';
+	import { tick } from 'svelte';
+	import VirtualList from 'svelte-tiny-virtual-list';
+	import { onMount } from 'svelte';
+
 	const convert = new Convert();
 	const VOID_LINES = 3;
 	let ul: HTMLUListElement;
-	$: height = ul ? +getComputedStyle(ul).height.replace('px', '') : 0;
+	let height = 300;
+
 	$: filteredLogs = $logs.filter((log) => !UNICODE_CONSOLE_CONTROLS.test(log) && log.trim());
+
+	export const update_height = () => {
+		height = ul ? +getComputedStyle(ul).height.replace('px', '') : 0;
+	};
+
+	onMount(async () => {
+		await tick();
+		update_height();
+	});
 </script>
 
 <ul bind:this={ul}>
@@ -33,6 +46,10 @@
 
 <style>
 	ul {
+		grid-column: 1/-1;
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
 		background-color: #222;
 		color: #eee;
 		margin: 0;

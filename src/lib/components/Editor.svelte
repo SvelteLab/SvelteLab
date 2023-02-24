@@ -11,6 +11,8 @@
 
 <style>
 	textarea {
+		width: 100%;
+		height: 100%;
 		background-color: #111;
 		color: #eee;
 		resize: none;
