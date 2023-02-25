@@ -7,7 +7,10 @@
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import { onMount } from 'svelte';
 
-	const convert = new Convert();
+	let convert = new Convert({
+		fg: 'var(--sk-code-base)'
+	});
+
 	const VOID_LINES = 3;
 	let ul: HTMLUListElement;
 	let height = 300;
