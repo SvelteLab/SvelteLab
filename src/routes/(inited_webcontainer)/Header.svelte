@@ -54,10 +54,15 @@
 	}
 
 	button {
-		height: 1.5em;
-		width: 1.5em;
+		font-size: 1.25em;
 		display: grid;
 		place-items: center;
+	}
+
+	button > :global(svg) {
+		/* override site-kit */
+		height: initial !important;
+		width: initial !important;
 	}
 
 	span {
