@@ -20,7 +20,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		font-size: 5em;
+		font-size: 3em;
 	}
 	.loader span {
 		font-size: 1em;
