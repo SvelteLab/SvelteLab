@@ -1,12 +1,12 @@
 <script>
-	import Fork from '~icons/cil/fork';
-	import ConfigFiles from '~icons/eos-icons/configuration-file';
-	import PanelBottom from '~icons/fluent/panel-bottom-20-filled';
-	import PanelLeft from '~icons/fluent/panel-left-20-filled';
-	import Login from '~icons/material-symbols/login';
-	import Save from '~icons/material-symbols/save';
-	import NewFile from '~icons/mdi/file-document-add';
-	import NewFolder from '~icons/mdi/folder-add';
+	import Fork from '~icons/akar-icons/copy'
+	import ConfigFiles from '~icons/akar-icons/settings-horizontal'
+	import PanelBottom from '~icons/akar-icons/panel-bottom'
+	import PanelLeft from '~icons/akar-icons/panel-left';
+	import Login from '~icons/akar-icons/face-happy';
+	import Save from '~icons/akar-icons/cloud';
+	import NewFile from '~icons/akar-icons/file';
+	import NewFolder from '~icons/akar-icons/folder-add';
 </script>
 
 <header>

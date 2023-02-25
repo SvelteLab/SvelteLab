@@ -4,7 +4,6 @@
 	import '@sveltejs/site-kit/styles/index.css';
 	import '../../styles/global.css';
 	import Booting from '~icons/line-md/loading-alt-loop';
-	import Deps from '~icons/line-md/downloading-loop';
 	onMount(() => {
 		//this is to interact with the filesistem
 		//from the console...we can remove it later
