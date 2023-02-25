@@ -1,8 +1,12 @@
 <script>
 	import '@sveltejs/site-kit/styles/index.css';
+	import InstallDeps from '~icons/line-md/downloading-loop';
 </script>
 
-Installing dependencies...
+<div class="loader">
+	<InstallDeps />
+	<span> Installing dependencies... </span>
+</div>
 
 <style>
 	:global(body) {
