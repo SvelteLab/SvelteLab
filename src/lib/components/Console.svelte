@@ -50,8 +50,8 @@
 		overflow: hidden;
 		width: 100%;
 		height: 100%;
-		background-color: #222;
-		color: #eee;
+		background-color: var(--sk-back-1);
+		color: var(--sk-code-base);
 		margin: 0;
 		font-family: monospace;
 		list-style: none;

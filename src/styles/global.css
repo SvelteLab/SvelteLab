@@ -1,3 +1,5 @@
+@import './theme.css';
+
 *,
 *::before,
 *::after {
@@ -9,4 +11,25 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	font-family: var(--sk-font);
+}
+
+body .splitpanes.default-theme .splitpanes__splitter {
+	background-color: var(--sk-back-4);
+	border: none;
+}
+
+body .splitpanes.default-theme .splitpanes__splitter::before,
+body .splitpanes.default-theme .splitpanes__splitter::after {
+	content: none;
+}
+
+body .default-theme.splitpanes--vertical > .splitpanes__splitter,
+body .default-theme .splitpanes--vertical > .splitpanes__splitter {
+	width: 2px;
+}
+
+body .default-theme.splitpanes--horizontal > .splitpanes__splitter,
+body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
+	height: 2px;
 }

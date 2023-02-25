@@ -13,8 +13,9 @@
 	textarea {
 		width: 100%;
 		height: 100%;
-		background-color: #111;
-		color: #eee;
+		background-color: var(--sk-back-1);
+		color: var(--sk-code-base);
+		border: none;
 		resize: none;
 	}
 </style>
