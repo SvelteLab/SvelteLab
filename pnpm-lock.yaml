@@ -4,6 +4,7 @@ specifiers:
   '@playwright/test': ^1.28.1
   '@sveltejs/adapter-auto': ^2.0.0
   '@sveltejs/kit': ^1.5.0
+  '@sveltejs/site-kit': ^3.2.2
   '@types/dompurify': ^2.4.0
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
@@ -25,6 +26,7 @@ specifiers:
   vitest: ^0.25.3
 
 dependencies:
+  '@sveltejs/site-kit': 3.2.2
   '@webcontainer/api': 1.0.2
   ansi-to-html: 0.7.2
   svelte-splitpanes: 0.7.12_svelte@3.55.1
@@ -375,6 +377,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@sveltejs/site-kit/3.2.2:
+    resolution: {integrity: sha512-HBLtfNdLr5Ykl8i8CvJcYjib7zMIJupg4T/omplp3ccpgpiUh26tk71vRG1+a6yMkfbfy0ShoPb9uwNril5cnw==}
+    dev: false
 
   /@sveltejs/vite-plugin-svelte/2.0.3_svelte@3.55.1+vite@4.1.4:
     resolution: {integrity: sha512-o+cguBFdwIGtRbNkYOyqTM7KvRUffxh5bfK4oJsWKG2obu+v/cbpT03tJrGl58C7tRXo/aEC0/axN5FVHBj0nA==}

@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/site-kit": "^3.2.2",
 		"@webcontainer/api": "^1.0.2",
 		"ansi-to-html": "^0.7.2",
 		"svelte-splitpanes": "^0.7.12"
