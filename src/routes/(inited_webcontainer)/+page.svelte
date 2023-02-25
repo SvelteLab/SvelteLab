@@ -4,6 +4,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
+	import Header from './Header.svelte';
 
 	onMount(async () => {
 		await webcontainer.install_dependencies();
@@ -17,23 +18,31 @@
 	let update_height: () => void;
 </script>
 
-<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-	<Pane>
-		<Splitpanes>
-			<Pane>
-				<Editor />
-			</Pane>
-			<Pane>
-				{#key $webcontainer.iframe_url}
-					<iframe title="content" src={$webcontainer.iframe_url} />
-				{/key}
-			</Pane>
-		</Splitpanes>
-	</Pane>
-	<Pane><Console bind:update_height /></Pane>
-</Splitpanes>
+<div class="grid">
+	<Header />
+	<Splitpanes class="main-pane" horizontal on:ready={handle_pane} on:resized={handle_pane}>
+		<Pane>
+			<Splitpanes>
+				<Pane>
+					<Editor />
+				</Pane>
+				<Pane>
+					{#key $webcontainer.iframe_url}
+						<iframe title="content" src={$webcontainer.iframe_url} />
+					{/key}
+				</Pane>
+			</Splitpanes>
+		</Pane>
+		<Pane><Console bind:update_height /></Pane>
+	</Splitpanes>
+</div>
 
 <style>
+	.grid {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
 	iframe {
 		width: 100%;
 		height: 100%;

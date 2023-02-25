@@ -17,5 +17,6 @@
 		color: var(--sk-code-base);
 		border: none;
 		resize: none;
+		padding: 0.75em
 	}
 </style>
