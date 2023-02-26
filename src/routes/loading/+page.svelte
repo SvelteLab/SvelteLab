@@ -1,5 +1,5 @@
 <script>
-	import '@sveltejs/site-kit/styles/index.css';
+	import '../../styles/global.css';
 	import InstallDeps from '~icons/line-md/downloading-loop';
 </script>
 

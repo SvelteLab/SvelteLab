@@ -31,4 +31,5 @@ export const global_css = `:root {
 	background-color: var(--sk-back-2);
 	color: var(--sk-text-1);
 	margin: 0.75em;
+	font-family: var(--sk-font);
  }`;
