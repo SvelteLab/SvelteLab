@@ -1,6 +1,6 @@
-import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
-import { WebContainer } from '@webcontainer/api';
-import { get, readable, writable } from "svelte/store";
+import { get_file_from_path } from '$lib/utils/file_system';
+import { WebContainer, type DirEnt, type FileSystemTree } from '@webcontainer/api';
+import { get, readable, writable } from 'svelte/store';
 import { files as starting_files } from './files';
 
 /**
@@ -12,7 +12,7 @@ const recursive_warning_proxy_traps: ProxyHandler<never> = {
 		return new Proxy(new Function(), recursive_warning_proxy_traps);
 	},
 	apply() {
-		throw new Error("You have to init the webcontainer before using it.");
+		throw new Error('You have to init the webcontainer before using it.');
 	}
 };
 
@@ -21,19 +21,26 @@ const recursive_warning_proxy_traps: ProxyHandler<never> = {
  * initialization. This is so we can avoid checking for the webcontainer instance presence
  * in every method.
  */
-let webcontainer_instance = new Proxy<WebContainer>({} as WebContainer, recursive_warning_proxy_traps);
+let webcontainer_instance = new Proxy<WebContainer>(
+	{} as WebContainer,
+	recursive_warning_proxy_traps
+);
 
 const { subscribe, update } = writable({
 	current_file: starting_files.src.directory.routes.directory['+page.svelte'].file.contents,
 	current_path: './src/routes/+page.svelte',
-	iframe_url: './loading',
+	iframe_url: './loading'
 });
 const { subscribe: subscribe_logs, update: update_logs } = writable<string[]>([]);
 
-type WebcontainerStoreType = Parameters<typeof subscribe>["0"] extends (value: infer ActualType) => unknown ? ActualType : never;
+type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
+	value: infer ActualType
+) => unknown
+	? ActualType
+	: never;
 
 function merge_state(state: Partial<WebcontainerStoreType>) {
-	update(previous_state => ({ ...previous_state, ...state }));
+	update((previous_state) => ({ ...previous_state, ...state }));
 }
 
 /**
@@ -44,13 +51,15 @@ function merge_state(state: Partial<WebcontainerStoreType>) {
  * @returns the exit code of the command
  */
 async function run_command(cmd: string) {
-	const [command, ...args] = cmd.split(" ");
+	const [command, ...args] = cmd.split(' ');
 	const process = await webcontainer_instance.spawn(command, args);
-	process.output.pipeTo(new WritableStream({
-		write(data) {
-			update_logs(prev => [...prev, data]);
-		}
-	}));
+	process.output.pipeTo(
+		new WritableStream({
+			write(data) {
+				update_logs((prev) => [...prev, data]);
+			}
+		})
+	);
 	return process.exit;
 }
 
@@ -71,7 +80,6 @@ export const files = readable(starting_files);
  */
 export const in_memory_fs = writable(starting_files);
 
-
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -82,10 +90,14 @@ export const webcontainer = {
 	 */
 	async init() {
 		if (webcontainer_instance instanceof WebContainer) {
-			console.warn("You are trying to init the webcontainer multiple times and that's not permitted. Check your code!");
+			console.warn(
+				"You are trying to init the webcontainer multiple times and that's not permitted. Check your code!"
+			);
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
+		const cached = get_file_system_from_local_storage();
+		console.log(cached);
 		webcontainer_instance.mount(starting_files);
 	},
 	/**
@@ -94,7 +106,7 @@ export const webcontainer = {
 	 * @param path the path to the file to open.
 	 */
 	async open_file(path: string) {
-		const current_file = await webcontainer_instance.fs.readFile(path, "utf8");
+		const current_file = await webcontainer_instance.fs.readFile(path, 'utf8');
 		merge_state({ current_file, current_path: path });
 	},
 	/**
@@ -111,22 +123,68 @@ export const webcontainer = {
 		subtree.contents = content;
 		in_memory_fs.set(get(in_memory_fs));
 	},
+
 	/**
 	 * Run the initial npm install
 	 * @returns a promise that fulfill when the command has finished to run
 	 */
 	async install_dependencies() {
-		return run_command("npm install");
+		return run_command('npm install');
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
 	 * to update the iframe url;
 	 */
 	async run_dev_server() {
-		run_command("npm run dev");
-		webcontainer_instance.on("server-ready", (port, url) => {
+		run_command('npm run dev');
+		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ iframe_url: url });
 		});
 	},
 	run_command,
+
+	/**
+	 * Returns the current file system
+	 */
+	async save(): Promise<void> {
+		const tree = await get_file_system_from_webcontainer();
+		console.log('saving_tree', tree);
+		// todo make object-ified arrays iterable
+		localStorage.setItem('FS_tree', JSON.stringify(tree));
+	}
 };
+
+function get_file_system_from_local_storage() {
+	const string = localStorage.getItem('FS_tree');
+	if (!string) return;
+	return JSON.parse(string);
+}
+
+async function get_file_system_from_webcontainer(): Promise<FileSystemTree> {
+	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
+	return get_tree(root, '/');
+}
+async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystemTree> {
+	const tree: FileSystemTree = {};
+	for (const node of dir) {
+		const file_path = path + node.name;
+		console.log('READING: ' + file_path + (node.isDirectory() ? '/' : ''));
+		if (node.isFile()) {
+			tree[node.name] = {
+				file: {
+					contents: await webcontainer_instance.fs.readFile(file_path)
+				}
+			};
+		} else if (node.isDirectory() && !ignore_list.includes(node.name)) {
+			tree[node.name] = {
+				directory: await get_tree(
+					await webcontainer_instance.fs.readdir(file_path, { withFileTypes: true }),
+					file_path + '/'
+				)
+			};
+		}
+	}
+	return tree;
+}
+
+const ignore_list = ['.svelte-kit'];

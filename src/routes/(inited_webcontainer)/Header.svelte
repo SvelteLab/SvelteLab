@@ -1,12 +1,15 @@
 <script>
-	import Fork from '~icons/akar-icons/copy'
-	import ConfigFiles from '~icons/akar-icons/settings-horizontal'
-	import PanelBottom from '~icons/akar-icons/panel-bottom'
-	import PanelLeft from '~icons/akar-icons/panel-left';
-	import Login from '~icons/akar-icons/face-happy';
+	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
+	import Fork from '~icons/akar-icons/copy';
+	import Login from '~icons/akar-icons/face-happy';
 	import NewFile from '~icons/akar-icons/file';
 	import NewFolder from '~icons/akar-icons/folder-add';
+	import PanelBottom from '~icons/akar-icons/panel-bottom';
+	import PanelLeft from '~icons/akar-icons/panel-left';
+	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
+
+	let saving = new Promise((resolve) => resolve(null));
 </script>
 
 <header>
@@ -34,8 +37,17 @@
 		<Fork />
 	</button>
 
-	<button title="Save Changes">
-		<Save />
+	<button
+		title="Save Changes"
+		on:click={async () => {
+			saving = webcontainer.save();
+		}}
+	>
+		{#await saving}
+			...
+		{:then _}
+			<Save />
+		{/await}
 	</button>
 
 	<button title="Login">
