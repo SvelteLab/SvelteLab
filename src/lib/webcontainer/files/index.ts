@@ -7,15 +7,15 @@ import { page_svelte } from './page_svelte';
 import { svelte_config } from './svelte_config_js';
 import { vite_config } from './vite_config_ts';
 
-export interface DirectoryNodeWithOpen extends DirectoryNode {
+export interface DirectoryNodeExtended extends DirectoryNode {
 	open?: boolean;
 }
-export interface FileNodeWithOpen extends FileNode {
+export interface FileNodeExtended extends FileNode {
 	open?: boolean;
 }
 
-export interface FileSystemTreeWithOpens extends FileSystemTree {
-	[name: string]: DirectoryNodeWithOpen | FileNodeWithOpen;
+export interface FileSystemTreeExtended extends FileSystemTree {
+	[name: string]: DirectoryNodeExtended | FileNodeExtended;
 }
 
 export const files = {
@@ -62,4 +62,4 @@ export const files = {
 			contents: svelte_config
 		}
 	}
-} satisfies FileSystemTreeWithOpens;
+} satisfies FileSystemTreeExtended;
