@@ -72,12 +72,6 @@
 		place-items: center;
 	}
 
-	button > :global(svg) {
-		/* override site-kit */
-		height: initial !important;
-		width: initial !important;
-	}
-
 	span {
 		margin-left: 2em;
 		flex-grow: 1;
