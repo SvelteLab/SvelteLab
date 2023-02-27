@@ -39,9 +39,23 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@codemirror/autocomplete": "^6.0.0",
+		"@codemirror/lang-css": "^6.0.1",
+		"@codemirror/lang-html": "^6.2.0",
+		"@codemirror/lang-javascript": "^6.1.1",
+		"@codemirror/language": "^6.0.0",
+		"@codemirror/state": "^6.0.0",
+		"@codemirror/view": "^6.0.0",
+		"@lezer/common": "^1.0.0",
+		"@lezer/highlight": "^1.0.0",
+		"@lezer/javascript": "^1.2.0",
+		"@lezer/lr": "^1.0.0",
+		"@replit/codemirror-lang-svelte": "^6.0.0",
 		"@sveltejs/site-kit": "^3.2.2",
 		"@webcontainer/api": "^1.0.2",
 		"ansi-to-html": "^0.7.2",
+		"codemirror": "^6.0.1",
+		"svelte-codemirror-editor": "^1.1.0",
 		"svelte-splitpanes": "^0.7.12"
 	}
 }
