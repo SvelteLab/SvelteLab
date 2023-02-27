@@ -1,12 +1,9 @@
-import type { DirectoryNodeWithOpen, FileNodeWithOpen, FileSystemTreeWithOpens } from "$lib/webcontainer/files";
+import type { FileSystemTreeExtended } from "$lib/webcontainer/files";
+import { is_dir } from "./runtime-assertions";
 
-export function is_dir(file: DirectoryNodeWithOpen | FileNodeWithOpen): file is DirectoryNodeWithOpen {
-	return "directory" in file;
-}
-
-export function get_file_from_path(base_path: string, files: FileSystemTreeWithOpens) {
+export function get_file_from_path(base_path: string, files: FileSystemTreeExtended) {
 	const path = base_path.split(/\.?\//);
-	let subtree: FileSystemTreeWithOpens = files;
+	let subtree: FileSystemTreeExtended = files;
 	for (let index = 0; index < path.length; index++) {
 		const path_part = path[index];
 		if (path_part) {
@@ -21,9 +18,9 @@ export function get_file_from_path(base_path: string, files: FileSystemTreeWithO
 	throw new Error("You are trying to get the file content of a folder");
 }
 
-export function get_subtree_from_path(base_path: string, files: FileSystemTreeWithOpens) {
+export function get_subtree_from_path(base_path: string, files: FileSystemTreeExtended) {
 	const path = base_path.split(/\.?\//);
-	let subtree: FileSystemTreeWithOpens = files;
+	let subtree: FileSystemTreeExtended = files;
 	for (let index = 0; index < path.length; index++) {
 		const path_part = path[index];
 		if (path_part) {

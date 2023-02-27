@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { get_subtree_from_path, is_dir } from '$lib/utils/file_system';
+	import { get_subtree_from_path } from '$lib/utils/file_system';
 	import { get_icon } from '$lib/utils/icons';
+	import { is_dir } from '$lib/utils/runtime-assertions';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
 	import Folder from '~icons/akar-icons/folder';
 	export let base_path = './';

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { UNICODE_CONSOLE_CONTROLS } from '$lib/utils/regex';
+	import { is_html_element } from '$lib/utils/runtime-assertions';
 	import { logs } from '$lib/webcontainer';
 	import Convert from 'ansi-to-html';
 	import DOMPurify from 'dompurify';
@@ -12,6 +13,7 @@
 
 	const VOID_LINES = 3;
 	let ul: HTMLUListElement;
+	let virtualList: VirtualList;
 	let height = 300;
 
 	$: filteredLogs = $logs.filter((log) => !UNICODE_CONSOLE_CONTROLS.test(log) && log.trim());
@@ -19,6 +21,28 @@
 	export const update_height = () => {
 		height = ul ? +getComputedStyle(ul).height.replace('px', '') : 0;
 	};
+
+	const heights_map = new Map<number, number>();
+
+	function children_height(node: Node, index: number) {
+		const maybe_span = node.firstChild;
+		if (maybe_span && is_html_element(maybe_span)) {
+			const actualHeight = maybe_span.getBoundingClientRect().height;
+			heights_map.set(index, actualHeight);
+			if (actualHeight > 25) {
+				virtualList.recomputeSizes(0);
+			}
+		}
+	}
+
+	const cached_html = new Map<string, string>();
+
+	function get_html(log: string) {
+		if (cached_html.has(log)) return cached_html.get(log)!;
+		const html = DOMPurify.sanitize(convert.toHtml(log));
+		cached_html.set(log, html);
+		return html;
+	}
 
 	onMount(async () => {
 		setTimeout(() => {
@@ -29,7 +53,8 @@
 
 <ul bind:this={ul}>
 	<VirtualList
-		itemSize={25}
+		bind:this={virtualList}
+		itemSize={(index) => heights_map.get(index) ?? 25}
 		width="100%"
 		{height}
 		itemCount={filteredLogs.length + VOID_LINES}
@@ -37,9 +62,9 @@
 		scrollToAlignment="end"
 		scrollToIndex={filteredLogs.length + VOID_LINES - 1}
 	>
-		<li slot="item" let:index let:style {style}>
+		<li use:children_height={index} slot="item" let:index let:style {style}>
 			{#if filteredLogs[index]}
-				{@html DOMPurify.sanitize(convert.toHtml(filteredLogs[index]))}
+				{@html get_html(filteredLogs[index])}
 			{:else}
 				&nbsp;
 			{/if}
