@@ -1,15 +1,31 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
+	import { svelte } from '@replit/codemirror-lang-svelte';
+
+	import CodeMirror from 'svelte-codemirror-editor';
 </script>
 
-<textarea
+<CodeMirror
+	lang={svelte()}
 	value={$webcontainer.current_file}
-	on:input={(e) => {
-		webcontainer.update_file($webcontainer.current_path, e.currentTarget.value);
+	on:change={(e) => {
+		webcontainer.update_file($webcontainer.current_path, e.detail);
+	}}
+	styles={{
+		'&': {
+			width: '100%',
+			height: '100%',
+			overflow: 'auto'
+		}
 	}}
 />
 
 <style>
+	:global(.codemirror-wrapper) {
+		width: 100%;
+		height: 100%;
+	}
+
 	textarea {
 		width: 100%;
 		height: 100%;
