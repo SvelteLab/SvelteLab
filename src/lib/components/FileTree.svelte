@@ -23,9 +23,9 @@
 			{@const icon = get_icon(file)}
 			{@const path = base_path + file}
 			<li class:open={$webcontainer.current_path === path}>
-				<button on:click={() => webcontainer.open_file(path)}
-					><svelte:component this={icon} />{file}</button
-				>
+				<button on:click={() => webcontainer.open_file(path)}>
+					<svelte:component this={icon} />{file}
+				</button>
 			</li>
 		{/if}
 	{/each}
