@@ -163,8 +163,8 @@ async function get_tree_from_container(): Promise<FileSystemTree> {
 	return get_tree(root, '/');
 }
 
+const decoder = new TextDecoder();
 async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystemTree> {
-	const decoder = new TextDecoder();
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
 		const node_path = path + node.name;
