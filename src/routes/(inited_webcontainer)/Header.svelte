@@ -15,11 +15,21 @@
 </script>
 
 <header>
-	<button title="Toggle File Browser" on:click={layout_store.toggle_file_tree}>
+	<button
+		title="Toggle File Browser"
+		on:click={layout_store.toggle_file_tree}
+		class:active={$layout_store.file_tree}
+		aria-pressed={$layout_store.file_tree}
+	>
 		<PanelLeft />
 	</button>
 
-	<button title="Toggle Terminal" on:click={layout_store.toggle_terminal}>
+	<button
+		title="Toggle Terminal"
+		on:click={layout_store.toggle_terminal}
+		class:active={$layout_store.terminal}
+		aria-pressed={$layout_store.terminal}
+	>
 		<PanelBottom />
 	</button>
 
@@ -59,7 +69,7 @@
 
 <style>
 	header {
-		padding: 1em 1.5em;
+		padding: 0.75em 1.5em;
 		display: flex;
 		gap: 1em;
 		background-color: var(--sk-back-2);
@@ -71,6 +81,18 @@
 		font-size: 1.25em;
 		display: grid;
 		place-items: center;
+		position: relative;
+		padding-block: 0.25rem;
+	}
+
+	button.active::after {
+		content: '';
+		position: absolute;
+		background-color: var(--sk-theme-1);
+		right: 1px;
+		left: 1px;
+		bottom: 0;
+		top: calc(100% - 3px);
 	}
 
 	span {
