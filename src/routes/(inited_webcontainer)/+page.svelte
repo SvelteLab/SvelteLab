@@ -14,7 +14,7 @@
 	});
 
 	function handle_pane() {
-		update_height();
+		if (update_height) update_height();
 	}
 
 	let update_height: () => void;
@@ -22,12 +22,12 @@
 
 <div class="grid">
 	<Header />
-	<Splitpanes class="main-pane" on:ready={handle_pane} on:resized={handle_pane}>
+	<Splitpanes class="main-pane">
 		{#if $layout_store.file_tree}
 			<Pane size={20} minSize={5}><FileTree /></Pane>
 		{/if}
 		<Pane>
-			<Splitpanes horizontal>
+			<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 				<Pane>
 					<Splitpanes>
 						<Pane>

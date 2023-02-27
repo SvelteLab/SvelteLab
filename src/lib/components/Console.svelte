@@ -3,9 +3,8 @@
 	import { logs } from '$lib/webcontainer';
 	import Convert from 'ansi-to-html';
 	import DOMPurify from 'dompurify';
-	import { tick } from 'svelte';
-	import VirtualList from 'svelte-tiny-virtual-list';
 	import { onMount } from 'svelte';
+	import VirtualList from 'svelte-tiny-virtual-list';
 
 	let convert = new Convert({
 		fg: 'var(--sk-code-base)'
@@ -24,7 +23,7 @@
 	onMount(async () => {
 		setTimeout(() => {
 			update_height();
-		}, 200);
+		}, 200); // wait for toggle animation
 	});
 </script>
 
