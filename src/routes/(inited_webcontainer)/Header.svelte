@@ -9,16 +9,17 @@
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
+	import { layout_store } from './layout_store';
 
 	let saving = new Promise((resolve) => resolve(null));
 </script>
 
 <header>
-	<button title="Toggle File Browser">
+	<button title="Toggle File Browser" on:click={layout_store.toggle_file_tree}>
 		<PanelLeft />
 	</button>
 
-	<button title="Toggle Terminal">
+	<button title="Toggle Terminal" on:click={layout_store.toggle_terminal}>
 		<PanelBottom />
 	</button>
 

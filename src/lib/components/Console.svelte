@@ -22,8 +22,9 @@
 	};
 
 	onMount(async () => {
-		await tick();
-		update_height();
+		setTimeout(() => {
+			update_height();
+		}, 200);
 	});
 </script>
 
