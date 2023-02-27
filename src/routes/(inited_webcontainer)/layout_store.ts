@@ -1,11 +1,11 @@
-import { writable } from 'svelte/store';
+import { persisted } from 'svelte-local-storage-store';
 
 interface LayoutStore {
 	file_tree: boolean;
 	terminal: boolean;
 }
 
-const { subscribe, update } = writable<LayoutStore>({
+const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: false,
 	terminal: false
 });
