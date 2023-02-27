@@ -74,6 +74,8 @@
 		gap: 1em;
 		background-color: var(--sk-back-2);
 		position: relative;
+		z-index: 2;
+		align-items: center;
 		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
 	}
 
