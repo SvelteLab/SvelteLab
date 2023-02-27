@@ -16,6 +16,9 @@
 			width: '100%',
 			height: '100%',
 			overflow: 'auto'
+		},
+		'*': {
+			'font-family': 'var(--sk-font-mono)'
 		}
 	}}
 />
