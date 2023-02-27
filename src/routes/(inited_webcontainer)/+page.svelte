@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
+	import { layout_store } from './layout_store';
 
 	onMount(async () => {
 		await webcontainer.install_dependencies();
@@ -13,7 +14,7 @@
 	});
 
 	function handle_pane() {
-		update_height();
+		if (update_height) update_height();
 	}
 
 	let update_height: () => void;
@@ -21,10 +22,12 @@
 
 <div class="grid">
 	<Header />
-	<Splitpanes class="main-pane" on:ready={handle_pane} on:resized={handle_pane}>
-		<Pane size={20}><FileTree /></Pane>
+	<Splitpanes class="main-pane">
+		{#if $layout_store.file_tree}
+			<Pane size={20} minSize={5}><FileTree /></Pane>
+		{/if}
 		<Pane>
-			<Splitpanes horizontal>
+			<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 				<Pane>
 					<Splitpanes>
 						<Pane>
@@ -37,7 +40,9 @@
 						</Pane>
 					</Splitpanes>
 				</Pane>
-				<Pane><Console bind:update_height /></Pane>
+				{#if $layout_store.terminal}
+					<Pane><Console bind:update_height /></Pane>
+				{/if}
 			</Splitpanes>
 		</Pane>
 	</Splitpanes>

@@ -29,6 +29,7 @@
 		"prettier-plugin-svelte": "^2.8.1",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
+		"svelte-local-storage-store": "^0.4.0",
 		"svelte-tiny-virtual-list": "^2.0.5",
 		"tslib": "^2.4.1",
 		"typescript": "^4.9.3",

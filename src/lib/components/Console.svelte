@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { UNICODE_CONSOLE_CONTROLS } from '$lib/utils/regex';
+	import { is_html_element } from '$lib/utils/runtime-assertions';
 	import { logs } from '$lib/webcontainer';
 	import Convert from 'ansi-to-html';
 	import DOMPurify from 'dompurify';
-	import { tick } from 'svelte';
-	import VirtualList from 'svelte-tiny-virtual-list';
 	import { onMount } from 'svelte';
-	import { is_html_element } from '$lib/utils/runtime-assertions';
+	import VirtualList from 'svelte-tiny-virtual-list';
 
 	let convert = new Convert({
 		fg: 'var(--sk-code-base)'
@@ -46,8 +45,9 @@
 	}
 
 	onMount(async () => {
-		await tick();
-		update_height();
+		setTimeout(() => {
+			update_height();
+		}, 200); // wait for toggle animation
 	});
 </script>
 

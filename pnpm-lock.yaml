@@ -19,6 +19,7 @@ specifiers:
   prettier-plugin-svelte: ^2.8.1
   svelte: ^3.54.0
   svelte-check: ^3.0.1
+  svelte-local-storage-store: ^0.4.0
   svelte-splitpanes: ^0.7.12
   svelte-tiny-virtual-list: ^2.0.5
   tslib: ^2.4.1
@@ -49,6 +50,7 @@ devDependencies:
   prettier-plugin-svelte: 2.9.0_jrsxveqmsx2uadbqiuq74wlc4u
   svelte: 3.55.1
   svelte-check: 3.0.4_svelte@3.55.1
+  svelte-local-storage-store: 0.4.0_svelte@3.55.1
   svelte-tiny-virtual-list: 2.0.5
   tslib: 2.5.0
   typescript: 4.9.5
@@ -1814,6 +1816,15 @@ packages:
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       svelte: '>=3.19.0'
+    dependencies:
+      svelte: 3.55.1
+    dev: true
+
+  /svelte-local-storage-store/0.4.0_svelte@3.55.1:
+    resolution: {integrity: sha512-ctPykTt4S3BE5bF0mfV0jKiUR1qlmqLvnAkQvYHLeb9wRyO1MdIFDVI23X+TZEFleATHkTaOpYZswIvf3b2tWA==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0
     dependencies:
       svelte: 3.55.1
     dev: true

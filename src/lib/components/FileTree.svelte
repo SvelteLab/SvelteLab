@@ -24,9 +24,9 @@
 			{@const icon = get_icon(file)}
 			{@const path = base_path + file}
 			<li class:open={$webcontainer.current_path === path}>
-				<button on:click={() => webcontainer.open_file(path)}
-					><svelte:component this={icon} />{file}</button
-				>
+				<button on:click={() => webcontainer.open_file(path)}>
+					<svelte:component this={icon} />{file}
+				</button>
 			</li>
 		{/if}
 	{/each}
@@ -36,7 +36,8 @@
 	ul {
 		list-style: none;
 		margin: 0;
-		padding: 1rem;
+		padding-block: 0.5rem;
+		padding-inline-start: 1rem;
 		background-color: var(--sk-back-1);
 		height: 100%;
 	}
@@ -52,9 +53,13 @@
 		white-space: nowrap;
 		padding: 0.5rem;
 	}
+	li:not(.open) {
+		filter: grayscale(100%);
+	}
 	li.open {
 		color: var(--sk-theme-1);
 		position: relative;
+		border-bottom-color: var(--sk-theme-1);
 	}
 	li.open::after {
 		content: '';
@@ -65,7 +70,8 @@
 	}
 	button {
 		display: flex;
-		gap: 0.5rem;
+		align-items: center;
+		gap: 0.75rem;
 		padding: 0;
 		border: 0;
 	}

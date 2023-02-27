@@ -46,3 +46,10 @@ body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
 .loader span {
 	font-size: 1em;
 }
+
+/* override site-kit */
+button > svg {
+	height: initial !important;
+	width: initial !important;
+	stroke: initial !important;
+}
