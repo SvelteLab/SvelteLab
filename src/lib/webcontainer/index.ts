@@ -1,6 +1,7 @@
+import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
 import { WebContainer } from '@webcontainer/api';
-import { writable } from "svelte/store";
-import { files } from './files';
+import { get, readable, writable } from "svelte/store";
+import { files as starting_files } from './files';
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -23,7 +24,7 @@ const recursive_warning_proxy_traps: ProxyHandler<never> = {
 let webcontainer_instance = new Proxy<WebContainer>({} as WebContainer, recursive_warning_proxy_traps);
 
 const { subscribe, update } = writable({
-	current_file: files.src.directory.routes.directory['+page.svelte'].file.contents,
+	current_file: starting_files.src.directory.routes.directory['+page.svelte'].file.contents,
 	current_path: './src/routes/+page.svelte',
 	iframe_url: './loading',
 });
@@ -60,6 +61,18 @@ async function run_command(cmd: string) {
 export const logs = { subscribe: subscribe_logs };
 
 /**
+ * Readable store for the file system tree, we duplicate this so that
+ * the file system tree does not have to re-evaluate every keystroke
+ */
+export const files = readable(starting_files);
+
+/**
+ * Writable store for the file system, we can save this to our storage
+ */
+export const in_memory_fs = writable(starting_files);
+
+
+/**
  * Ther actual webcontainer store with useful methods
  */
 export const webcontainer = {
@@ -73,7 +86,7 @@ export const webcontainer = {
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
-		webcontainer_instance.mount(files);
+		webcontainer_instance.mount(starting_files);
 	},
 	/**
 	 * Read the file from the file system of the webcontainer and set the content to the
@@ -92,6 +105,11 @@ export const webcontainer = {
 	 */
 	update_file(path: string, content: string) {
 		webcontainer_instance.fs.writeFile(path, content);
+		//get the file content from the path
+		const subtree = get_file_from_path(path, get(in_memory_fs));
+		//update the in memory store
+		subtree.contents = content;
+		in_memory_fs.set(get(in_memory_fs));
 	},
 	/**
 	 * Run the initial npm install
@@ -112,4 +130,3 @@ export const webcontainer = {
 	},
 	run_command,
 };
-
