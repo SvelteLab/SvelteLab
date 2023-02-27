@@ -69,11 +69,12 @@ async function run_command(cmd: string) {
 			}
 		})
 	);
-	return process.exit.then(() => {
+	return process.exit.then((code: number) => {
 		merge_state({
 			running_command: null,
 			running_process: null,
 		});
+        return code;
 	});
 }
 
