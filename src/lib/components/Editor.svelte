@@ -49,7 +49,8 @@
 			color: 'var(--sk-code-base)'
 		},
 		'*': {
-			'font-family': 'var(--sk-font-mono)'
+			'font-family': 'var(--sk-font-mono)',
+			'tab-size': 3
 		},
 		'.cm-gutters': {
 			border: 'none'
@@ -58,11 +59,20 @@
 			'background-color': 'var(--sk-code-bg)',
 			color: 'var(--sk-code-base)'
 		},
-		'.cm-activeLine': {
+		'.cm-line.cm-activeLine': {
 			'background-color': 'var(--sk-back-translucent)'
 		},
 		'.cm-activeLineGutter': {
 			'background-color': 'var(--sk-back-3)'
+		},
+		'.cm-focused.cm-selectionBackground': {
+			'background-color': 'var(--sk-back-4) !important'
+		},
+		'.cm-selectionBackground': {
+			'background-color': 'var(--sk-back-5) !important'
+		},
+		'.cm-cursor': {
+			'border-color': 'var(--sk-code-base)'
 		}
 	}}
 />
