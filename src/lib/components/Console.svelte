@@ -13,7 +13,7 @@
 
 	const VOID_LINES = 3;
 	let ul: HTMLUListElement;
-	let virtualList: VirtualList;
+	let virtual_list: VirtualList;
 	let height = 300;
 
 	$: filteredLogs = $logs.filter((log) => !UNICODE_CONSOLE_CONTROLS.test(log) && log.trim());
@@ -30,7 +30,7 @@
 			const actualHeight = maybe_span.getBoundingClientRect().height;
 			heights_map.set(index, actualHeight);
 			if (actualHeight > 25) {
-				virtualList.recomputeSizes(0);
+				virtual_list.recomputeSizes(0);
 			}
 		}
 	}
@@ -53,7 +53,7 @@
 
 <ul bind:this={ul}>
 	<VirtualList
-		bind:this={virtualList}
+		bind:this={virtual_list}
 		itemSize={(index) => heights_map.get(index) ?? 25}
 		width="100%"
 		{height}

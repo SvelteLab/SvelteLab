@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Console from '$lib/components/Console.svelte';
 	import Editor from '$lib/components/Editor.svelte';
-	import FileTree from '$lib/components/FileTree.svelte';
+	import FileActions from '$lib/components/FileActions.svelte';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
@@ -24,7 +24,7 @@
 	<Header />
 	<Splitpanes class="main-pane">
 		{#if $layout_store.file_tree}
-			<Pane size={20} minSize={5}><FileTree /></Pane>
+			<Pane size={20} minSize={5}><FileActions /></Pane>
 		{/if}
 		<Pane>
 			<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>

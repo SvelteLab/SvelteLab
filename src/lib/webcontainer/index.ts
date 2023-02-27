@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { get_file_from_path } from '$lib/utils/file_system';
-import { WebContainer, type DirEnt, type FileSystemTree } from '@webcontainer/api';
+import { WebContainer, type DirEnt, type FileSystemTree, type WebContainerProcess } from '@webcontainer/api';
 import { get, readable, writable } from 'svelte/store';
 import { files as default_files } from './files';
 
@@ -32,7 +32,9 @@ let webcontainer_instance = new Proxy<WebContainer>(
 const { subscribe, update } = writable({
 	current_file: initial_files.src.directory.routes.directory['+page.svelte'].file.contents,
 	current_path: './src/routes/+page.svelte',
-	iframe_url: './loading'
+	iframe_url: './loading',
+	running_command: null as string | null,
+	running_process: null as WebContainerProcess | null,
 });
 const { subscribe: subscribe_logs, update: update_logs } = writable<string[]>([]);
 
@@ -56,6 +58,10 @@ function merge_state(state: Partial<WebcontainerStoreType>) {
 async function run_command(cmd: string) {
 	const [command, ...args] = cmd.split(' ');
 	const process = await webcontainer_instance.spawn(command, args);
+	merge_state({
+		running_command: cmd,
+		running_process: process,
+	});
 	process.output.pipeTo(
 		new WritableStream({
 			write(data) {
@@ -63,7 +69,12 @@ async function run_command(cmd: string) {
 			}
 		})
 	);
-	return process.exit;
+	return process.exit.then(() => {
+		merge_state({
+			running_command: null,
+			running_process: null,
+		});
+	});
 }
 
 /**
@@ -81,7 +92,9 @@ export const files = readable(initial_files);
 /**
  * Writable store for the file system, we can save this to our storage
  */
-export const in_memory_fs = writable(initial_files);
+const in_memory_fs_store = writable(initial_files);
+
+export const in_memory_fs = { subscribe: in_memory_fs_store.subscribe };
 
 /**
  * Ther actual webcontainer store with useful methods
@@ -122,7 +135,7 @@ export const webcontainer = {
 		const subtree = get_file_from_path(path, get(in_memory_fs));
 		//update the in memory store
 		subtree.contents = content;
-		in_memory_fs.set(get(in_memory_fs));
+		in_memory_fs_store.set(get(in_memory_fs));
 	},
 
 	/**
@@ -140,6 +153,11 @@ export const webcontainer = {
 		run_command('npm run dev');
 		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ iframe_url: url });
+			webcontainer_instance.on("port", (closed_port: number) => {
+				if (port === closed_port) {
+					merge_state({ iframe_url: './error' });
+				}
+			});
 		});
 	},
 	run_command,

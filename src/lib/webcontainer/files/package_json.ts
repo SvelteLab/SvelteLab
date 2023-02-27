@@ -8,8 +8,6 @@ export const package_json = JSON.stringify({
 		check: 'svelte-kit sync && svelte-check --tsconfig ./jsconfig.json',
 		'check:watch':
 			'svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch',
-		lint: 'prettier --plugin-search-dir . --check .',
-		format: 'prettier --plugin-search-dir . --write .',
 	},
 	devDependencies: {
 		'@sveltejs/adapter-auto': '^2.0.0',
