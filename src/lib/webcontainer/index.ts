@@ -10,8 +10,7 @@ const initial_files = get_tree_from_local_storage() || default_files;
  * the web container.
  */
 const recursive_warning_proxy_traps: ProxyHandler<never> = {
-	get(_, prop) {
-		if (prop === 'unbooted') return true;
+	get() {
 		return new Proxy(new Function(), recursive_warning_proxy_traps);
 	},
 	apply() {
