@@ -1,11 +1,5 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		// hack to show LS file
-		webcontainer.open_file('/src/routes/+page.svelte');
-	});
 </script>
 
 <textarea
