@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { get_file_from_path } from '$lib/utils/file_system';
 import { WebContainer, type DirEnt, type FileSystemTree } from '@webcontainer/api';
 import { get, readable, writable } from 'svelte/store';
@@ -153,6 +154,7 @@ export const webcontainer = {
 };
 
 function get_tree_from_local_storage() {
+	if (!browser) return;
 	const string = localStorage.getItem('FS_tree');
 	if (!string) return;
 	return JSON.parse(string);
