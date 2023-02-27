@@ -1,5 +1,5 @@
 import type { FileSystemTreeExtended } from "$lib/webcontainer/files";
-import { is_dir } from "./typescript-assertions";
+import { is_dir } from "./runtime-assertions";
 
 export function get_file_from_path(base_path: string, files: FileSystemTreeExtended) {
 	const path = base_path.split(/\.?\//);

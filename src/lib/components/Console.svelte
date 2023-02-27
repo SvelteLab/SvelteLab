@@ -6,7 +6,7 @@
 	import { tick } from 'svelte';
 	import VirtualList from 'svelte-tiny-virtual-list';
 	import { onMount } from 'svelte';
-	import { is_html_element } from '$lib/utils/typescript-assertions';
+	import { is_html_element } from '$lib/utils/runtime-assertions';
 
 	let convert = new Convert({
 		fg: 'var(--sk-code-base)'
