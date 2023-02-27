@@ -5,6 +5,7 @@
 	import Login from '~icons/akar-icons/face-happy';
 	import NewFile from '~icons/akar-icons/file';
 	import NewFolder from '~icons/akar-icons/folder-add';
+	import Pending from '~icons/akar-icons/more-horizontal';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
@@ -44,7 +45,7 @@
 		}}
 	>
 		{#await saving}
-			...
+			<Pending />
 		{:then _}
 			<Save />
 		{/await}

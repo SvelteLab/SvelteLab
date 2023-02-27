@@ -1,14 +1,17 @@
 import { get_file_from_path } from '$lib/utils/file_system';
 import { WebContainer, type DirEnt, type FileSystemTree } from '@webcontainer/api';
 import { get, readable, writable } from 'svelte/store';
-import { files as starting_files } from './files';
+import { files as default_files } from './files';
+
+const initial_files = get_tree_from_local_storage() || default_files;
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
  * the web container.
  */
 const recursive_warning_proxy_traps: ProxyHandler<never> = {
-	get() {
+	get(_, prop) {
+		if (prop === 'unbooted') return true;
 		return new Proxy(new Function(), recursive_warning_proxy_traps);
 	},
 	apply() {
@@ -27,7 +30,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, update } = writable({
-	current_file: starting_files.src.directory.routes.directory['+page.svelte'].file.contents,
+	current_file: initial_files.src.directory.routes.directory['+page.svelte'].file.contents,
 	current_path: './src/routes/+page.svelte',
 	iframe_url: './loading'
 });
@@ -73,12 +76,12 @@ export const logs = { subscribe: subscribe_logs };
  * Readable store for the file system tree, we duplicate this so that
  * the file system tree does not have to re-evaluate every keystroke
  */
-export const files = readable(starting_files);
+export const files = readable(initial_files);
 
 /**
  * Writable store for the file system, we can save this to our storage
  */
-export const in_memory_fs = writable(starting_files);
+export const in_memory_fs = writable(initial_files);
 
 /**
  * Ther actual webcontainer store with useful methods
@@ -96,9 +99,7 @@ export const webcontainer = {
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
-		const cached = get_file_system_from_local_storage();
-		console.log(cached);
-		webcontainer_instance.mount(starting_files);
+		webcontainer_instance.mount(initial_files);
 	},
 	/**
 	 * Read the file from the file system of the webcontainer and set the content to the
@@ -144,42 +145,44 @@ export const webcontainer = {
 	run_command,
 
 	/**
-	 * Returns the current file system
+	 * Saves the container file system to local storage
 	 */
 	async save(): Promise<void> {
-		const tree = await get_file_system_from_webcontainer();
-		console.log('saving_tree', tree);
-		// todo make object-ified arrays iterable
+		const tree = await get_tree_from_container();
 		localStorage.setItem('FS_tree', JSON.stringify(tree));
 	}
 };
 
-function get_file_system_from_local_storage() {
+function get_tree_from_local_storage() {
 	const string = localStorage.getItem('FS_tree');
 	if (!string) return;
 	return JSON.parse(string);
 }
 
-async function get_file_system_from_webcontainer(): Promise<FileSystemTree> {
+async function get_tree_from_container(): Promise<FileSystemTree> {
 	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
 	return get_tree(root, '/');
 }
+
 async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystemTree> {
+	const decoder = new TextDecoder();
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
-		const file_path = path + node.name;
-		console.log('READING: ' + file_path + (node.isDirectory() ? '/' : ''));
+		const node_path = path + node.name;
+		// console.log('READING: ' + node_path + (node.isDirectory() ? '/' : ''));
 		if (node.isFile()) {
+			const raw_data = await webcontainer_instance.fs.readFile(node_path);
+			const contents = decoder.decode(raw_data); // convert to POJO
 			tree[node.name] = {
 				file: {
-					contents: await webcontainer_instance.fs.readFile(file_path)
+					contents
 				}
 			};
-		} else if (node.isDirectory() && !ignore_list.includes(node.name)) {
+		} else if (node.isDirectory() && !IGNORE_LIST.includes(node.name)) {
 			tree[node.name] = {
 				directory: await get_tree(
-					await webcontainer_instance.fs.readdir(file_path, { withFileTypes: true }),
-					file_path + '/'
+					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
+					node_path + '/'
 				)
 			};
 		}
@@ -187,4 +190,4 @@ async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystem
 	return tree;
 }
 
-const ignore_list = ['.svelte-kit'];
+const IGNORE_LIST = ['.svelte-kit', 'node_modules'];
