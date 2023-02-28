@@ -96,6 +96,7 @@
 					dispatch(`add`, formData.get('path'));
 				}}
 			>
+				<!-- svelte-ignore a11y-autofocus -->
 				<input name="path" autofocus /><button title="Create file"><Check /></button>
 			</form>
 		</li>
