@@ -52,7 +52,12 @@
 				><button
 					title="Delete folder"
 					on:click={() => {
-						webcontainer.delete_file(`${base_path}${file}`);
+						/// TODO: use proper component
+						if (
+							window.confirm(`Are you sure you want to delete "${file}" and everything inside?`)
+						) {
+							webcontainer.delete_file(`${base_path}${file}`);
+						}
 					}}><Delete /></button
 				>
 			</li>
@@ -80,7 +85,10 @@
 				<button
 					title="Delete {file}"
 					on:click={() => {
-						webcontainer.delete_file(`${base_path}${file}`);
+						/// TODO: use proper component
+						if (window.confirm(`Are you sure you want to delete "${file}"?`)) {
+							webcontainer.delete_file(`${base_path}${file}`);
+						}
 					}}><Delete /></button
 				>
 			</li>
