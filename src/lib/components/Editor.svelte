@@ -36,6 +36,8 @@
 <CodeMirror
 	{lang}
 	{theme}
+	useTab
+	tabSize={3}
 	value={$webcontainer.current_file}
 	on:change={(e) => {
 		webcontainer.update_file($webcontainer.current_path, e.detail);

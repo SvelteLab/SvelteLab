@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
-import { get_file_from_path } from '$lib/utils/file_system';
+import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
 import { WebContainer, type DirEnt, type FileSystemTree, type WebContainerProcess } from '@webcontainer/api';
-import { get, readable, writable } from 'svelte/store';
+import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
 
 const initial_files = get_tree_from_local_storage() || default_files;
@@ -74,7 +74,7 @@ async function run_command(cmd: string) {
 			running_command: null,
 			running_process: null,
 		});
-        return code;
+		return code;
 	});
 }
 
@@ -88,14 +88,44 @@ export const logs = { subscribe: subscribe_logs };
  * Readable store for the file system tree, we duplicate this so that
  * the file system tree does not have to re-evaluate every keystroke
  */
-export const files = readable(initial_files);
+const files_store = writable(structuredClone(initial_files));
+
+export const files = {
+	subscribe: files_store.subscribe,
+};
 
 /**
  * Writable store for the file system, we can save this to our storage
  */
-const in_memory_fs_store = writable(initial_files);
+const in_memory_fs_store = writable(structuredClone(initial_files));
 
 export const in_memory_fs = { subscribe: in_memory_fs_store.subscribe };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function add_file_in_store(store: Writable<any>, path: string, contents: string, create_if_not_exist = false) {
+	//get the file content from the path
+	const subtree = get_file_from_path(path, get(store), create_if_not_exist);
+	//update the in memory store
+	subtree.contents = contents;
+	//trigger rerender
+	store.update(value => value);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function delete_file_from_store(store: Writable<any>, path: string) {
+	const split_path = path.split("/");
+	const last_part = split_path.pop();
+	const actual_path = split_path.join("/");
+	const subtree = get_subtree_from_path(actual_path, get(store));
+	if (subtree) {
+		if (last_part) {
+			//delete the last part of the path
+			delete subtree[last_part];
+			//trigger rerender
+			store.update(value => value);
+		}
+	}
+}
 
 /**
  * Ther actual webcontainer store with useful methods
@@ -132,11 +162,7 @@ export const webcontainer = {
 	 */
 	update_file(path: string, content: string) {
 		webcontainer_instance.fs.writeFile(path, content);
-		//get the file content from the path
-		const subtree = get_file_from_path(path, get(in_memory_fs));
-		//update the in memory store
-		subtree.contents = content;
-		in_memory_fs_store.set(get(in_memory_fs));
+		add_file_in_store(in_memory_fs_store, path, content);
 	},
 
 	/**
@@ -162,13 +188,33 @@ export const webcontainer = {
 		});
 	},
 	run_command,
-
 	/**
 	 * Saves the container file system to local storage
 	 */
 	async save(): Promise<void> {
-		const tree = await get_tree_from_container();
-		localStorage.setItem('FS_tree', JSON.stringify(tree));
+		localStorage.setItem('FS_tree', JSON.stringify(get(in_memory_fs_store)));
+	},
+	async add_file(path: string) {
+		await webcontainer_instance.fs.writeFile(path, "");
+		add_file_in_store(in_memory_fs_store, path, "", true);
+		add_file_in_store(files_store, path, "", true);
+	},
+	async add_folder(path: string) {
+		await webcontainer_instance.fs.mkdir(path, {
+			recursive: true,
+		});
+		get_subtree_from_path(path, get(files_store), true);
+		get_subtree_from_path(path, get(in_memory_fs_store), true);
+		//trigger rerender
+		in_memory_fs_store.update(value => value);
+		files_store.update(value => value);
+	},
+	async delete_file(path: string) {
+		await webcontainer_instance.fs.rm(path, {
+			recursive: true,
+		});
+		delete_file_from_store(in_memory_fs_store, path);
+		delete_file_from_store(files_store, path);
 	}
 };
 

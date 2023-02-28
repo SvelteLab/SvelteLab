@@ -36,12 +36,6 @@
 	<button title="Toggle Config Files">
 		<ConfigFiles />
 	</button>
-	<button title="Create File">
-		<NewFile />
-	</button>
-	<button title="Create Folder">
-		<NewFolder />
-	</button>
 
 	<span> Hello World </span>
 

@@ -50,8 +50,9 @@
 
 <style>
 	.grid {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto minmax(0, 1fr);
 		height: 100%;
 	}
 	iframe {
