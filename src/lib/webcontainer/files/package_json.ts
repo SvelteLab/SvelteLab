@@ -19,4 +19,4 @@ export const package_json = JSON.stringify({
 		vite: '^4.0.0',
 	},
 	type: 'module',
-});
+}, null, 2);
