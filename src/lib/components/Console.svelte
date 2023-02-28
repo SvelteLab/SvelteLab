@@ -25,8 +25,9 @@
 	const heights_map = new Map<number, number>();
 
 	function children_height(node: Node, index: number) {
-		const maybe_span = node.firstChild;
-		if (maybe_span && is_html_element(maybe_span)) {
+		if (!is_html_element(node)) return;
+		const maybe_span = node.firstElementChild;
+		if (maybe_span) {
 			const actualHeight = maybe_span.getBoundingClientRect().height;
 			heights_map.set(index, actualHeight);
 			if (actualHeight > 25) {
