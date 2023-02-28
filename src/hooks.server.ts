@@ -5,5 +5,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		'Cross-Origin-Embedder-Policy': 'require-corp',
 		'Cross-Origin-Opener-Policy': 'same-origin',
 	});
-	return resolve(event);
+	return resolve(event, {
+		transformPageChunk(input) {
+			const theme = event.cookies.get("svelteblitz-theme") ?? "";
+			return input.html.replace("%theme%", theme);
+		},
+	});
 };
