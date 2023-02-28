@@ -96,7 +96,7 @@
 					dispatch(`add`, formData.get('path'));
 				}}
 			>
-				<input name="path" /><button title="Create file"><Check /></button>
+				<input name="path" autofocus /><button title="Create file"><Check /></button>
 			</form>
 		</li>
 	{/if}
