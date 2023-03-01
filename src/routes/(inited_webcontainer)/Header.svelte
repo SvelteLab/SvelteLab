@@ -1,35 +1,23 @@
 <script lang="ts">
+	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
 	import Fork from '~icons/akar-icons/copy';
 	import Login from '~icons/akar-icons/face-happy';
-	import Sun from '~icons/akar-icons/sun';
 	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/akar-icons/more-horizontal';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
+	import Planet from '~icons/akar-icons/planet';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
+	import Sun from '~icons/akar-icons/sun';
 	import { layout_store } from './layout_store';
-	import { theme } from '$lib/theme';
-	import { onMount } from 'svelte';
-	let theme_icon_if_null = Moon;
-	onMount(() => {
-		const match = window.matchMedia('(prefers-color-scheme: dark)');
-		if (match.matches) {
-			theme_icon_if_null = Sun;
-		}
-		const listener = (event: MediaQueryListEvent) => {
-			theme_icon_if_null = event.matches ? Sun : Moon;
-		};
-		match.addEventListener('change', listener);
-		return () => {
-			match.removeEventListener('change', listener);
-		};
-	});
+	const theme = get_theme();
 	let saving = new Promise((resolve) => resolve(null));
 </script>
 
 <header>
+	<img src="./logo.svg" alt="svelteblitz logo" />
 	<button
 		title="Toggle File Browser"
 		on:click={layout_store.toggle_file_tree}
@@ -63,7 +51,7 @@
 		{:else if $theme === 'dark'}
 			<Sun />
 		{:else}
-			<svelte:component this={theme_icon_if_null} />
+			<Planet />
 		{/if}
 	</button>
 
@@ -101,6 +89,10 @@
 		z-index: 2;
 		align-items: center;
 		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+	}
+	img {
+		width: 32px;
+		aspect-ratio: 1;
 	}
 
 	button {

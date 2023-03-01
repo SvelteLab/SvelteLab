@@ -1,27 +1,13 @@
-import { browser } from "$app/environment";
 import { get_cookies } from "$lib/utils/various";
-import { get, writable } from "svelte/store";
+import { onMount } from "svelte";
+import { writable } from "svelte/store";
 
 type Theme = "light" | "dark" | null;
 
-const { subscribe, set, update } = writable<Theme>();
-
-if (browser) {
-	const media = window.matchMedia("(prefers-color-scheme: dark)");
-	const cookies = get_cookies();
-	if (!cookies["svelteblitz-theme"]) {
-		set(media.matches ? "dark" : "light");
-	}
-	media.addEventListener("change", (event) => {
-		if (!cookies["svelteblitz-theme"]) {
-			set(event.matches ? "dark" : "light");
-		}
-	});
-}
+const { subscribe, set } = writable<Theme>(null);
 
 function set_theme_and_cookie(value: Theme) {
 	set(value);
-	console.log({ value });
 	if (value) {
 		document.documentElement.className = value;
 		document.cookie = `svelteblitz-theme=${value}`;
@@ -31,25 +17,40 @@ function set_theme_and_cookie(value: Theme) {
 	}
 }
 
-export const theme = {
-	subscribe,
-	next() {
+export function get_theme() {
+	onMount(() => {
+		const media = window.matchMedia("(prefers-color-scheme: dark)");
 		const cookies = get_cookies();
-		console.log(cookies);
 		if (!cookies["svelteblitz-theme"]) {
-			const media = window.matchMedia("(prefers-color-scheme: dark)");
-			if (media.matches) {
-				set_theme_and_cookie("light");
-			} else {
-				set_theme_and_cookie("dark");
-			}
+			set(media.matches ? "dark" : "light");
 		} else {
-			if (cookies["svelteblitz-theme"] === "light") {
-				set_theme_and_cookie("dark");
+			set(cookies["svelteblitz-theme"]);
+		}
+		media.addEventListener("change", (event) => {
+			if (!cookies["svelteblitz-theme"]) {
+				set(event.matches ? "dark" : "light");
+			}
+		});
+	});
+	return {
+		subscribe,
+		next() {
+			const cookies = get_cookies();
+			console.log(cookies);
+			if (!cookies["svelteblitz-theme"]) {
+				const media = window.matchMedia("(prefers-color-scheme: dark)");
+				if (media.matches) {
+					set_theme_and_cookie("light");
+				} else {
+					set_theme_and_cookie("dark");
+				}
 			} else {
-				set_theme_and_cookie(null);
+				if (cookies["svelteblitz-theme"] === "light") {
+					set_theme_and_cookie("dark");
+				} else {
+					set_theme_and_cookie(null);
+				}
 			}
 		}
-	}
+	};
 }
-
