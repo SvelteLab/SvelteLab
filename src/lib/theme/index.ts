@@ -36,7 +36,6 @@ export function get_theme() {
 		subscribe,
 		next() {
 			const cookies = get_cookies();
-			console.log(cookies);
 			if (!cookies["svelteblitz-theme"]) {
 				const media = window.matchMedia("(prefers-color-scheme: dark)");
 				if (media.matches) {

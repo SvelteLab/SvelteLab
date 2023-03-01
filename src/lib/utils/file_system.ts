@@ -1,9 +1,9 @@
-import type { FileSystemTreeExtended } from "$lib/webcontainer/files";
+import type { FileSystemTree } from "@webcontainer/api";
 import { is_dir } from "./runtime-assertions";
 
-export function get_file_from_path(base_path: string, files: FileSystemTreeExtended, create_if_not_exist = false) {
+export function get_file_from_path(base_path: string, files: FileSystemTree, create_if_not_exist = false) {
 	const path = base_path.split(/\.?\//);
-	let subtree: FileSystemTreeExtended = files;
+	let subtree: FileSystemTree = files;
 	for (let index = 0; index < path.length; index++) {
 		const path_part = path[index];
 		if (path_part) {
@@ -27,9 +27,9 @@ export function get_file_from_path(base_path: string, files: FileSystemTreeExten
 	throw new Error("You are trying to get the file content of a folder");
 }
 
-export function get_subtree_from_path(base_path: string, files: FileSystemTreeExtended, create_if_not_exist = false) {
+export function get_subtree_from_path(base_path: string, files: FileSystemTree, create_if_not_exist = false) {
 	const path = base_path.split(/\.?\//);
-	let subtree: FileSystemTreeExtended = files;
+	let subtree: FileSystemTree = files;
 	for (let index = 0; index < path.length; index++) {
 		const path_part = path[index];
 		if (path_part) {

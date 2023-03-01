@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
@@ -64,7 +65,8 @@
 	<button
 		title="Save Changes"
 		on:click={async () => {
-			saving = webcontainer.save();
+			goto('/testid');
+			//saving = webcontainer.save();
 		}}
 	>
 		{#await saving}

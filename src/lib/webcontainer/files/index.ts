@@ -1,4 +1,4 @@
-import type { DirectoryNode, FileNode, FileSystemTree } from '@webcontainer/api';
+import type { FileSystemTree } from '@webcontainer/api';
 import { app_html } from './app_html';
 import { global_css } from './global_css';
 import { package_json } from './package_json';
@@ -7,15 +7,11 @@ import { page_svelte } from './page_svelte';
 import { svelte_config } from './svelte_config_js';
 import { vite_config } from './vite_config_ts';
 
-export interface DirectoryNodeExtended extends DirectoryNode {
-	open?: boolean;
-}
-export interface FileNodeExtended extends FileNode {
-	open?: boolean;
-}
 
-export interface FileSystemTreeExtended extends FileSystemTree {
-	[name: string]: DirectoryNodeExtended | FileNodeExtended;
+declare module "@webcontainer/api" {
+	export interface DirectoryNode {
+		open?: boolean;
+	}
 }
 
 export const files = {
@@ -26,7 +22,7 @@ export const files = {
 					'+page.server.ts': {
 						file: {
 							contents: page_server_ts
-						}
+						},
 					},
 					'+page.svelte': {
 						file: {
@@ -62,4 +58,4 @@ export const files = {
 			contents: svelte_config
 		}
 	}
-} satisfies FileSystemTreeExtended;
+} satisfies FileSystemTree;
