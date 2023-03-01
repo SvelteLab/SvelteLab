@@ -65,8 +65,12 @@
 	<button
 		title="Save Changes"
 		on:click={async () => {
-			goto('/testid');
-			//saving = webcontainer.save();
+			// we can do this instead of goto: we don't need svelte to reload the
+			// components, we just need to provide the user with the new url
+			// and let him refresh if it wants. This obviosuly would be an api
+			// call to get the correct id from the db
+			history.pushState(null, '', '/' + Math.random().toString(36).substring(2));
+			saving = webcontainer.save();
 		}}
 	>
 		{#await saving}
