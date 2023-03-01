@@ -1,16 +1,31 @@
-<script>
+<script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
 	import Fork from '~icons/akar-icons/copy';
 	import Login from '~icons/akar-icons/face-happy';
-	import NewFile from '~icons/akar-icons/file';
-	import NewFolder from '~icons/akar-icons/folder-add';
+	import Sun from '~icons/akar-icons/sun';
+	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/akar-icons/more-horizontal';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import { layout_store } from './layout_store';
-
+	import { theme } from '$lib/theme';
+	import { onMount } from 'svelte';
+	let theme_icon_if_null = Moon;
+	onMount(() => {
+		const match = window.matchMedia('(prefers-color-scheme: dark)');
+		if (match.matches) {
+			theme_icon_if_null = Sun;
+		}
+		const listener = (event: MediaQueryListEvent) => {
+			theme_icon_if_null = event.matches ? Sun : Moon;
+		};
+		match.addEventListener('change', listener);
+		return () => {
+			match.removeEventListener('change', listener);
+		};
+	});
 	let saving = new Promise((resolve) => resolve(null));
 </script>
 
@@ -35,6 +50,21 @@
 
 	<button title="Toggle Config Files">
 		<ConfigFiles />
+	</button>
+
+	<button
+		on:click={() => {
+			theme.next();
+		}}
+		title="Change theme"
+	>
+		{#if $theme === 'light'}
+			<Moon />
+		{:else if $theme === 'dark'}
+			<Sun />
+		{:else}
+			<svelte:component this={theme_icon_if_null} />
+		{/if}
 	</button>
 
 	<span> Hello World </span>
