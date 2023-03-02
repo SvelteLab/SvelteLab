@@ -1,6 +1,12 @@
 import { browser, dev } from '$app/environment';
+import { terminal } from '$lib/terminal';
 import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
-import { WebContainer, type DirEnt, type FileSystemTree, type WebContainerProcess } from '@webcontainer/api';
+import {
+	WebContainer,
+	type DirEnt,
+	type FileSystemTree,
+	type WebContainerProcess
+} from '@webcontainer/api';
 import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
 
@@ -34,9 +40,8 @@ const { subscribe, update } = writable({
 	current_path: null as string | null,
 	iframe_url: './loading',
 	running_command: null as string | null,
-	running_process: null as WebContainerProcess | null,
+	running_process: null as WebContainerProcess | null
 });
-const { subscribe: subscribe_logs, update: update_logs } = writable<string[]>([]);
 
 type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
 	value: infer ActualType
@@ -60,29 +65,23 @@ async function run_command(cmd: string) {
 	const process = await webcontainer_instance.spawn(command, args);
 	merge_state({
 		running_command: cmd,
-		running_process: process,
+		running_process: process
 	});
 	process.output.pipeTo(
 		new WritableStream({
 			write(data) {
-				update_logs((prev) => [...prev, data]);
+				terminal.write(data);
 			}
 		})
 	);
 	return process.exit.then((code: number) => {
 		merge_state({
 			running_command: null,
-			running_process: null,
+			running_process: null
 		});
 		return code;
 	});
 }
-
-/**
- * This is the list of logs from the webcontainer.
- * N.b. they are strings with ANSI colors (that's why they are parsed with ansi-to-html)
- */
-export const logs = { subscribe: subscribe_logs };
 
 /**
  * Readable store for the file system tree, we duplicate this so that
@@ -91,7 +90,7 @@ export const logs = { subscribe: subscribe_logs };
 const files_store = writable(structuredClone(initial_files));
 
 export const files = {
-	subscribe: files_store.subscribe,
+	subscribe: files_store.subscribe
 };
 
 /**
@@ -102,27 +101,32 @@ const in_memory_fs_store = writable(structuredClone(initial_files));
 export const in_memory_fs = { subscribe: in_memory_fs_store.subscribe };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function add_file_in_store(store: Writable<any>, path: string, contents: string, create_if_not_exist = false) {
+function add_file_in_store(
+	store: Writable<any>,
+	path: string,
+	contents: string,
+	create_if_not_exist = false
+) {
 	//get the file content from the path
 	const subtree = get_file_from_path(path, get(store), create_if_not_exist);
 	//update the in memory store
 	subtree.contents = contents;
 	//trigger rerender
-	store.update(value => value);
+	store.update((value) => value);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function delete_file_from_store(store: Writable<any>, path: string) {
-	const split_path = path.split("/");
+	const split_path = path.split('/');
 	const last_part = split_path.pop();
-	const actual_path = split_path.length === 1 ? `${split_path[0]}/` : split_path.join("/");
+	const actual_path = split_path.length === 1 ? `${split_path[0]}/` : split_path.join('/');
 	const subtree = get_subtree_from_path(actual_path, get(store));
 	if (subtree) {
 		if (last_part) {
 			//delete the last part of the path
 			delete subtree[last_part];
 			//trigger rerender
-			store.update(value => value);
+			store.update((value) => value);
 		}
 	}
 }
@@ -186,7 +190,7 @@ export const webcontainer = {
 		run_command('npm run dev');
 		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ iframe_url: url });
-			webcontainer_instance.on("port", (closed_port: number) => {
+			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
 					merge_state({ iframe_url: './error' });
 				}
@@ -201,28 +205,28 @@ export const webcontainer = {
 		localStorage.setItem('FS_tree', JSON.stringify(get(in_memory_fs_store)));
 	},
 	async add_file(path: string) {
-		await webcontainer_instance.fs.writeFile(path, "");
-		add_file_in_store(in_memory_fs_store, path, "", true);
-		add_file_in_store(files_store, path, "", true);
+		await webcontainer_instance.fs.writeFile(path, '');
+		add_file_in_store(in_memory_fs_store, path, '', true);
+		add_file_in_store(files_store, path, '', true);
 	},
 	async add_folder(path: string) {
 		await webcontainer_instance.fs.mkdir(path, {
-			recursive: true,
+			recursive: true
 		});
 		get_subtree_from_path(path, get(files_store), true);
 		get_subtree_from_path(path, get(in_memory_fs_store), true);
 		//trigger rerender
-		in_memory_fs_store.update(value => value);
-		files_store.update(value => value);
+		in_memory_fs_store.update((value) => value);
+		files_store.update((value) => value);
 	},
 	async delete_file(path: string) {
 		await webcontainer_instance.fs.rm(path, {
-			recursive: true,
+			recursive: true
 		});
 		if (get(webcontainer).current_path?.includes(path)) {
 			merge_state({
 				current_file: null,
-				current_path: null,
+				current_path: null
 			});
 		}
 		delete_file_from_store(in_memory_fs_store, path);

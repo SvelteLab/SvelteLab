@@ -58,6 +58,8 @@
 		"ansi-to-html": "^0.7.2",
 		"codemirror": "^6.0.1",
 		"svelte-codemirror-editor": "^1.1.0",
-		"svelte-splitpanes": "^0.7.12"
+		"svelte-splitpanes": "^0.7.12",
+		"xterm": "^5.1.0",
+		"xterm-addon-fit": "^0.7.0"
 	}
 }

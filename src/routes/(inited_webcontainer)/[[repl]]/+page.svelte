@@ -22,7 +22,7 @@
 
 <div class="grid">
 	<Header />
-	<Splitpanes class="main-pane">
+	<Splitpanes class="main-pane" on:ready={handle_pane} on:resized={handle_pane}>
 		{#if $layout_store.file_tree}
 			<Pane size={20} minSize={5}><FileActions /></Pane>
 		{/if}

@@ -43,6 +43,8 @@ specifiers:
   unplugin-icons: ^0.15.3
   vite: ^4.0.0
   vitest: ^0.25.3
+  xterm: ^5.1.0
+  xterm-addon-fit: ^0.7.0
 
 dependencies:
   '@codemirror/autocomplete': 6.4.2_4brt7ssv37vk5p4hmzax5oqmt4
@@ -65,6 +67,8 @@ dependencies:
   codemirror: 6.0.1_@lezer+common@1.0.2
   svelte-codemirror-editor: 1.1.0_codemirror@6.0.1
   svelte-splitpanes: 0.7.12_svelte@3.55.1
+  xterm: 5.1.0
+  xterm-addon-fit: 0.7.0_xterm@5.1.0
 
 devDependencies:
   '@iconify/json': 2.2.27
@@ -2433,6 +2437,18 @@ packages:
   /wrappy/1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
+
+  /xterm-addon-fit/0.7.0_xterm@5.1.0:
+    resolution: {integrity: sha512-tQgHGoHqRTgeROPnvmtEJywLKoC/V9eNs4bLLz7iyJr1aW/QFzRwfd3MGiJ6odJd9xEfxcW36/xRU47JkD5NKQ==}
+    peerDependencies:
+      xterm: ^5.0.0
+    dependencies:
+      xterm: 5.1.0
+    dev: false
+
+  /xterm/5.1.0:
+    resolution: {integrity: sha512-LovENH4WDzpwynj+OTkLyZgJPeDom9Gra4DMlGAgz6pZhIDCQ+YuO7yfwanY+gVbn/mmZIStNOnVRU/ikQuAEQ==}
+    dev: false
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
