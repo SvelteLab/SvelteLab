@@ -16,6 +16,8 @@ const lines: string[] = [''];
 let current_caret = 1;
 let line_history = 1;
 
+// link to github gist that contains useful ANSI commands
+// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 terminal.onKey((e) => {
 	const process = get(webcontainer).running_process;
 	const key_event = e.domEvent.key.toLowerCase();
