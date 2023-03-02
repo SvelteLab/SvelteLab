@@ -13,11 +13,19 @@
 	});
 </script>
 
+<slot />
 {#await webcontainer.init(data.repl)}
 	<div class="loader">
 		<Booting />
 		<span> Booting up webcontainer... </span>
 	</div>
-{:then}
-	<slot />
 {/await}
+
+<style>
+	div {
+		position: fixed;
+		inset: 0;
+		backdrop-filter: blur(10px);
+		z-index: 9999;
+	}
+</style>

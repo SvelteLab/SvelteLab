@@ -9,8 +9,10 @@
 	import { layout_store } from './layout_store';
 
 	onMount(async () => {
-		await webcontainer.install_dependencies();
-		webcontainer.run_dev_server();
+		return webcontainer.on_init(async () => {
+			await webcontainer.install_dependencies();
+			webcontainer.run_dev_server();
+		});
 	});
 
 	function handle_pane() {
