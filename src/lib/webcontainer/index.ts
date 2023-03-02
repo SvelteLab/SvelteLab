@@ -100,8 +100,8 @@ const in_memory_fs_store = writable(structuredClone(initial_files));
 
 export const in_memory_fs = { subscribe: in_memory_fs_store.subscribe };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function add_file_in_store(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	store: Writable<any>,
 	path: string,
 	contents: string,
@@ -131,6 +131,8 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 	}
 }
 
+const init_callbacks = new Set<() => void>();
+
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -154,6 +156,23 @@ export const webcontainer = {
 		}
 		webcontainer_instance = await WebContainer.boot();
 		webcontainer_instance.mount(toMount ?? initial_files);
+		init_callbacks.forEach((callback) => {
+			if (typeof callback === 'function') {
+				callback();
+			}
+		});
+		init_callbacks.clear();
+	},
+	/**
+	 * Register a callback for the webcontainer boots.
+	 * @param callback the callback that will be called when the webcontainer boots
+	 * @returns The cleanup function to unregister the callback
+	 */
+	on_init(callback: () => void) {
+		init_callbacks.add(callback);
+		return () => {
+			init_callbacks.delete(callback);
+		};
 	},
 	/**
 	 * Read the file from the file system of the webcontainer and set the content to the

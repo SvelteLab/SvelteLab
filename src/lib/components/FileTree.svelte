@@ -68,6 +68,7 @@
 		{#if is_dir(file_const)}
 			<li class="folder">
 				<button
+					class="file"
 					on:click={() => {
 						// @ts-ignore
 						tree[file].open = !file_const.open;
@@ -116,7 +117,7 @@
 			{@const icon = get_icon(file)}
 			{@const path = base_path + file}
 			<li class:open={$webcontainer.current_path === path}>
-				<button on:click={() => webcontainer.open_file(path)}>
+				<button class="file" on:click={() => webcontainer.open_file(path)}>
 					<svelte:component this={icon} />{file}
 				</button>
 				<button
@@ -170,8 +171,8 @@
 	}
 	/*style reset for nested folders*/
 	ul :global(ul) {
-		height: auto;
-		padding-block: 0;
+		height: auto !important;
+		padding-block: 0 !important;
 	}
 	li {
 		border-bottom: 1px solid var(--sk-back-4);
@@ -182,6 +183,18 @@
 		display: grid;
 		grid-template-columns: 1fr repeat(3, auto);
 	}
+	li > button:not(.file) {
+		display: none;
+	}
+	li:hover > button:not(.file) {
+		display: initial;
+	}
+	@media (hover: none) {
+		li > button:not(.file) {
+			display: initial;
+		}
+	}
+
 	li:not(.open) {
 		filter: grayscale(100%);
 	}
