@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import '../../../styles/global.css';
 	import Booting from '~icons/line-md/loading-alt-loop';
 	import type { LayoutData } from './$types';
 
