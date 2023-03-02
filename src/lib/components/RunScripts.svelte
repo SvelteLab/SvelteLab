@@ -61,4 +61,7 @@
 		text-overflow: ellipsis;
 		opacity: 0.5;
 	}
+	button {
+		display: flex;
+	}
 </style>
