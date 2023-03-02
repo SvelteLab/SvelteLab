@@ -24,4 +24,7 @@
 		width: 100%;
 		overflow: hidden;
 	}
+	div :global(.xterm) {
+		height: 100%;
+	}
 </style>
