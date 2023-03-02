@@ -31,7 +31,7 @@
 			const actualHeight = maybe_span.getBoundingClientRect().height;
 			heights_map.set(index, actualHeight);
 			if (actualHeight > 25) {
-				virtual_list.recomputeSizes(0);
+				virtual_list?.recomputeSizes?.(0);
 			}
 		}
 	}

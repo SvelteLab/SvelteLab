@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
@@ -64,6 +65,11 @@
 	<button
 		title="Save Changes"
 		on:click={async () => {
+			// we can do this instead of goto: we don't need svelte to reload the
+			// components, we just need to provide the user with the new url
+			// and let him refresh if it wants. This obviosuly would be an api
+			// call to get the correct id from the db
+			history.pushState(null, '', '/' + Math.random().toString(36).substring(2));
 			saving = webcontainer.save();
 		}}
 	>

@@ -16,6 +16,22 @@
 
 	const dispatch = createEventDispatcher();
 
+	function handleAdd({
+		name,
+		file = '',
+		add
+	}: {
+		name: string;
+		file?: string;
+		add: typeof is_adding;
+	}) {
+		if (add === 'file') {
+			webcontainer.add_file(`${base_path}${file}/${name}`);
+		} else if (add === 'folder') {
+			webcontainer.add_folder(`${base_path}${file}/${name}`);
+		}
+	}
+
 	$: tree = get_subtree_from_path(base_path, $files_store);
 	$: files = Object.keys(tree ?? {}).sort((file_one, file_two) => {
 		// if they are both dirs order alphabetically
@@ -32,21 +48,42 @@
 </script>
 
 <ul>
+	{#if base_path === './'}
+		<li class="folder">
+			Add to root <button
+				title="New File"
+				on:click={() => {
+					is_adding = 'file';
+				}}><Plus /></button
+			><button
+				title="New Folder"
+				on:click={() => {
+					is_adding = 'folder';
+				}}><FolderAdd /></button
+			>
+		</li>
+	{/if}
 	{#each files as file}
 		{@const file_const = tree[file]}
 		{#if is_dir(file_const)}
 			<li class="folder">
-				<button on:click={() => (tree[file].open = !file_const.open)}><Folder />{file}</button
+				<button
+					on:click={() => {
+						// @ts-ignore
+						tree[file].open = !file_const.open;
+					}}><Folder />{file}</button
 				><button
 					title="New File"
 					on:click={() => {
 						add = 'file';
+						// @ts-ignore
 						tree[file].open = true;
 					}}><Plus /></button
 				><button
 					title="New Folder"
 					on:click={() => {
 						add = 'folder';
+						// @ts-ignore
 						tree[file].open = true;
 					}}><FolderAdd /></button
 				><button
@@ -66,11 +103,11 @@
 					base_path={`${base_path}${file}/`}
 					is_adding={add}
 					on:add={({ detail: name }) => {
-						if (add === 'file') {
-							webcontainer.add_file(`${base_path}${file}/${name}`);
-						} else if (add === 'folder') {
-							webcontainer.add_folder(`${base_path}${file}/${name}`);
-						}
+						handleAdd({
+							name,
+							file,
+							add
+						});
 						add = null;
 					}}
 				/>
@@ -101,7 +138,18 @@
 					e.preventDefault();
 					if (!is_adding) return;
 					const formData = new FormData(e.currentTarget);
-					dispatch(`add`, formData.get('path'));
+					const path = formData.get('path');
+					if (!path) return;
+					if (base_path === './') {
+						handleAdd({
+							name: path.toString(),
+							add: is_adding,
+							file: ''
+						});
+						is_adding = null;
+					} else {
+						dispatch(`add`, path);
+					}
 				}}
 			>
 				<!-- svelte-ignore a11y-autofocus -->

@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser, dev } from '$app/environment';
 import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
 import { WebContainer, type DirEnt, type FileSystemTree, type WebContainerProcess } from '@webcontainer/api';
 import { get, writable, type Writable } from 'svelte/store';
@@ -30,8 +30,8 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, update } = writable({
-	current_file: initial_files.src.directory.routes.directory['+page.svelte'].file.contents,
-	current_path: './src/routes/+page.svelte',
+	current_file: null as string | null,
+	current_path: null as string | null,
 	iframe_url: './loading',
 	running_command: null as string | null,
 	running_process: null as WebContainerProcess | null,
@@ -115,7 +115,7 @@ function add_file_in_store(store: Writable<any>, path: string, contents: string,
 function delete_file_from_store(store: Writable<any>, path: string) {
 	const split_path = path.split("/");
 	const last_part = split_path.pop();
-	const actual_path = split_path.join("/");
+	const actual_path = split_path.length === 1 ? `${split_path[0]}/` : split_path.join("/");
 	const subtree = get_subtree_from_path(actual_path, get(store));
 	if (subtree) {
 		if (last_part) {
@@ -135,15 +135,21 @@ export const webcontainer = {
 	/**
 	 * init the webcontainer and mount the files
 	 */
-	async init() {
+	async init(toMount?: FileSystemTree) {
 		if (webcontainer_instance instanceof WebContainer) {
-			console.warn(
-				"You are trying to init the webcontainer multiple times and that's not permitted. Check your code!"
-			);
+			if (dev) {
+				console.warn(
+					"You are trying to init the webcontainer multiple times and that's not permitted. Check your code!"
+				);
+			}
 			return;
 		}
+		if (toMount) {
+			in_memory_fs_store.set(structuredClone(toMount));
+			files_store.set(structuredClone(toMount));
+		}
 		webcontainer_instance = await WebContainer.boot();
-		webcontainer_instance.mount(initial_files);
+		webcontainer_instance.mount(toMount ?? initial_files);
 	},
 	/**
 	 * Read the file from the file system of the webcontainer and set the content to the
@@ -213,6 +219,12 @@ export const webcontainer = {
 		await webcontainer_instance.fs.rm(path, {
 			recursive: true,
 		});
+		if (get(webcontainer).current_path?.includes(path)) {
+			merge_state({
+				current_file: null,
+				current_path: null,
+			});
+		}
 		delete_file_from_store(in_memory_fs_store, path);
 		delete_file_from_store(files_store, path);
 	}
@@ -235,7 +247,6 @@ async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystem
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
 		const node_path = path + node.name;
-		// console.log('READING: ' + node_path + (node.isDirectory() ? '/' : ''));
 		if (node.isFile()) {
 			const raw_data = await webcontainer_instance.fs.readFile(node_path);
 			const contents = decoder.decode(raw_data); // convert to POJO
