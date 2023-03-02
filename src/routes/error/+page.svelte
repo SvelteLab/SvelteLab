@@ -1,12 +1,12 @@
 <script>
 	import '../../styles/global.css';
-	import Error from '~icons/akar-icons/chat-error';
+	import Error from '~icons/akar-icons/chat-question';
 </script>
 
 <div class="loader">
 	<Error />
-	<span> No page found.</span>
-	<span><small> Try running a dev script... </small></span>
+	<span> No page found...</span>
+	<span><small> Try running the dev script! </small></span>
 </div>
 
 <style>
