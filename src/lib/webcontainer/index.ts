@@ -94,10 +94,10 @@ async function listen_for_files_changes() {
 	process.output.pipeTo(
 		new WritableStream({
 			write(data) {
-				const matches = data.match(/(?<command>(?:unlink|add|addDir)):(?<route>.*)/);
+				const matches = data.match(/(?<command>(?:unlink|add|addDir|unlinkDir)):(?<route>.*)/);
 				if (matches) {
 					const { command, route } = matches.groups as {
-						command: 'unlink' | 'add' | 'addDir';
+						command: 'unlink' | 'add' | 'addDir' | 'unlinkDir';
 						route: string;
 					};
 					const path = `./${route}`;
@@ -107,7 +107,7 @@ async function listen_for_files_changes() {
 						get_subtree_from_path(path, get(files_store), true);
 						//trigger rerender
 						files_store.update((value) => value);
-					} else {
+					} else if (command === 'unlink' || command === 'unlinkDir') {
 						delete_file_from_store(files_store, path);
 					}
 				}
