@@ -83,6 +83,42 @@ async function run_command(cmd: string) {
 	});
 }
 
+async function listen_for_files_changes() {
+	const to_ignore = IGNORE_LIST.flatMap((IGNORE) => ['-i', `"${IGNORE}"`]);
+	console.log({ to_ignore });
+	const process = await webcontainer_instance.spawn('npx', [
+		'chokidar-cli',
+		'*',
+		'**/*',
+		...to_ignore
+	]);
+	process.output.pipeTo(
+		new WritableStream({
+			write(data) {
+				const matches = data.match(/(?<command>(?:unlink|add|addDir)):(?<route>.*)/);
+				if (matches) {
+					const { command, route } = matches.groups as {
+						command: 'unlink' | 'add' | 'addDir';
+						route: string;
+					};
+					const path = `./${route}`;
+					if (command === 'add') {
+						add_file_in_store(files_store, path, '', true);
+					} else if (command == 'addDir') {
+						get_subtree_from_path(path, get(files_store), true);
+						//trigger rerender
+						files_store.update((value) => value);
+					} else {
+						delete_file_from_store(files_store, path);
+					}
+					console.log(data);
+				}
+			}
+		})
+	);
+	process.exit.then(listen_for_files_changes);
+}
+
 /**
  * Readable store for the file system tree, we duplicate this so that
  * the file system tree does not have to re-evaluate every keystroke
@@ -92,13 +128,6 @@ const files_store = writable(structuredClone(initial_files));
 export const files = {
 	subscribe: files_store.subscribe
 };
-
-/**
- * Writable store for the file system, we can save this to our storage
- */
-const in_memory_fs_store = writable(structuredClone(initial_files));
-
-export const in_memory_fs = { subscribe: in_memory_fs_store.subscribe };
 
 function add_file_in_store(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,11 +180,19 @@ export const webcontainer = {
 			return;
 		}
 		if (toMount) {
-			in_memory_fs_store.set(structuredClone(toMount));
 			files_store.set(structuredClone(toMount));
 		}
 		webcontainer_instance = await WebContainer.boot();
 		webcontainer_instance.mount(toMount ?? initial_files);
+		webcontainer_instance.on('server-ready', (port, url) => {
+			merge_state({ iframe_url: url });
+			webcontainer_instance.on('port', (closed_port: number) => {
+				if (port === closed_port) {
+					merge_state({ iframe_url: './error' });
+				}
+			});
+		});
+		listen_for_files_changes();
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
 				callback();
@@ -191,7 +228,6 @@ export const webcontainer = {
 	 */
 	update_file(path: string, content: string) {
 		webcontainer_instance.fs.writeFile(path, content);
-		add_file_in_store(in_memory_fs_store, path, content);
 	},
 
 	/**
@@ -207,36 +243,21 @@ export const webcontainer = {
 	 */
 	async run_dev_server() {
 		run_command('npm run dev');
-		webcontainer_instance.on('server-ready', (port, url) => {
-			merge_state({ iframe_url: url });
-			webcontainer_instance.on('port', (closed_port: number) => {
-				if (port === closed_port) {
-					merge_state({ iframe_url: './error' });
-				}
-			});
-		});
 	},
 	run_command,
 	/**
 	 * Saves the container file system to local storage
 	 */
 	async save(): Promise<void> {
-		localStorage.setItem('FS_tree', JSON.stringify(get(in_memory_fs_store)));
+		localStorage.setItem('FS_tree', JSON.stringify(get_tree_from_container()));
 	},
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
-		add_file_in_store(in_memory_fs_store, path, '', true);
-		add_file_in_store(files_store, path, '', true);
 	},
 	async add_folder(path: string) {
 		await webcontainer_instance.fs.mkdir(path, {
 			recursive: true
 		});
-		get_subtree_from_path(path, get(files_store), true);
-		get_subtree_from_path(path, get(in_memory_fs_store), true);
-		//trigger rerender
-		in_memory_fs_store.update((value) => value);
-		files_store.update((value) => value);
 	},
 	async delete_file(path: string) {
 		await webcontainer_instance.fs.rm(path, {
@@ -248,8 +269,14 @@ export const webcontainer = {
 				current_path: null
 			});
 		}
-		delete_file_from_store(in_memory_fs_store, path);
-		delete_file_from_store(files_store, path);
+	},
+	async read_package_json() {
+		try {
+			const package_json = await webcontainer_instance.fs.readFile('./package.json', 'utf8');
+			return JSON.parse(package_json);
+		} catch (e) {
+			return {};
+		}
 	}
 };
 

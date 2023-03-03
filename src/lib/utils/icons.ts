@@ -6,13 +6,15 @@ import Vite from '~icons/vscode-icons/file-type-vite';
 import CSS from '~icons/vscode-icons/file-type-css';
 import JSON from '~icons/vscode-icons/file-type-json';
 import HTML from '~icons/vscode-icons/file-type-html';
+import Tailwind from '~icons/vscode-icons/file-type-tailwind';
 
 const icon_maps = new Map<RegExp, typeof File>([
 	[/vite\.config\.(ts|js)$/, Vite],
+	[/tailwind\.config\.(cjs|js)$/, Tailwind],
 	[/svelte\.config\.(ts|js)$/, Svelte],
 	[/.*\.svelte$/, Svelte],
 	[/.*\.ts$/, TS],
-	[/.*\.js$/, JS],
+	[/.*\.(js|cjs|mjs)$/, JS],
 	[/.*\.css$/, CSS],
 	[/.*\.json$/, JSON],
 	[/.*\.html$/, HTML],
