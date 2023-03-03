@@ -85,7 +85,6 @@ async function run_command(cmd: string) {
 
 async function listen_for_files_changes() {
 	const to_ignore = IGNORE_LIST.flatMap((IGNORE) => ['-i', `"${IGNORE}"`]);
-	console.log({ to_ignore });
 	const process = await webcontainer_instance.spawn('npx', [
 		'chokidar-cli',
 		'*',
@@ -111,7 +110,6 @@ async function listen_for_files_changes() {
 					} else {
 						delete_file_from_store(files_store, path);
 					}
-					console.log(data);
 				}
 			}
 		})
