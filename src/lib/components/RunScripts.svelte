@@ -1,17 +1,34 @@
 <script lang="ts">
-	import { in_memory_fs, webcontainer } from '$lib/webcontainer';
+	import { webcontainer } from '$lib/webcontainer';
+	import { onMount } from 'svelte';
 	import Play from '~icons/akar-icons/play';
 	import Stop from '~icons/akar-icons/square';
 	import Running from '~icons/eos-icons/loading';
+	import Refresh from '~icons/akar-icons/arrow-counter-clockwise';
 	let scripts: [string, string][] = [];
-	$: {
-		try {
-			const package_json = JSON.parse($in_memory_fs['package.json'].file.contents);
-			scripts = Object.entries(package_json?.scripts || {}) as unknown as [string, string][];
-		} catch (e) {}
+	let loading = false;
+	async function refresh_package_json() {
+		loading = true;
+		const [package_json] = await Promise.all([
+			webcontainer.read_package_json(),
+			new Promise((resolve) => setTimeout(resolve, 1000))
+		]);
+		scripts = Object.entries(package_json?.scripts || {}) as unknown as [string, string][];
+		loading = false;
 	}
+	onMount(() => {
+		return webcontainer.on_init(refresh_package_json);
+	});
 </script>
 
+<div>
+	<span>NPM SCRIPTS</span>
+	{#if !loading}
+		<button on:click={refresh_package_json}><Refresh /></button>
+	{:else}
+		<Running />
+	{/if}
+</div>
 <ul>
 	{#each scripts as [script, run]}
 		{@const actual_command = `npm run ${script}`}
@@ -63,5 +80,15 @@
 	}
 	button {
 		display: flex;
+	}
+	div {
+		background-color: var(--sk-back-1);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.5rem;
+		font-weight: bold;
+		font-size: 1.3rem;
+		text-transform: uppercase;
 	}
 </style>

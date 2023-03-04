@@ -25,6 +25,8 @@
 		svelte: svelte(),
 		html: html(),
 		js: javascript(),
+		cjs: javascript(),
+		mjs: javascript(),
 		ts: javascript({ typescript: true }),
 		css: css(),
 		json: json(),

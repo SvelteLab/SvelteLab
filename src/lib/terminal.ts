@@ -41,7 +41,6 @@ terminal.onKey((e) => {
 			//split the string based on the caret position
 			const first = line.substring(0, current_caret - 1);
 			const last = line.substring(current_caret);
-			console.log(first, last);
 			/**
 			 * This madness write in the buffer of xterm in this way
 			 * - \b move the caret back
