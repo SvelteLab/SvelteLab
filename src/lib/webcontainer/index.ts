@@ -9,6 +9,7 @@ import {
 } from '@webcontainer/api';
 import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 
 const initial_files = get_tree_from_local_storage() || default_files;
 
@@ -74,16 +75,33 @@ async function run_command(cmd: string) {
 			}
 		})
 	);
-	return process.exit.then((code: number) => {
+	return process.exit.then(async (code: number) => {
 		merge_state({
 			running_command: null,
 			running_process: null
 		});
+		try {
+			// for good measure whenever an npm script finishes we
+			// sync the store to the webcontainer
+			files_store.set(await get_tree_from_container());
+		} catch (e) {
+			/* empty */
+		}
 		return code;
 	});
 }
 
+const listening_for_fs_store = writable(false);
+
+/**
+ * we can use this to check if we are already lstening to fs
+ */
+export const listening_for_fs = {
+	subscribe: listening_for_fs_store.subscribe
+};
+
 async function listen_for_files_changes() {
+	listening_for_fs_store.set(false);
 	const to_ignore = IGNORE_LIST.flatMap((IGNORE) => ['-i', `"${IGNORE}"`]);
 	const process = await webcontainer_instance.spawn('npx', [
 		'chokidar-cli',
@@ -94,21 +112,24 @@ async function listen_for_files_changes() {
 	process.output.pipeTo(
 		new WritableStream({
 			write(data) {
-				const matches = data.match(/(?<command>(?:unlink|add|addDir|unlinkDir)):(?<route>.*)/);
+				if (data.startsWith('success Install finished')) {
+					listening_for_fs_store.set(true);
+				}
+				const matches = data.match(/(?<command>(?:unlink|add)):(?<route>.*)/);
 				if (matches) {
 					const { command, route } = matches.groups as {
-						command: 'unlink' | 'add' | 'addDir' | 'unlinkDir';
+						command: 'unlink' | 'add';
 						route: string;
 					};
 					const path = `./${route}`;
 					if (command === 'add') {
 						add_file_in_store(files_store, path, '', true);
-					} else if (command == 'addDir') {
-						get_subtree_from_path(path, get(files_store), true);
-						//trigger rerender
-						files_store.update((value) => value);
-					} else if (command === 'unlink' || command === 'unlinkDir') {
-						delete_file_from_store(files_store, path);
+					} else if (command === 'unlink') {
+						try {
+							delete_file_from_store(files_store, path);
+						} catch (e) {
+							/* empty */
+						}
 					}
 				}
 			}
@@ -176,6 +197,19 @@ export const webcontainer = {
 				);
 			}
 			return;
+		}
+		const hash = window.location.hash.substring(1);
+		if (!toMount && hash) {
+			const url_search_params = new URLSearchParams(hash);
+			const code = url_search_params.get('code');
+			if (code) {
+				const project = decompressFromEncodedURIComponent(code);
+				try {
+					toMount = JSON.parse(project);
+				} catch (e) {
+					/* empty */
+				}
+			}
 		}
 		if (toMount) {
 			files_store.set(structuredClone(toMount));
@@ -251,16 +285,28 @@ export const webcontainer = {
 	},
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
+		//if we are not already listening we can add the file in store ourself
+		if (!get(listening_for_fs_store)) {
+			add_file_in_store(files_store, path, '', true);
+		}
 	},
 	async add_folder(path: string) {
 		await webcontainer_instance.fs.mkdir(path, {
 			recursive: true
 		});
+		get_subtree_from_path(path, get(files_store), true);
+		//trigger rerender
+		files_store.update((value) => value);
 	},
 	async delete_file(path: string) {
 		await webcontainer_instance.fs.rm(path, {
 			recursive: true
 		});
+		try {
+			delete_file_from_store(files_store, path);
+		} catch (e) {
+			/* empty */
+		}
 		if (get(webcontainer).current_path?.includes(path)) {
 			merge_state({
 				current_file: null,
@@ -275,6 +321,15 @@ export const webcontainer = {
 		} catch (e) {
 			return {};
 		}
+	},
+	async get_share_url() {
+		const container_tree = await get_tree_from_container();
+		const url = new URL(window.location.href);
+		const encoded = compressToEncodedURIComponent(JSON.stringify(container_tree));
+		const url_search_params = new URLSearchParams();
+		url_search_params.set('code', encoded);
+		url.hash = url_search_params.toString();
+		return url;
 	}
 };
 

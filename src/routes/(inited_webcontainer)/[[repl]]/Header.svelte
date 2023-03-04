@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { toast } from '@zerodevx/svelte-toast';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import Save from '~icons/akar-icons/cloud';
@@ -7,6 +7,7 @@
 	import Login from '~icons/akar-icons/face-happy';
 	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/akar-icons/more-horizontal';
+	import Share from '~icons/akar-icons/network';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import Planet from '~icons/akar-icons/planet';
@@ -62,6 +63,24 @@
 		<Fork />
 	</button>
 
+	<button
+		on:click={async () => {
+			try {
+				const share_url = await webcontainer.get_share_url();
+				window.navigator.clipboard.writeText(share_url.toString());
+				toast.push('Copied to clipboard');
+			} catch (e) {
+				toast.push('Errors were made', {
+					theme: {
+						'--toastBarBackground': '#ff0000'
+					}
+				});
+			}
+		}}
+		title="Share"
+	>
+		<Share />
+	</button>
 	<button
 		title="Save Changes"
 		on:click={async () => {
