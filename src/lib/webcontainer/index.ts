@@ -324,6 +324,9 @@ export const webcontainer = {
 	},
 	async get_share_url() {
 		const container_tree = await get_tree_from_container();
+        // we delete package-lock because it's not needed
+        // and it bloat the url
+        delete container_tree['package-lock.json'];
 		const url = new URL(window.location.href);
 		const encoded = compressToEncodedURIComponent(JSON.stringify(container_tree));
 		const url_search_params = new URLSearchParams();
