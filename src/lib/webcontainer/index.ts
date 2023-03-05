@@ -367,6 +367,7 @@ export const webcontainer = {
 		// and it bloat the url
 		delete container_tree['package-lock.json'];
 		const url = new URL(window.location.href);
+		url.pathname = '';
 		const encoded = compressToEncodedURIComponent(JSON.stringify(container_tree));
 		const url_search_params = new URLSearchParams();
 		url_search_params.set('code', encoded);
