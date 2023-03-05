@@ -99,9 +99,9 @@
 		{/await}
 	</button>
 
-	<button title="Login">
+	<a href="/profile" class="btn" title="Login">
 		<Login />
-	</button>
+	</a>
 </header>
 
 <style>

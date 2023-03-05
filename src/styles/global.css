@@ -49,8 +49,12 @@ body .default-theme .splitpanes--horizontal>.splitpanes__splitter {
 	font-size: 1em;
 }
 
+.btn {
+	color: var(--sk-text-1);
+}
+
 /* override site-kit */
-button>svg {
+:is(button, a)>svg {
 	display: block;
 	height: initial !important;
 	width: initial !important;

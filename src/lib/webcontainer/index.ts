@@ -11,7 +11,7 @@ import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 
-const initial_files = get_tree_from_local_storage() || default_files;
+const initial_files = (get_tree_from_local_storage() || default_files) as FileSystemTree;
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -181,6 +181,30 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 
 const init_callbacks = new Set<() => void>();
 
+function get_files_to_mount(to_mount?: FileSystemTree) {
+	const hash = window?.location?.hash?.substring?.(1);
+	if (!to_mount && hash) {
+		const url_search_params = new URLSearchParams(hash);
+		const code = url_search_params.get('code');
+		if (code) {
+			const project = decompressFromEncodedURIComponent(code);
+			try {
+				to_mount = JSON.parse(project);
+			} catch (e) {
+				/* empty */
+			}
+		}
+	}
+	return to_mount ?? initial_files;
+}
+
+async function remove_all_files() {
+	const main_dir = await webcontainer_instance.fs.readdir('./');
+	for (const file of main_dir) {
+		await webcontainer_instance.fs.rm(`./${file}`, { recursive: true });
+	}
+}
+
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -189,7 +213,7 @@ export const webcontainer = {
 	/**
 	 * init the webcontainer and mount the files
 	 */
-	async init(toMount?: FileSystemTree) {
+	async init(to_mount?: FileSystemTree) {
 		if (webcontainer_instance instanceof WebContainer) {
 			if (dev) {
 				console.warn(
@@ -198,24 +222,12 @@ export const webcontainer = {
 			}
 			return;
 		}
-		const hash = window.location.hash.substring(1);
-		if (!toMount && hash) {
-			const url_search_params = new URLSearchParams(hash);
-			const code = url_search_params.get('code');
-			if (code) {
-				const project = decompressFromEncodedURIComponent(code);
-				try {
-					toMount = JSON.parse(project);
-				} catch (e) {
-					/* empty */
-				}
-			}
-		}
-		if (toMount) {
-			files_store.set(structuredClone(toMount));
+		//we just get this files to already show the files in the blorred background
+		to_mount = get_files_to_mount(to_mount);
+		if (to_mount) {
+			files_store.set(structuredClone(to_mount));
 		}
 		webcontainer_instance = await WebContainer.boot();
-		webcontainer_instance.mount(toMount ?? initial_files);
 		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ iframe_url: url });
 			webcontainer_instance.on('port', (closed_port: number) => {
@@ -225,12 +237,26 @@ export const webcontainer = {
 			});
 		});
 		listen_for_files_changes();
+	},
+	/**
+	 * Mount some files in the filesystem
+	 * @param to_mount the file tree to mount
+	 * @returns a promise that resolves when the file are mounted
+	 */
+	async mount_files(to_mount?: FileSystemTree) {
+		to_mount = get_files_to_mount(to_mount);
+		if (to_mount) {
+			files_store.set(structuredClone(to_mount));
+		}
+		await remove_all_files();
+		const mount_promise = webcontainer_instance.mount(to_mount ?? initial_files);
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
 				callback();
 			}
 		});
 		init_callbacks.clear();
+		return mount_promise;
 	},
 	/**
 	 * Register a callback for the webcontainer boots.
@@ -267,6 +293,12 @@ export const webcontainer = {
 	 * @returns a promise that fulfill when the command has finished to run
 	 */
 	async install_dependencies() {
+		const package_json = await this.read_package_json();
+		// if there are no dependencies to install just return 0 as the
+		// correct exit code
+		if (!(package_json?.dependencies || package_json?.devDependencies)) {
+			return Promise.resolve(0);
+		}
 		return run_command('npm install');
 	},
 	/**
@@ -274,7 +306,14 @@ export const webcontainer = {
 	 * to update the iframe url;
 	 */
 	async run_dev_server() {
-		run_command('npm run dev');
+		const package_json = await this.read_package_json();
+		// if there is no dev script just return 0 as the
+		// correct exit code
+		if (!package_json?.scripts?.dev) {
+			terminal.write('no dev script found, run whatever you want...\n');
+			return Promise.resolve(0);
+		}
+		return run_command('npm run dev');
 	},
 	run_command,
 	/**
@@ -324,9 +363,9 @@ export const webcontainer = {
 	},
 	async get_share_url() {
 		const container_tree = await get_tree_from_container();
-        // we delete package-lock because it's not needed
-        // and it bloat the url
-        delete container_tree['package-lock.json'];
+		// we delete package-lock because it's not needed
+		// and it bloat the url
+		delete container_tree['package-lock.json'];
 		const url = new URL(window.location.href);
 		const encoded = compressToEncodedURIComponent(JSON.stringify(container_tree));
 		const url_search_params = new URLSearchParams();
