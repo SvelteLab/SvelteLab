@@ -4,7 +4,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import Save from '~icons/akar-icons/cloud';
 	import Fork from '~icons/akar-icons/copy';
-	import Login from '~icons/akar-icons/face-happy';
+	import Login from '~icons/akar-icons/person';
 	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/akar-icons/more-horizontal';
 	import Share from '~icons/akar-icons/network';
@@ -14,6 +14,9 @@
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
 	import { layout_store } from './layout_store';
+	import { page } from '$app/stores';
+	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
+
 	let saving = new Promise((resolve) => resolve(null));
 </script>
 
@@ -102,9 +105,19 @@
 		{/await}
 	</button>
 
-	<a href="/profile" class="btn" title="Login">
-		<Login />
-	</a>
+	{#if !$page?.data?.github_login}
+		<a href="/profile" class="btn" title="Profile">
+			<Login />
+		</a>
+	{:else}
+		<a
+			class="btn"
+			href={`${$page.data?.github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
+			title="Login with GitHub"
+		>
+			<Login />
+		</a>
+	{/if}
 </header>
 
 <style>
