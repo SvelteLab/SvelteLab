@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import Booting from '~icons/line-md/loading-alt-loop';
 	import type { LayoutData } from './$types';
+	import { beforeNavigate } from '$app/navigation';
 
 	export let data: LayoutData;
 
@@ -12,10 +13,14 @@
 		//from the console...we can remove it later
 		(window as any).wc = webcontainer;
 	});
+
+	beforeNavigate(() => {
+		$webcontainer.running_process?.kill?.();
+	});
 </script>
 
 <slot />
-{#await webcontainer.init(data.repl)}
+{#await webcontainer.init(data.repl).then(() => webcontainer.mount_files(data.repl))}
 	<div class="loader">
 		<Booting />
 		<span> Booting up webcontainer... </span>
