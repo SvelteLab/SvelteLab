@@ -5,8 +5,14 @@
 	import Booting from '~icons/line-md/loading-alt-loop';
 	import type { LayoutData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
+	import { save_repl } from '$lib/api/client/repls';
+	import { repl_id } from '$lib/stores/repl_id_store';
+	import { error } from '$lib/utils/toast';
 
 	export let data: LayoutData;
+
+	// keep the repl id store up to date in case data changes
+	$: repl_id.set(data.id);
 
 	onMount(() => {
 		//this is to interact with the filesistem
@@ -19,6 +25,18 @@
 	});
 </script>
 
+<svelte:window
+	on:keydown={async (e) => {
+		if (e.code === 'KeyS' && e.ctrlKey) {
+			e.preventDefault();
+			if (data.user) {
+				await save_repl();
+			} else {
+				error('It seems you are trying to save. Login to save your project.');
+			}
+		}
+	}}
+/>
 <slot />
 {#await webcontainer.init(data.repl).then(() => webcontainer.mount_files(data.repl))}
 	<div class="loader">

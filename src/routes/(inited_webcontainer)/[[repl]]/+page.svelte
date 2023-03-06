@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
-	import { layout_store } from './layout_store';
+	import { layout_store } from '$lib/stores/layout_store';
 
 	onMount(async () => {
 		return webcontainer.on_init(async () => {

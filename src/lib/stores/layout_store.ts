@@ -6,7 +6,7 @@ interface LayoutStore {
 }
 
 const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
-	file_tree: false,
+	file_tree: true,
 	terminal: false
 });
 
