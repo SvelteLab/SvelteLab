@@ -7,7 +7,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
 	import { repl_id } from '$lib/stores/repl_id_store';
-	import { error } from '$lib/utils/toast';
+	import { error } from '$lib/toast';
 
 	export let data: LayoutData;
 

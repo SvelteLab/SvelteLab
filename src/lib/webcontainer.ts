@@ -324,7 +324,7 @@ export const webcontainer = {
 		if (!(package_json?.dependencies || package_json?.devDependencies)) {
 			return Promise.resolve(0);
 		}
-		return run_command('npm install');
+		return run_command('npm install --verbose');
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"

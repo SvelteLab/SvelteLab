@@ -19,11 +19,10 @@
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import { invalidate } from '$app/navigation';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { success, error } from '$lib/utils/toast';
+	import { success, error } from '$lib/toast';
 	import { save_repl } from '$lib/api/client/repls';
 	import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
 
-	const theme = get_theme();
 	$: ({ user, github_login } = $page.data ?? {});
 </script>
 

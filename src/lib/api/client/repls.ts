@@ -1,4 +1,4 @@
-import { error, success } from '$lib/utils/toast';
+import { error, success } from '$lib/toast';
 import { webcontainer } from '$lib/webcontainer';
 import { get } from 'svelte/store';
 import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
