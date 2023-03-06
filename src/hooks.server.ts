@@ -5,6 +5,7 @@ import { dev } from '$app/environment';
 import { POCKETBASE_URL } from '$env/static/private';
 
 const handle_headers: Handle = async ({ event, resolve }) => {
+	console.log(event.request.url);
 	event.setHeaders({
 		'Cross-Origin-Embedder-Policy': 'require-corp',
 		'Cross-Origin-Opener-Policy': 'same-origin'
