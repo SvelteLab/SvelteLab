@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { toast } from '@zerodevx/svelte-toast';
-	import { get_theme } from '$lib/theme';
+	import { theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
+	import { toast } from '@zerodevx/svelte-toast';
 	import Save from '~icons/akar-icons/cloud';
 	import Fork from '~icons/akar-icons/copy';
 	import Login from '~icons/akar-icons/face-happy';
@@ -14,7 +14,6 @@
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
 	import { layout_store } from './layout_store';
-	const theme = get_theme();
 	let saving = new Promise((resolve) => resolve(null));
 </script>
 
@@ -43,15 +42,19 @@
 	</button>
 
 	<button
-		on:click={() => {
-			theme.next();
+		on:click={(e) => {
+			if (e.shiftKey) {
+				theme.remove_preference();
+			} else {
+				theme.change_preference();
+			}
 		}}
-		title="Change theme"
+		title="Change theme. Shift+Click to delete preference"
 	>
-		{#if $theme === 'light'}
-			<Moon />
-		{:else if $theme === 'dark'}
+		{#if $theme.next === 'light'}
 			<Sun />
+		{:else if $theme.next === 'dark'}
+			<Moon />
 		{:else}
 			<Planet />
 		{/if}
