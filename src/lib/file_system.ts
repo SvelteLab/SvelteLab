@@ -1,7 +1,14 @@
-import type { FileSystemTree } from "@webcontainer/api";
-import { is_dir } from "./runtime-assertions";
+import type { DirectoryNode, FileNode, FileSystemTree } from '@webcontainer/api';
 
-export function get_file_from_path(base_path: string, files: FileSystemTree, create_if_not_exist = false) {
+export function is_dir(file: DirectoryNode | FileNode): file is DirectoryNode {
+	return 'directory' in file;
+}
+
+export function get_file_from_path(
+	base_path: string,
+	files: FileSystemTree,
+	create_if_not_exist = false
+) {
 	const path = base_path.split(/\.?\//);
 	let subtree: FileSystemTree = files;
 	for (let index = 0; index < path.length; index++) {
@@ -12,7 +19,7 @@ export function get_file_from_path(base_path: string, files: FileSystemTree, cre
 				//this means is a new file
 				subtree[path_part] = {
 					file: {
-						contents: '',
+						contents: ''
 					}
 				};
 				file = subtree[path_part];
@@ -24,10 +31,14 @@ export function get_file_from_path(base_path: string, files: FileSystemTree, cre
 			}
 		}
 	}
-	throw new Error("You are trying to get the file content of a folder");
+	throw new Error('You are trying to get the file content of a folder');
 }
 
-export function get_subtree_from_path(base_path: string, files: FileSystemTree, create_if_not_exist = false) {
+export function get_subtree_from_path(
+	base_path: string,
+	files: FileSystemTree,
+	create_if_not_exist = false
+) {
 	const path = base_path.split(/\.?\//);
 	let subtree: FileSystemTree = files;
 	for (let index = 0; index < path.length; index++) {

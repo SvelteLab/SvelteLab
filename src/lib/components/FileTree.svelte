@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { get_subtree_from_path } from '$lib/utils/file_system';
-	import { get_icon } from '$lib/utils/icons';
-	import { is_dir } from '$lib/utils/runtime-assertions';
+	import { get_subtree_from_path, is_dir } from '$lib/file_system';
+	import { get_icon } from '$lib/file_icons';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
+	import { createEventDispatcher } from 'svelte';
+	import Check from '~icons/akar-icons/check';
 	import Folder from '~icons/akar-icons/folder';
 	import FolderAdd from '~icons/akar-icons/folder-add';
 	import Plus from '~icons/akar-icons/plus';
-	import Check from '~icons/akar-icons/check';
 	import Delete from '~icons/akar-icons/trash-can';
-	import { createEventDispatcher } from 'svelte';
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
 
