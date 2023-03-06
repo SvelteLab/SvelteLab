@@ -14,6 +14,9 @@
 	// keep the repl id store up to date in case data changes
 	$: repl_id.set(data.id);
 
+	// keep the repl id store up to date in case data changes
+	$: repl_id.set(data.id);
+
 	onMount(() => {
 		//this is to interact with the filesistem
 		//from the console...we can remove it later
@@ -25,6 +28,18 @@
 	});
 </script>
 
+<svelte:window
+	on:keydown={async (e) => {
+		if (e.code === 'KeyS' && e.ctrlKey) {
+			e.preventDefault();
+			if (data.user) {
+				await save_repl();
+			} else {
+				error('It seems you are trying to save. Login to save your project.');
+			}
+		}
+	}}
+/>
 <svelte:window
 	on:keydown={async (e) => {
 		if (e.code === 'KeyS' && e.ctrlKey) {

@@ -6,6 +6,10 @@
 	import Fork from '$lib/components/icons/Fork.svelte';
 	import SignIn from '~icons/akar-icons/person';
 	import SignOut from '~icons/akar-icons/sign-out';
+	import Save from '$lib/components/icons/Save.svelte';
+	import Fork from '$lib/components/icons/Fork.svelte';
+	import SignIn from '~icons/akar-icons/person';
+	import SignOut from '~icons/akar-icons/sign-out';
 	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/eos-icons/loading';
 	import Share from '~icons/akar-icons/network';
