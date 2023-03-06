@@ -1,6 +1,6 @@
 import { browser, dev } from '$app/environment';
 import { terminal } from '$lib/terminal';
-import { get_file_from_path, get_subtree_from_path } from '$lib/utils/file_system';
+import { get_file_from_path, get_subtree_from_path } from '$lib/file_system';
 import {
 	WebContainer,
 	type DirEnt,
