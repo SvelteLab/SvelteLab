@@ -1,28 +1,30 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
-	import Save from '~icons/akar-icons/cloud';
-	import Fork from '~icons/akar-icons/copy';
-	import Login from '~icons/akar-icons/person';
+	import Save from '$lib/components/icons/Save.svelte';
+	import Fork from '$lib/components/icons/Fork.svelte';
+	import SignIn from '~icons/akar-icons/person';
 	import SignOut from '~icons/akar-icons/sign-out';
 	import Moon from '~icons/akar-icons/moon';
-	import Pending from '~icons/akar-icons/more-horizontal';
+	import Pending from '~icons/eos-icons/loading';
 	import Share from '~icons/akar-icons/network';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import Planet from '~icons/akar-icons/planet';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
-	import { layout_store } from './layout_store';
+	import { layout_store } from '$lib/stores/layout_store';
 	import { page } from '$app/stores';
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import { invalidate } from '$app/navigation';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { success, error } from '$lib/utils/toast';
+	import { save_repl } from '$lib/api/client/repls';
+	import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
 
 	const theme = get_theme();
-	let saving = new Promise((resolve) => resolve(null));
+	$: ({ user, github_login } = $page.data ?? {});
 </script>
 
 <header>
@@ -66,55 +68,45 @@
 
 	<span> Hello World </span>
 
-	<button title="Fork Project">
-		<Fork />
-	</button>
-
 	<button
 		on:click={async () => {
 			try {
 				const share_url = await webcontainer.get_share_url();
 				window.navigator.clipboard.writeText(share_url.toString());
-				toast.push('Copied to clipboard');
+				success('Copied to clipboard');
 			} catch (e) {
-				toast.push('Errors were made', {
-					theme: {
-						'--toastBarBackground': '#ff0000'
-					}
-				});
+				error("Can't copy to clipboard");
 			}
 		}}
 		title="Share"
 	>
 		<Share />
 	</button>
-	<button
-		title="Save Changes"
-		on:click={async () => {
-			// we can do this instead of goto: we don't need svelte to reload the
-			// components, we just need to provide the user with the new url
-			// and let him refresh if it wants. This obviosuly would be an api
-			// call to get the correct id from the db
-			history.pushState(null, '', '/' + Math.random().toString(36).substring(2));
-			saving = webcontainer.save();
-		}}
-	>
-		{#await saving}
-			<Pending />
-		{:then _}
-			<Save />
-		{/await}
-	</button>
 
-	{#if $page.data.user}
+	{#if user}
+		<button title="Fork Project">
+			<Fork />
+		</button>
+		<form
+			on:submit|preventDefault={async () => {
+				await save_repl();
+			}}
+		>
+			<button title="Save Changes">
+				{#if $is_repl_saving}
+					<Pending />
+				{:else}
+					<Save />
+				{/if}
+			</button>
+		</form>
+
 		<a href="/profile" class="btn" title="Profile">
-			<Avatar
-				alt={`${$page.data.user.name} profile`}
-				src={`./proxy/?url=${$page.data.user.avatarUrl}`}
-			/>
+			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 		</a>
 		<form
 			use:enhance={() => () => {
+				//on logout we invalidate authed:user which reload the page
 				invalidate('authed:user');
 			}}
 			method="POST"
@@ -127,10 +119,10 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${$page.data?.github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
+			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
 			title="Login with GitHub"
 		>
-			<Login />
+			<SignIn />
 		</a>
 	{/if}
 </header>
