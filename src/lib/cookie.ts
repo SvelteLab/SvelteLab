@@ -1,5 +1,7 @@
 import { browser } from '$app/environment';
 
+export const THEME_COOKIE = 'svelteblitz-theme';
+
 export function get_cookies() {
 	if (!browser) return {};
 	return Object.fromEntries(
@@ -7,7 +9,7 @@ export function get_cookies() {
 	) as Record<string, string>;
 }
 
-export function get_cookie(name: string) {
+export function get_cookie(name: string): string | undefined {
 	return get_cookies()[name];
 }
 

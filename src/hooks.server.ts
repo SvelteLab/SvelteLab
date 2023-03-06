@@ -1,3 +1,4 @@
+import { THEME_COOKIE } from '$lib/cookie';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -7,7 +8,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	});
 	return resolve(event, {
 		transformPageChunk(input) {
-			const theme = event.cookies.get('svelteblitz-theme') ?? '';
+			const theme = event.cookies.get(THEME_COOKIE) ?? '';
 			return input.html.replace('%theme%', theme);
 		}
 	});
