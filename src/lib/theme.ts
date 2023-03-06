@@ -4,9 +4,9 @@ import { update_terminal_theme } from './terminal';
 
 export type Theme = 'light' | 'dark';
 
-const store = writable<{ current: Theme; next: Theme }>(init());
+const store = writable<{ current: Theme; next: Theme }>(initial_state());
 
-function init() {
+function initial_state() {
 	const user_preference = get_cookie(THEME_COOKIE) as Theme | undefined;
 	if (!user_preference) {
 		window
@@ -22,7 +22,7 @@ function init() {
 function change_preference() {
 	window
 		.matchMedia('(prefers-color-scheme: dark)')
-		.addEventListener('change', handle_os_preference_change);
+		.removeEventListener('change', handle_os_preference_change);
 	const { next: current } = get(store);
 	const next = get_opposite(current);
 	store.set({ current, next });
@@ -40,7 +40,7 @@ function handle_os_preference_change() {
 
 function remove_preference() {
 	set_cookie(THEME_COOKIE, '');
-	store.set(init());
+	store.set(initial_state());
 }
 
 function get_opposite(current: Theme): Theme {
