@@ -1,9 +1,6 @@
+import { redirect } from '@sveltejs/kit';
 import type { FileSystemTree } from '@webcontainer/api';
 import type { LayoutServerLoad } from './$types';
-import { redirect } from '@sveltejs/kit';
-import type { Actions } from '../$types';
-import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
-import { dev } from '$app/environment';
 
 export const ssr = false;
 
@@ -46,7 +43,7 @@ function get_repl_from_id(id: string) {
 	return repls[id];
 }
 
-export const load: LayoutServerLoad = async ({ params, locals, cookies }) => {
+export const load: LayoutServerLoad = async ({ params }) => {
 	const { repl } = params;
 	let repl_files: FileSystemTree | undefined;
 	if (repl) {
@@ -55,19 +52,7 @@ export const load: LayoutServerLoad = async ({ params, locals, cookies }) => {
 	if (repl && !repl_files) {
 		throw redirect(300, '/');
 	}
-	let github_login;
-	if (!locals.user) {
-		github_login = await (
-			await locals.poket_base.collection('users').listAuthMethods()
-		)?.authProviders?.find?.((provider) => provider.name === 'github');
-		if (github_login?.codeVerifier) {
-			cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
-				path: '/'
-			});
-		}
-	}
 	return {
-		repl: repl_files,
-		github_login
+		repl: repl_files
 	};
 };

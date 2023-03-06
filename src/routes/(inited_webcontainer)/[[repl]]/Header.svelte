@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { toast } from '@zerodevx/svelte-toast';
 	import { theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
-	import { toast } from '@zerodevx/svelte-toast';
 	import Save from '~icons/akar-icons/cloud';
 	import Fork from '~icons/akar-icons/copy';
 	import Login from '~icons/akar-icons/person';
+	import SignOut from '~icons/akar-icons/sign-out';
 	import Moon from '~icons/akar-icons/moon';
 	import Pending from '~icons/akar-icons/more-horizontal';
 	import Share from '~icons/akar-icons/network';
@@ -16,6 +18,8 @@
 	import { layout_store } from './layout_store';
 	import { page } from '$app/stores';
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
+	import { invalidate } from '$app/navigation';
+	import Avatar from '$lib/components/Avatar.svelte';
 
 	let saving = new Promise((resolve) => resolve(null));
 </script>
@@ -105,10 +109,24 @@
 		{/await}
 	</button>
 
-	{#if !$page?.data?.github_login}
+	{#if $page.data.user}
 		<a href="/profile" class="btn" title="Profile">
-			<Login />
+			<Avatar
+				alt={`${$page.data.user.name} profile`}
+				src={`./proxy/?url=${$page.data.user.avatarUrl}`}
+			/>
 		</a>
+		<form
+			use:enhance={() => () => {
+				invalidate('authed:user');
+			}}
+			method="POST"
+			action="?/logout"
+		>
+			<button title="Sign out">
+				<SignOut />
+			</button>
+		</form>
 	{:else}
 		<a
 			class="btn"
