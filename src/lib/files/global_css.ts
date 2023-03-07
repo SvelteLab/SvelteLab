@@ -28,7 +28,7 @@ export const global_css = `:root {
 	}
  }
  body {
-	background-color: var(--sk-back-2);
+	background-color: var(--sk-back-3);
 	color: var(--sk-text-1);
 	margin: 0.75em;
 	font-family: var(--sk-font);
