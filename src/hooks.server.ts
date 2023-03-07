@@ -1,9 +1,9 @@
-import { THEME_COOKIE } from '$lib/cookie';
-import type { Handle } from '@sveltejs/kit';
-import PocketBase from 'pocketbase';
-import { sequence } from '@sveltejs/kit/hooks';
 import { dev } from '$app/environment';
 import { POCKETBASE_URL } from '$env/static/private';
+import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
+import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
+import PocketBase from 'pocketbase';
 
 const handle_headers: Handle = async ({ event, resolve }) => {
 	event.setHeaders({
@@ -12,7 +12,7 @@ const handle_headers: Handle = async ({ event, resolve }) => {
 	});
 	return resolve(event, {
 		transformPageChunk(input) {
-			const theme = event.cookies.get(THEME_COOKIE) ?? '';
+			const theme = event.cookies.get(PUBLIC_THEME_COOKIE_NAME) ?? '';
 			return input.html.replace('%theme%', theme);
 		}
 	});
