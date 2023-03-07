@@ -61,6 +61,14 @@ body .default-theme .splitpanes--horizontal>.splitpanes__splitter {
 	stroke: initial !important;
 }
 
+:is(button, a)>img {
+	display: block;
+}
+
+a {
+	font-size: 20px;
+}
+
 .dark {
 	/* TODO create tokens for all the ad-hoc styles used on the site, so we can offer dark mode */
 	--sk-back-1: hsl(0, 0%, 10%);

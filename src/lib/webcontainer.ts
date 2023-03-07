@@ -36,7 +36,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 	recursive_warning_proxy_traps
 );
 
-const { subscribe, update } = writable({
+const { subscribe, set } = writable({
 	current_file: null as string | null,
 	current_path: null as string | null,
 	iframe_url: './loading',
@@ -50,8 +50,28 @@ type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
 	? ActualType
 	: never;
 
-function merge_state(state: Partial<WebcontainerStoreType>) {
-	update((previous_state) => ({ ...previous_state, ...state }));
+async function merge_state(state: Partial<WebcontainerStoreType>) {
+	const previous_state = get({ subscribe });
+	let current_file = state.current_file ?? null; //<-- remove undefined for typescript
+	// if the current file is not being set we retrieve it from the virtual
+	// file system so that it's up to date. This is to avoid to update this
+	// store to every keystroke and at the same time avoid resetting the editor
+	// when we update another piece of the store.
+	if (!current_file) {
+		try {
+			current_file = await webcontainer_instance.fs.readFile(
+				previous_state.current_path ?? '',
+				'utf8'
+			);
+		} catch (e) {
+			/* empty */
+		}
+	}
+	set({
+		...previous_state,
+		...state,
+		current_file
+	});
 }
 
 /**
@@ -250,6 +270,11 @@ export const webcontainer = {
 		}
 		await remove_all_files();
 		const mount_promise = webcontainer_instance.mount(to_mount ?? initial_files);
+		merge_state({
+			current_file: null,
+			current_path: null,
+			iframe_url: './loading'
+		});
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
 				callback();
@@ -299,7 +324,7 @@ export const webcontainer = {
 		if (!(package_json?.dependencies || package_json?.devDependencies)) {
 			return Promise.resolve(0);
 		}
-		return run_command('npm install');
+		return run_command('npm install --verbose');
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
@@ -322,6 +347,7 @@ export const webcontainer = {
 	async save(): Promise<void> {
 		localStorage.setItem('FS_tree', JSON.stringify(get_tree_from_container()));
 	},
+	get_tree_from_container,
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
 		//if we are not already listening we can add the file in store ourself

@@ -1,20 +1,29 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
-	import { toast } from '@zerodevx/svelte-toast';
-	import Save from '~icons/akar-icons/cloud';
-	import Fork from '~icons/akar-icons/copy';
-	import Login from '~icons/akar-icons/face-happy';
+	import Save from '$lib/components/icons/Save.svelte';
+	import Fork from '$lib/components/icons/Fork.svelte';
+	import SignIn from '~icons/akar-icons/person';
+	import SignOut from '~icons/akar-icons/sign-out';
 	import Moon from '~icons/akar-icons/moon';
-	import Pending from '~icons/akar-icons/more-horizontal';
+	import Pending from '~icons/eos-icons/loading';
 	import Share from '~icons/akar-icons/network';
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import Planet from '~icons/akar-icons/planet';
 	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
-	import { layout_store } from './layout_store';
-	let saving = new Promise((resolve) => resolve(null));
+	import { layout_store } from '$lib/stores/layout_store';
+	import { page } from '$app/stores';
+	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
+	import { invalidate } from '$app/navigation';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import { success, error } from '$lib/toast';
+	import { save_repl } from '$lib/api/client/repls';
+	import { repl_name, is_repl_saving } from '$lib/stores/repl_id_store';
+
+	$: ({ user, github_login } = $page.data ?? {});
 </script>
 
 <header>
@@ -60,51 +69,64 @@
 		{/if}
 	</button>
 
-	<span> Hello World </span>
-
-	<button title="Fork Project">
-		<Fork />
-	</button>
+	<input bind:value={$repl_name} />
 
 	<button
 		on:click={async () => {
 			try {
 				const share_url = await webcontainer.get_share_url();
 				window.navigator.clipboard.writeText(share_url.toString());
-				toast.push('Copied to clipboard');
+				success('Copied to clipboard');
 			} catch (e) {
-				toast.push('Errors were made', {
-					theme: {
-						'--toastBarBackground': '#ff0000'
-					}
-				});
+				error("Can't copy to clipboard");
 			}
 		}}
 		title="Share"
 	>
 		<Share />
 	</button>
-	<button
-		title="Save Changes"
-		on:click={async () => {
-			// we can do this instead of goto: we don't need svelte to reload the
-			// components, we just need to provide the user with the new url
-			// and let him refresh if it wants. This obviosuly would be an api
-			// call to get the correct id from the db
-			history.pushState(null, '', '/' + Math.random().toString(36).substring(2));
-			saving = webcontainer.save();
-		}}
-	>
-		{#await saving}
-			<Pending />
-		{:then _}
-			<Save />
-		{/await}
-	</button>
 
-	<a href="/profile" class="btn" title="Login">
-		<Login />
-	</a>
+	{#if user}
+		<button title="Fork Project">
+			<Fork />
+		</button>
+		<button
+			on:click={async () => {
+				await save_repl();
+			}}
+			title="Save Changes"
+		>
+			{#if $is_repl_saving}
+				<Pending />
+			{:else}
+				<Save />
+			{/if}
+		</button>
+
+		<a href="/profile" class="btn" title="Profile">
+			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+		</a>
+		<form
+			use:enhance={() => () => {
+				//on logout we invalidate authed:user which reload the page
+				invalidate('authed:user');
+			}}
+			method="POST"
+			action="?/logout"
+		>
+			<button title="Sign out">
+				<SignOut />
+			</button>
+		</form>
+	{:else}
+		<a
+			class="btn"
+			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
+			title="Login with GitHub"
+		>
+			<SignIn />
+		</a>
+	{/if}
 </header>
 
 <style>
@@ -140,9 +162,17 @@
 		bottom: 0;
 		top: calc(100% - 3px);
 	}
-
-	span {
+	input {
 		margin-left: 2em;
 		flex-grow: 1;
+		background-color: var(--sk-back-2);
+		border: 1.5px solid var(--sk-back-4);
+		font-size: 1.5rem;
+		color: var(--sk-text-1);
+		padding: 1rem;
+		font-family: var(--sk-font);
+	}
+	input:focus {
+		outline: 1px solid var(--sk-theme-1);
 	}
 </style>
