@@ -8,7 +8,9 @@
 	import Folder from '~icons/akar-icons/folder';
 	import FolderAdd from '~icons/akar-icons/folder-add';
 	import Plus from '~icons/akar-icons/plus';
+	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Delete from '~icons/akar-icons/trash-can';
+
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
 
@@ -67,6 +69,9 @@
 					}}
 				>
 					<FolderAdd />
+				</button>
+				<button title="Toggle Config Files">
+					<ConfigFiles />
 				</button>
 			</div>
 		</li>

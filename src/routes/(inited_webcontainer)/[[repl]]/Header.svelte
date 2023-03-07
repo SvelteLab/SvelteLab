@@ -12,7 +12,6 @@
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import Planet from '~icons/akar-icons/planet';
-	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { page } from '$app/stores';
@@ -44,10 +43,6 @@
 		aria-pressed={$layout_store.terminal}
 	>
 		<PanelBottom />
-	</button>
-
-	<button title="Toggle Config Files">
-		<ConfigFiles />
 	</button>
 
 	<button
