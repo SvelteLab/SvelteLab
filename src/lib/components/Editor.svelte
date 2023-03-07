@@ -57,7 +57,7 @@
 				width: '100%',
 				height: '100%',
 				overflow: 'auto',
-				'background-color': 'var(--sk-code-bg)',
+				'background-color': 'var(--sk-back-1)',
 				color: 'var(--sk-code-base)'
 			},
 			'*': {
@@ -68,7 +68,7 @@
 				border: 'none'
 			},
 			'.cm-gutter': {
-				'background-color': 'var(--sk-code-bg)',
+				'background-color': 'var(--sk-back-1)',
 				color: 'var(--sk-code-base)'
 			},
 			'.cm-line.cm-activeLine': {
@@ -85,6 +85,9 @@
 			},
 			'.cm-cursor': {
 				'border-color': 'var(--sk-code-base)'
+			},
+			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+				background: 'var(--sk-back-3)'
 			}
 		}}
 	/>
