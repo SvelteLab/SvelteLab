@@ -90,19 +90,18 @@
 		<button title="Fork Project">
 			<Fork />
 		</button>
-		<form
-			on:submit|preventDefault={async () => {
+		<button
+			on:click={async () => {
 				await save_repl();
 			}}
+			title="Save Changes"
 		>
-			<button title="Save Changes">
-				{#if $is_repl_saving}
-					<Pending />
-				{:else}
-					<Save />
-				{/if}
-			</button>
-		</form>
+			{#if $is_repl_saving}
+				<Pending />
+			{:else}
+				<Save />
+			{/if}
+		</button>
 
 		<a href="/profile" class="btn" title="Profile">
 			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
