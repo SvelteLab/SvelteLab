@@ -90,14 +90,13 @@
 	}
 
 	li span {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 	}
+
 	small {
+		/* TODO: Fix ellipsis not working 😭 */
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
