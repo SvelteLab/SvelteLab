@@ -86,8 +86,15 @@
 			'.cm-cursor': {
 				'border-color': 'var(--sk-code-base)'
 			},
+			'.cm-tooltip': {
+				border: 'none'
+			},
 			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
 				background: 'var(--sk-back-3)'
+			},
+			'.cm-tooltip-autocomplete ul li[aria-selected]': {
+				background: 'var(--sk-theme-1)',
+				color: 'var(--sk-text-1)'
 			}
 		}}
 	/>
