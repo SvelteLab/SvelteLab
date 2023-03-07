@@ -1,3 +1,4 @@
+import { replSchema } from '$lib/schemas';
 import { redirect } from '@sveltejs/kit';
 import type { FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
@@ -7,8 +8,7 @@ export const ssr = false;
 
 async function get_repl_from_id(id: string, poket_base: PoketBase) {
 	const replRecord = await poket_base.collection('repls').getOne(id);
-	// TODO zod validate
-	return replRecord;
+	return replSchema.parse(replRecord);
 }
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {

@@ -44,6 +44,7 @@ specifiers:
   vitest: ^0.25.3
   xterm: ^5.1.0
   xterm-addon-fit: ^0.7.0
+  zod: ^3.21.4
 
 dependencies:
   '@codemirror/autocomplete': 6.4.2_4brt7ssv37vk5p4hmzax5oqmt4
@@ -69,6 +70,7 @@ dependencies:
   svelte-splitpanes: 0.7.12_svelte@3.55.1
   xterm: 5.1.0
   xterm-addon-fit: 0.7.0_xterm@5.1.0
+  zod: 3.21.4
 
 devDependencies:
   '@iconify/json': 2.2.27
@@ -2443,3 +2445,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
