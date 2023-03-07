@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({ locals, depends, cookies }) => {
 		)?.authProviders?.find?.((provider) => provider.name === 'github');
 		if (github_login?.codeVerifier) {
 			cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
+				httpOnly: true,
 				path: '/'
 			});
 		}
