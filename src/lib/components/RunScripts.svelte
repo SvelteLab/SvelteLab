@@ -42,21 +42,19 @@
 					if (!running) webcontainer.run_command(actual_command);
 				}}
 			>
-				<span>
-					{#if running}
-						<Running />
-					{/if}
-					{script}
-					<small>{run}</small>
-				</span>
-				<div class="hover-group">
-					{#if running}
-						<Stop />
-					{:else}
-						<Play />
-					{/if}
-				</div>
+				{script}
+				<small>{run}</small>
+				{#if running}
+					<Running />
+				{/if}
 			</button>
+			<div class="hover-group">
+				{#if running}
+					<Stop />
+				{:else}
+					<Play />
+				{/if}
+			</div>
 		</li>
 	{:else}
 		<li>
@@ -88,13 +86,6 @@
 		padding: 0.5rem;
 		position: relative;
 	}
-
-	li span {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
 	small {
 		/* TODO: Fix ellipsis not working 😭 */
 		white-space: nowrap;
@@ -102,9 +93,14 @@
 		text-overflow: ellipsis;
 		opacity: 0.5;
 	}
+
 	button {
+		min-width: 0;
 		display: flex;
+		gap: 0.5rem;
+		align-items: center;
 	}
+
 	div {
 		background-color: var(--sk-back-1);
 		display: flex;
@@ -130,7 +126,8 @@
 		color: var(--sk-text-3);
 	}
 
-	.hover-group button:hover {
+	.hover-group:hover,
+	button:hover .hover-group {
 		color: var(--sk-text-1);
 	}
 

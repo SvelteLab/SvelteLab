@@ -45,7 +45,7 @@
 					</Splitpanes>
 				</Pane>
 				{#if $layout_store.terminal}
-					<Pane size={42} {minSize}><Console bind:update_height /></Pane>
+					<Pane size={30} {minSize}><Console bind:update_height /></Pane>
 				{/if}
 			</Splitpanes>
 		</Pane>

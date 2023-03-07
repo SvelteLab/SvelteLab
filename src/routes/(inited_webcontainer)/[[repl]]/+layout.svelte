@@ -57,7 +57,7 @@
 	div {
 		position: fixed;
 		inset: 0;
-		backdrop-filter: blur(10px);
+		backdrop-filter: blur(4px);
 		z-index: 9999;
 	}
 	:global(:root) {

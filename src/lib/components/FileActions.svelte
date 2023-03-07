@@ -6,10 +6,10 @@
 </script>
 
 <Splitpanes horizontal>
-	<Pane size={70} {minSize}>
+	<Pane {minSize}>
 		<FileTree />
 	</Pane>
-	<Pane {minSize}>
+	<Pane size={30} {minSize}>
 		<RunScripts />
 	</Pane>
 </Splitpanes>
