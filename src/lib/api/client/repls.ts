@@ -1,7 +1,7 @@
 import { error, success } from '$lib/toast';
 import { webcontainer } from '$lib/webcontainer';
 import { get } from 'svelte/store';
-import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
+import { repl_id, repl_name, is_repl_saving } from '$lib/stores/repl_id_store';
 
 /**
  * This function does what it takes to save the repl, it set the state
@@ -10,6 +10,11 @@ import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
  */
 export async function save_repl() {
 	const id = get(repl_id);
+	const name = get(repl_name);
+	if (name.length < 2) {
+		error('The minimum name lenght is 2');
+		return;
+	}
 	const files = await webcontainer.get_tree_from_container();
 	is_repl_saving.set(true);
 	const res = await fetch('./save-repl', {
@@ -19,7 +24,8 @@ export async function save_repl() {
 		},
 		body: JSON.stringify({
 			files,
-			id
+			id,
+			name
 		})
 	});
 	if (res.ok) {

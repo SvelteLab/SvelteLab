@@ -5,5 +5,5 @@
 </script>
 
 {#each data.repls as repl (repl.id)}
-	<a href={repl.id}>{repl.id}</a><br />
+	<a href={repl.id}>{repl.name || repl.id}</a><br />
 {/each}

@@ -21,7 +21,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { success, error } from '$lib/toast';
 	import { save_repl } from '$lib/api/client/repls';
-	import { repl_id, is_repl_saving } from '$lib/stores/repl_id_store';
+	import { repl_name, is_repl_saving } from '$lib/stores/repl_id_store';
 
 	$: ({ user, github_login } = $page.data ?? {});
 </script>
@@ -69,7 +69,7 @@
 		{/if}
 	</button>
 
-	<span> Hello World </span>
+	<input bind:value={$repl_name} />
 
 	<button
 		on:click={async () => {
@@ -163,9 +163,17 @@
 		bottom: 0;
 		top: calc(100% - 3px);
 	}
-
-	span {
+	input {
 		margin-left: 2em;
 		flex-grow: 1;
+		background-color: var(--sk-back-2);
+		border: 1.5px solid var(--sk-back-4);
+		font-size: 1.5rem;
+		color: var(--sk-text-1);
+		padding: 1rem;
+		font-family: var(--sk-font);
+	}
+	input:focus {
+		outline: 1px solid var(--sk-theme-1);
 	}
 </style>

@@ -6,13 +6,14 @@
 	import type { LayoutData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
-	import { repl_id } from '$lib/stores/repl_id_store';
+	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { error } from '$lib/toast';
 
 	export let data: LayoutData;
 
-	// keep the repl id store up to date in case data changes
+	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
+	$: repl_name.set(data.repl_name);
 
 	onMount(() => {
 		//this is to interact with the filesistem
