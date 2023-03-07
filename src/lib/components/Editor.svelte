@@ -37,8 +37,9 @@
 </script>
 
 {#if $webcontainer.current_path == null}
-	<div>
-		<span><File />Open a file to start editing</span>
+	<div class="loader">
+		<File />
+		<span>Open a file to start editing</span>
 	</div>
 {:else}
 	<CodeMirror
@@ -95,15 +96,6 @@
 		height: 100%;
 	}
 	div {
-		width: 100%;
-		height: 100%;
-		display: grid;
-		place-items: center;
 		background-color: var(--sk-back-1);
-	}
-	span {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
 	}
 </style>

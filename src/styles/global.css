@@ -1,5 +1,6 @@
 @import '@sveltejs/site-kit/styles/index.css';
 @import 'xterm/css/xterm.css';
+@import './components.css';
 
 *,
 *::before,
@@ -26,42 +27,25 @@ body .splitpanes.default-theme .splitpanes__splitter::after {
 	content: none;
 }
 
-body .default-theme.splitpanes--vertical>.splitpanes__splitter,
-body .default-theme .splitpanes--vertical>.splitpanes__splitter {
+body .default-theme.splitpanes--vertical > .splitpanes__splitter,
+body .default-theme .splitpanes--vertical > .splitpanes__splitter {
 	width: 2px;
 }
 
-body .default-theme.splitpanes--horizontal>.splitpanes__splitter,
-body .default-theme .splitpanes--horizontal>.splitpanes__splitter {
+body .default-theme.splitpanes--horizontal > .splitpanes__splitter,
+body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
 	height: 2px;
 }
 
-.loader {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-size: 3em;
-}
-
-.loader span {
-	font-size: 1em;
-}
-
-.btn {
-	color: var(--sk-text-1);
-}
-
 /* override site-kit */
-:is(button, a)>svg {
+:is(button, a) > svg {
 	display: block;
 	height: initial !important;
 	width: initial !important;
 	stroke: initial !important;
 }
 
-:is(button, a)>img {
+:is(button, a) > img {
 	display: block;
 }
 
