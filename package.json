@@ -59,6 +59,7 @@
 		"svelte-codemirror-editor": "^1.1.0",
 		"svelte-splitpanes": "^0.7.12",
 		"xterm": "^5.1.0",
-		"xterm-addon-fit": "^0.7.0"
+		"xterm-addon-fit": "^0.7.0",
+		"zod": "^3.21.4"
 	}
 }
