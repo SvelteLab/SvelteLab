@@ -12,7 +12,6 @@
 	import PanelBottom from '~icons/akar-icons/panel-bottom';
 	import PanelLeft from '~icons/akar-icons/panel-left';
 	import Planet from '~icons/akar-icons/planet';
-	import ConfigFiles from '~icons/akar-icons/settings-horizontal';
 	import Sun from '~icons/akar-icons/sun';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { page } from '$app/stores';
@@ -46,10 +45,6 @@
 		<PanelBottom />
 	</button>
 
-	<button title="Toggle Config Files">
-		<ConfigFiles />
-	</button>
-
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -69,7 +64,7 @@
 		{/if}
 	</button>
 
-	<input bind:value={$repl_name} />
+	<div class="grow" />
 
 	<button
 		on:click={async () => {
@@ -140,8 +135,13 @@
 		align-items: center;
 		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
 	}
+
+	.grow {
+		flex-grow: 1;
+	}
+
 	img {
-		width: 32px;
+		width: 3rem;
 		aspect-ratio: 1;
 	}
 
@@ -161,18 +161,5 @@
 		left: 1px;
 		bottom: 0;
 		top: calc(100% - 3px);
-	}
-	input {
-		margin-left: 2em;
-		flex-grow: 1;
-		background-color: var(--sk-back-2);
-		border: 1.5px solid var(--sk-back-4);
-		font-size: 1.5rem;
-		color: var(--sk-text-1);
-		padding: 1rem;
-		font-family: var(--sk-font);
-	}
-	input:focus {
-		outline: 1px solid var(--sk-theme-1);
 	}
 </style>

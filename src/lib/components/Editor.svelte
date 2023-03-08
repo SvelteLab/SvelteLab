@@ -37,8 +37,9 @@
 </script>
 
 {#if $webcontainer.current_path == null}
-	<div>
-		<span><File />Open a file to start editing</span>
+	<div class="loader">
+		<File />
+		<span>Open a file to start editing</span>
 	</div>
 {:else}
 	<CodeMirror
@@ -56,7 +57,7 @@
 				width: '100%',
 				height: '100%',
 				overflow: 'auto',
-				'background-color': 'var(--sk-code-bg)',
+				'background-color': 'var(--sk-back-1)',
 				color: 'var(--sk-code-base)'
 			},
 			'*': {
@@ -67,7 +68,7 @@
 				border: 'none'
 			},
 			'.cm-gutter': {
-				'background-color': 'var(--sk-code-bg)',
+				'background-color': 'var(--sk-back-1)',
 				color: 'var(--sk-code-base)'
 			},
 			'.cm-line.cm-activeLine': {
@@ -84,6 +85,16 @@
 			},
 			'.cm-cursor': {
 				'border-color': 'var(--sk-code-base)'
+			},
+			'.cm-tooltip': {
+				border: 'none'
+			},
+			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+				background: 'var(--sk-back-3)'
+			},
+			'.cm-tooltip-autocomplete ul li[aria-selected]': {
+				background: 'var(--sk-theme-1)',
+				color: 'var(--sk-text-1)'
 			}
 		}}
 	/>
@@ -95,15 +106,6 @@
 		height: 100%;
 	}
 	div {
-		width: 100%;
-		height: 100%;
-		display: grid;
-		place-items: center;
 		background-color: var(--sk-back-1);
-	}
-	span {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
 	}
 </style>

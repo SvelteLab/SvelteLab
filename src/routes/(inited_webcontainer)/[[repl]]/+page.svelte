@@ -20,22 +20,24 @@
 	}
 
 	let update_height: () => void;
+
+	const minSize = 5;
 </script>
 
 <div class="grid">
 	<Header />
 	<Splitpanes class="main-pane" on:ready={handle_pane} on:resized={handle_pane}>
 		{#if $layout_store.file_tree}
-			<Pane size={20} minSize={5}><FileActions /></Pane>
+			<Pane size={20} {minSize}><FileActions {minSize} /></Pane>
 		{/if}
 		<Pane>
 			<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-				<Pane>
+				<Pane {minSize}>
 					<Splitpanes>
-						<Pane>
+						<Pane {minSize}>
 							<Editor />
 						</Pane>
-						<Pane>
+						<Pane {minSize}>
 							{#key $webcontainer.iframe_url}
 								<iframe title="content" src={$webcontainer.iframe_url} />
 							{/key}
@@ -43,7 +45,7 @@
 					</Splitpanes>
 				</Pane>
 				{#if $layout_store.terminal}
-					<Pane><Console bind:update_height /></Pane>
+					<Pane size={30} {minSize}><Console bind:update_height /></Pane>
 				{/if}
 			</Splitpanes>
 		</Pane>

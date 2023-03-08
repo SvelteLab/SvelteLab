@@ -1,0 +1,16 @@
+.btn {
+	color: var(--sk-text-1);
+}
+
+.loader {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 6rem;
+	gap: 2rem;
+}
+.loader span {
+	font-size: 2rem;
+}

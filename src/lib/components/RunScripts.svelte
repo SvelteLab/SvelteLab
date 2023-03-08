@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
+	import Refresh from '~icons/akar-icons/arrow-counter-clockwise';
 	import Play from '~icons/akar-icons/play';
 	import Stop from '~icons/akar-icons/square';
 	import Running from '~icons/eos-icons/loading';
-	import Refresh from '~icons/akar-icons/arrow-counter-clockwise';
 	let scripts: [string, string][] = [];
 	let loading = false;
 	async function refresh_package_json() {
 		loading = true;
 		const [package_json] = await Promise.all([
-			webcontainer.read_package_json(),
-			new Promise((resolve) => setTimeout(resolve, 1000))
+			webcontainer.read_package_json()
+			// new Promise((resolve) => setTimeout(resolve, 1000))
 		]);
 		scripts = Object.entries(package_json?.scripts || {}) as unknown as [string, string][];
 		loading = false;
@@ -21,10 +21,12 @@
 	});
 </script>
 
-<div>
+<div class="heading">
 	<span>NPM SCRIPTS</span>
 	{#if !loading}
-		<button on:click={refresh_package_json}><Refresh /></button>
+		<div class="hover-group">
+			<button on:click={refresh_package_json}><Refresh /></button>
+		</div>
 	{:else}
 		<Running />
 	{/if}
@@ -32,45 +34,63 @@
 <ul>
 	{#each scripts as [script, run]}
 		{@const actual_command = `npm run ${script}`}
+		{@const running = actual_command === $webcontainer.running_command}
 		<li>
-			{script}<small>{run}</small>
 			<button
-				disabled={!!$webcontainer.running_command &&
-					$webcontainer.running_command !== actual_command}
 				on:click={() => {
-					if ($webcontainer.running_process) {
-						$webcontainer.running_process.kill();
-					} else {
-						webcontainer.run_command(actual_command);
-					}
+					$webcontainer.running_process?.kill();
+					if (!running) webcontainer.run_command(actual_command);
 				}}
 			>
-				{#if actual_command === $webcontainer.running_command}
-					<Running /><Stop />
+				{script}
+				<small>{run}</small>
+				{#if running}
+					<Running />
+				{/if}
+			</button>
+			<button
+				class="hover-group"
+				on:click={() => {
+					$webcontainer.running_process?.kill();
+					if (!running) webcontainer.run_command(actual_command);
+				}}
+			>
+				{#if running}
+					<Stop />
 				{:else}
 					<Play />
 				{/if}
 			</button>
 		</li>
 	{:else}
-		no scripts
+		<li>
+			no scripts...
+
+			<div class="hover-group">
+				<button on:click={refresh_package_json}><Refresh /></button>
+			</div>
+		</li>
 	{/each}
 </ul>
 
 <style>
 	ul {
-		overflow-y: auto;
-		height: 100%;
+		list-style: none;
 		margin: 0;
-		scrollbar-gutter: stable;
 		padding: 1rem;
+		padding-block: 0rem;
+		padding-inline-end: 0rem;
 		background-color: var(--sk-back-3);
+		height: 100%;
 	}
 	li {
 		display: grid;
-		grid-template-columns: min-content 1fr auto;
-		gap: 0.3rem;
-		align-items: center;
+		color: var(--sk-text-1);
+		height: 2em;
+		overflow: hidden;
+		white-space: nowrap;
+		padding: 0.5rem;
+		position: relative;
 	}
 	small {
 		white-space: nowrap;
@@ -78,9 +98,14 @@
 		text-overflow: ellipsis;
 		opacity: 0.5;
 	}
+
 	button {
+		min-width: 0;
 		display: flex;
+		gap: 0.5rem;
+		align-items: center;
 	}
+
 	div {
 		background-color: var(--sk-back-1);
 		display: flex;
@@ -90,5 +115,45 @@
 		font-weight: bold;
 		font-size: 1.3rem;
 		text-transform: uppercase;
+	}
+
+	.hover-group {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		display: flex;
+		gap: 0.75rem;
+		padding: 0.5rem;
+		align-items: center;
+		justify-content: end;
+		background-color: var(--sk-back-3);
+		color: var(--sk-text-3);
+	}
+
+	.heading {
+		padding-inline-start: 1em;
+		position: relative;
+	}
+
+	.heading .hover-group {
+		background-color: var(--sk-back-1);
+	}
+
+	.heading .hover-group,
+	li .hover-group {
+		display: none;
+	}
+
+	.heading:hover .hover-group,
+	li:hover .hover-group {
+		display: flex;
+	}
+
+	@media (hover: none) {
+		.heading .hover-group,
+		li .hover-group {
+			display: flex;
+		}
 	}
 </style>
