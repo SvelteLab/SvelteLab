@@ -2,12 +2,12 @@
 	import Console from '$lib/components/Console.svelte';
 	import Editor from '$lib/components/Editor.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
+	import Iframe from '$lib/components/Iframe.svelte';
+	import { layout_store } from '$lib/stores/layout_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
-	import { layout_store } from '$lib/stores/layout_store';
-	import Iframe from '$lib/components/Iframe.svelte';
 
 	onMount(async () => {
 		return webcontainer.on_init(async () => {
@@ -27,26 +27,26 @@
 
 <div class="grid">
 	<Header />
-	<Splitpanes class="main-pane" on:ready={handle_pane} on:resized={handle_pane}>
-		{#if $layout_store.file_tree}
-			<Pane size={20} {minSize}><FileActions {minSize} /></Pane>
-		{/if}
+	<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
 		<Pane>
-			<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-				<Pane {minSize}>
-					<Splitpanes>
+			<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+				{#if $layout_store.file_tree}
+					<Pane size={30} {minSize}><FileActions {minSize} /></Pane>
+				{/if}
+				<Pane>
+					<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 						<Pane {minSize}>
 							<Editor />
 						</Pane>
-						<Pane {minSize}>
-							<Iframe />
-						</Pane>
+						{#if $layout_store.terminal}
+							<Pane size={30} {minSize}><Console bind:update_height /></Pane>
+						{/if}
 					</Splitpanes>
 				</Pane>
-				{#if $layout_store.terminal}
-					<Pane size={30} {minSize}><Console bind:update_height /></Pane>
-				{/if}
 			</Splitpanes>
+		</Pane>
+		<Pane size={42} {minSize}>
+			<Iframe />
 		</Pane>
 	</Splitpanes>
 </div>

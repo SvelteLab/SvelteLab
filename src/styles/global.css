@@ -15,8 +15,10 @@ body {
 	padding: 0;
 	height: 100%;
 	font-family: var(--sk-font);
+	background-color: var(--sk-back-4);
 }
 
+body .splitpanes.default-theme .splitpanes__pane,
 body .splitpanes.default-theme .splitpanes__splitter {
 	background-color: var(--sk-back-4);
 	border: none;
