@@ -48,13 +48,19 @@
 					<Running />
 				{/if}
 			</button>
-			<div class="hover-group">
+			<button
+				class="hover-group"
+				on:click={() => {
+					$webcontainer.running_process?.kill();
+					if (!running) webcontainer.run_command(actual_command);
+				}}
+			>
 				{#if running}
 					<Stop />
 				{:else}
 					<Play />
 				{/if}
-			</div>
+			</button>
 		</li>
 	{:else}
 		<li>
@@ -87,7 +93,6 @@
 		position: relative;
 	}
 	small {
-		/* TODO: Fix ellipsis not working 😭 */
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -124,11 +129,6 @@
 		justify-content: end;
 		background-color: var(--sk-back-3);
 		color: var(--sk-text-3);
-	}
-
-	.hover-group:hover,
-	button:hover .hover-group {
-		color: var(--sk-text-1);
 	}
 
 	.heading {
