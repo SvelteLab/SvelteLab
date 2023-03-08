@@ -327,8 +327,8 @@ export const webcontainer = {
 		window.wci = webcontainer_instance;
 		const dep_list = await fetch('./init-files/list.json').then((res) => res.json());
 		const promises = [];
-		for (let dep of list) {
-			promises.push(fetch('./init-files/deps/' + dep + '.json'));
+		for (let dep of dep_list) {
+			promises.push(fetch('./init-files/deps/' + dep + '.json').then((res) => res.json()));
 		}
 		const deps = await Promise.all(promises);
 		for (let i = 0; i < dep_list.length; i++) {
