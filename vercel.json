@@ -1,7 +1,7 @@
 {
 	"headers": [
 	  {
-		"source": "/init-files/deps/*",
+		"source": "/init-files/deps/(.*)",
 		"headers": [
 		  {
 			"key": "Cache-Control",
