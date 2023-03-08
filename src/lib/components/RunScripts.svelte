@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import Refresh from '~icons/akar-icons/arrow-counter-clockwise';
+	import Refresh from '~icons/akar-icons/arrow-clockwise';
 	import Play from '~icons/akar-icons/play';
 	import Stop from '~icons/akar-icons/square';
 	import Running from '~icons/eos-icons/loading';
