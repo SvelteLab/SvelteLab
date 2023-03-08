@@ -331,10 +331,14 @@ export const webcontainer = {
 			promises.push(fetch('./init-files/deps/' + dep + '.json').then((res) => res.json()));
 		}
 		const deps = await Promise.all(promises);
+		webcontainer_instance.fs.mkdir('node_modules');
 		for (let i = 0; i < dep_list.length; i++) {
-			webcontainer_instance.mount(deps[i], {
-				mountPoint: './node_modules/' + dep_list[i]
-			});
+			webcontainer_instance.mount(
+				{ [dep_list[i]]: deps[i] },
+				{
+					mountPoint: './node_modules/'
+				}
+			);
 		}
 		return run_command('npm install --verbose').then((code) => {
 			listen_for_files_changes();
