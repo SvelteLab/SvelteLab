@@ -3,7 +3,7 @@
 	import Refresh from '~icons/akar-icons/arrow-clockwise';
 
 	function handleUrlChange(e: SubmitEvent) {
-		webcontainer.set_iframe_path('');
+		webcontainer.set_iframe_path(''); // refresh even if nothing changed
 		const url = new FormData(e.target as HTMLFormElement).get('url')?.toString() || '/';
 		if (url.startsWith('/')) {
 			webcontainer.set_iframe_path(url);
