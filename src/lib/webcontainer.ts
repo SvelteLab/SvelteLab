@@ -39,7 +39,8 @@ let webcontainer_instance = new Proxy<WebContainer>(
 const { subscribe, set } = writable({
 	current_file: null as string | null,
 	current_path: null as string | null,
-	iframe_url: './loading',
+	webcontainer_url: './loading',
+	iframe_path: '/',
 	running_command: null as string | null,
 	running_process: null as WebContainerProcess | null
 });
@@ -249,10 +250,10 @@ export const webcontainer = {
 		}
 		webcontainer_instance = await WebContainer.boot();
 		webcontainer_instance.on('server-ready', (port, url) => {
-			merge_state({ iframe_url: url });
+			merge_state({ webcontainer_url: url });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
-					merge_state({ iframe_url: './error' });
+					merge_state({ webcontainer_url: './error' });
 				}
 			});
 		});
@@ -272,7 +273,7 @@ export const webcontainer = {
 		merge_state({
 			current_file: null,
 			current_path: null,
-			iframe_url: './loading'
+			webcontainer_url: './loading'
 		});
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
@@ -402,6 +403,10 @@ export const webcontainer = {
 		url_search_params.set('code', encoded);
 		url.hash = url_search_params.toString();
 		return url;
+	},
+
+	set_iframe_path(iframe_path: string) {
+		merge_state({ iframe_path });
 	}
 };
 

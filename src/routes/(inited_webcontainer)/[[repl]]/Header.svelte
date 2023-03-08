@@ -133,7 +133,23 @@
 		position: relative;
 		z-index: 2;
 		align-items: center;
-		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+		--shadow-height: 0.5rem;
+		--shadow-gradient: linear-gradient(
+			to bottom,
+			rgba(0, 0, 0, 0.1) 0%,
+			rgba(0, 0, 0, 0.05) 30%,
+			transparent 100%
+		);
+	}
+
+	header:after {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: var(--shadow-height);
+		left: 0;
+		bottom: calc(-1 * var(--shadow-height));
+		background: var(--shadow-gradient);
 	}
 
 	.grow {

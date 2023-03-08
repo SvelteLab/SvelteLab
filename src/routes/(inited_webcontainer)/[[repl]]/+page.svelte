@@ -7,6 +7,7 @@
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
 	import { layout_store } from '$lib/stores/layout_store';
+	import Iframe from '$lib/components/Iframe.svelte';
 
 	onMount(async () => {
 		return webcontainer.on_init(async () => {
@@ -38,9 +39,7 @@
 							<Editor />
 						</Pane>
 						<Pane {minSize}>
-							{#key $webcontainer.iframe_url}
-								<iframe title="content" src={$webcontainer.iframe_url} />
-							{/key}
+							<Iframe />
 						</Pane>
 					</Splitpanes>
 				</Pane>
@@ -58,10 +57,5 @@
 		grid-template-columns: 1fr;
 		grid-template-rows: auto minmax(0, 1fr);
 		height: 100%;
-	}
-	iframe {
-		width: 100%;
-		height: 100%;
-		border: none;
 	}
 </style>
