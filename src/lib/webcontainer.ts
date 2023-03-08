@@ -256,7 +256,6 @@ export const webcontainer = {
 				}
 			});
 		});
-		listen_for_files_changes();
 	},
 	/**
 	 * Mount some files in the filesystem
@@ -322,9 +321,13 @@ export const webcontainer = {
 		// if there are no dependencies to install just return 0 as the
 		// correct exit code
 		if (!(package_json?.dependencies || package_json?.devDependencies)) {
+			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		return run_command('npm install --verbose');
+		return run_command('npm install --verbose').then((code) => {
+			listen_for_files_changes();
+			return code;
+		});
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
