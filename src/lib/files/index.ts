@@ -7,8 +7,7 @@ import { page_svelte } from './page_svelte';
 import { svelte_config } from './svelte_config_js';
 import { vite_config } from './vite_config_ts';
 
-
-declare module "@webcontainer/api" {
+declare module '@webcontainer/api' {
 	export interface DirectoryNode {
 		open?: boolean;
 	}
@@ -22,7 +21,7 @@ export const files = {
 					'+page.server.ts': {
 						file: {
 							contents: page_server_ts
-						},
+						}
 					},
 					'+page.svelte': {
 						file: {
