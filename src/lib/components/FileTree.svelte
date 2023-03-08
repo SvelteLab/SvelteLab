@@ -218,6 +218,10 @@
 		padding-inline-start: 1em;
 	}
 
+	.root .hover-group {
+		background-color: var(--sk-back-1);
+	}
+
 	li {
 		display: grid;
 		align-items: center;

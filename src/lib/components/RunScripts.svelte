@@ -136,6 +136,10 @@
 		position: relative;
 	}
 
+	.heading .hover-group {
+		background-color: var(--sk-back-1);
+	}
+
 	.heading .hover-group,
 	li .hover-group {
 		display: none;
