@@ -8,17 +8,19 @@
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
+	import type { ComponentType, SvelteComponentTyped } from 'svelte';
 
-	let Console: ConstructorOfATypedSvelteComponent = PlaceholderComponent;
-	let Editor: ConstructorOfATypedSvelteComponent = VoidEditor;
+	let Console: ComponentType<SvelteComponentTyped> = PlaceholderComponent;
+	let Editor: ComponentType<SvelteComponentTyped> = VoidEditor;
 
 	onMount(async () => {
-		Console = (await import('$lib/components/Console.svelte')).default;
-		Editor = (await import('$lib/components/Editor.svelte')).default;
-		return webcontainer.on_init(async () => {
+		const destroy = webcontainer.on_init(async () => {
 			await webcontainer.install_dependencies();
 			webcontainer.run_dev_server();
 		});
+		Console = (await import('$lib/components/Console.svelte')).default;
+		Editor = (await import('$lib/components/Editor.svelte')).default;
+		return destroy;
 	});
 
 	function handle_pane() {
