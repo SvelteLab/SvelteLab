@@ -12,12 +12,12 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import Pending from '~icons/eos-icons/loading';
 	import SignIn from '~icons/material-symbols/account-circle';
-	import Save from '~icons/material-symbols/cloud';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
 	import SignOut from '~icons/material-symbols/logout-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
+	import Save from '~icons/material-symbols/save';
 	import Share from '~icons/material-symbols/share';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
