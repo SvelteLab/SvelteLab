@@ -55,7 +55,7 @@
 		"@replit/codemirror-lang-svelte": "^6.0.0",
 		"@sveltejs/site-kit": "^3.2.2",
 		"@webcontainer/api": "^1.0.2",
-		"as-comps": "^0.0.24",
+		"as-comps": "^0.0.25",
 		"codemirror": "^6.0.1",
 		"lz-string": "^1.5.0",
 		"pocketbase": "^0.12.0",
