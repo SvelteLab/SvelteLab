@@ -1,17 +1,17 @@
-import { browser, dev } from '$app/environment';
-import { terminal } from '$lib/terminal';
+import { dev } from '$app/environment';
 import { get_file_from_path, get_subtree_from_path } from '$lib/file_system';
+import { terminal } from '$lib/terminal';
 import {
 	WebContainer,
 	type DirEnt,
 	type FileSystemTree,
 	type WebContainerProcess
 } from '@webcontainer/api';
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
-import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 
-const initial_files = (get_tree_from_local_storage() || default_files) as FileSystemTree;
+const initial_files = default_files as FileSystemTree;
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -202,6 +202,15 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 
 const init_callbacks = new Set<() => void>();
 
+/**
+ * Function to get the files to mount based on the to_mount
+ * argument. The order is the following:
+ * - If there's a file system passed in it will just return that
+ * - If there's not a file system passed in and there's the hash
+ * it will return the decoded hash
+ * - If there's not a fole system and there's not an hash it will
+ * return the initial files.
+ */
 function get_files_to_mount(to_mount?: FileSystemTree) {
 	const hash = window?.location?.hash?.substring?.(1);
 	if (!to_mount && hash) {
@@ -216,7 +225,7 @@ function get_files_to_mount(to_mount?: FileSystemTree) {
 			}
 		}
 	}
-	return to_mount ?? initial_files;
+	return { file_system: to_mount ?? initial_files, are_initials: !to_mount };
 }
 
 async function remove_all_files() {
@@ -234,7 +243,7 @@ export const webcontainer = {
 	/**
 	 * init the webcontainer and mount the files
 	 */
-	async init(to_mount?: FileSystemTree) {
+	async init(files_to_mount?: FileSystemTree) {
 		if (webcontainer_instance instanceof WebContainer) {
 			if (dev) {
 				console.warn(
@@ -244,7 +253,7 @@ export const webcontainer = {
 			return;
 		}
 		//we just get this files to already show the files in the blorred background
-		to_mount = get_files_to_mount(to_mount);
+		const { file_system: to_mount } = get_files_to_mount(files_to_mount);
 		if (to_mount) {
 			files_store.set(structuredClone(to_mount));
 		}
@@ -260,11 +269,20 @@ export const webcontainer = {
 	},
 	/**
 	 * Mount some files in the filesystem
-	 * @param to_mount the file tree to mount
+	 * @param files_to_mount the file tree to mount
 	 * @returns a promise that resolves when the file are mounted
 	 */
-	async mount_files(to_mount?: FileSystemTree) {
-		to_mount = get_files_to_mount(to_mount);
+	async mount_files(files_to_mount?: FileSystemTree) {
+		const { file_system: to_mount, are_initials } = get_files_to_mount(files_to_mount);
+		if (are_initials) {
+			// if the files are the default files we dinamically load the package-lock.json
+			// this is to avoid a huge bundle on the startup that takes 3 secs to download
+			to_mount['package-lock.json'] = {
+				file: {
+					contents: (await import('$lib/files/project/package-lock.json?raw')).default
+				}
+			};
+		}
 		if (to_mount) {
 			files_store.set(structuredClone(to_mount));
 		}
@@ -409,13 +427,6 @@ export const webcontainer = {
 		merge_state({ iframe_path });
 	}
 };
-
-function get_tree_from_local_storage() {
-	if (!browser) return;
-	const string = localStorage.getItem('FS_tree');
-	if (!string) return;
-	return JSON.parse(string);
-}
 
 async function get_tree_from_container(): Promise<FileSystemTree> {
 	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
