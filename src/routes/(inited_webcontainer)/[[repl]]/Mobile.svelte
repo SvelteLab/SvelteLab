@@ -1,13 +1,14 @@
 <script lang="ts">
-	import Console from '$lib/components/Console.svelte';
-	import Editor from '$lib/components/Editor.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
 	import { Dialog } from 'as-comps';
-	import { tick } from 'svelte';
+	import { SvelteComponentTyped, tick, type ComponentType } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
+
+	export let Console: ComponentType<SvelteComponentTyped>;
+	export let Editor: ComponentType<SvelteComponentTyped>;
 
 	export let showing: 'files' | 'code' | 'iframe' | 'terminal' = 'code';
 

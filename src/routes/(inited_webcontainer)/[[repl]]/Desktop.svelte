@@ -1,11 +1,13 @@
 <script lang="ts">
-	import Console from '$lib/components/Console.svelte';
-	import Editor from '$lib/components/Editor.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
 	import { layout_store } from '$lib/stores/layout_store';
+	import type { ComponentType, SvelteComponentTyped } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
+
+	export let Console: ComponentType<SvelteComponentTyped>;
+	export let Editor: ComponentType<SvelteComponentTyped>;
 
 	function handle_pane() {
 		if (update_height) update_height();
@@ -27,10 +29,11 @@
 				<Pane>
 					<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 						<Pane {minSize}>
-							<Editor />
+							<svelte:component this={Editor} />
 						</Pane>
 						{#if $layout_store.terminal}
-							<Pane size={30} {minSize}><Console bind:update_height /></Pane>
+							<Pane size={30} {minSize}><svelte:component this={Console} bind:update_height /></Pane
+							>
 						{/if}
 					</Splitpanes>
 				</Pane>
