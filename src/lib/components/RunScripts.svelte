@@ -25,7 +25,7 @@
 	<span>NPM SCRIPTS</span>
 	{#if !loading}
 		<div class="hover-group">
-			<button on:click={refresh_package_json}><Refresh /></button>
+			<button title="Refresh the scripts" on:click={refresh_package_json}><Refresh /></button>
 		</div>
 	{:else}
 		<Running />
@@ -37,6 +37,7 @@
 		{@const running = actual_command === $webcontainer.running_command}
 		<li>
 			<button
+				title="Run the script {script}"
 				on:click={() => {
 					$webcontainer.running_process?.kill();
 					if (!running) webcontainer.run_command(actual_command);
@@ -49,6 +50,7 @@
 				{/if}
 			</button>
 			<button
+				title={running ? `Stop the script ${script}` : `Run the script ${script}`}
 				class="hover-group"
 				on:click={() => {
 					$webcontainer.running_process?.kill();
@@ -67,7 +69,7 @@
 			no scripts...
 
 			<div class="hover-group">
-				<button on:click={refresh_package_json}><Refresh /></button>
+				<button title="Refresh the scripts" on:click={refresh_package_json}><Refresh /></button>
 			</div>
 		</li>
 	{/each}

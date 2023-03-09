@@ -29,25 +29,25 @@ body .splitpanes.default-theme .splitpanes__splitter::after {
 	content: none;
 }
 
-body .default-theme.splitpanes--vertical > .splitpanes__splitter,
-body .default-theme .splitpanes--vertical > .splitpanes__splitter {
+body .default-theme.splitpanes--vertical>.splitpanes__splitter,
+body .default-theme .splitpanes--vertical>.splitpanes__splitter {
 	width: 2px;
 }
 
-body .default-theme.splitpanes--horizontal > .splitpanes__splitter,
-body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
+body .default-theme.splitpanes--horizontal>.splitpanes__splitter,
+body .default-theme .splitpanes--horizontal>.splitpanes__splitter {
 	height: 2px;
 }
 
 /* override site-kit */
-:is(button, a) > svg {
+:is(button, a)>svg {
 	display: block;
 	height: initial !important;
 	width: initial !important;
 	stroke: initial !important;
 }
 
-:is(button, a) > img {
+:is(button, a)>img {
 	display: block;
 }
 

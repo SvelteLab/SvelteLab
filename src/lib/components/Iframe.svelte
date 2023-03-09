@@ -18,7 +18,7 @@
 		<button title="Refresh">
 			<Refresh />
 		</button>
-		<input name="url" type="text" value={$webcontainer.iframe_path} />
+		<input aria-label="current path" name="url" type="text" value={$webcontainer.iframe_path} />
 	</form>
 	{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
 		<iframe

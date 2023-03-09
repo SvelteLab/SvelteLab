@@ -1,14 +1,23 @@
 <script lang="ts">
+	import PlaceholderComponent from '$lib/components/PlaceholderComponent.svelte';
+	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { webcontainer } from '$lib/webcontainer';
+	import type { ComponentType, SvelteComponentTyped } from 'svelte';
 	import { onMount } from 'svelte';
 	import Desktop from './Desktop.svelte';
 	import Mobile from './Mobile.svelte';
 
+	let Console: ComponentType<SvelteComponentTyped> = PlaceholderComponent;
+	let Editor: ComponentType<SvelteComponentTyped> = VoidEditor;
+
 	onMount(async () => {
-		return webcontainer.on_init(async () => {
+		const destroy = webcontainer.on_init(async () => {
 			await webcontainer.install_dependencies();
 			webcontainer.run_dev_server();
 		});
+		Console = (await import('$lib/components/Console.svelte')).default;
+		Editor = (await import('$lib/components/Editor.svelte')).default;
+		return destroy;
 	});
 
 	let width: number;
@@ -17,7 +26,7 @@
 <svelte:window bind:innerWidth={width} />
 
 {#if width >= 500}
-	<Desktop />
+	<Desktop {Console} {Editor} />
 {:else}
-	<Mobile />
+	<Mobile {Console} {Editor} />
 {/if}

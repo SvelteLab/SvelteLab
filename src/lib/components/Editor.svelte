@@ -1,4 +1,5 @@
 <script lang="ts">
+	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
@@ -9,7 +10,6 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import File from '~icons/material-symbols/unknown-document-rounded';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -37,10 +37,7 @@
 </script>
 
 {#if $webcontainer.current_path == null}
-	<div class="loader">
-		<File />
-		<span>Open a file to start editing</span>
-	</div>
+	<VoidEditor />
 {:else}
 	<CodeMirror
 		{lang}
@@ -104,8 +101,5 @@
 	:global(.codemirror-wrapper) {
 		width: 100%;
 		height: 100%;
-	}
-	div {
-		background-color: var(--sk-back-1);
 	}
 </style>
