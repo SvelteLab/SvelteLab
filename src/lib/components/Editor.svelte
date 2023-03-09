@@ -9,7 +9,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import File from '~icons/akar-icons/file';
+	import VoidEditor from '$lib/components/VoidEditor.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -37,10 +37,7 @@
 </script>
 
 {#if $webcontainer.current_path == null}
-	<div class="loader">
-		<File />
-		<span>Open a file to start editing</span>
-	</div>
+	<VoidEditor />
 {:else}
 	<CodeMirror
 		{lang}
@@ -104,8 +101,5 @@
 	:global(.codemirror-wrapper) {
 		width: 100%;
 		height: 100%;
-	}
-	div {
-		background-color: var(--sk-back-1);
 	}
 </style>

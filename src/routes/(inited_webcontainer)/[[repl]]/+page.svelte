@@ -1,14 +1,19 @@
 <script lang="ts">
-	import Console from '$lib/components/Console.svelte';
-	import Editor from '$lib/components/Editor.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
+	import PlaceholderComponent from '$lib/components/PlaceholderComponent.svelte';
+	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import { layout_store } from '$lib/stores/layout_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Header from './Header.svelte';
-	import { layout_store } from '$lib/stores/layout_store';
+
+	let Console: ConstructorOfATypedSvelteComponent = PlaceholderComponent;
+	let Editor: ConstructorOfATypedSvelteComponent = VoidEditor;
 
 	onMount(async () => {
+		Console = (await import('$lib/components/Console.svelte')).default;
+		Editor = (await import('$lib/components/Editor.svelte')).default;
 		return webcontainer.on_init(async () => {
 			await webcontainer.install_dependencies();
 			webcontainer.run_dev_server();
@@ -35,7 +40,7 @@
 				<Pane {minSize}>
 					<Splitpanes>
 						<Pane {minSize}>
-							<Editor />
+							<svelte:component this={Editor} />
 						</Pane>
 						<Pane {minSize}>
 							{#key $webcontainer.iframe_url}
@@ -45,7 +50,9 @@
 					</Splitpanes>
 				</Pane>
 				{#if $layout_store.terminal}
-					<Pane size={30} {minSize}><Console bind:update_height /></Pane>
+					<Pane size={30} {minSize}>
+						<svelte:component this={Console} bind:update_height />
+					</Pane>
 				{/if}
 			</Splitpanes>
 		</Pane>
