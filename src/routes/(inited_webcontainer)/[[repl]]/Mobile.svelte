@@ -48,13 +48,13 @@
 			>
 				<FileActions />
 			</Dialog>
-			<Editor />
+			<svelte:component this={Editor} />
 		</div>
 		<div hidden={showing !== 'iframe'}>
 			<Iframe />
 		</div>
 		<div hidden={showing !== 'terminal'}>
-			<Console bind:update_height />
+			<svelte:component this={Console} bind:update_height />
 		</div>
 	</main>
 	<MobileFooter bind:showing />
