@@ -1,4 +1,4 @@
-import File from '~icons/akar-icons/file';
+import File from '~icons/material-symbols/description-rounded';
 import JS from '~icons/vscode-icons/file-type-js-official';
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import TS from '~icons/vscode-icons/file-type-typescript-official';

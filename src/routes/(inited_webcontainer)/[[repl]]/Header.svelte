@@ -5,22 +5,21 @@
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import Fork from '$lib/components/icons/Fork.svelte';
-	import Save from '$lib/components/icons/Save.svelte';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving } from '$lib/stores/repl_id_store';
 	import { theme } from '$lib/theme';
 	import { error, success } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
-	import Terminal from '~icons/akar-icons/credit-card-alt1';
-	import Moon from '~icons/akar-icons/moon';
-	import Share from '~icons/akar-icons/network';
-	import SignIn from '~icons/akar-icons/person';
-	import Planet from '~icons/akar-icons/planet';
-	import SignOut from '~icons/akar-icons/sign-out';
-	import Sun from '~icons/akar-icons/sun';
-	import FileBrowser from '~icons/akar-icons/three-line-horizontal';
 	import Pending from '~icons/eos-icons/loading';
+	import SignIn from '~icons/material-symbols/account-circle';
+	import Save from '~icons/material-symbols/cloud';
+	import Moon from '~icons/material-symbols/dark-mode-rounded';
+	import Fork from '~icons/material-symbols/fork-right-rounded';
+	import Sun from '~icons/material-symbols/light-mode';
+	import SignOut from '~icons/material-symbols/logout-rounded';
+	import FileBrowser from '~icons/material-symbols/menu-rounded';
+	import Share from '~icons/material-symbols/share';
+	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	$: ({ user, github_login } = $page.data ?? {});
 
@@ -60,10 +59,8 @@
 	>
 		{#if $theme.next === 'light'}
 			<Sun />
-		{:else if $theme.next === 'dark'}
-			<Moon />
 		{:else}
-			<Planet />
+			<Moon />
 		{/if}
 	</button>
 

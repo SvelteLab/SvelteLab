@@ -9,7 +9,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import File from '~icons/akar-icons/file';
+	import File from '~icons/material-symbols/unknown-document-rounded';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },

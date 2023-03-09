@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Code from '~icons/akar-icons/chevron-horizontal';
-	import Terminal from '~icons/akar-icons/credit-card-alt1';
-	import IFrame from '~icons/akar-icons/globe';
-	import FileBrowser from '~icons/akar-icons/three-line-horizontal';
+	import IFrame from '~icons/material-symbols/browse-activity-outline-rounded';
+	import Code from '~icons/material-symbols/code-rounded';
+	import FileBrowser from '~icons/material-symbols/menu-rounded';
+	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	export let showing: 'files' | 'code' | 'iframe' | 'terminal' = 'code';
 </script>
