@@ -1,49 +1,52 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { theme } from '$lib/theme';
-	import { webcontainer } from '$lib/webcontainer';
-	import Save from '$lib/components/icons/Save.svelte';
-	import Fork from '$lib/components/icons/Fork.svelte';
-	import SignIn from '~icons/akar-icons/person';
-	import SignOut from '~icons/akar-icons/sign-out';
-	import Moon from '~icons/akar-icons/moon';
-	import Pending from '~icons/eos-icons/loading';
-	import Share from '~icons/akar-icons/network';
-	import PanelBottom from '~icons/akar-icons/panel-bottom';
-	import PanelLeft from '~icons/akar-icons/panel-left';
-	import Planet from '~icons/akar-icons/planet';
-	import Sun from '~icons/akar-icons/sun';
-	import { layout_store } from '$lib/stores/layout_store';
+	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
-	import { invalidate } from '$app/navigation';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import { success, error } from '$lib/toast';
 	import { save_repl } from '$lib/api/client/repls';
-	import { repl_name, is_repl_saving } from '$lib/stores/repl_id_store';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import Fork from '$lib/components/icons/Fork.svelte';
+	import Save from '$lib/components/icons/Save.svelte';
+	import { layout_store } from '$lib/stores/layout_store';
+	import { is_repl_saving } from '$lib/stores/repl_id_store';
+	import { theme } from '$lib/theme';
+	import { error, success } from '$lib/toast';
+	import { webcontainer } from '$lib/webcontainer';
+	import Terminal from '~icons/akar-icons/credit-card-alt1';
+	import Moon from '~icons/akar-icons/moon';
+	import Share from '~icons/akar-icons/network';
+	import SignIn from '~icons/akar-icons/person';
+	import Planet from '~icons/akar-icons/planet';
+	import SignOut from '~icons/akar-icons/sign-out';
+	import Sun from '~icons/akar-icons/sun';
+	import FileBrowser from '~icons/akar-icons/three-line-horizontal';
+	import Pending from '~icons/eos-icons/loading';
 
 	$: ({ user, github_login } = $page.data ?? {});
+
+	export let mobile = false;
 </script>
 
 <header>
 	<img src="./logo.svg" alt="svelteblitz logo" />
-	<button
-		title="Toggle File Browser"
-		on:click={layout_store.toggle_file_tree}
-		class:active={$layout_store.file_tree}
-		aria-pressed={$layout_store.file_tree}
-	>
-		<PanelLeft />
-	</button>
+	{#if !mobile}
+		<button
+			title="Toggle File Browser"
+			on:click={layout_store.toggle_file_tree}
+			aria-pressed={$layout_store.file_tree}
+		>
+			<FileBrowser />
+		</button>
 
-	<button
-		title="Toggle Terminal"
-		on:click={layout_store.toggle_terminal}
-		class:active={$layout_store.terminal}
-		aria-pressed={$layout_store.terminal}
-	>
-		<PanelBottom />
-	</button>
+		<button
+			title="Toggle Terminal"
+			on:click={layout_store.toggle_terminal}
+			aria-pressed={$layout_store.terminal}
+		>
+			<Terminal />
+		</button>
+	{/if}
+	<div class="grow" />
 
 	<button
 		on:click={(e) => {
@@ -63,8 +66,6 @@
 			<Planet />
 		{/if}
 	</button>
-
-	<div class="grow" />
 
 	<button
 		on:click={async () => {
@@ -169,7 +170,7 @@
 		padding-block: 0.25rem;
 	}
 
-	button.active::after {
+	button[aria-pressed='true']::after {
 		content: '';
 		position: absolute;
 		background-color: var(--sk-theme-1);
