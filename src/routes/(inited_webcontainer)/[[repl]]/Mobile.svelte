@@ -3,9 +3,12 @@
 	import Editor from '$lib/components/Editor.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
+	import { Dialog } from 'as-comps';
 	import { tick } from 'svelte';
+	import { fly } from 'svelte/transition';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
+
 	export let showing: 'files' | 'code' | 'iframe' | 'terminal' = 'code';
 
 	let update_height: () => void;
@@ -21,10 +24,27 @@
 <div class="container">
 	<Header mobile />
 	<main>
-		<div hidden={showing !== 'files'}>
-			<FileActions />
-		</div>
-		<div hidden={showing !== 'code'}>
+		<div hidden={showing !== 'code' && showing !== 'files'}>
+			<Dialog
+				isOpen={showing === 'files'}
+				on:dismiss={() => (showing = 'code')}
+				noCloseButton
+				includedTrigger={false}
+				dialogIn={fly}
+				dialogInOptions={{ x: -500 }}
+				--as-dialog-padding="0"
+				--as-dialog-top="calc(50% + 3.8rem)"
+				--as-dialog-left="0"
+				--as-dialog-right="auto"
+				--as-dialog-transform="translateY(-50%)"
+				--as-dialog-border-radius="0"
+				--as-dialog-width="calc(100% - 4em)"
+				--as-dialog-max-width="800px"
+				--as-dialog-height="100%"
+				--as-dialog-max-height="calc(100% - 2em)"
+			>
+				<FileActions />
+			</Dialog>
 			<Editor />
 		</div>
 		<div hidden={showing !== 'iframe'}>
@@ -49,5 +69,6 @@
 	div {
 		width: 100%;
 		height: 100%;
+		max-width: 100vw;
 	}
 </style>
