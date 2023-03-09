@@ -1,0 +1,16 @@
+{
+	"name": "project",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/kit": "^1.5.0",
+		"svelte": "^3.54.0",
+		"vite": "^4.0.0"
+	},
+	"type": "module"
+}
