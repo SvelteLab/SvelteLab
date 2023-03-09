@@ -26,6 +26,13 @@
 	});
 </script>
 
+<svelte:head>
+	<meta
+		name="description"
+		content="Quickly spin up a sveltekit project and share it in a matter of seconds."
+	/>
+</svelte:head>
+
 <svelte:window
 	on:keydown={async (e) => {
 		if (e.code === 'KeyS' && e.ctrlKey) {
