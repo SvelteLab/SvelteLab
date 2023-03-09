@@ -32,7 +32,9 @@
 				noCloseButton
 				includedTrigger={false}
 				dialogIn={fly}
+				dialogOut={fly}
 				dialogInOptions={{ x: -500 }}
+				dialogOutOptions={{ x: -500 }}
 				--as-dialog-padding="0"
 				--as-dialog-top="calc(50% + 3.8rem)"
 				--as-dialog-left="0"
