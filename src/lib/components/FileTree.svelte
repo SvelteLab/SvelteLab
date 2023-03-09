@@ -52,7 +52,7 @@
 <ul>
 	{#if base_path === './'}
 		<li class="root">
-			<input bind:value={$repl_name} />
+			<input aria-label="REPL name" bind:value={$repl_name} />
 			<div class="hover-group">
 				<button
 					title="New File"
