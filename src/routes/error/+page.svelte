@@ -1,6 +1,6 @@
 <script>
 	import '../../styles/global.css';
-	import Error from '~icons/akar-icons/chat-question';
+	import Error from '~icons/material-symbols/chat-error-rounded';
 </script>
 
 <div class="loader">

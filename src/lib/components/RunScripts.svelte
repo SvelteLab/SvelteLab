@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import Refresh from '~icons/akar-icons/arrow-clockwise';
-	import Play from '~icons/akar-icons/play';
-	import Stop from '~icons/akar-icons/square';
 	import Running from '~icons/eos-icons/loading';
+	import Play from '~icons/material-symbols/play-arrow-outline-rounded';
+	import Refresh from '~icons/material-symbols/refresh-rounded';
+	import Stop from '~icons/material-symbols/stop-outline-rounded';
 	let scripts: [string, string][] = [];
 	let loading = false;
 	async function refresh_package_json() {
@@ -156,6 +156,7 @@
 		.heading .hover-group,
 		li .hover-group {
 			display: flex;
+			font-size: 1.75rem;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import File from '~icons/akar-icons/file';
+	import File from '~icons/material-symbols/unknown-document-rounded';
 </script>
 
 <div class="loader">

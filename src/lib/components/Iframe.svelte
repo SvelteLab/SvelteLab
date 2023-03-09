@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
-	import Refresh from '~icons/akar-icons/arrow-clockwise';
+	import Refresh from '~icons/material-symbols/refresh-rounded';
 
 	function handleUrlChange(e: SubmitEvent) {
 		webcontainer.set_iframe_path(''); // refresh even if nothing changed
@@ -47,6 +47,7 @@
 		font-size: inherit;
 		height: 100%;
 		width: 100%;
+		background-color: transparent;
 	}
 
 	input:focus {
