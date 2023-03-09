@@ -4,12 +4,13 @@
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
 	import { createEventDispatcher } from 'svelte';
-	import Check from '~icons/material-symbols/check-small-rounded';
-	import Folder from '~icons/material-symbols/folder-outline-rounded';
-	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Plus from '~icons/material-symbols/add-rounded';
-	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
+	import Check from '~icons/material-symbols/check-small-rounded';
+	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
+	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
+	import Folder from '~icons/material-symbols/folder-outline-rounded';
+	import { open_file } from './Tabs.svelte';
 
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
@@ -145,7 +146,7 @@
 			{@const icon = get_icon(node_key)}
 			{@const path = base_path + node_key}
 			<li class:open={$webcontainer.current_path === path}>
-				<button class="node" on:click={() => webcontainer.open_file(path)}>
+				<button class="node" on:click={() => open_file(path)}>
 					<svelte:component this={icon} />
 					<span>
 						{node_key}

@@ -1,15 +1,15 @@
 import { browser, dev } from '$app/environment';
-import { terminal } from '$lib/terminal';
 import { get_file_from_path, get_subtree_from_path } from '$lib/file_system';
+import { terminal } from '$lib/terminal';
 import {
 	WebContainer,
 	type DirEnt,
 	type FileSystemTree,
 	type WebContainerProcess
 } from '@webcontainer/api';
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
-import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 
 const initial_files = (get_tree_from_local_storage() || default_files) as FileSystemTree;
 
@@ -37,7 +37,6 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, set } = writable({
-	current_file: null as string | null,
 	current_path: null as string | null,
 	webcontainer_url: './loading',
 	iframe_path: '/',
@@ -53,25 +52,9 @@ type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
 
 async function merge_state(state: Partial<WebcontainerStoreType>) {
 	const previous_state = get({ subscribe });
-	let current_file = state.current_file ?? null; //<-- remove undefined for typescript
-	// if the current file is not being set we retrieve it from the virtual
-	// file system so that it's up to date. This is to avoid to update this
-	// store to every keystroke and at the same time avoid resetting the editor
-	// when we update another piece of the store.
-	if (!current_file) {
-		try {
-			current_file = await webcontainer_instance.fs.readFile(
-				previous_state.current_path ?? '',
-				'utf8'
-			);
-		} catch (e) {
-			/* empty */
-		}
-	}
 	set({
 		...previous_state,
-		...state,
-		current_file
+		...state
 	});
 }
 
@@ -271,7 +254,6 @@ export const webcontainer = {
 		await remove_all_files();
 		const mount_promise = webcontainer_instance.mount(to_mount ?? initial_files);
 		merge_state({
-			current_file: null,
 			current_path: null,
 			webcontainer_url: './loading'
 		});
@@ -293,15 +275,6 @@ export const webcontainer = {
 		return () => {
 			init_callbacks.delete(callback);
 		};
-	},
-	/**
-	 * Read the file from the file system of the webcontainer and set the content to the
-	 * current_file (also changing the current_path). If the file does not exist it throws.
-	 * @param path the path to the file to open.
-	 */
-	async open_file(path: string) {
-		const current_file = await webcontainer_instance.fs.readFile(path, 'utf8');
-		merge_state({ current_file, current_path: path });
 	},
 	/**
 	 * Write a file inside the file system of the webcontainer.
@@ -376,19 +349,20 @@ export const webcontainer = {
 		} catch (e) {
 			/* empty */
 		}
-		if (get(webcontainer).current_path?.includes(path)) {
-			merge_state({
-				current_file: null,
-				current_path: null
-			});
+	},
+	async read_file(path: string) {
+		try {
+			return webcontainer_instance.fs.readFile(path, 'utf8');
+		} catch (e) {
+			return '';
 		}
 	},
 	async read_package_json() {
 		try {
-			const package_json = await webcontainer_instance.fs.readFile('./package.json', 'utf8');
-			return JSON.parse(package_json);
+			const file = await this.read_file('./package.json');
+			return JSON.parse(file);
 		} catch (e) {
-			return {};
+			return '';
 		}
 	},
 	async get_share_url() {
