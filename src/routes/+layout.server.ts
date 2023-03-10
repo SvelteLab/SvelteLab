@@ -1,24 +1,27 @@
 import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
-import type { PageServerLoad } from './(inited_webcontainer)/$types';
+import type { LayoutServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, depends, cookies }) => {
+export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	depends('authed:user');
-	let github_login;
+
+	if (locals.user) {
+		return {
+			user: locals.user
+		};
+	}
+
 	// if there no user we fetch the github login url and we save the code verifier
 	// in a cookie
-	if (!locals.user) {
-		github_login = await (
-			await locals.poket_base.collection('users').listAuthMethods()
-		)?.authProviders?.find?.((provider) => provider.name === 'github');
-		if (github_login?.codeVerifier) {
-			cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
-				httpOnly: true,
-				path: '/'
-			});
-		}
-	}
+	const auth_methods = await locals.poket_base.collection('users').listAuthMethods();
+	const github_login = auth_methods.authProviders.find((p) => p.name === 'github');
+	if (!github_login) throw Error('No authProvider with name "github" in pocketbase auth_methods');
+
+	cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
+		httpOnly: true,
+		path: '/'
+	});
+
 	return {
-		user: locals.user,
 		github_login
 	};
 };
