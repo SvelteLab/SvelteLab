@@ -12,7 +12,6 @@ const project = import.meta.glob('./**/!(package-lock.json)', {
 });
 const project_files: FileSystemTree = {};
 for (const file in project) {
-	console.log(file);
 	const path = file.split('/').slice(2);
 	let subtree = project_files;
 	for (let i = 0; i < path.length; i++) {
