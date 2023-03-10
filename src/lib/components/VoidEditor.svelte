@@ -1,11 +1,17 @@
 <script lang="ts">
 	import File from '~icons/material-symbols/unknown-document-rounded';
+
+	export let loading = false;
 </script>
 
-<div class="loader">
-	<File />
-	<span>Open a file to start editing</span>
-</div>
+{#if !loading}
+	<div class="loader">
+		<File />
+		<span>Open a file to start editing</span>
+	</div>
+{:else}
+	<div class="loader" />
+{/if}
 
 <style>
 	div {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import { current_tab } from '$lib/tabs';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
@@ -10,6 +11,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
+	import Tabs from './Tabs.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -33,68 +35,73 @@
 		md: markdown()
 	};
 
-	$: lang = langs[$webcontainer?.current_path?.split('.').at(-1) ?? 'svelte'];
+	$: lang = langs[$current_tab.split('.').at(-1) ?? 'svelte'];
 </script>
 
-{#if $webcontainer.current_path == null}
+<Tabs />
+
+{#if !$current_tab}
 	<VoidEditor />
 {:else}
-	<CodeMirror
-		{lang}
-		{theme}
-		useTab
-		tabSize={3}
-		value={$webcontainer?.current_file ?? ''}
-		on:change={(e) => {
-			if ($webcontainer.current_path == null || $webcontainer.current_path == null) return;
-			webcontainer.update_file($webcontainer.current_path, e.detail);
-		}}
-		styles={{
-			'&': {
-				width: '100%',
-				height: '100%',
-				overflow: 'auto',
-				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)'
-			},
-			'*': {
-				'font-family': 'var(--sk-font-mono)',
-				'tab-size': 3
-			},
-			'.cm-gutters': {
-				border: 'none'
-			},
-			'.cm-gutter': {
-				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)'
-			},
-			'.cm-line.cm-activeLine': {
-				'background-color': 'var(--sk-back-translucent)'
-			},
-			'.cm-activeLineGutter': {
-				'background-color': 'var(--sk-back-3)'
-			},
-			'.cm-focused.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-4) !important'
-			},
-			'.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-5) !important'
-			},
-			'.cm-cursor': {
-				'border-color': 'var(--sk-code-base)'
-			},
-			'.cm-tooltip': {
-				border: 'none'
-			},
-			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
-				background: 'var(--sk-back-3)'
-			},
-			'.cm-tooltip-autocomplete ul li[aria-selected]': {
-				background: 'var(--sk-theme-1)',
-				color: 'var(--sk-text-1)'
-			}
-		}}
-	/>
+	{#await webcontainer.read_file($current_tab)}
+		<VoidEditor loading />
+	{:then file}
+		<CodeMirror
+			{lang}
+			{theme}
+			useTab
+			tabSize={3}
+			value={file ?? ''}
+			on:change={(e) => {
+				webcontainer.update_file($current_tab, e.detail);
+			}}
+			styles={{
+				'&': {
+					width: '100%',
+					height: '100%',
+					overflow: 'auto',
+					'background-color': 'var(--sk-back-1)',
+					color: 'var(--sk-code-base)'
+				},
+				'*': {
+					'font-family': 'var(--sk-font-mono)',
+					'tab-size': 3
+				},
+				'.cm-gutters': {
+					border: 'none'
+				},
+				'.cm-gutter': {
+					'background-color': 'var(--sk-back-1)',
+					color: 'var(--sk-code-base)'
+				},
+				'.cm-line.cm-activeLine': {
+					'background-color': 'var(--sk-back-translucent)'
+				},
+				'.cm-activeLineGutter': {
+					'background-color': 'var(--sk-back-3)'
+				},
+				'.cm-focused.cm-selectionBackground': {
+					'background-color': 'var(--sk-back-4) !important'
+				},
+				'.cm-selectionBackground': {
+					'background-color': 'var(--sk-back-5) !important'
+				},
+				'.cm-cursor': {
+					'border-color': 'var(--sk-code-base)'
+				},
+				'.cm-tooltip': {
+					border: 'none'
+				},
+				'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+					background: 'var(--sk-back-3)'
+				},
+				'.cm-tooltip-autocomplete ul li[aria-selected]': {
+					background: 'var(--sk-theme-1)',
+					color: 'var(--sk-text-1)'
+				}
+			}}
+		/>
+	{/await}
 {/if}
 
 <style>
