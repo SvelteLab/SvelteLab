@@ -2,6 +2,7 @@
 	import { get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { repl_name } from '$lib/stores/repl_id_store';
+	import { current_tab, open_file } from '$lib/tabs';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
 	import { createEventDispatcher } from 'svelte';
 	import Plus from '~icons/material-symbols/add-rounded';
@@ -10,7 +11,6 @@
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Folder from '~icons/material-symbols/folder-outline-rounded';
-	import { current_tab, open_file } from '$lib/tabs';
 
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
