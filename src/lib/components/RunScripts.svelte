@@ -34,34 +34,26 @@
 <ul>
 	{#each scripts as [script, run]}
 		{@const actual_command = `npm run ${script}`}
-		{@const running = actual_command === $webcontainer.running_command}
 		<li>
 			<button
+				disabled={!$webcontainer.is_jsh_listening}
 				title="Run the script {script}"
 				on:click={() => {
-					$webcontainer.running_process?.kill();
-					if (!running) webcontainer.run_command(actual_command);
+					webcontainer.run_command(actual_command);
 				}}
 			>
 				{script}
 				<small>{run}</small>
-				{#if running}
-					<Running />
-				{/if}
 			</button>
 			<button
-				title={running ? `Stop the script ${script}` : `Run the script ${script}`}
+				disabled={!$webcontainer.is_jsh_listening}
+				title={`Run the script ${script}`}
 				class="hover-group"
 				on:click={() => {
-					$webcontainer.running_process?.kill();
-					if (!running) webcontainer.run_command(actual_command);
+					webcontainer.run_command(actual_command);
 				}}
 			>
-				{#if running}
-					<Stop />
-				{:else}
-					<Play />
-				{/if}
+				<Play />
 			</button>
 		</li>
 	{:else}
@@ -147,8 +139,8 @@
 		display: none;
 	}
 
-	.heading:hover .hover-group,
-	li:hover .hover-group {
+	.heading:hover .hover-group:not(:disabled),
+	li:hover .hover-group:not(:disabled) {
 		display: flex;
 	}
 
