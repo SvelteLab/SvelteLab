@@ -4,7 +4,6 @@
 	import Running from '~icons/eos-icons/loading';
 	import Play from '~icons/material-symbols/play-arrow-outline-rounded';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
-	import Stop from '~icons/material-symbols/stop-outline-rounded';
 	let scripts: [string, string][] = [];
 	let loading = false;
 	async function refresh_package_json() {
