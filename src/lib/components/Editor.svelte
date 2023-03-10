@@ -43,7 +43,7 @@
 	<VoidEditor />
 {:else}
 	{#await webcontainer.read_file($current_path)}
-		...
+		<VoidEditor loading />
 	{:then file}
 		<CodeMirror
 			{lang}
