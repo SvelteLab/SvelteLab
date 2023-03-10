@@ -62,10 +62,10 @@ async function merge_state(state: Partial<WebcontainerStoreType>) {
  * An utility function to run a command on the webcontainer instance as a string
  * it will automatically split the command by it's args and pipe every log to the
  * logs array.
- * @param cmd a string representing a command you want to run
- * @returns the exit code of the command
+ * @param {string} cmd a string representing a command you want to run
+ * @param {()=>void} [callback] an optional callback to run when the command finishes
  */
-function run_command(cmd: string) {
+function run_command(cmd: string, callback?: () => void) {
 	const wc_store = get({ subscribe });
 	// we get the writer from the store
 	const shell_writer = wc_store.process_writer;
@@ -73,8 +73,11 @@ function run_command(cmd: string) {
 	// otherwise we queue it
 	if (shell_writer && wc_store.is_jsh_listening) {
 		shell_writer.write(cmd + '\n');
+		if (callback) {
+			jsh_finish_queue.add(callback);
+		}
 	} else {
-		jsh_queue.add(cmd);
+		jsh_queue.add({ cmd, callback });
 	}
 }
 
@@ -201,7 +204,13 @@ async function remove_all_files() {
 	}
 }
 
-const jsh_queue = new Set<string>();
+// the first queue is used when the user or we try to run a command
+// while jsh is not listening yet, we queue the command write it to
+// the terminal as soon as jsh is ready
+const jsh_queue = new Set<{ cmd: string; callback?: () => void }>();
+// the second queue is to have callbacks for when a command finishes
+// for example to launch the chokidar listener after the npm i
+const jsh_finish_queue = new Set<() => void>();
 
 async function launch_jsh() {
 	// we launch the shell
@@ -225,9 +234,12 @@ async function launch_jsh() {
 						is_jsh_listening: true
 					});
 					files_store.set(await get_tree_from_container());
-					const command = jsh_queue.values().next().value;
+					const command = jsh_queue.values().next().value as { cmd: string; callback?: () => void };
 					if (command) {
-						run_command(command);
+						run_command(command.cmd);
+						if (command.callback) {
+							jsh_finish_queue.add(command.callback);
+						}
 						jsh_queue.delete(command);
 					}
 					// if data includes \r and jsh it's already listening
@@ -236,6 +248,8 @@ async function launch_jsh() {
 					merge_state({
 						is_jsh_listening: false
 					});
+					jsh_finish_queue.forEach((callback) => callback());
+					jsh_finish_queue.clear();
 				}
 				terminal.write(data);
 			}
@@ -360,8 +374,9 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		run_command('npm install --verbose');
-		listen_for_files_changes();
+		run_command('npm install --verbose', () => {
+			listen_for_files_changes();
+		});
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
