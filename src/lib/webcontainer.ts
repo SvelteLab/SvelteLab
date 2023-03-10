@@ -213,13 +213,9 @@ const jsh_queue = new Set<{ cmd: string; callback?: () => void }>();
 const jsh_finish_queue = new Set<() => void>();
 
 async function launch_jsh() {
+	console.log('launching jsh');
 	// we launch the shell
-	const jsh_process = await webcontainer_instance.spawn('jsh', {
-		terminal: {
-			cols: terminal.cols,
-			rows: terminal.rows
-		}
-	});
+	const jsh_process = await webcontainer_instance.spawn('jsh');
 	// we pipe the output of the process to a new writable stream that
 	// write to the terminal
 	jsh_process.output.pipeTo(
