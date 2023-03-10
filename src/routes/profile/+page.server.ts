@@ -5,10 +5,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		throw redirect(301, '/');
 	}
-	const repls = await (
-		await locals.poket_base.collection('repls').getFullList()
-	).map((repl) => structuredClone(repl));
 	return {
-		repls
+		repls: locals.pocketbase
+			.collection('repls')
+			.getFullList()
+			.then((repls) => repls.map((repl) => structuredClone(repl)))
 	};
 };
