@@ -225,7 +225,7 @@ function get_files_to_mount(to_mount?: FileSystemTree) {
 			}
 		}
 	}
-	return { file_system: to_mount ?? initial_files, are_initials: !to_mount };
+	return to_mount ?? initial_files;
 }
 
 async function remove_all_files() {
@@ -243,7 +243,7 @@ export const webcontainer = {
 	/**
 	 * init the webcontainer and mount the files
 	 */
-	async init(files_to_mount?: FileSystemTree) {
+	async init(to_mount?: FileSystemTree) {
 		if (webcontainer_instance instanceof WebContainer) {
 			if (dev) {
 				console.warn(
@@ -253,7 +253,7 @@ export const webcontainer = {
 			return;
 		}
 		//we just get this files to already show the files in the blorred background
-		const { file_system: to_mount } = get_files_to_mount(files_to_mount);
+		to_mount = get_files_to_mount(to_mount);
 		if (to_mount) {
 			files_store.set(structuredClone(to_mount));
 		}
@@ -269,20 +269,11 @@ export const webcontainer = {
 	},
 	/**
 	 * Mount some files in the filesystem
-	 * @param files_to_mount the file tree to mount
+	 * @param to_mount the file tree to mount
 	 * @returns a promise that resolves when the file are mounted
 	 */
-	async mount_files(files_to_mount?: FileSystemTree) {
-		const { file_system: to_mount, are_initials } = get_files_to_mount(files_to_mount);
-		// if (are_initials) {
-		// 	// if the files are the default files we dinamically load the package-lock.json
-		// 	// this is to avoid a huge bundle on the startup that takes 3 secs to download
-		// 	to_mount['package-lock.json'] = {
-		// 		file: {
-		// 			contents: (await import('$lib/files/project/package-lock.json?raw')).default
-		// 		}
-		// 	};
-		// }
+	async mount_files(to_mount?: FileSystemTree) {
+		to_mount = get_files_to_mount(to_mount);
 		if (to_mount) {
 			files_store.set(structuredClone(to_mount));
 		}
