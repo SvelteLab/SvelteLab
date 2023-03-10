@@ -37,7 +37,6 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, set } = writable({
-	current_path: null as string | null,
 	webcontainer_url: './loading',
 	iframe_path: '/',
 	running_command: null as string | null,
@@ -254,7 +253,6 @@ export const webcontainer = {
 		await remove_all_files();
 		const mount_promise = webcontainer_instance.mount(to_mount ?? initial_files);
 		merge_state({
-			current_path: null,
 			webcontainer_url: './loading'
 		});
 		init_callbacks.forEach((callback) => {
