@@ -1,43 +1,16 @@
-<script context="module" lang="ts">
-	import { get_icon } from '$lib/file_icons';
-	import { get, writable } from 'svelte/store';
-
-	const open_paths = writable(new Set<string>());
-
-	const { subscribe: subscribe_current, set: set_current } = writable('');
-	export const current_path = { subscribe: subscribe_current };
-
-	export function open_file(path: string) {
-		set_current(path);
-		open_paths.update(($tabs) => $tabs.add(path));
-	}
-
-	function close_file(path: string) {
-		open_paths.update(($tabs) => {
-			const $current_path = get(current_path);
-			if (path === $current_path) {
-				const tab_index_to_open = [...$tabs].findIndex((p) => p === $current_path) - 1;
-				let next_path = [...$tabs].at(tab_index_to_open) || '';
-				next_path = next_path !== $current_path ? next_path : '';
-				set_current(next_path);
-			}
-			$tabs.delete(path);
-			return $tabs;
-		});
-	}
-</script>
-
 <script>
+	import { get_icon } from '$lib/file_icons';
+	import { close_file, current_tab, open_file, tabs } from '$lib/tabs';
 	import Close from '~icons/material-symbols/close-rounded';
 </script>
 
 <section>
-	{#each [...$open_paths] as path}
+	{#each [...$tabs] as path}
 		{@const file_name = path.split('/').at(-1)}
-		<article aria-selected={path === $current_path}>
+		<article aria-selected={path === $current_tab}>
 			<button
-				on:click={(e) => {
-					set_current(path);
+				on:click={() => {
+					open_file(path);
 				}}
 				on:auxclick={() => {
 					close_file(path);
@@ -62,6 +35,7 @@
 		display: flex;
 		max-width: 100%;
 		overflow-x: auto;
+		background-color: var(--sk-back-1);
 	}
 	article {
 		padding: 0.5em;

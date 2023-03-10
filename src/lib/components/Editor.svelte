@@ -1,5 +1,6 @@
 <script lang="ts">
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import { current_tab } from '$lib/tabs';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
@@ -10,7 +11,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import Tabs, { current_path } from './Tabs.svelte';
+	import Tabs from './Tabs.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -34,15 +35,15 @@
 		md: markdown()
 	};
 
-	$: lang = langs[$current_path.split('.').at(-1) ?? 'svelte'];
+	$: lang = langs[$current_tab.split('.').at(-1) ?? 'svelte'];
 </script>
 
 <Tabs />
 
-{#if !$current_path}
+{#if !$current_tab}
 	<VoidEditor />
 {:else}
-	{#await webcontainer.read_file($current_path)}
+	{#await webcontainer.read_file($current_tab)}
 		<VoidEditor loading />
 	{:then file}
 		<CodeMirror
@@ -52,7 +53,7 @@
 			tabSize={3}
 			value={file ?? ''}
 			on:change={(e) => {
-				webcontainer.update_file($current_path, e.detail);
+				webcontainer.update_file($current_tab, e.detail);
 			}}
 			styles={{
 				'&': {
