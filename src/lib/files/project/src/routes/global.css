@@ -9,10 +9,9 @@
 	--sk-text-1: hsl(0, 0%, 13%);
 	--sk-text-2: hsl(0, 0%, 27%);
 	--sk-text-3: hsl(240, 8%, 44%);
-	--sk-font: "Overpass", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-		Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
-		sans-serif;
-	--sk-font-mono: "Fira Mono", monospace;
+	--sk-font: 'Overpass', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+		Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	--sk-font-mono: 'Fira Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
