@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { SvelteToast } from '@zerodevx/svelte-toast';
-	import { webcontainer } from '$lib/webcontainer';
-	import { onMount } from 'svelte';
-	import Booting from '~icons/line-md/loading-alt-loop';
-	import type { LayoutData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { error } from '$lib/toast';
+	import { webcontainer } from '$lib/webcontainer';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { onMount } from 'svelte';
+	import Booting from '~icons/line-md/loading-alt-loop';
+	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 
@@ -16,42 +16,36 @@
 	$: repl_name.set(data.repl_name);
 
 	onMount(() => {
-		//this is to interact with the filesistem
-		//from the console...we can remove it later
+		// for debugging
 		(window as any).wc = webcontainer;
 	});
 
 	beforeNavigate(() => {
 		$webcontainer.running_process?.kill?.();
 	});
+
+	async function handleKeydown(e: KeyboardEvent) {
+		if (!(e.code === 'KeyS' && e.ctrlKey)) return;
+		e.preventDefault();
+		if (data.user) {
+			await save_repl();
+			return;
+		}
+		error('It seems you are trying to save. Login to save your project.');
+	}
 </script>
 
-<svelte:head>
-	<meta
-		name="description"
-		content="Quickly spin up a sveltekit project and share it in a matter of seconds."
-	/>
-</svelte:head>
+<svelte:window on:keydown={handleKeydown} />
 
-<svelte:window
-	on:keydown={async (e) => {
-		if (e.code === 'KeyS' && e.ctrlKey) {
-			e.preventDefault();
-			if (data.user) {
-				await save_repl();
-			} else {
-				error('It seems you are trying to save. Login to save your project.');
-			}
-		}
-	}}
-/>
 <slot />
+
 {#await webcontainer.init(data.repl).then(() => webcontainer.mount_files(data.repl))}
 	<div class="loader">
 		<Booting />
 		<span> Booting up webcontainer... </span>
 	</div>
 {/await}
+
 <SvelteToast
 	options={{
 		theme: {
