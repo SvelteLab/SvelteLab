@@ -6,7 +6,10 @@ declare module '@webcontainer/api' {
 	}
 }
 
-const project = import.meta.glob('./project/**/*', { as: 'raw', eager: true });
+const project = import.meta.glob('./**/!(package-lock.json)', {
+	as: 'raw',
+	eager: true
+});
 const project_files: FileSystemTree = {};
 for (const file in project) {
 	const path = file.split('/').slice(2);
