@@ -41,8 +41,9 @@ const { subscribe, set } = writable({
 	current_path: null as string | null,
 	webcontainer_url: './loading',
 	iframe_path: '/',
-	running_command: null as string | null,
-	running_process: null as WebContainerProcess | null
+	process_writer: null as WritableStreamDefaultWriter<string> | null,
+	running_process: null as WebContainerProcess | null,
+	is_jsh_listening: false
 });
 
 type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
@@ -82,34 +83,17 @@ async function merge_state(state: Partial<WebcontainerStoreType>) {
  * @param cmd a string representing a command you want to run
  * @returns the exit code of the command
  */
-async function run_command(cmd: string) {
-	const [command, ...args] = cmd.split(' ');
-	const process = await webcontainer_instance.spawn(command, args);
-	merge_state({
-		running_command: cmd,
-		running_process: process
-	});
-	process.output.pipeTo(
-		new WritableStream({
-			write(data) {
-				terminal.write(data);
-			}
-		})
-	);
-	return process.exit.then(async (code: number) => {
-		merge_state({
-			running_command: null,
-			running_process: null
-		});
-		try {
-			// for good measure whenever an npm script finishes we
-			// sync the store to the webcontainer
-			files_store.set(await get_tree_from_container());
-		} catch (e) {
-			/* empty */
-		}
-		return code;
-	});
+function run_command(cmd: string) {
+	const wc_store = get({ subscribe });
+	// we get the writer from the store
+	const shell_writer = wc_store.process_writer;
+	// if it's already listening we write the passed in command
+	// otherwise we queue it
+	if (shell_writer && wc_store.is_jsh_listening) {
+		shell_writer.write(cmd + '\n');
+	} else {
+		jsh_queue.add(cmd);
+	}
 }
 
 const listening_for_fs_store = writable(false);
@@ -235,6 +219,75 @@ async function remove_all_files() {
 	}
 }
 
+const jsh_queue = new Set<string>();
+
+async function launch_jsh() {
+	// we launch the shell
+	const jsh_process = await webcontainer_instance.spawn('jsh', {
+		terminal: {
+			cols: terminal.cols,
+			rows: terminal.rows
+		}
+	});
+	// we pipe the output of the process to a new writable stream that
+	// write to the terminal
+	jsh_process.output.pipeTo(
+		new WritableStream({
+			async write(data) {
+				const already_listening = get({ subscribe }).is_jsh_listening;
+				// if data includes ❯ and jsh is not already listening
+				// we sync the store and eventually run the next command
+				// in the queue
+				if (data.includes('❯') && !already_listening) {
+					merge_state({
+						is_jsh_listening: true
+					});
+					files_store.set(await get_tree_from_container());
+					const command = jsh_queue.values().next().value;
+					if (command) {
+						run_command(command);
+						jsh_queue.delete(command);
+					}
+					// if data includes \r and jsh it's already listening
+					// a new command is probably being run so we set the store
+				} else if (data.includes('\r') && already_listening) {
+					merge_state({
+						is_jsh_listening: false
+					});
+				}
+				terminal.write(data);
+			}
+		})
+	);
+	// get the input writer and store it in the store
+	const shell_writer = jsh_process.input.getWriter();
+	merge_state({
+		running_process: jsh_process,
+		process_writer: shell_writer
+	});
+
+	// add listener on the terminal to pipe that to the actual process
+	const terminal_writer = terminal.onData((data) => {
+		shell_writer.write(data);
+	});
+
+	// wait for the process to exit
+	const exit_code = await jsh_process.exit;
+	// reset the store, clear terminal and dispose writer
+	merge_state({
+		process_writer: null,
+		running_process: null,
+		is_jsh_listening: false
+	});
+	terminal.clear();
+	terminal_writer.dispose();
+	// if the user type the exit command we
+	// relaunch the shell...the code will be 143 when we kill the process
+	if (exit_code === 0) {
+		launch_jsh();
+	}
+}
+
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -290,6 +343,8 @@ export const webcontainer = {
 			}
 		});
 		init_callbacks.clear();
+		// on mount we launch the shell
+		launch_jsh();
 		return mount_promise;
 	},
 	/**
@@ -334,10 +389,8 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		return run_command('npm install --verbose').then((code) => {
-			listen_for_files_changes();
-			return code;
-		});
+		run_command('npm install --verbose');
+		listen_for_files_changes();
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
@@ -349,7 +402,7 @@ export const webcontainer = {
 		// correct exit code
 		if (!package_json?.scripts?.dev) {
 			terminal.write('no dev script found, run whatever you want...\n');
-			return Promise.resolve(0);
+			return 0;
 		}
 		return run_command('npm run dev');
 	},
