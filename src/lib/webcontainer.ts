@@ -274,15 +274,15 @@ export const webcontainer = {
 	 */
 	async mount_files(files_to_mount?: FileSystemTree) {
 		const { file_system: to_mount, are_initials } = get_files_to_mount(files_to_mount);
-		if (are_initials) {
-			// if the files are the default files we dinamically load the package-lock.json
-			// this is to avoid a huge bundle on the startup that takes 3 secs to download
-			to_mount['package-lock.json'] = {
-				file: {
-					contents: (await import('$lib/files/project/package-lock.json?raw')).default
-				}
-			};
-		}
+		// if (are_initials) {
+		// 	// if the files are the default files we dinamically load the package-lock.json
+		// 	// this is to avoid a huge bundle on the startup that takes 3 secs to download
+		// 	to_mount['package-lock.json'] = {
+		// 		file: {
+		// 			contents: (await import('$lib/files/project/package-lock.json?raw')).default
+		// 		}
+		// 	};
+		// }
 		if (to_mount) {
 			files_store.set(structuredClone(to_mount));
 		}
