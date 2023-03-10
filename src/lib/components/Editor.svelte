@@ -10,7 +10,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
-	import Tabs, { current_file } from './Tabs.svelte';
+	import Tabs, { current_path } from './Tabs.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -34,15 +34,15 @@
 		md: markdown()
 	};
 
-	$: lang = langs[$current_file.split('.').at(-1) ?? 'svelte'];
+	$: lang = langs[$current_path.split('.').at(-1) ?? 'svelte'];
 </script>
 
 <Tabs />
 
-{#if !$current_file}
+{#if !$current_path}
 	<VoidEditor />
 {:else}
-	{#await webcontainer.read_file($current_file)}
+	{#await webcontainer.read_file($current_path)}
 		...
 	{:then file}
 		<CodeMirror
@@ -52,7 +52,7 @@
 			tabSize={3}
 			value={file ?? ''}
 			on:change={(e) => {
-				webcontainer.update_file($current_file, e.detail);
+				webcontainer.update_file($current_path, e.detail);
 			}}
 			styles={{
 				'&': {

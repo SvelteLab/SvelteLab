@@ -10,7 +10,7 @@
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Folder from '~icons/material-symbols/folder-outline-rounded';
-	import { open_file } from './Tabs.svelte';
+	import { current_path, open_file } from './Tabs.svelte';
 
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
@@ -145,7 +145,7 @@
 		{:else}
 			{@const icon = get_icon(node_key)}
 			{@const path = base_path + node_key}
-			<li class:open={$webcontainer.current_path === path}>
+			<li class:open={$current_path === path}>
 				<button class="node" on:click={() => open_file(path)}>
 					<svelte:component this={icon} />
 					<span>

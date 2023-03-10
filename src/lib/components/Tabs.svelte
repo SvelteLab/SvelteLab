@@ -1,15 +1,27 @@
 <script context="module" lang="ts">
 	import { get_icon } from '$lib/file_icons';
-	import { writable } from 'svelte/store';
+	import { get, writable } from 'svelte/store';
 
 	const open_paths = writable(new Set<string>());
 
 	const { subscribe: subscribe_current_file, set: set_current_file } = writable('');
-	export const current_file = { subscribe: subscribe_current_file };
+	export const current_path = { subscribe: subscribe_current_file };
 
 	export function open_file(path: string) {
 		set_current_file(path);
 		open_paths.update(($tabs) => $tabs.add(path));
+	}
+
+	function close_file(path: string) {
+		open_paths.update(($tabs) => {
+			const $current_path = get(current_path);
+			if (path === $current_path) {
+				const tab_index_to_open = [...$tabs].findIndex((p) => p === $current_path) - 1;
+				set_current_file([...$tabs].at(tab_index_to_open) ?? '');
+			}
+			$tabs.delete(path);
+			return $tabs;
+		});
 	}
 </script>
 
@@ -20,14 +32,14 @@
 <section>
 	{#each [...$open_paths] as path}
 		{@const file_name = path.split('/').at(-1)}
-		<article aria-selected={path === $current_file}>
+		<article aria-selected={path === $current_path}>
 			<button on:click={() => set_current_file(path)}>
 				<svelte:component this={get_icon(file_name || '')} />
 				{file_name}
 			</button>
 			<button
 				on:click={() => {
-					//
+					close_file(path);
 				}}
 			>
 				<Close />
