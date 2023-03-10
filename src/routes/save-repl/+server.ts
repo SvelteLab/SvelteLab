@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			status: 500
 		});
 	}
-	const replCollection = locals.poket_base.collection('repls');
+	const replCollection = locals.pocketbase.collection('repls');
 	let created;
 	try {
 		if (to_save.id) {

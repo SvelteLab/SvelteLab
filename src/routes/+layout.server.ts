@@ -12,7 +12,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 
 	// if there no user we fetch the github login url and we save the code verifier
 	// in a cookie
-	const auth_methods = await locals.poket_base.collection('users').listAuthMethods();
+	const auth_methods = await locals.pocketbase.collection('users').listAuthMethods();
 	const github_login = auth_methods.authProviders.find((p) => p.name === 'github');
 	if (!github_login) throw Error('No authProvider with name "github" in pocketbase auth_methods');
 

@@ -9,7 +9,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			poket_base: PoketBase;
+			pocketbase: PoketBase;
 			user: Admin | Record | null;
 		}
 		// interface PageData {}

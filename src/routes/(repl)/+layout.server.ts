@@ -6,30 +6,37 @@ import type { LayoutServerLoad } from './$types';
 
 export const ssr = false;
 
-async function get_repl_from_id(id: string, poket_base: PoketBase) {
-	const replRecord = await poket_base.collection('repls').getOne(id);
-	return replSchema.parse(replRecord);
+async function get_repl_from_id(id: string, pocketbase: PoketBase) {
+	const record = await pocketbase.collection('repls').getOne(id);
+	return replSchema.parse(record);
 }
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { repl } = params;
-	let repl_files: FileSystemTree | undefined;
-	let repl_name = 'Hello world';
-	if (repl) {
-		try {
-			const repl_stored = await get_repl_from_id(repl, locals.poket_base);
-			repl_files = repl_stored.files;
-			repl_name = repl_stored.name;
-		} catch (e) {
-			/* empty */
-		}
+	let files: FileSystemTree | undefined;
+	let name = 'Hello world';
+
+	if (!repl) {
+		return {
+			repl: files,
+			repl_name: name
+		};
 	}
-	if (repl && !repl_files) {
+
+	try {
+		const record = await get_repl_from_id(repl, locals.pocketbase);
+		files = record.files;
+		name = record.name;
+	} catch (e) {
+		/* empty */
+	}
+
+	if (!files) {
 		throw redirect(300, '/');
 	}
 	return {
-		repl: repl_files,
+		repl: files,
 		id: repl,
-		repl_name
+		repl_name: name
 	};
 };
