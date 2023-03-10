@@ -46,7 +46,9 @@
 	}}
 />
 <slot />
-{#await webcontainer.init(data.repl).then(() => webcontainer.mount_files(data.repl))}
+{#await webcontainer
+	.init(data.repl)
+	.then(() => webcontainer.mount_files(data.repl).then(() => console.log('files mounted')))}
 	<div class="loader">
 		<Booting />
 		<span> Booting up webcontainer... </span>
