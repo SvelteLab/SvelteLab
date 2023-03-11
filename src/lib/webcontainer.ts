@@ -327,7 +327,7 @@ export const webcontainer = {
 			files_store.set(structuredClone(to_mount));
 		}
 		await remove_all_files();
-		const mount_promise = webcontainer_instance.mount(to_mount ?? initial_files);
+		const mount_promise = await webcontainer_instance.mount(to_mount ?? initial_files);
 		merge_state({
 			webcontainer_url: './loading'
 		});
