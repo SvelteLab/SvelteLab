@@ -55,7 +55,7 @@
 
 	{#if user}
 		<a href="/profile" class="btn" title="Profile">
-			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+			<Avatar alt={`${user.name} profile`} src={`/proxy/?url=${user.avatarUrl}`} />
 		</a>
 		<form
 			use:enhance={() => () => {
