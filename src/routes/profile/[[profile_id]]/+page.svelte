@@ -4,14 +4,16 @@
 	import Share from '~icons/akar-icons/network';
 	import TrashCan from '~icons/akar-icons/trash-can';
 	import { flip } from 'svelte/animate';
+	import ProfileHeader from './ProfileHeader.svelte';
 
 	export let data: PageData;
 </script>
 
+<ProfileHeader />
 <main>
 	{#each data.repls as project (project.id)}
 		<!-- this will be useful when we will add delete -->
-		<a animate:flip href={project.id}>
+		<a animate:flip href="/{project.id}">
 			<article>
 				<p>
 					{project.name}
@@ -34,12 +36,16 @@
 </main>
 
 <style>
+	:global(body) {
+		background-color: var(--sk-back-1);
+	}
 	main {
 		padding: 2rem;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-		gap: 3rem;
+		gap: 2rem;
 		max-width: 100%;
+		background-color: var(--sk-back-1);
 	}
 	a {
 		color: var(--sk-text-1);
@@ -51,6 +57,8 @@
 		position: relative;
 		border-radius: 0.5rem;
 		overflow: hidden;
+		height: 100%;
+		background-color: var(--sk-back-2);
 	}
 	article > * {
 		max-width: 80%;
