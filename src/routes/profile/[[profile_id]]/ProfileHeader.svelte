@@ -3,49 +3,23 @@
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
-	import { save_repl } from '$lib/api/client/repls';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { layout_store } from '$lib/stores/layout_store';
-	import { is_repl_saving } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
 	import { error, success } from '$lib/toast';
-	import { webcontainer } from '$lib/webcontainer';
-	import Pending from '~icons/eos-icons/loading';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
-	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
 	import SignOut from '~icons/material-symbols/logout-rounded';
-	import FileBrowser from '~icons/material-symbols/menu-rounded';
-	import Save from '~icons/material-symbols/save';
 	import Share from '~icons/material-symbols/share';
-	import Terminal from '~icons/material-symbols/terminal-rounded';
 
-	const theme = get_theme();
-	$: ({ user, github_login } = $page.data ?? {});
+	const theme = get_theme(false);
 
-	export let mobile = false;
+	$: ({ user, github_login, profile } = $page.data ?? {});
 </script>
 
 <header>
-	<img src="./logo.svg" alt="svelteblitz logo" />
-	{#if !mobile}
-		<button
-			title="Toggle File Browser"
-			on:click={layout_store.toggle_file_tree}
-			aria-pressed={$layout_store.file_tree}
-		>
-			<FileBrowser />
-		</button>
-
-		<button
-			title="Toggle Terminal"
-			on:click={layout_store.toggle_terminal}
-			aria-pressed={$layout_store.terminal}
-		>
-			<Terminal />
-		</button>
-	{/if}
+	<img src="/logo.svg" alt="svelteblitz logo" />
+	<h1>{profile?.username ?? 'nobody'} profile</h1>
 	<div class="grow" />
 
 	<button
@@ -68,8 +42,7 @@
 	<button
 		on:click={async () => {
 			try {
-				const share_url = await webcontainer.get_share_url();
-				window.navigator.clipboard.writeText(share_url.toString());
+				window.navigator.clipboard.writeText(''.toString());
 				success('Copied to clipboard');
 			} catch (e) {
 				error("Can't copy to clipboard");
@@ -81,22 +54,6 @@
 	</button>
 
 	{#if user}
-		<button title="Fork Project">
-			<Fork />
-		</button>
-		<button
-			on:click={async () => {
-				await save_repl();
-			}}
-			title="Save Changes"
-		>
-			{#if $is_repl_saving}
-				<Pending />
-			{:else}
-				<Save />
-			{/if}
-		</button>
-
 		<a href="/profile" class="btn" title="Profile">
 			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 		</a>
@@ -151,6 +108,10 @@
 		background: var(--shadow-gradient);
 	}
 
+	h1 {
+		font-size: 1.6rem;
+	}
+
 	.grow {
 		flex-grow: 1;
 	}
@@ -166,15 +127,5 @@
 		place-items: center;
 		position: relative;
 		padding-block: 0.25rem;
-	}
-
-	button[aria-pressed='true']::after {
-		content: '';
-		position: absolute;
-		background-color: var(--sk-theme-1);
-		right: 1px;
-		left: 1px;
-		bottom: 0;
-		top: calc(100% - 3px);
 	}
 </style>
