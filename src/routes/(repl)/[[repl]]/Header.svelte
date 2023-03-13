@@ -7,7 +7,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
-	import { is_repl_saving } from '$lib/stores/repl_id_store';
+	import { is_repl_saving, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import Pending from '~icons/eos-icons/loading';
@@ -25,6 +25,7 @@
 	$: ({ user, github_login } = $page.data ?? {});
 
 	export let mobile = false;
+	let forking = false;
 </script>
 
 <header>
@@ -82,9 +83,34 @@
 	</button>
 
 	{#if user}
-		<button title="Fork Project">
-			<Fork />
-		</button>
+		<form
+			use:enhance={() => {
+				forking = true;
+				return ({ update }) => {
+					forking = false;
+					update();
+				};
+			}}
+			method="POST"
+			action="?/fork"
+		>
+			<input type="hidden" value={$repl_id} name="id" />
+			<button
+				on:click={(e) => {
+					if (!window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}}
+				title="Fork Project"
+			>
+				{#if forking}
+					<Pending />
+				{:else}
+					<Fork />
+				{/if}
+			</button>
+		</form>
 		<button
 			on:click={async () => {
 				await save_repl();
