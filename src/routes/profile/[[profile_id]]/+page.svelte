@@ -16,7 +16,7 @@
 	const search = queryParam('s', ssp.string(), {
 		debounceHistory: 500
 	});
-	let deleting = [] as string[];
+	let loading = [] as string[];
 	$: repls = data.repls.filter((repl) =>
 		repl.name.toLowerCase().includes($search?.toLowerCase() ?? '')
 	);
@@ -51,17 +51,38 @@
 					<Share />
 				</button>
 				{#if data.user}
-					<button>
-						<Fork />
-					</button>
+					<form
+						use:enhance={() => {
+							loading.push(project.id);
+							loading = loading;
+							return ({ update }) => {
+								loading = loading.filter((id) => id !== project.id);
+								update();
+							};
+						}}
+						action="?/fork"
+						method="POST"
+					>
+						<input name="id" type="hidden" value={project.id} />
+						<button
+							on:click={(e) => {
+								if (!window.confirm(`Are you sure you want to fork "${project.name}"`)) {
+									e.stopPropagation();
+									e.preventDefault();
+								}
+							}}
+						>
+							<Fork />
+						</button>
+					</form>
 				{/if}
 				{#if data.user?.id === data.profile.id}
 					<form
 						use:enhance={() => {
-							deleting.push(project.id);
-							deleting = deleting;
+							loading.push(project.id);
+							loading = loading;
 							return ({ update }) => {
-								deleting = deleting.filter((id) => id !== project.id);
+								loading = loading.filter((id) => id !== project.id);
 								// optimistic update
 								repls = repls.filter((repl) => repl.id !== project.id);
 								update();
@@ -88,7 +109,7 @@
 			<div class="tree">
 				<TreeMap tree={project.files} />
 			</div>
-			{#if deleting.includes(project.id)}
+			{#if loading.includes(project.id)}
 				<div class="loading">
 					<Pending />
 				</div>
