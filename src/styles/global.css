@@ -29,25 +29,25 @@ body .splitpanes.default-theme .splitpanes__splitter::after {
 	content: none;
 }
 
-body .default-theme.splitpanes--vertical > .splitpanes__splitter,
-body .default-theme .splitpanes--vertical > .splitpanes__splitter {
+body .default-theme.splitpanes--vertical>.splitpanes__splitter,
+body .default-theme .splitpanes--vertical>.splitpanes__splitter {
 	width: 2px;
 }
 
-body .default-theme.splitpanes--horizontal > .splitpanes__splitter,
-body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
+body .default-theme.splitpanes--horizontal>.splitpanes__splitter,
+body .default-theme .splitpanes--horizontal>.splitpanes__splitter {
 	height: 2px;
 }
 
 /* override site-kit */
-:is(button, a) > svg {
+:is(button, a)>svg {
 	display: block;
 	height: initial !important;
 	width: initial !important;
 	stroke: initial !important;
 }
 
-:is(button, a) > img {
+:is(button, a)>img {
 	display: block;
 }
 
@@ -134,4 +134,28 @@ a {
 	/* used for coloured backgrounds e.g. blockquotes */
 	--sk-back-translucent: hsla(0, 0%, 0%, 0.1);
 	--sk-text-translucent: hsla(0, 0%, 0%, 0.7);
+}
+
+:root {
+	--sb-track-color: var(--sk-back-1);
+	--sb-thumb-color: var(--sk-theme-1);
+	--sb-size: 10px;
+}
+
+
+* {
+	scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+*::-webkit-scrollbar {
+	width: var(--sb-size);
+	height: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+	background: var(--sb-track-color);
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--sb-thumb-color);
 }
