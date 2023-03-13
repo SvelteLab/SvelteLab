@@ -54,5 +54,6 @@
 		transform: scaleX(calc(var(--percentage) * 100%));
 		background-color: var(--sk-theme-1);
 		transition: transform 250ms;
+		z-index: 9999;
 	}
 </style>
