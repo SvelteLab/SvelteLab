@@ -22,7 +22,7 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	const theme = get_theme();
-	$: ({ user, github_login } = $page.data ?? {});
+	$: ({ user, github_login, repl, owner_id } = $page.data ?? {});
 
 	export let mobile = false;
 	let forking = false;
@@ -111,19 +111,20 @@
 				{/if}
 			</button>
 		</form>
-		<button
-			on:click={async () => {
-				await save_repl();
-			}}
-			title="Save Changes"
-		>
-			{#if $is_repl_saving}
-				<Pending />
-			{:else}
-				<Save />
-			{/if}
-		</button>
-
+		{#if !owner_id || user.id === owner_id}
+			<button
+				on:click={async () => {
+					await save_repl();
+				}}
+				title="Save Changes"
+			>
+				{#if $is_repl_saving}
+					<Pending />
+				{:else}
+					<Save />
+				{/if}
+			</button>
+		{/if}
 		<a href="/profile" class="btn" title="Profile">
 			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 		</a>

@@ -10,7 +10,6 @@ export const fork: Action = async ({ request, fetch }) => {
 	const res = await fetch(`/fork/${id}`, {
 		method: 'POST'
 	});
-	console.log(res);
 	if (res.ok) {
 		const created = await res.json();
 		throw redirect(301, `/${created.id}`);

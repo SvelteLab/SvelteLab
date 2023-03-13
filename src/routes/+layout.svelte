@@ -20,7 +20,7 @@
 		--toastContainerBottom: 1.5rem;
 		--toastContainerTop: auto;
 		--toastMsgPadding: 1.5rem;
-		--toastWidth: 20rem;
+		--toastWidth: min(auto, 100%);
 		--toastBackground: var(--sk-back-2);
 		--toastColor: var(--sk-text-1);
 	}

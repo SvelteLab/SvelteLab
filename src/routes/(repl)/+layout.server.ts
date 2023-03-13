@@ -22,11 +22,12 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 			repl_name: name
 		};
 	}
-
+	let owner_id;
 	try {
 		const record = await get_repl_from_id(repl, locals.pocketbase);
 		files = record.files;
 		name = record.name;
+		owner_id = record.user;
 	} catch (e) {
 		/* empty */
 	}
@@ -37,6 +38,7 @@ export const load: LayoutServerLoad = async ({ params, locals }) => {
 	return {
 		repl: files,
 		id: repl,
-		repl_name: name
+		repl_name: name,
+		owner_id
 	};
 };
