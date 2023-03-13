@@ -14,7 +14,7 @@
 	export let data: PageData;
 
 	const search = queryParam('s', ssp.string(), {
-		debounceHistory: 500
+		pushHistory: false
 	});
 	let loading = [] as string[];
 	$: repls = data.repls.filter((repl) =>

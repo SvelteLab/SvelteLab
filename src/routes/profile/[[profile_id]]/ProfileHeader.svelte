@@ -78,7 +78,7 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
+			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
 			<SignIn />
@@ -118,7 +118,7 @@
 		font-size: 1.6rem;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		max-width: 14rem;
+		max-width: 20rem;
 		overflow: hidden;
 	}
 

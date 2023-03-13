@@ -22,8 +22,7 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	const theme = get_theme();
-	$: ({ user, github_login, repl, owner_id } = $page.data ?? {});
-
+	$: ({ user, github_login, owner_id } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
 </script>
@@ -143,7 +142,7 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}`}
+			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
 			<SignIn />
