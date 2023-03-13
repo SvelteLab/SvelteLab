@@ -2,7 +2,7 @@ import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
 import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({ locals, url, cookies }) => {
+export const GET: RequestHandler = async ({ locals, url, cookies, params: { redirect_to } }) => {
 	const code = url.searchParams.get('code');
 	const code_verifier = cookies.get(GITHUB_VERIFIER_COOKIE_NAME);
 	const auth_data = await locals.pocketbase
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 	return new Response(null, {
 		status: 301,
 		headers: {
-			location: '/'
+			location: `/${redirect_to}`
 		}
 	});
 };
