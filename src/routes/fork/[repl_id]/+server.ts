@@ -9,6 +9,7 @@ export const POST: RequestHandler = async ({ locals, params: { repl_id } }) => {
 			.getFirstListItem(`id = "${repl_id}"`)
 			.then(structuredClone)) as Partial<Record>;
 		delete existing_repl.id;
+		existing_repl.user = locals.user?.id;
 		const created = await repls.create(existing_repl);
 		return json({ id: created.id });
 	} catch (e) {
