@@ -1,5 +1,6 @@
 <script lang="ts">
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
@@ -52,6 +53,7 @@
 			useTab
 			tabSize={3}
 			value={file ?? ''}
+			extensions={[js_snippets, svelte_snippets]}
 			on:change={(e) => {
 				webcontainer.update_file($current_tab, e.detail);
 			}}
