@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
+	import OpenInNew from '~icons/material-symbols/open-in-new';
+	import { tick } from 'svelte';
 
-	function handleUrlChange(e: SubmitEvent) {
+	async function handleUrlChange(e: SubmitEvent) {
 		webcontainer.set_iframe_path(''); // refresh even if nothing changed
 		const url = new FormData(e.target as HTMLFormElement).get('url')?.toString() || '/';
+		await tick();
 		if (url.startsWith('/')) {
 			webcontainer.set_iframe_path(url);
 		} else {
@@ -18,7 +21,21 @@
 		<button title="Refresh">
 			<Refresh />
 		</button>
-		<input aria-label="current path" name="url" type="text" value={$webcontainer.iframe_path} />
+		<a
+			title="Open in new Tab"
+			href={$webcontainer.webcontainer_url + $webcontainer.iframe_path}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<OpenInNew />
+		</a>
+		<input
+			autocomplete="off"
+			aria-label="current path"
+			name="url"
+			type="text"
+			value={$webcontainer.iframe_path}
+		/>
 	</form>
 	{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
 		<iframe
@@ -37,6 +54,10 @@
 		background-color: var(--sk-back-2);
 		gap: 0.5rem;
 		border-bottom: 1px solid var(--sk-back-4);
+	}
+	a {
+		color: var(--sk-text-2);
+		font-size: inherit;
 	}
 
 	input {
