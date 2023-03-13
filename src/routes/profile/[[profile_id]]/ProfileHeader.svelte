@@ -4,8 +4,9 @@
 	import { page } from '$app/stores';
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { share } from '$lib/share';
 	import { get_theme } from '$lib/theme';
-	import { error, success } from '$lib/toast';
+	import { error } from '$lib/toast';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
@@ -18,7 +19,9 @@
 </script>
 
 <header>
-	<img src="/logo.svg" alt="svelteblitz logo" />
+	<a href="/" title="New REPL">
+		<img src="/logo.svg" alt="svelteblitz logo" />
+	</a>
 	<h1>{profile?.username ?? 'nobody'} profile</h1>
 	<div class="grow" />
 
@@ -41,12 +44,15 @@
 
 	<button
 		on:click={async () => {
-			try {
-				window.navigator.clipboard.writeText(''.toString());
-				success('Copied to clipboard');
-			} catch (e) {
-				error("Can't copy to clipboard");
+			if (!profile) {
+				error('There was a problem sharing this profile');
+				return;
 			}
+			await share({
+				text: 'Take a look at my Svelteblitz profile',
+				title: `${profile.username} - Svelteblitz`,
+				url: `/profile/${profile.id}`
+			});
 		}}
 		title="Share"
 	>
@@ -63,7 +69,7 @@
 				invalidate('authed:user');
 			}}
 			method="POST"
-			action="?/logout"
+			action="/?/logout"
 		>
 			<button title="Sign out">
 				<SignOut />
@@ -110,6 +116,10 @@
 
 	h1 {
 		font-size: 1.6rem;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		max-width: 14rem;
+		overflow: hidden;
 	}
 
 	.grow {

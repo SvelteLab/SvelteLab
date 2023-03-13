@@ -1,37 +1,99 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import TreeMap from '$lib/components/TreeMap.svelte';
-	import type { PageData } from './$types';
-	import Share from '~icons/akar-icons/network';
-	import TrashCan from '~icons/akar-icons/trash-can';
+	import { share } from '$lib/share';
 	import { flip } from 'svelte/animate';
+	import { queryParam, ssp } from 'sveltekit-search-params';
+	import TrashCan from '~icons/material-symbols/delete-forever-outline';
+	import Fork from '~icons/material-symbols/fork-right-rounded';
+	import Share from '~icons/material-symbols/share';
+	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
+	import Pending from '~icons/eos-icons/loading';
 
 	export let data: PageData;
+
+	const search = queryParam('s', ssp.string(), {
+		debounceHistory: 500
+	});
+	let deleting = [] as string[];
+	$: repls = data.repls.filter((repl) =>
+		repl.name.toLowerCase().includes($search?.toLowerCase() ?? '')
+	);
 </script>
 
 <ProfileHeader />
 <main>
-	{#each data.repls as project (project.id)}
+	<input bind:value={$search} placeholder="search..." aria-label="search a repl" type="search" />
+	{#each repls as project (project.id)}
 		<!-- this will be useful when we will add delete -->
-		<a animate:flip href="/{project.id}">
-			<article>
+		<article
+			animate:flip={{
+				duration: 250
+			}}
+		>
+			<a data-sveltekit-preload-data="off" href="/{project.id}">
 				<p>
 					{project.name}
 				</p>
 				<small>/{project.id}</small>
-				<div class="buttons">
+			</a>
+			<div class="buttons">
+				<button
+					on:click={() => {
+						share({
+							text: `Take a look at my REPL`,
+							title: `Svelteblitz - ${project.name}`,
+							url: `/${project.id}`
+						});
+					}}
+				>
+					<Share />
+				</button>
+				{#if data.user}
 					<button>
-						<TrashCan />
+						<Fork />
 					</button>
-					<button>
-						<Share />
-					</button>
+				{/if}
+				{#if data.user?.id === data.profile.id}
+					<form
+						use:enhance={() => {
+							deleting.push(project.id);
+							deleting = deleting;
+							return ({ update }) => {
+								deleting = deleting.filter((id) => id !== project.id);
+								// optimistic update
+								repls = repls.filter((repl) => repl.id !== project.id);
+								update();
+							};
+						}}
+						action="?/delete"
+						method="POST"
+					>
+						<input name="id" type="hidden" value={project.id} />
+						<button
+							on:click={(e) => {
+								if (!window.confirm(`Are you sure you want to delete "${project.name}"`)) {
+									e.stopPropagation();
+									e.preventDefault();
+								}
+							}}
+							style:color="var(--sk-theme-1)"
+						>
+							<TrashCan />
+						</button>
+					</form>
+				{/if}
+			</div>
+			<div class="tree">
+				<TreeMap tree={project.files} />
+			</div>
+			{#if deleting.includes(project.id)}
+				<div class="loading">
+					<Pending />
 				</div>
-				<div class="tree">
-					<TreeMap tree={project.files} />
-				</div>
-			</article>
-		</a>
+			{/if}
+		</article>
 	{/each}
 </main>
 
@@ -47,6 +109,20 @@
 		max-width: 100%;
 		background-color: var(--sk-back-1);
 	}
+	input {
+		grid-column: 1/-1;
+		width: min(50rem, 100%);
+		justify-self: center;
+		background-color: var(--sk-back-5);
+		padding: 0.5rem;
+		border: none;
+		border-radius: 0.5rem;
+		color: var(--sk-text-1);
+	}
+	input::placeholder {
+		color: var(--sk-text-1);
+		opacity: 0.6;
+	}
 	a {
 		color: var(--sk-text-1);
 		text-decoration: none;
@@ -59,6 +135,7 @@
 		overflow: hidden;
 		height: 100%;
 		background-color: var(--sk-back-2);
+		position: relative;
 	}
 	article > * {
 		max-width: 80%;
@@ -79,16 +156,30 @@
 		object-fit: contain;
 	}
 	.buttons {
-		margin-block: 1rem;
+		margin-block-start: 2.5rem;
 		display: flex;
+		font-size: 2rem;
 	}
 	p {
 		margin: 0;
 		font-size: 2rem;
 	}
 	small {
-		background: var(--sk-back-2);
-		padding: 0.25rem 0.5rem;
-		grid-row: -1;
+		background: var(--sk-back-5);
+		padding: 0.75rem;
+		border-radius: 0.3rem;
+	}
+	form {
+		line-height: 0;
+	}
+	.loading {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		font-size: 3rem;
+		background-color: var(--sk-back-5);
+		opacity: 0.7;
+		max-width: unset;
 	}
 </style>
