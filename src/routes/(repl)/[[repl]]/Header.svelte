@@ -5,10 +5,10 @@
 	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
-	import { error, success } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
 	import Pending from '~icons/eos-icons/loading';
 	import SignIn from '~icons/material-symbols/account-circle';
@@ -28,7 +28,9 @@
 </script>
 
 <header>
-	<img src="./logo.svg" alt="svelteblitz logo" />
+	<a href="/" title="New REPL">
+		<img src="/logo.svg" alt="svelteblitz logo" />
+	</a>
 	{#if !mobile}
 		<button
 			title="Toggle File Browser"
@@ -67,13 +69,12 @@
 
 	<button
 		on:click={async () => {
-			try {
-				const share_url = await webcontainer.get_share_url();
-				window.navigator.clipboard.writeText(share_url.toString());
-				success('Copied to clipboard');
-			} catch (e) {
-				error("Can't copy to clipboard");
-			}
+			const share_url = await webcontainer.get_share_url();
+			await share({
+				text: 'Take a look at my REPL',
+				title: 'Svelteblitz',
+				url: share_url.toString()
+			});
 		}}
 		title="Share"
 	>

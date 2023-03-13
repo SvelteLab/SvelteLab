@@ -1,5 +1,5 @@
-import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { profile_id } = params;
@@ -27,3 +27,16 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		profile
 	};
 };
+
+export const actions = {
+	async delete({ locals, request }) {
+		const form_data = await request.formData();
+		const id = form_data.get('id');
+		try {
+			locals.pocketbase.collection('repls').delete(id?.toString() ?? '');
+		} catch (e) {
+			return fail(500);
+		}
+		return { success: true };
+	}
+} satisfies Actions;
