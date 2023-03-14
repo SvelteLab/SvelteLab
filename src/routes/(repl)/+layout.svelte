@@ -55,31 +55,30 @@
 		<span> Booting up webcontainer... </span>
 	</div>
 {/await}
-<raiser>
-	<Dialog
-		--as-dialog-width="max(50vw, 35rem)"
-		--as-dialog--actions-justify-content="flex-end"
-		--as-dialog--actions--child-button-flex-grow="0"
-		--as-dialog-border-radius=".25rem"
-		--as-dialog-background="var(--sk-back-2)"
-		--as-dialog-padding="3rem"
-		noCloseButton
-		autofocus={false}
-		isOpen={isTipOpen && $tips_store.no_config && first_time}
-		includedTrigger={false}
-	>
-		<h1><Tip />[TIP] No config to the extreme</h1>
-		<p>
-			By default we don't show the usual config files associated with a Sveltekit project to keep
-			things clean and easy in the file tree. If you need to do modifications to any of this config
-			files you can tap on the little <ConfigFiles /> button at the root of the file tree.
-		</p>
-		<svelte:fragment slot="dialog-actions">
-			<button on:click={() => ($tips_store.no_config = false)}>Don't show me this again</button>
-			<button class="primary" on:click={() => (isTipOpen = false)}>Got it</button>
-		</svelte:fragment>
-	</Dialog>
-</raiser>
+
+<Dialog
+	--as-dialog-width="max(50vw, 35rem)"
+	--as-dialog--actions-justify-content="flex-end"
+	--as-dialog--actions--child-button-flex-grow="0"
+	--as-dialog-border-radius=".25rem"
+	--as-dialog-background="var(--sk-back-2)"
+	--as-dialog-padding="3rem"
+	noCloseButton
+	autofocus={false}
+	isOpen={isTipOpen && $tips_store.no_config && first_time}
+	includedTrigger={false}
+>
+	<h1><Tip />[TIP] No config to the extreme</h1>
+	<p>
+		By default we don't show the usual config files associated with a Sveltekit project to keep
+		things clean and easy in the file tree. If you need to do modifications to any of this config
+		files you can tap on the little <ConfigFiles /> button at the root of the file tree.
+	</p>
+	<svelte:fragment slot="dialog-actions">
+		<button on:click={() => ($tips_store.no_config = false)}>Don't show me this again</button>
+		<button class="primary" on:click={() => (isTipOpen = false)}>Got it</button>
+	</svelte:fragment>
+</Dialog>
 
 <style>
 	div {
@@ -98,11 +97,7 @@
 	.primary {
 		color: var(--sk-theme-1);
 	}
-	raiser {
-		position: absolute;
-		width: 0;
-		height: 0;
-		pointer-events: none;
-		z-index: 9999;
+	:global(dialog) {
+		z-index: 999;
 	}
 </style>
