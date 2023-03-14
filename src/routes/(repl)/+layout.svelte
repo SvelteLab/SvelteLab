@@ -85,7 +85,7 @@
 		position: fixed;
 		inset: 0;
 		backdrop-filter: blur(4px);
-		z-index: 9999;
+		z-index: 999;
 	}
 	h1 {
 		font-size: 2rem;
@@ -98,6 +98,6 @@
 		color: var(--sk-theme-1);
 	}
 	:global(dialog) {
-		z-index: 999 !important;
+		z-index: 9999 !important;
 	}
 </style>
