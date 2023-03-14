@@ -98,6 +98,6 @@
 		color: var(--sk-theme-1);
 	}
 	:global(dialog) {
-		z-index: 999;
+		z-index: 999 !important;
 	}
 </style>
