@@ -1,5 +1,5 @@
 import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
-import { REDIRECT_URI } from '$lib/env';
+import { REDIRECT_URI } from '$lib/env.server';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ locals, url, cookies, params: { redirect_to } }) => {

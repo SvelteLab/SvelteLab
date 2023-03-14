@@ -4,7 +4,6 @@
 	import { page } from '$app/stores';
 	import { save_repl } from '$lib/api/client/repls';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { REDIRECT_URI } from '$lib/env';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -22,7 +21,7 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	const theme = get_theme();
-	$: ({ user, github_login, owner_id } = $page.data ?? {});
+	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
 </script>
