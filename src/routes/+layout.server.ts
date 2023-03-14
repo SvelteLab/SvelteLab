@@ -1,4 +1,5 @@
 import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
+import { REDIRECT_URI } from '$lib/env.server';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
@@ -22,6 +23,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	});
 
 	return {
-		github_login
+		github_login,
+		REDIRECT_URI
 	};
 };

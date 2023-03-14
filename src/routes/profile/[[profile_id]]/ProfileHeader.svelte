@@ -3,7 +3,6 @@
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { REDIRECT_URI } from '$lib/env';
 	import { share } from '$lib/share';
 	import { get_theme } from '$lib/theme';
 	import { error } from '$lib/toast';
@@ -15,7 +14,7 @@
 
 	const theme = get_theme(false);
 
-	$: ({ user, github_login, profile } = $page.data ?? {});
+	$: ({ user, github_login, profile, REDIRECT_URI } = $page.data ?? {});
 </script>
 
 <header>
