@@ -9,7 +9,6 @@
 	import { is_repl_saving, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
-	import Pending from '~icons/eos-icons/loading';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
@@ -19,6 +18,8 @@
 	import Save from '~icons/material-symbols/save';
 	import Share from '~icons/material-symbols/share';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import Download from '~icons/material-symbols/download-rounded';
+	import AsyncButton from '$lib/components/AsyncButton.svelte';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
@@ -79,6 +80,13 @@
 	>
 		<Share />
 	</button>
+	<AsyncButton
+		click={async () => {
+			await webcontainer.save_as_zip();
+		}}
+	>
+		<Download />
+	</AsyncButton>
 
 	{#if user}
 		<form
@@ -93,35 +101,29 @@
 			action="?/fork"
 		>
 			<input type="hidden" value={$repl_id} name="id" />
-			<button
-				on:click={(e) => {
+			<AsyncButton
+				click={(e) => {
 					if (!window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
 						e.stopPropagation();
 						e.preventDefault();
 					}
 				}}
 				title="Fork Project"
+				loading={forking}
 			>
-				{#if forking}
-					<Pending />
-				{:else}
-					<Fork />
-				{/if}
-			</button>
+				<Fork />
+			</AsyncButton>
 		</form>
 		{#if !owner_id || user.id === owner_id}
-			<button
-				on:click={async () => {
+			<AsyncButton
+				click={async () => {
 					await save_repl();
 				}}
 				title="Save Changes"
+				loading={$is_repl_saving}
 			>
-				{#if $is_repl_saving}
-					<Pending />
-				{:else}
-					<Save />
-				{/if}
-			</button>
+				<Save />
+			</AsyncButton>
 		{/if}
 		<a href="/profile" class="btn" title="Profile">
 			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />

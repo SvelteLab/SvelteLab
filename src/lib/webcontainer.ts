@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { get_file_from_path, get_subtree_from_path } from '$lib/file_system';
+import { get_file_from_path, get_subtree_from_path, is_dir } from '$lib/file_system';
 import { terminal } from '$lib/terminal';
 import {
 	WebContainer,
@@ -10,6 +10,7 @@ import {
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { files as default_files } from './files';
+import { repl_name } from './stores/repl_id_store';
 
 const initial_files = default_files as FileSystemTree;
 
@@ -456,6 +457,32 @@ export const webcontainer = {
 
 	set_iframe_path(iframe_path: string) {
 		merge_state({ iframe_path });
+	},
+	async save_as_zip() {
+		// lazy load the library loading since it's not a common usage
+		const JSZip = (await import('jszip')).default;
+		const zip = new JSZip();
+		const current_tree = await get_tree_from_container();
+		console.log(current_tree);
+		const traverse = (tree: FileSystemTree, path: string) => {
+			const files_and_folders = Object.keys(tree);
+			for (const file of files_and_folders) {
+				const entry = tree[file];
+				const current_path = `${path}${file}`;
+				if (is_dir(entry)) {
+					zip.folder(current_path);
+					traverse(entry.directory, `${current_path}/`);
+					continue;
+				}
+				zip.file(current_path, entry.file.contents);
+			}
+		};
+		traverse(current_tree, '');
+		const base_64 = await zip.generateAsync({ type: 'base64' });
+		const a = document.createElement('a');
+		a.href = 'data:application/zip;base64,' + base_64;
+		a.download = `${get(repl_name)}.zip`;
+		a.click();
 	}
 };
 
