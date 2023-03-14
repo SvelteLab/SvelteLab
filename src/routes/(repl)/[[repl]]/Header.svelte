@@ -2,9 +2,9 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { REDIRECT_URI } from '$lib/env';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -142,7 +142,7 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}${$page.url.pathname}`}
+			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
 			<SignIn />

@@ -3,11 +3,13 @@ import { persisted } from 'svelte-local-storage-store';
 interface LayoutStore {
 	file_tree: boolean;
 	terminal: boolean;
+	show_config: boolean;
 }
 
 const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: true,
-	terminal: false
+	terminal: false,
+	show_config: false
 });
 
 function toggle_file_tree() {
@@ -24,4 +26,11 @@ function toggle_terminal() {
 	}));
 }
 
-export const layout_store = { subscribe, toggle_file_tree, toggle_terminal };
+function toggle_config() {
+	update((state) => ({
+		...state,
+		show_config: !state.show_config
+	}));
+}
+
+export const layout_store = { subscribe, toggle_file_tree, toggle_terminal, toggle_config };

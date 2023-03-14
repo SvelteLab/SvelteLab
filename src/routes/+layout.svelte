@@ -1,7 +1,11 @@
 <script>
+	import { update_first_time } from '$lib/first_load';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { onMount } from 'svelte';
 	import '../styles/global.css';
 	import LoadingIndicator from './LoadingIndicator.svelte';
+
+	onMount(update_first_time);
 </script>
 
 <LoadingIndicator />

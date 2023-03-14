@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
+	import { layout_store } from '$lib/stores/layout_store';
+	import { base_path as base_path_store } from '$lib/stores/base_path_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { current_tab, open_file } from '$lib/tabs';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
@@ -51,7 +53,7 @@
 </script>
 
 <ul>
-	{#if base_path === './'}
+	{#if base_path === $base_path_store}
 		<li class="root">
 			<input aria-label="REPL name" bind:value={$repl_name} />
 			<div class="hover-group">
@@ -71,7 +73,12 @@
 				>
 					<FolderAdd />
 				</button>
-				<button title="Toggle Config Files">
+				<button
+					on:click={() => {
+						layout_store.toggle_config();
+					}}
+					title="Toggle Config Files"
+				>
 					<ConfigFiles />
 				</button>
 			</div>
@@ -177,7 +184,7 @@
 					const formData = new FormData(e.currentTarget);
 					const path = formData.get('path');
 					if (!path) return;
-					if (base_path === './') {
+					if (base_path === $base_path_store) {
 						handleAdd({
 							name: path.toString(),
 							add: is_adding,

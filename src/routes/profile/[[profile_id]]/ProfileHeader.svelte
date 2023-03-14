@@ -2,8 +2,8 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { REDIRECT_URI } from '$lib/env';
 	import { share } from '$lib/share';
 	import { get_theme } from '$lib/theme';
 	import { error } from '$lib/toast';
@@ -78,7 +78,7 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${github_login?.authUrl}${PUBLIC_GITHUB_REDIRECT_URI}${$page.url.pathname}`}
+			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
 			<SignIn />
