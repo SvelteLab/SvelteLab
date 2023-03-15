@@ -168,8 +168,6 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 	}
 }
 
-const init_callbacks = new Set<() => void>();
-
 async function clear_webcontainer_fs() {
 	const main_dir = await webcontainer_instance.fs.readdir('./');
 	for (const file of main_dir) {
@@ -292,17 +290,6 @@ export const webcontainer = {
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
 		await webcontainer.run_dev_server();
-	},
-	/**
-	 * Register a callback for the webcontainer boots.
-	 * @param callback the callback that will be called when the webcontainer boots
-	 * @returns The cleanup function to unregister the callback
-	 */
-	on_init(callback: () => void) {
-		init_callbacks.add(callback);
-		return () => {
-			init_callbacks.delete(callback);
-		};
 	},
 	/**
 	 * Write a file inside the file system of the webcontainer.
