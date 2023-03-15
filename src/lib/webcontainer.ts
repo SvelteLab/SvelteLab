@@ -35,7 +35,8 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, set } = writable({
-	webcontainer_url: './loading',
+	webcontainer_url: '',
+	status: 'booting',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
@@ -276,32 +277,21 @@ export const webcontainer = {
 			}
 			return;
 		}
-
 		webcontainer_instance = await WebContainer.boot();
-
 		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ webcontainer_url: url });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
-					merge_state({ webcontainer_url: './error' });
+					merge_state({ webcontainer_url: '', status: 'server_closed' });
 				}
 			});
 		});
-
 		await clear_webcontainer_fs();
-		const mount_promise = await webcontainer_instance.mount(get(files_store));
-		merge_state({
-			webcontainer_url: './loading'
-		});
-		init_callbacks.forEach((callback) => {
-			if (typeof callback === 'function') {
-				callback();
-			}
-		});
-		init_callbacks.clear();
-		// on mount we launch the shell
+		await webcontainer_instance.mount(get(files_store));
 		launch_jsh();
-		return mount_promise;
+		merge_state({ status: 'waiting' });
+		await webcontainer.install_dependencies();
+		await webcontainer.run_dev_server();
 	},
 	/**
 	 * Register a callback for the webcontainer boots.
