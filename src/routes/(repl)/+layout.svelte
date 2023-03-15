@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -18,19 +19,30 @@
 	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
 	$: repl_name.set(data.repl_name);
-	$: webcontainer.set_file_system(data.repl);
+	$: webcontainer.set_file_system(data.repl!);
 
-	onMount(() => {
+	let fix_for_double_after = false;
+
+	afterNavigate(() => {
+		if (fix_for_double_after) return;
+		console.log('booting');
+		fix_for_double_after = true;
 		// for debugging
 		(window as any).wc = webcontainer;
-		webcontainer.init();
+		webcontainer.init().then(() => webcontainer.mount_files());
+	});
+
+	beforeNavigate(() => {
+		console.log('killing?');
+		fix_for_double_after = false;
+		$webcontainer.running_process?.kill?.();
 	});
 
 	async function handleKeydown(e: KeyboardEvent) {
 		if (!(e.code === 'KeyS' && e.ctrlKey)) return;
 		e.preventDefault();
 		if (data.user) {
-			if (data.user.id === data.owner_id) {
+			if (!data.owner_id || data.user.id === data.owner_id) {
 				await save_repl();
 				return;
 			}
@@ -46,6 +58,7 @@
 <slot />
 
 <Dialog
+	--as-dialog-container-z-index="9999"
 	--as-dialog-width="max(50vw, 35rem)"
 	--as-dialog--actions-justify-content="flex-end"
 	--as-dialog--actions--child-button-flex-grow="0"
@@ -70,12 +83,6 @@
 </Dialog>
 
 <style>
-	div {
-		position: fixed;
-		inset: 0;
-		backdrop-filter: blur(4px);
-		z-index: 999;
-	}
 	h1 {
 		font-size: 2rem;
 		display: flex;
@@ -85,8 +92,5 @@
 	}
 	.primary {
 		color: var(--sk-theme-1);
-	}
-	:global(dialog) {
-		z-index: 9999 !important;
 	}
 </style>

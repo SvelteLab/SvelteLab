@@ -24,6 +24,9 @@ export function get_file_from_path(
 				};
 				file = subtree[path_part];
 			}
+			if (!file) {
+				throw new Error('File does not exist');
+			}
 			if (is_dir(file)) {
 				subtree = file.directory;
 			} else {

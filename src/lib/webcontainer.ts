@@ -168,6 +168,8 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 	}
 }
 
+const init_callbacks = new Set<() => void>();
+
 async function clear_webcontainer_fs() {
 	const main_dir = await webcontainer_instance.fs.readdir('./');
 	for (const file of main_dir) {
@@ -252,6 +254,10 @@ async function launch_jsh() {
 	// relaunch the shell...the code will be 143 when we kill the process
 	if (exit_code === 0) {
 		launch_jsh();
+	} else {
+		// if we kill the process we also clear the queue
+		jsh_queue.clear();
+		jsh_finish_queue.clear();
 	}
 }
 
@@ -262,11 +268,6 @@ export const webcontainer = {
 	subscribe,
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
-		try {
-			await webcontainer_instance.mount(get(files_store));
-		} catch {
-			/** emtpy */
-		}
 	},
 	/**
 	 * init the webcontainer and mount the files
@@ -289,12 +290,35 @@ export const webcontainer = {
 				}
 			});
 		});
+	},
+	/**
+	 * Mount some files in the filesystem
+	 */
+	async mount_files() {
 		await clear_webcontainer_fs();
 		await webcontainer_instance.mount(get(files_store));
+		// on mount we launch the shell
 		launch_jsh();
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
 		await webcontainer.run_dev_server();
+		init_callbacks.forEach((callback) => {
+			if (typeof callback === 'function') {
+				callback();
+			}
+		});
+		init_callbacks.clear();
+	},
+	/**
+	 * Register a callback for the webcontainer boots.
+	 * @param callback the callback that will be called when the webcontainer boots
+	 * @returns The cleanup function to unregister the callback
+	 */
+	on_init(callback: () => void) {
+		init_callbacks.add(callback);
+		return () => {
+			init_callbacks.delete(callback);
+		};
 	},
 	/**
 	 * Write a file inside the file system of the webcontainer.
@@ -424,7 +448,8 @@ export const webcontainer = {
 		a.href = 'data:application/zip;base64,' + base_64;
 		a.download = `${get(repl_name)}.zip`;
 		a.click();
-	}
+	},
+	get_tree_from_container
 };
 
 async function get_tree_from_container(): Promise<FileSystemTree> {

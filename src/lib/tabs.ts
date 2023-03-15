@@ -29,3 +29,11 @@ export function close_file(path: string) {
 		return $tabs;
 	});
 }
+
+export function close_all_tabs() {
+	update_tabs(($tabs) => {
+		$tabs.clear();
+		return $tabs;
+	});
+	set_current_tab('');
+}

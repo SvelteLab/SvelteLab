@@ -103,6 +103,8 @@
 				}
 			}}
 		/>
+	{:catch}
+		<VoidEditor loading />
 	{/await}
 {/if}
 
