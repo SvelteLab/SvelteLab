@@ -25,6 +25,13 @@
 			<button title="Refresh">
 				<Refresh />
 			</button>
+			<input
+				autocomplete="off"
+				aria-label="current path"
+				name="url"
+				type="text"
+				value={$webcontainer.iframe_path}
+			/>
 			<a
 				title="Open in new Tab"
 				href={$webcontainer.webcontainer_url + $webcontainer.iframe_path}
@@ -33,13 +40,6 @@
 			>
 				<OpenInNew />
 			</a>
-			<input
-				autocomplete="off"
-				aria-label="current path"
-				name="url"
-				type="text"
-				value={$webcontainer.iframe_path}
-			/>
 		</form>
 		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
 			<iframe
@@ -74,7 +74,11 @@
 		gap: 0.5rem;
 		border-bottom: 1px solid var(--sk-back-4);
 	}
-	a {
+
+	a,
+	button {
+		display: flex;
+		align-items: center;
 		color: var(--sk-text-2);
 		font-size: inherit;
 	}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_icon } from '$lib/file_icons';
+	import { get_folder_icon, get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
@@ -12,12 +12,11 @@
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
-	import Folder from '~icons/material-symbols/folder-outline-rounded';
 
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
 
-	let add: typeof is_adding = null;
+	let add: { kind: typeof is_adding; name: string } | null = null;
 
 	const dispatch = createEventDispatcher();
 
@@ -74,6 +73,7 @@
 					<FolderAdd />
 				</button>
 				<button
+					aria-pressed={$layout_store.show_config}
 					on:click={() => {
 						layout_store.toggle_config();
 					}}
@@ -85,9 +85,10 @@
 		</li>
 	{/if}
 	{#each nodes as node_key}
+		{@const icon = get_folder_icon(node_key)}
 		{@const node = tree[node_key]}
 		{#if is_dir(node)}
-			<li class="folder">
+			<li class="folder" class:open={node.open}>
 				<button
 					class="node"
 					on:click={() => {
@@ -95,13 +96,13 @@
 						tree[node_key].open = !node.open;
 					}}
 				>
-					<Folder />{node_key}
+					<svelte:component this={icon} />{node_key}
 				</button>
 				<div class="hover-group">
 					<button
 						title="New File"
 						on:click={() => {
-							add = 'file';
+							add = { kind: 'file', name: node_key };
 							// @ts-ignore
 							tree[node_key].open = true;
 						}}
@@ -111,7 +112,7 @@
 					<button
 						title="New Folder"
 						on:click={() => {
-							add = 'folder';
+							add = { kind: 'folder', name: node_key };
 							// @ts-ignore
 							tree[node_key].open = true;
 						}}
@@ -138,12 +139,12 @@
 			{#if node.open}
 				<svelte:self
 					base_path={`${base_path}${node_key}/`}
-					is_adding={add}
+					is_adding={add?.name === node_key ? add.kind : undefined}
 					on:add={({ detail: name }) => {
 						handleAdd({
 							name,
 							file: node_key,
-							add
+							add: add?.kind ?? null
 						});
 						add = null;
 					}}
@@ -212,6 +213,7 @@
 		padding-inline-end: 0rem;
 		background-color: var(--sk-back-3);
 		height: 100%;
+		overflow: auto;
 	}
 
 	/*style reset for nested folders*/
@@ -259,7 +261,6 @@
 		bottom: 0;
 		right: 0;
 		display: flex;
-		gap: 0.75rem;
 		padding: 0.5rem;
 		align-items: center;
 		justify-content: end;
@@ -287,16 +288,16 @@
 	}
 
 	li:not(.open, .root) {
-		filter: grayscale(70%);
+		filter: grayscale(70%) opacity(80%);
 	}
 
-	li.open {
+	li.open:not(.folder) {
 		color: var(--sk-theme-1);
 		position: relative;
 		border-bottom-color: var(--sk-theme-1);
 	}
 
-	li.open::after {
+	li.open:not(.folder)::after {
 		content: '';
 		position: absolute;
 		background-color: var(--sk-theme-1);
@@ -308,8 +309,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		padding: 0;
 		border: 0;
+		position: relative;
 	}
 
 	button :global(svg) {
@@ -336,5 +337,19 @@
 	input:focus {
 		background-color: var(--sk-back-2);
 		outline: 1px solid var(--sk-theme-1);
+	}
+
+	.hover-group button {
+		padding: 0.3em;
+	}
+
+	button[aria-pressed='true']::after {
+		content: '';
+		position: absolute;
+		background-color: var(--sk-theme-1);
+		right: 1px;
+		left: 1px;
+		bottom: 0;
+		top: calc(100% - 3px);
 	}
 </style>
