@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -25,10 +24,6 @@
 		// for debugging
 		(window as any).wc = webcontainer;
 		webcontainer.init();
-	});
-
-	beforeNavigate(() => {
-		$webcontainer.running_process?.kill?.();
 	});
 
 	async function handleKeydown(e: KeyboardEvent) {

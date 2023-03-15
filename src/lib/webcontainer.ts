@@ -260,8 +260,13 @@ async function launch_jsh() {
  */
 export const webcontainer = {
 	subscribe,
-	set_file_system(files: FileSystemTree) {
+	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
+		try {
+			await webcontainer_instance.mount(get(files_store));
+		} catch {
+			/** emtpy */
+		}
 	},
 	/**
 	 * init the webcontainer and mount the files
