@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_icon } from '$lib/file_icons';
+	import { get_folder_icon, get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
@@ -12,7 +12,6 @@
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
-	import Folder from '~icons/material-symbols/folder-outline-rounded';
 
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
@@ -85,9 +84,10 @@
 		</li>
 	{/if}
 	{#each nodes as node_key}
+		{@const icon = get_folder_icon(node_key)}
 		{@const node = tree[node_key]}
 		{#if is_dir(node)}
-			<li class="folder">
+			<li class="folder" class:open={node.open}>
 				<button
 					class="node"
 					on:click={() => {
@@ -95,7 +95,7 @@
 						tree[node_key].open = !node.open;
 					}}
 				>
-					<Folder />{node_key}
+					<svelte:component this={icon} />{node_key}
 				</button>
 				<div class="hover-group">
 					<button
@@ -288,16 +288,16 @@
 	}
 
 	li:not(.open, .root) {
-		filter: grayscale(70%);
+		filter: grayscale(70%) opacity(80%);
 	}
 
-	li.open {
+	li.open:not(.folder) {
 		color: var(--sk-theme-1);
 		position: relative;
 		border-bottom-color: var(--sk-theme-1);
 	}
 
-	li.open::after {
+	li.open:not(.folder)::after {
 		content: '';
 		position: absolute;
 		background-color: var(--sk-theme-1);
