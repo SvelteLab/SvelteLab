@@ -1,3 +1,4 @@
+import { default_project_files } from '$lib/default_project_files';
 import { replSchema } from '$lib/schemas';
 import { redirect } from '@sveltejs/kit';
 import type { FileSystemTree } from '@webcontainer/api';
@@ -13,7 +14,7 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 
 export const load: LayoutServerLoad = async ({ params, locals }) => {
 	const { repl } = params;
-	let files: FileSystemTree | undefined;
+	let files: FileSystemTree = default_project_files;
 	let name = 'Hello world';
 
 	if (!repl) {

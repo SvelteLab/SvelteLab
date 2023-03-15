@@ -11,13 +11,8 @@
 	let Editor: ComponentType<SvelteComponentTyped> = VoidEditor;
 
 	onMount(async () => {
-		const destroy = webcontainer.on_init(async () => {
-			await webcontainer.install_dependencies();
-			webcontainer.run_dev_server();
-		});
 		Console = (await import('$lib/components/Console.svelte')).default;
 		Editor = (await import('$lib/components/Editor.svelte')).default;
-		return destroy;
 	});
 
 	let width: number;

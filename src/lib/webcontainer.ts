@@ -7,12 +7,9 @@ import {
 	type FileSystemTree,
 	type WebContainerProcess
 } from '@webcontainer/api';
-import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
+import { compressToEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
-import { files as default_files } from './files';
 import { repl_name } from './stores/repl_id_store';
-
-const initial_files = default_files as FileSystemTree;
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -38,7 +35,8 @@ let webcontainer_instance = new Proxy<WebContainer>(
 );
 
 const { subscribe, set } = writable({
-	webcontainer_url: './loading',
+	webcontainer_url: '',
+	status: 'booting',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
@@ -133,7 +131,7 @@ async function listen_for_files_changes() {
  * Readable store for the file system tree, we duplicate this so that
  * the file system tree does not have to re-evaluate every keystroke
  */
-const files_store = writable(structuredClone(initial_files));
+const files_store = writable<FileSystemTree>();
 
 export const files = {
 	subscribe: files_store.subscribe
@@ -170,35 +168,7 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 	}
 }
 
-const init_callbacks = new Set<() => void>();
-
-/**
- * Function to get the files to mount based on the to_mount
- * argument. The order is the following:
- * - If there's a file system passed in it will just return that
- * - If there's not a file system passed in and there's the hash
- * it will return the decoded hash
- * - If there's not a fole system and there's not an hash it will
- * return the initial files.
- */
-function get_files_to_mount(to_mount?: FileSystemTree) {
-	const hash = window?.location?.hash?.substring?.(1);
-	if (!to_mount && hash) {
-		const url_search_params = new URLSearchParams(hash);
-		const code = url_search_params.get('code');
-		if (code) {
-			const project = decompressFromEncodedURIComponent(code);
-			try {
-				to_mount = JSON.parse(project);
-			} catch (e) {
-				/* empty */
-			}
-		}
-	}
-	return to_mount ?? initial_files;
-}
-
-async function remove_all_files() {
+async function clear_webcontainer_fs() {
 	const main_dir = await webcontainer_instance.fs.readdir('./');
 	for (const file of main_dir) {
 		await webcontainer_instance.fs.rm(`./${file}`, { recursive: true });
@@ -290,10 +260,18 @@ async function launch_jsh() {
  */
 export const webcontainer = {
 	subscribe,
+	async set_file_system(files: FileSystemTree) {
+		files_store.set(files);
+		try {
+			await webcontainer_instance.mount(get(files_store));
+		} catch {
+			/** emtpy */
+		}
+	},
 	/**
 	 * init the webcontainer and mount the files
 	 */
-	async init(to_mount?: FileSystemTree) {
+	async init() {
 		if (webcontainer_instance instanceof WebContainer) {
 			if (dev) {
 				console.warn(
@@ -302,56 +280,21 @@ export const webcontainer = {
 			}
 			return;
 		}
-		//we just get this files to already show the files in the blorred background
-		to_mount = get_files_to_mount(to_mount);
-		if (to_mount) {
-			files_store.set(structuredClone(to_mount));
-		}
 		webcontainer_instance = await WebContainer.boot();
 		webcontainer_instance.on('server-ready', (port, url) => {
 			merge_state({ webcontainer_url: url });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
-					merge_state({ webcontainer_url: './error' });
+					merge_state({ webcontainer_url: '', status: 'server_closed' });
 				}
 			});
 		});
-	},
-	/**
-	 * Mount some files in the filesystem
-	 * @param to_mount the file tree to mount
-	 * @returns a promise that resolves when the file are mounted
-	 */
-	async mount_files(to_mount?: FileSystemTree) {
-		to_mount = get_files_to_mount(to_mount);
-		if (to_mount) {
-			files_store.set(structuredClone(to_mount));
-		}
-		await remove_all_files();
-		const mount_promise = await webcontainer_instance.mount(to_mount ?? initial_files);
-		merge_state({
-			webcontainer_url: './loading'
-		});
-		init_callbacks.forEach((callback) => {
-			if (typeof callback === 'function') {
-				callback();
-			}
-		});
-		init_callbacks.clear();
-		// on mount we launch the shell
+		await clear_webcontainer_fs();
+		await webcontainer_instance.mount(get(files_store));
 		launch_jsh();
-		return mount_promise;
-	},
-	/**
-	 * Register a callback for the webcontainer boots.
-	 * @param callback the callback that will be called when the webcontainer boots
-	 * @returns The cleanup function to unregister the callback
-	 */
-	on_init(callback: () => void) {
-		init_callbacks.add(callback);
-		return () => {
-			init_callbacks.delete(callback);
-		};
+		merge_state({ status: 'waiting' });
+		await webcontainer.install_dependencies();
+		await webcontainer.run_dev_server();
 	},
 	/**
 	 * Write a file inside the file system of the webcontainer.
@@ -394,13 +337,6 @@ export const webcontainer = {
 		return run_command('npm run dev');
 	},
 	run_command,
-	/**
-	 * Saves the container file system to local storage
-	 */
-	async save(): Promise<void> {
-		localStorage.setItem('FS_tree', JSON.stringify(get_tree_from_container()));
-	},
-	get_tree_from_container,
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
 		//if we are not already listening we can add the file in store ourself
@@ -430,7 +366,12 @@ export const webcontainer = {
 		try {
 			return webcontainer_instance.fs.readFile(path, 'utf8');
 		} catch (e) {
-			return '';
+			// use store instead
+			let contents = get_file_from_path(path, get(files_store)).contents;
+			if (typeof contents !== 'string') {
+				contents = decoder.decode(contents);
+			}
+			return contents;
 		}
 	},
 	async read_package_json() {

@@ -34,4 +34,4 @@ for (const file in project) {
 	}
 }
 
-export const files = project_files satisfies FileSystemTree;
+export const default_project_files = project_files satisfies FileSystemTree;

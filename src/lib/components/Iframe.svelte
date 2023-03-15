@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
 	import { tick } from 'svelte';
+	import InstallDeps from '~icons/line-md/downloading-loop';
+	import Booting from '~icons/line-md/loading-alt-loop';
+	import Error from '~icons/material-symbols/chat-error-rounded';
 	import OpenInNew from '~icons/material-symbols/open-in-new';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
 
@@ -17,34 +20,50 @@
 </script>
 
 <section>
-	<form on:submit|preventDefault={handleUrlChange}>
-		<button title="Refresh">
-			<Refresh />
-		</button>
-		<input
-			autocomplete="off"
-			aria-label="current path"
-			name="url"
-			type="text"
-			value={$webcontainer.iframe_path}
-		/>
-		<a
-			title="Open in new Tab"
-			href={$webcontainer.webcontainer_url + $webcontainer.iframe_path}
-			target="_blank"
-			rel="noopener noreferrer"
-		>
-			<OpenInNew />
-		</a>
-	</form>
-	{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
-		<iframe
-			title="content"
-			src={$webcontainer.webcontainer_url.startsWith('.')
-				? $webcontainer.webcontainer_url
-				: $webcontainer.webcontainer_url + $webcontainer.iframe_path}
-		/>
-	{/key}
+	{#if $webcontainer.webcontainer_url}
+		<form on:submit|preventDefault={handleUrlChange}>
+			<button title="Refresh">
+				<Refresh />
+			</button>
+			<input
+				autocomplete="off"
+				aria-label="current path"
+				name="url"
+				type="text"
+				value={$webcontainer.iframe_path}
+			/>
+			<a
+				title="Open in new Tab"
+				href={$webcontainer.webcontainer_url + $webcontainer.iframe_path}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<OpenInNew />
+			</a>
+		</form>
+		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
+			<iframe
+				title="content"
+				src={$webcontainer.webcontainer_url.startsWith('.')
+					? $webcontainer.webcontainer_url
+					: $webcontainer.webcontainer_url + $webcontainer.iframe_path}
+			/>
+		{/key}
+	{:else}
+		<div class="loader">
+			{#if $webcontainer.status === 'booting'}
+				<Booting />
+				<span> Booting WebContainer and mounting Filesystem... </span>
+			{:else if $webcontainer.status === 'waiting'}
+				<InstallDeps />
+				<span> Installing Dependencies and starting Vite... </span>
+			{:else if $webcontainer.status === 'server_closed'}
+				<Error />
+				<span> Server Closed </span>
+				<span>Try running a script...</span>
+			{/if}
+		</div>
+	{/if}
 </section>
 
 <style>

@@ -16,7 +16,7 @@
 		loading = false;
 	}
 	onMount(() => {
-		return webcontainer.on_init(refresh_package_json);
+		refresh_package_json();
 	});
 </script>
 
