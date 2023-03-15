@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
-	import { default_project_files } from '$lib/default_project_files';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { tips_store } from '$lib/stores/tips_store';
@@ -20,7 +19,7 @@
 	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
 	$: repl_name.set(data.repl_name);
-	$: webcontainer.set_file_system(data.repl || default_project_files);
+	$: webcontainer.set_file_system(data.repl);
 
 	onMount(() => {
 		// for debugging
