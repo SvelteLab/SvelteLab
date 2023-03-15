@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { webcontainer } from '$lib/webcontainer';
+	import { files, webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import Running from '~icons/eos-icons/loading';
 	import Play from '~icons/material-symbols/play-arrow-outline-rounded';
@@ -15,9 +15,11 @@
 		scripts = Object.entries(package_json?.scripts || {}) as unknown as [string, string][];
 		loading = false;
 	}
-	onMount(() => {
+	$: {
+		//whenever files change we refresh the package json
+		$files;
 		refresh_package_json();
-	});
+	}
 </script>
 
 <div class="heading">
