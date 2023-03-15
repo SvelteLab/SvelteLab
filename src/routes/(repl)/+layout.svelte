@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { save_repl } from '$lib/api/client/repls';
+	import { default_project_files } from '$lib/default_project_files';
+	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
+	import { tips_store } from '$lib/stores/tips_store';
 	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
 	import { Dialog } from 'as-comps';
 	import { onMount } from 'svelte';
-	import Booting from '~icons/line-md/loading-alt-loop';
+	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Tip from '~icons/material-symbols/tips-and-updates';
 	import type { LayoutData } from './$types';
-	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
-	import { tips_store } from '$lib/stores/tips_store';
-	import { first_time } from '$lib/first_load';
 
 	export let data: LayoutData;
 
@@ -20,10 +20,12 @@
 	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
 	$: repl_name.set(data.repl_name);
+	$: webcontainer.set_file_system(data.repl || default_project_files);
 
 	onMount(() => {
 		// for debugging
 		(window as any).wc = webcontainer;
+		webcontainer.init();
 	});
 
 	beforeNavigate(() => {
@@ -48,13 +50,6 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <slot />
-
-{#await webcontainer.init(data.repl).then(() => webcontainer.mount_files(data.repl))}
-	<div class="loader">
-		<Booting />
-		<span> Booting up webcontainer... </span>
-	</div>
-{/await}
 
 <Dialog
 	--as-dialog-width="max(50vw, 35rem)"
