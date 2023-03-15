@@ -355,13 +355,6 @@ export const webcontainer = {
 		return run_command('npm run dev');
 	},
 	run_command,
-	/**
-	 * Saves the container file system to local storage
-	 */
-	async save(): Promise<void> {
-		localStorage.setItem('FS_tree', JSON.stringify(get_tree_from_container()));
-	},
-	get_tree_from_container,
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
 		//if we are not already listening we can add the file in store ourself
@@ -391,7 +384,12 @@ export const webcontainer = {
 		try {
 			return webcontainer_instance.fs.readFile(path, 'utf8');
 		} catch (e) {
-			return '';
+			// use store instead
+			let contents = get_file_from_path(path, get(files_store)).contents;
+			if (typeof contents !== 'string') {
+				contents = decoder.decode(contents);
+			}
+			return contents;
 		}
 	},
 	async read_package_json() {

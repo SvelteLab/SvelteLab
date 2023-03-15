@@ -1,9 +1,13 @@
 import { get, writable } from 'svelte/store';
 
-const { subscribe: subscribe_tabs, update: update_tabs } = writable(new Set<string>());
+const { subscribe: subscribe_tabs, update: update_tabs } = writable(
+	new Set<string>().add('/src/routes/+page.svelte')
+);
 export const tabs = { subscribe: subscribe_tabs };
 
-const { subscribe: subscribe_current_tab, set: set_current_tab } = writable('');
+const { subscribe: subscribe_current_tab, set: set_current_tab } = writable(
+	'/src/routes/+page.svelte'
+);
 export const current_tab = { subscribe: subscribe_current_tab };
 
 export function open_file(path: string) {
