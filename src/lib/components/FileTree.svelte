@@ -73,6 +73,7 @@
 					<FolderAdd />
 				</button>
 				<button
+					aria-pressed={$layout_store.show_config}
 					on:click={() => {
 						layout_store.toggle_config();
 					}}
@@ -260,7 +261,6 @@
 		bottom: 0;
 		right: 0;
 		display: flex;
-		gap: 0.75rem;
 		padding: 0.5rem;
 		align-items: center;
 		justify-content: end;
@@ -309,8 +309,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		padding: 0;
 		border: 0;
+		position: relative;
 	}
 
 	button :global(svg) {
@@ -337,5 +337,19 @@
 	input:focus {
 		background-color: var(--sk-back-2);
 		outline: 1px solid var(--sk-theme-1);
+	}
+
+	.hover-group button {
+		padding: 0.3em;
+	}
+
+	button[aria-pressed='true']::after {
+		content: '';
+		position: absolute;
+		background-color: var(--sk-theme-1);
+		right: 1px;
+		left: 1px;
+		bottom: 0;
+		top: calc(100% - 3px);
 	}
 </style>
