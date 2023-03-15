@@ -9,10 +9,10 @@ import {
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
-import { files as default_files } from './files';
+import { default_project_files } from './default_project_files';
 import { repl_name } from './stores/repl_id_store';
 
-const initial_files = default_files as FileSystemTree;
+const initial_files = default_project_files as FileSystemTree;
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
