@@ -1,10 +1,10 @@
 <script>
 	import { get_icon } from '$lib/file_icons';
 	import { close_all_tabs, close_file, current_tab, open_file, tabs } from '$lib/tabs';
-	import { onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Close from '~icons/material-symbols/close-rounded';
 
-	onMount(() => () => {
+	onDestroy(() => {
 		//close the tabs when we unmount the component
 		close_all_tabs();
 	});
