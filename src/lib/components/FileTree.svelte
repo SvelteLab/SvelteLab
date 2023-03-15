@@ -17,7 +17,7 @@
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
 
-	let add: typeof is_adding = null;
+	let add: { kind: typeof is_adding; name: string } | null = null;
 
 	const dispatch = createEventDispatcher();
 
@@ -101,7 +101,7 @@
 					<button
 						title="New File"
 						on:click={() => {
-							add = 'file';
+							add = { kind: 'file', name: node_key };
 							// @ts-ignore
 							tree[node_key].open = true;
 						}}
@@ -111,7 +111,7 @@
 					<button
 						title="New Folder"
 						on:click={() => {
-							add = 'folder';
+							add = { kind: 'folder', name: node_key };
 							// @ts-ignore
 							tree[node_key].open = true;
 						}}
@@ -138,12 +138,12 @@
 			{#if node.open}
 				<svelte:self
 					base_path={`${base_path}${node_key}/`}
-					is_adding={add}
+					is_adding={add?.name === node_key ? add.kind : undefined}
 					on:add={({ detail: name }) => {
 						handleAdd({
 							name,
 							file: node_key,
-							add
+							add: add?.kind ?? null
 						});
 						add = null;
 					}}
@@ -212,6 +212,7 @@
 		padding-inline-end: 0rem;
 		background-color: var(--sk-back-3);
 		height: 100%;
+		overflow: auto;
 	}
 
 	/*style reset for nested folders*/
