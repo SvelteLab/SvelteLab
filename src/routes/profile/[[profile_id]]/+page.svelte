@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import TreeMap from '$lib/components/TreeMap.svelte';
-	import { share } from '$lib/share';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import Pending from '~icons/eos-icons/loading';
 	import TrashCan from '~icons/material-symbols/delete-forever-outline';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
-	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
 
@@ -24,7 +22,12 @@
 
 <ProfileHeader />
 <main>
-	<input bind:value={$search} placeholder="search..." aria-label="search a repl" type="search" />
+	<input
+		bind:value={$search}
+		placeholder="🔍 Search..."
+		aria-label="Search for a repl"
+		type="search"
+	/>
 	{#each repls as project (project.id)}
 		<!-- this will be useful when we will add delete -->
 		<article
@@ -123,11 +126,12 @@
 		grid-column: 1/-1;
 		width: min(50rem, 100%);
 		justify-self: center;
-		background-color: var(--sk-back-5);
+		background-color: transparent;
+		border: 1px solid var(--sk-back-4);
 		padding: 0.5rem;
-		border: none;
 		border-radius: 0.5rem;
 		color: var(--sk-text-1);
+		font-size: 2rem;
 	}
 	input::placeholder {
 		color: var(--sk-text-1);
