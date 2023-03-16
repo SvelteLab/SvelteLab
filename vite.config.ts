@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
@@ -14,6 +15,10 @@ export default defineConfig({
 					(svg) => svg.replace(/^<svg /, '<svg fill="currentColor" ')
 				)
 			}
+		}),
+		visualizer({
+			emitFile: true,
+			filename: 'stats.html'
 		})
 	],
 	test: {

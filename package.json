@@ -28,6 +28,7 @@
 		"postcss": ">=8.4.6 <9.0.0",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
+		"rollup-plugin-visualizer": "^5.9.0",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
 		"svelte-local-storage-store": "^0.4.0",
@@ -66,5 +67,8 @@
 		"xterm": "^5.1.0",
 		"xterm-addon-fit": "^0.7.0",
 		"zod": "^3.21.4"
+	},
+	"engines": {
+		"node": ">=18 <19"
 	}
 }
