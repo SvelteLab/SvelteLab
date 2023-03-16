@@ -12,6 +12,8 @@
 	// to set the loading state from inside
 	let is_loading = false;
 
+	export let badged = false;
+
 	type $$Props = HTMLButtonAttributes & {
 		click: (
 			event: MouseEvent & {
@@ -19,10 +21,12 @@
 			}
 		) => void;
 		loading?: boolean;
+		badged?: boolean;
 	};
 </script>
 
 <button
+	class={badged ? 'badged' : undefined}
 	on:click={async (e) => {
 		is_loading = true;
 		await click(e);
@@ -44,5 +48,14 @@
 		place-items: center;
 		position: relative;
 		padding-block: 0.25rem;
+		position: relative;
+	}
+	.badged::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		top: auto;
+		height: 0.25rem;
+		background-color: var(--sk-theme-1);
 	}
 </style>

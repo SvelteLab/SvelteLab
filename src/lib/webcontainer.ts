@@ -9,7 +9,7 @@ import {
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
-import { repl_name } from './stores/repl_id_store';
+import { is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { deferred_promise } from './utils';
 
 /**
@@ -151,6 +151,7 @@ function add_file_in_store(
 	subtree.contents = contents;
 	//trigger rerender
 	store.update((value) => value);
+	is_repl_to_save.set(true);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,6 +168,7 @@ function delete_file_from_store(store: Writable<any>, path: string) {
 			store.update((value) => value);
 		}
 	}
+	is_repl_to_save.set(true);
 }
 
 const init_callbacks = new Set<() => void>();
@@ -329,6 +331,7 @@ export const webcontainer = {
 	 */
 	update_file(path: string, content: string) {
 		webcontainer_instance.fs.writeFile(path, content);
+		is_repl_to_save.set(true);
 	},
 
 	/**
@@ -375,6 +378,7 @@ export const webcontainer = {
 		get_subtree_from_path(path, get(files_store), true);
 		//trigger rerender
 		files_store.update((value) => value);
+		is_repl_to_save.set(true);
 	},
 	async delete_file(path: string) {
 		await webcontainer_instance.fs.rm(path, {
