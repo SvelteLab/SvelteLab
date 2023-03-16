@@ -101,6 +101,8 @@
 			rgba(0, 0, 0, 0.05) 30%,
 			transparent 100%
 		);
+		position: sticky;
+		top: 0;
 	}
 
 	header:after {
