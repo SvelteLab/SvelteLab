@@ -10,6 +10,7 @@ import {
 import { compressToEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { repl_name } from './stores/repl_id_store';
+import { deferred_promise } from './utils';
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -64,20 +65,20 @@ async function merge_state(state: Partial<WebcontainerStoreType>) {
  * @param {string} cmd a string representing a command you want to run
  * @param {()=>void} [callback] an optional callback to run when the command finishes
  */
-function run_command(cmd: string, callback?: () => void) {
+function run_command(cmd: string) {
 	const wc_store = get({ subscribe });
 	// we get the writer from the store
 	const shell_writer = wc_store.process_writer;
 	// if it's already listening we write the passed in command
 	// otherwise we queue it
+	const { resolve, promise: command_promise } = deferred_promise();
 	if (shell_writer && wc_store.is_jsh_listening) {
-		shell_writer.write(cmd + '\n');
-		if (callback) {
-			jsh_finish_queue.add(callback);
-		}
+		shell_writer.write(cmd + '\r');
+		jsh_finish_queue.add(resolve);
 	} else {
-		jsh_queue.add({ cmd, callback });
+		jsh_queue.add({ cmd, callback: resolve });
 	}
+	return command_promise;
 }
 
 const listening_for_fs_store = writable(false);
@@ -342,9 +343,8 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		run_command('npm install --verbose', () => {
-			listen_for_files_changes();
-		});
+		await run_command('npm install --verbose');
+		listen_for_files_changes();
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"

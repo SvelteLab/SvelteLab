@@ -21,6 +21,9 @@ export default defineConfig({
 			filename: 'stats.html'
 		})
 	],
+	define: {
+		'process.env.NODE_ENV': '"production"'
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
