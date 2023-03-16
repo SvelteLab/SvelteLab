@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import TreeMap from '$lib/components/TreeMap.svelte';
+	import { share } from '$lib/share';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import Pending from '~icons/eos-icons/loading';
 	import TrashCan from '~icons/material-symbols/delete-forever-outline';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
+	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
 
@@ -42,6 +44,17 @@
 				<small>/{project.id}</small>
 			</a>
 			<div class="buttons">
+				<button
+					on:click={() => {
+						share({
+							text: `Take a look at my REPL`,
+							title: `Svelteblitz - ${project.name}`,
+							url: `/${project.id}`
+						});
+					}}
+				>
+					<Share />
+				</button>
 				{#if data.user}
 					<form
 						use:enhance={() => {
