@@ -4,12 +4,12 @@
 	import { share } from '$lib/share';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
+	import Pending from '~icons/eos-icons/loading';
 	import TrashCan from '~icons/material-symbols/delete-forever-outline';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
-	import Pending from '~icons/eos-icons/loading';
 
 	export let data: PageData;
 
@@ -106,9 +106,9 @@
 					</form>
 				{/if}
 			</div>
-			<div class="tree">
+			<a data-sveltekit-preload-data="off" href="/{project.id}" class="tree">
 				<TreeMap tree={project.files} />
-			</div>
+			</a>
 			{#if loading.includes(project.id)}
 				<div class="loading">
 					<Pending />
@@ -170,25 +170,20 @@
 		border-left: 1px solid var(--sk-code-bg);
 		background: linear-gradient(-45deg, var(--sk-code-bg), transparent);
 	}
-	.tree :global(svg) {
-		position: absolute;
-		height: 100%;
-		width: 100%;
-		object-fit: contain;
-	}
 	.buttons {
 		margin-block-start: 2.5rem;
 		display: flex;
 		font-size: 2rem;
+		gap: 0.5em;
 	}
 	p {
 		margin: 0;
 		font-size: 2rem;
 	}
 	small {
-		background: var(--sk-back-5);
+		background: var(--sk-back-3);
 		padding: 0.75rem;
-		border-radius: 0.3rem;
+		border-radius: 0.5rem;
 	}
 	form {
 		line-height: 0;

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { is_dir } from '$lib/file_system';
-	import type { FileSystemTree } from '@webcontainer/api';
-
+	import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 	export let tree: FileSystemTree;
+	let _tree = (tree.src as DirectoryNode)?.directory || tree;
 	const padding = 3;
 
 	function flattenDir(dir: FileSystemTree, start_x = padding, start_y = padding / 2) {
@@ -38,7 +38,7 @@
 		return retval;
 	}
 
-	$: files = flattenDir(tree);
+	$: files = flattenDir(_tree);
 	$: max_y = Math.max(...files.map((file) => file.y1));
 	$: max_x = Math.max(...files.map((file) => file.x2));
 </script>
