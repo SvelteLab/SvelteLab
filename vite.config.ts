@@ -16,9 +16,6 @@ export default defineConfig({
 			}
 		})
 	],
-	define: {
-		'"production': '"production"'
-	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
