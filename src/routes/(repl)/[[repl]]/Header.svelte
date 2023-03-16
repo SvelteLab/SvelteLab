@@ -6,7 +6,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
-	import { is_repl_saving, repl_id, repl_name } from '$lib/stores/repl_id_store';
+	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import SignIn from '~icons/material-symbols/account-circle';
@@ -116,6 +116,7 @@
 		</form>
 		{#if !owner_id || user.id === owner_id}
 			<AsyncButton
+				badged={$is_repl_to_save}
 				click={async () => {
 					await save_repl();
 				}}

@@ -33,7 +33,6 @@
 	});
 
 	beforeNavigate(() => {
-		console.log('killing?');
 		fix_for_double_after = false;
 		$webcontainer.running_process?.kill?.();
 	});

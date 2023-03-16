@@ -1,7 +1,7 @@
 import { error, success } from '$lib/toast';
 import { webcontainer } from '$lib/webcontainer';
 import { get } from 'svelte/store';
-import { repl_id, repl_name, is_repl_saving } from '$lib/stores/repl_id_store';
+import { repl_id, repl_name, is_repl_saving, is_repl_to_save } from '$lib/stores/repl_id_store';
 
 /**
  * This function does what it takes to save the repl, it set the state
@@ -30,6 +30,7 @@ export async function save_repl() {
 	});
 	if (res.ok) {
 		success('Saved');
+		is_repl_to_save.set(false);
 		const created = await res.json();
 		if (created.id && !id) {
 			// if there wasn't an id means it's the first time
