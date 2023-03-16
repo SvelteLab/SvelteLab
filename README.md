@@ -2,7 +2,7 @@
 
 # SvelteBlitz
 
-⚡ Crafting a SvelteKit REPL powered by WebContainers
+⚡ Crafting a REPL for SvelteKit projects: quickly spin up a Sveltekit project and share it with the world. Made with svelte, for svelte, by svelte lovers.
 
 [➡️ Try it out now!](https://svelteblitz.vercel.app/)
 
@@ -15,3 +15,4 @@
 pnpm i
 pnpm dev
 ```
+````
