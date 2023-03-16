@@ -1,8 +1,12 @@
-<img src="./static/favicon.svg" width="64" height="64" alt="SvelteBlitz Logo: A lightning bolt with white outline on Svelte orange" />
+![A mockup of a phone with a Screenshot of SvelteBlitz opened. SvelteBlitz: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!](./header.png)
 
-# SvelteBlitz
+# ⚡ SvelteBlitz
 
-⚡ Crafting a REPL for SvelteKit projects: quickly spin up a Sveltekit project and share it with the world. Made with Svelte, for Svelte, by Svelte lovers.
+🏗️ We are crafting a REPL for SvelteKit projects: quickly spin up a Sveltekit project and share it with the world.
+
+🧡 Made with Svelte, for Svelte, by Svelte lovers!
+
+🔌 Powered by SvelteKit, WebContainers, CodeMirror, Xterm.js and PocketBase
 
 [➡️ Try it out now!](https://svelteblitz.vercel.app/)
 
