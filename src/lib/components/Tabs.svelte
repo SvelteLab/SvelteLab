@@ -42,6 +42,7 @@
 		max-width: 100%;
 		overflow-x: auto;
 		background-color: var(--sk-back-1);
+		border-bottom: 1px solid var(--sk-back-4);
 	}
 	article {
 		padding: 0.5em;

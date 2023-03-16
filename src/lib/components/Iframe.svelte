@@ -68,10 +68,10 @@
 
 <style>
 	form {
-		padding: 0.25em;
+		padding: 0.5em;
 		display: flex;
 		background-color: var(--sk-back-2);
-		gap: 0.5rem;
+		gap: 0.5em;
 		border-bottom: 1px solid var(--sk-back-4);
 	}
 

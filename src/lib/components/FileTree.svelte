@@ -225,6 +225,7 @@
 	.root {
 		background-color: var(--sk-back-1);
 		margin-inline-start: -1rem;
+		padding: 0.5em;
 		padding-inline-start: 1em;
 	}
 
@@ -237,7 +238,7 @@
 		align-items: center;
 		gap: 0.5em;
 		color: var(--sk-text-1);
-		height: 2em;
+		min-height: 2em;
 		overflow: hidden;
 		white-space: nowrap;
 		padding: 0.5rem;
