@@ -2,7 +2,7 @@
 
 # SvelteBlitz
 
-⚡ Crafting a REPL for SvelteKit projects: quickly spin up a Sveltekit project and share it with the world. Made with svelte, for svelte, by svelte lovers.
+⚡ Crafting a REPL for SvelteKit projects: quickly spin up a Sveltekit project and share it with the world. Made with Svelte, for Svelte, by Svelte lovers.
 
 [➡️ Try it out now!](https://svelteblitz.vercel.app/)
 
