@@ -39,17 +39,6 @@
 				<small>/{project.id}</small>
 			</a>
 			<div class="buttons">
-				<button
-					on:click={() => {
-						share({
-							text: `Take a look at my REPL`,
-							title: `Svelteblitz - ${project.name}`,
-							url: `/${project.id}`
-						});
-					}}
-				>
-					<Share />
-				</button>
 				{#if data.user}
 					<form
 						use:enhance={() => {
