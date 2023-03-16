@@ -22,7 +22,7 @@ export default defineConfig({
 		})
 	],
 	define: {
-		'"production"': '"production"'
+		NODE_ENV: '"production"'
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
