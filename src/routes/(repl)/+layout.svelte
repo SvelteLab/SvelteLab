@@ -29,6 +29,7 @@
 		if (fix_for_double_after) return;
 		console.log('afterNavigate after if');
 		fix_for_double_after = true;
+		console.log({ storage: window.sessionStorage });
 		// try to get the project from session storage and then delete it
 		const stored_project = window.sessionStorage.getItem(PUBLIC_SAVE_IN_SESSION_STORAGE_NAME);
 		console.log({ stored_project, PUBLIC_SAVE_IN_SESSION_STORAGE_NAME });

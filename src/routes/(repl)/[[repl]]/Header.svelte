@@ -147,12 +147,15 @@
 		<a
 			use:async_click={async (e) => {
 				try {
+					console.log('saving in session storage');
 					// save current project to session storage
 					window.sessionStorage.setItem(
 						PUBLIC_SAVE_IN_SESSION_STORAGE_NAME,
 						JSON.stringify(await webcontainer.get_tree_from_container())
 					);
+					console.log({ storage: window.sessionStorage });
 				} catch (e) {
+					console.log(e);
 					if (
 						!window.confirm('You will lose progress on this project...do you want to continue?')
 					) {
