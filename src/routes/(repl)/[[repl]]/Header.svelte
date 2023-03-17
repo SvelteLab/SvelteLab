@@ -147,15 +147,13 @@
 		<a
 			use:async_click={async (e) => {
 				try {
-					console.log('saving in local storage');
-					// save current project to local storage
+					// save current project to local storage (we have to use local instead
+					// of session because Firefox Mobile it's being weird)
 					window.localStorage.setItem(
 						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
 						JSON.stringify(await webcontainer.get_tree_from_container())
 					);
-					console.log({ storage: window.localStorage });
 				} catch (e) {
-					console.log(e);
 					if (
 						!window.confirm('You will lose progress on this project...do you want to continue?')
 					) {

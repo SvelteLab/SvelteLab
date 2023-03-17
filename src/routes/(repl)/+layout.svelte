@@ -25,21 +25,15 @@
 	let fix_for_double_after = false;
 
 	afterNavigate(async () => {
-		console.log('afterNavigate');
 		if (fix_for_double_after) return;
-		console.log('afterNavigate after if');
 		fix_for_double_after = true;
-		console.log({ storage: window.localStorage });
 		// try to get the project from local storage and then delete it
 		const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
-		console.log({ stored_project, PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME });
 		if (stored_project !== null) {
 			try {
 				const project = JSON.parse(stored_project);
-				console.log({ project });
 				await webcontainer.set_file_system(project);
 			} catch (e) {
-				console.log(e);
 				/* empty */
 			}
 			window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
