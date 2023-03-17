@@ -12,7 +12,7 @@ export const fork: Action = async ({ request, fetch }) => {
 	});
 	if (res.ok) {
 		const created = await res.json();
-		throw redirect(301, `/${created.id}`);
+		throw redirect(304, `/${created.id}`);
 	}
 	return fail(500);
 };
