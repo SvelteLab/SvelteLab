@@ -16,7 +16,7 @@
 	export let base_path = './';
 	export let is_adding: 'folder' | 'file' | null = null;
 
-	let add: { kind: typeof is_adding; name: string } | null = null;
+	let to_add_in_child: { kind: typeof is_adding; name: string } | null = null;
 
 	const dispatch = createEventDispatcher();
 
@@ -51,6 +51,7 @@
 	});
 </script>
 
+{base_path}
 <ul>
 	{#if base_path === $base_path_store}
 		<li class="root">
@@ -84,27 +85,28 @@
 			</div>
 		</li>
 	{/if}
-	{#each nodes as node_key}
-		{@const icon = get_folder_icon(node_key)}
-		{@const node = tree[node_key]}
+	{#each nodes as node_name}
+	{node_name}
+		{@const icon = get_folder_icon(node_name)}
+		{@const node = tree[node_name]}
 		{#if is_dir(node)}
 			<li class="folder" class:open={node.open}>
 				<button
 					class="node"
 					on:click={() => {
 						// @ts-ignore
-						tree[node_key].open = !node.open;
+						tree[node_name].open = !node.open;
 					}}
 				>
-					<svelte:component this={icon} />{node_key}
+					<svelte:component this={icon} />{node_name}
 				</button>
 				<div class="hover-group">
 					<button
 						title="New File"
 						on:click={() => {
-							add = { kind: 'file', name: node_key };
+							to_add_in_child = { kind: 'file', name: node_name };
 							// @ts-ignore
-							tree[node_key].open = true;
+							tree[node_name].open = true;
 						}}
 					>
 						<Plus />
@@ -112,9 +114,9 @@
 					<button
 						title="New Folder"
 						on:click={() => {
-							add = { kind: 'folder', name: node_key };
+							to_add_in_child = { kind: 'folder', name: node_name };
 							// @ts-ignore
-							tree[node_key].open = true;
+							tree[node_name].open = true;
 						}}
 					>
 						<FolderAdd />
@@ -125,10 +127,10 @@
 							/// TODO: use proper component
 							if (
 								window.confirm(
-									`Are you sure you want to delete "${node_key}" and everything inside?`
+									`Are you sure you want to delete "${node_name}" and everything inside?`
 								)
 							) {
-								webcontainer.delete_file(`${base_path}${node_key}`);
+								webcontainer.delete_file(`${base_path}${node_name}`);
 							}
 						}}
 					>
@@ -138,35 +140,35 @@
 			</li>
 			{#if node.open}
 				<svelte:self
-					base_path={`${base_path}${node_key}/`}
-					is_adding={add?.name === node_key ? add.kind : undefined}
+					base_path={`${base_path}${node_name}/`}
+					is_adding={to_add_in_child?.name === node_name ? to_add_in_child.kind : undefined}
 					on:add={({ detail: name }) => {
 						handleAdd({
 							name,
-							file: node_key,
-							add: add?.kind ?? null
+							file: node_name,
+							add: to_add_in_child?.kind ?? null
 						});
-						add = null;
+						to_add_in_child = null;
 					}}
 				/>
 			{/if}
 		{:else}
-			{@const icon = get_icon(node_key)}
-			{@const path = base_path + node_key}
+			{@const icon = get_icon(node_name)}
+			{@const path = base_path + node_name}
 			<li class:open={$current_tab === path}>
 				<button class="node" on:click={() => open_file(path)}>
 					<svelte:component this={icon} />
 					<span>
-						{node_key}
+						{node_name}
 					</span>
 				</button>
 				<div class="hover-group">
 					<button
-						title="Delete {node_key}"
+						title="Delete {node_name}"
 						on:click={() => {
 							/// TODO: use proper component
-							if (window.confirm(`Are you sure you want to delete "${node_key}"?`)) {
-								webcontainer.delete_file(`${base_path}${node_key}`);
+							if (window.confirm(`Are you sure you want to delete "${node_name}"?`)) {
+								webcontainer.delete_file(`${base_path}${node_name}`);
 							}
 						}}
 					>
