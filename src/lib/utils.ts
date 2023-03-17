@@ -26,6 +26,7 @@ export function async_click(
 		(click_handler: (e: MouseEvent) => Promise<void>) => async (e: MouseEvent) => {
 			e.preventDefault();
 			await click_handler(e);
+			console.log('now moving');
 			window.location.assign(node.href);
 		};
 	let on_click = generate_on_click(click_handler);
