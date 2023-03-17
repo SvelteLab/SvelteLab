@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { PUBLIC_SAVE_IN_SESSION_STORAGE_NAME } from '$env/static/public';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -147,13 +147,13 @@
 		<a
 			use:async_click={async (e) => {
 				try {
-					console.log('saving in session storage');
-					// save current project to session storage
-					window.sessionStorage.setItem(
-						PUBLIC_SAVE_IN_SESSION_STORAGE_NAME,
+					console.log('saving in local storage');
+					// save current project to local storage
+					window.localStorage.setItem(
+						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
 						JSON.stringify(await webcontainer.get_tree_from_container())
 					);
-					console.log({ storage: window.sessionStorage });
+					console.log({ storage: window.localStorage });
 				} catch (e) {
 					console.log(e);
 					if (

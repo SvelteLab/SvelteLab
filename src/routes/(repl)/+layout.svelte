@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
-	import { PUBLIC_SAVE_IN_SESSION_STORAGE_NAME } from '$env/static/public';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -29,10 +29,10 @@
 		if (fix_for_double_after) return;
 		console.log('afterNavigate after if');
 		fix_for_double_after = true;
-		console.log({ storage: window.sessionStorage });
-		// try to get the project from session storage and then delete it
-		const stored_project = window.sessionStorage.getItem(PUBLIC_SAVE_IN_SESSION_STORAGE_NAME);
-		console.log({ stored_project, PUBLIC_SAVE_IN_SESSION_STORAGE_NAME });
+		console.log({ storage: window.localStorage });
+		// try to get the project from local storage and then delete it
+		const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+		console.log({ stored_project, PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME });
 		if (stored_project !== null) {
 			try {
 				const project = JSON.parse(stored_project);
@@ -42,7 +42,7 @@
 				console.log(e);
 				/* empty */
 			}
-			window.sessionStorage.removeItem(PUBLIC_SAVE_IN_SESSION_STORAGE_NAME);
+			window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
 		}
 		webcontainer.init().then(() => webcontainer.mount_files());
 		// for debugging
