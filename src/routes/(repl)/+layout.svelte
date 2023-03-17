@@ -32,8 +32,10 @@
 		if (stored_project !== null) {
 			try {
 				const project = JSON.parse(stored_project);
+				console.log({ project });
 				await webcontainer.set_file_system(project);
 			} catch (e) {
+				console.log(e);
 				/* empty */
 			}
 			window.sessionStorage.removeItem(PUBLIC_SAVE_IN_SESSION_STORAGE_NAME);
