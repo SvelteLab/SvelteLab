@@ -10,6 +10,7 @@
 	align-items: center;
 	font-size: 6rem;
 	gap: 2rem;
+	text-align: center;
 }
 .loader span {
 	font-size: 2rem;
