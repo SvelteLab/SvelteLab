@@ -10,6 +10,7 @@ import {
 import { compressToEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { is_repl_to_save, repl_name } from './stores/repl_id_store';
+import { open_file, tabs } from './tabs';
 import { deferred_promise } from './utils';
 
 /**
@@ -264,6 +265,20 @@ async function launch_jsh() {
 	}
 }
 
+function does_file_exist(files: FileSystemTree, path: `./${string}`) {
+	const parts = path.split('/');
+	// throw the dot away
+	parts.shift();
+	const file = parts.pop() ?? '';
+	let subtree = files;
+	for (const part of parts) {
+		const current_check = subtree[part];
+		if (!current_check || !is_dir(current_check)) return false;
+		subtree = current_check.directory;
+	}
+	return !!subtree[file];
+}
+
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -271,6 +286,10 @@ export const webcontainer = {
 	subscribe,
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
+		// we do this here to avoid opening a non existing file
+		if (does_file_exist(files, './src/routes/+page.svelte')) {
+			open_file('./src/routes/+page.svelte');
+		}
 	},
 	/**
 	 * init the webcontainer and mount the files
