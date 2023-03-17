@@ -70,9 +70,8 @@
 	form {
 		padding: 0.5em;
 		display: flex;
-		background-color: var(--sk-back-2);
+		background-color: var(--sk-back-1);
 		gap: 0.5em;
-		border-bottom: 1px solid var(--sk-back-4);
 	}
 
 	a,
