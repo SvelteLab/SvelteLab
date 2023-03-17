@@ -319,17 +319,17 @@ export const webcontainer = {
 	async mount_files() {
 		await clear_webcontainer_fs();
 		await webcontainer_instance.mount(get(files_store));
-		// on mount we launch the shell
-		launch_jsh();
-		merge_state({ status: 'waiting' });
-		await webcontainer.install_dependencies();
-		await webcontainer.run_dev_server();
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
 				callback();
 			}
 		});
 		init_callbacks.clear();
+		// on mount we launch the shell
+		launch_jsh();
+		merge_state({ status: 'waiting' });
+		await webcontainer.install_dependencies();
+		await webcontainer.run_dev_server();
 	},
 	/**
 	 * Register a callback for the webcontainer boots.
@@ -349,8 +349,15 @@ export const webcontainer = {
 	 * @param content The content of the file to be written
 	 */
 	update_file(path: string, content: string) {
-		webcontainer_instance.fs.writeFile(path, content);
-		is_repl_to_save.set(true);
+		const update = () => {
+			webcontainer_instance.fs.writeFile(path, content);
+			is_repl_to_save.set(true);
+		};
+		if (webcontainer_instance instanceof WebContainer) {
+			update();
+		} else {
+			init_callbacks.add(update);
+		}
 	},
 
 	/**
