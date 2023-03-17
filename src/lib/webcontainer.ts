@@ -432,7 +432,6 @@ export const webcontainer = {
 		const JSZip = (await import('jszip')).default;
 		const zip = new JSZip();
 		const current_tree = await get_tree_from_container();
-		console.log(current_tree);
 		const traverse = (tree: FileSystemTree, path: string) => {
 			const files_and_folders = Object.keys(tree);
 			for (const file of files_and_folders) {

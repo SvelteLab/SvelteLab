@@ -16,9 +16,9 @@ export const GET: RequestHandler = async ({ locals, url, cookies, params: { redi
 		});
 	}
 	return new Response(null, {
-		status: 301,
+		status: 302,
 		headers: {
-			location: `/${redirect_to}`
+			location: `/${redirect_to}?login=true`
 		}
 	});
 };

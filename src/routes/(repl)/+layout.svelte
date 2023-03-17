@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -23,13 +24,23 @@
 
 	let fix_for_double_after = false;
 
-	afterNavigate(() => {
+	afterNavigate(async () => {
 		if (fix_for_double_after) return;
-		console.log('booting');
 		fix_for_double_after = true;
+		// try to get the project from local storage and then delete it
+		const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+		if (stored_project !== null) {
+			try {
+				const project = JSON.parse(stored_project);
+				await webcontainer.set_file_system(project);
+			} catch (e) {
+				/* empty */
+			}
+			window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+		}
+		webcontainer.init().then(() => webcontainer.mount_files());
 		// for debugging
 		(window as any).wc = webcontainer;
-		webcontainer.init().then(() => webcontainer.mount_files());
 	});
 
 	beforeNavigate(() => {

@@ -2,15 +2,19 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
+	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
+	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
+	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
 	import SignOut from '~icons/material-symbols/logout-rounded';
@@ -18,8 +22,6 @@
 	import Save from '~icons/material-symbols/save';
 	import Share from '~icons/material-symbols/share';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import Download from '~icons/material-symbols/download-rounded';
-	import AsyncButton from '$lib/components/AsyncButton.svelte';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
@@ -143,6 +145,23 @@
 		</form>
 	{:else}
 		<a
+			use:async_click={async (e) => {
+				try {
+					// save current project to local storage (we have to use local instead
+					// of session because Firefox Mobile it's being weird)
+					window.localStorage.setItem(
+						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
+						JSON.stringify(await webcontainer.get_tree_from_container())
+					);
+				} catch (e) {
+					if (
+						!window.confirm('You will lose progress on this project...do you want to continue?')
+					) {
+						// this will prevent the actual navigation
+						throw new Error('');
+					}
+				}
+			}}
 			class="btn"
 			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"

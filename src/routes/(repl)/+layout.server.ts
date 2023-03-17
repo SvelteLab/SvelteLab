@@ -12,12 +12,15 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	return replSchema.parse(record);
 }
 
-export const load: LayoutServerLoad = async ({ params, locals }) => {
+export const load: LayoutServerLoad = async ({ params, locals, url }) => {
 	const { repl } = params;
+	// if there's a ?login query param we are back from the login and we can try load files
+	// from the local storage so don't bother getting them from pocketbase
+	const from_login = url.searchParams.get('login') !== null;
 	let files: FileSystemTree = default_project_files;
 	let name = 'Hello world';
 
-	if (!repl) {
+	if (!repl || from_login) {
 		return {
 			repl: files,
 			repl_name: name
