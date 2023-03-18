@@ -71,9 +71,13 @@
 
 	<button
 		on:click={async () => {
-			const share_url = await webcontainer.get_share_url();
+			let share_url = new URL(window.location.href);
+			share_url.pathname = $repl_id ?? '';
+			if (!$repl_id) {
+				share_url = await webcontainer.get_share_url();
+			}
 			await share({
-				text: 'Take a look at my REPL',
+				text: `Take a look at my REPL - ${repl_name}`,
 				title: 'Svelteblitz',
 				url: share_url.toString()
 			});
