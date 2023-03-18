@@ -28,7 +28,7 @@
 				{/if}
 				<Pane>
 					<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-						<Pane {minSize}>
+						<Pane {minSize} class="editor-pane">
 							<svelte:component this={Editor} />
 						</Pane>
 						{#if $layout_store.terminal}
@@ -51,5 +51,10 @@
 		grid-template-columns: 1fr;
 		grid-template-rows: auto minmax(0, 1fr);
 		height: 100%;
+	}
+	:global(.editor-pane) {
+		position: relative;
+		display: grid;
+		grid-template-rows: min-content 1fr;
 	}
 </style>

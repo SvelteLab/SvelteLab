@@ -25,7 +25,7 @@
 <div class="container">
 	<Header mobile />
 	<main>
-		<div hidden={showing !== 'code' && showing !== 'files'}>
+		<div class="editor" hidden={showing !== 'code' && showing !== 'files'}>
 			<Dialog
 				isOpen={showing === 'files'}
 				on:dismiss={() => (showing = 'code')}
@@ -74,5 +74,10 @@
 		width: 100%;
 		height: 100%;
 		max-width: 100vw;
+	}
+	.editor {
+		display: grid;
+		grid-template-rows: min-content 1fr;
+		position: relative;
 	}
 </style>

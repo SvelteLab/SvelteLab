@@ -10,7 +10,7 @@ import {
 import { compressToEncodedURIComponent } from 'lz-string';
 import { get, writable, type Writable } from 'svelte/store';
 import { is_repl_to_save, repl_name } from './stores/repl_id_store';
-import { open_file, tabs } from './tabs';
+import { open_file } from './tabs';
 import { deferred_promise } from './utils';
 
 /**
