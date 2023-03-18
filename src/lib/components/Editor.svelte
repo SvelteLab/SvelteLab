@@ -87,7 +87,7 @@
 	<VoidEditor />
 {:else}
 	{#await webcontainer.read_file($current_tab)}
-		<VoidEditor loading />
+		<VoidEditor />
 	{:then file}
 		{update_code(file)}
 		<CodeMirror
@@ -159,7 +159,7 @@
 			/>
 		{/if}
 	{:catch}
-		<VoidEditor loading />
+		<VoidEditor />
 	{/await}
 {/if}
 

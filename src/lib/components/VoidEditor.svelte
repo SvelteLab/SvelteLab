@@ -16,5 +16,6 @@
 <style>
 	div {
 		background-color: var(--sk-back-1);
+		grid-row: 1/-1;
 	}
 </style>
