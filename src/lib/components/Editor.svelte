@@ -12,6 +12,7 @@
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
+	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
@@ -36,7 +37,14 @@
 		md: markdown()
 	};
 
-	$: lang = langs[$current_tab.split('.').at(-1) ?? 'svelte'];
+	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
+	$: lang = langs[current_lang];
+	let code = '';
+
+	function update_code(file: string) {
+		code = file;
+		return '';
+	}
 </script>
 
 <Tabs />
@@ -47,6 +55,7 @@
 	{#await webcontainer.read_file($current_tab)}
 		<VoidEditor loading />
 	{:then file}
+		{update_code(file)}
 		<CodeMirror
 			{lang}
 			{theme}
@@ -56,6 +65,7 @@
 			extensions={[js_snippets, svelte_snippets]}
 			on:change={(e) => {
 				webcontainer.update_file($current_tab, e.detail);
+				code = e.detail;
 			}}
 			styles={{
 				'&': {
@@ -103,6 +113,9 @@
 				}
 			}}
 		/>
+		{#if current_lang === 'svelte'}
+			<Errors {code} />
+		{/if}
 	{:catch}
 		<VoidEditor loading />
 	{/await}
