@@ -2,6 +2,7 @@
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
+	import type { SvelteError } from '$lib/types';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
@@ -9,9 +10,12 @@
 	import { json } from '@codemirror/lang-json';
 	import { markdown } from '@codemirror/lang-markdown';
 	import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
+	import type { Diagnostic } from '@codemirror/lint';
+	import { linter } from '@codemirror/lint';
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
+	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 
@@ -45,6 +49,36 @@
 		code = file;
 		return '';
 	}
+
+	const warnings_and_errors = {
+		warnings: [] as Warning[],
+		error: null as SvelteError | null
+	};
+
+	function return_diagnostics() {
+		const diagnostcs: Diagnostic[] = [];
+		for (let warning of warnings_and_errors.warnings) {
+			if (!warning.start || !warning.end) continue;
+			diagnostcs.push({
+				from: warning.start.character,
+				to: warning.end.character,
+				severity: 'warning',
+				message: warning.message
+			});
+		}
+		if (warnings_and_errors.error) {
+			const { error } = warnings_and_errors;
+			if (error.start && error.end) {
+				diagnostcs.push({
+					from: error.start.character,
+					to: error.end.character,
+					severity: 'error',
+					message: error.message
+				});
+			}
+		}
+		return diagnostcs;
+	}
 </script>
 
 <Tabs />
@@ -62,7 +96,7 @@
 			useTab
 			tabSize={3}
 			value={file ?? ''}
-			extensions={[js_snippets, svelte_snippets]}
+			extensions={[js_snippets, svelte_snippets, linter(return_diagnostics)]}
 			on:change={(e) => {
 				webcontainer.update_file($current_tab, e.detail);
 				code = e.detail;
@@ -110,11 +144,19 @@
 				'.cm-tooltip-autocomplete ul li[aria-selected]': {
 					background: 'var(--sk-theme-1)',
 					color: 'var(--sk-text-1)'
+				},
+				'.cm-tooltip-lint': {
+					background: 'var(--sk-back-3)',
+					color: 'var(--sk-text-1)'
 				}
 			}}
 		/>
 		{#if current_lang === 'svelte'}
-			<Errors {code} />
+			<Errors
+				{code}
+				bind:warnings={warnings_and_errors.warnings}
+				bind:error={warnings_and_errors.error}
+			/>
 		{/if}
 	{:catch}
 		<VoidEditor loading />

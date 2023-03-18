@@ -1,30 +1,13 @@
 <script lang="ts">
+	import type { SvelteError } from '$lib/types';
 	import { compile } from 'svelte/compiler';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
-	import WarningIcon from '~icons/material-symbols/warning-outline';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
+	import WarningIcon from '~icons/material-symbols/warning-outline';
 
 	export let code = '';
-
-	type SvelteError = {
-		name: string;
-		code: string;
-		start: {
-			line: number;
-			column: number;
-			character: number;
-		};
-		end: {
-			line: number;
-			column: number;
-			character: number;
-		};
-		pos: number;
-		frame: string;
-	} & Error;
-
-	let warnings = [] as Warning[];
-	let error: SvelteError | null = null;
+	export let warnings = [] as Warning[];
+	export let error: SvelteError | null = null;
 
 	function parse(code: string) {
 		warnings = [];
