@@ -22,7 +22,7 @@
 	$: parse(code);
 </script>
 
-<errors-container>
+<section class="errors-container">
 	{#if error}
 		<div class="error"><ErrorIcon />{error.message} at {error.start.line}:{error.start.column}</div>
 	{/if}
@@ -30,7 +30,7 @@
 	{#each warnings as warning}
 		<div class="warning"><WarningIcon />{warning.message}</div>
 	{/each}
-</errors-container>
+</section>
 
 <style>
 	errors-container {
