@@ -6,6 +6,7 @@
 	import { save_repl } from '$lib/api/client/repls';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Dialog from '$lib/components/Dialog.svelte';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -27,6 +28,25 @@
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
+
+	async function share_with_hash() {
+		const share_url = await webcontainer.get_share_url();
+		await share({
+			text: `Take a look at my REPL - ${repl_name}`,
+			title: 'Svelteblitz',
+			url: share_url.toString()
+		});
+	}
+
+	async function share_with_id() {
+		const share_url = new URL(window.location.href);
+		share_url.pathname = $repl_id ?? '';
+		await share({
+			text: `Take a look at my REPL - ${repl_name}`,
+			title: 'Svelteblitz',
+			url: share_url.toString()
+		});
+	}
 </script>
 
 <header>
@@ -68,19 +88,13 @@
 			<Moon />
 		{/if}
 	</button>
-
 	<button
 		on:click={async () => {
-			let share_url = new URL(window.location.href);
-			share_url.pathname = $repl_id ?? '';
 			if (!$repl_id) {
-				share_url = await webcontainer.get_share_url();
+				share_with_hash();
+				return;
 			}
-			await share({
-				text: `Take a look at my REPL - ${repl_name}`,
-				title: 'Svelteblitz',
-				url: share_url.toString()
-			});
+			share_with_id();
 		}}
 		title="Share"
 	>

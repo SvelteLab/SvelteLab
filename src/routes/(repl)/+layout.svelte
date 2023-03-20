@@ -7,7 +7,7 @@
 	import { tips_store } from '$lib/stores/tips_store';
 	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
-	import { Dialog } from 'as-comps';
+	import Dialog from '$lib/components/Dialog.svelte';
 	import { onMount } from 'svelte';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Tip from '~icons/material-symbols/tips-and-updates';
@@ -67,20 +67,10 @@
 
 <slot />
 
-<Dialog
-	--as-dialog-container-z-index="9999"
-	--as-dialog-width="max(50vw, 35rem)"
-	--as-dialog--actions-justify-content="flex-end"
-	--as-dialog--actions--child-button-flex-grow="0"
-	--as-dialog-border-radius=".25rem"
-	--as-dialog-background="var(--sk-back-2)"
-	--as-dialog-padding="3rem"
-	noCloseButton
-	autofocus={false}
-	isOpen={isTipOpen && $tips_store.no_config && first_time}
-	includedTrigger={false}
->
-	<h1><Tip />[TIP] No config to the extreme</h1>
+<Dialog is_open={isTipOpen && $tips_store.no_config && first_time}>
+	<svelte:fragment slot="dialog-title">
+		<Tip />[TIP] No config to the extreme
+	</svelte:fragment>
 	<p>
 		By default we don't show the usual config files associated with a Sveltekit project to keep
 		things clean and easy in the file tree. If you need to do modifications to any of this config
@@ -93,13 +83,6 @@
 </Dialog>
 
 <style>
-	h1 {
-		font-size: 2rem;
-		display: flex;
-		gap: 1rem;
-		color: var(--sk-theme-1);
-		font-weight: bold;
-	}
 	.primary {
 		color: var(--sk-theme-1);
 	}
