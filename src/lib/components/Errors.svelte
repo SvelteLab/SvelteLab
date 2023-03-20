@@ -22,26 +22,28 @@
 	$: parse(code);
 </script>
 
-<section class="errors-container">
+<ul class="errors-container">
 	{#if error}
-		<div class="error"><ErrorIcon />{error.message} at {error.start.line}:{error.start.column}</div>
+		<li class="error"><ErrorIcon />{error.message} at {error.start.line}:{error.start.column}</li>
 	{/if}
 
 	{#each warnings as warning}
-		<div class="warning"><WarningIcon />{warning.message}</div>
+		<li class="warning"><WarningIcon />{warning.message}</li>
 	{/each}
-</section>
+</ul>
 
 <style>
-	errors-container {
+	.errors-container {
 		position: absolute;
 		inset: 0;
 		top: auto;
 		color: hsl(0, 0%, 10%);
 		font-weight: bold;
 		font-size: var(--sk-text-xs);
+		margin: 0;
+		padding: 0;
 	}
-	div {
+	li {
 		padding: 0.3em;
 		border-bottom: 1px solid hsl(0, 0%, 10%);
 		display: grid;
