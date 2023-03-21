@@ -13,16 +13,23 @@
 	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
-	export let is_adding: 'folder' | 'file' | null = null;
-	export let root_is_adding: typeof is_adding = null;
+	export let is_adding_type: 'folder' | 'file' | null = null;
+	export let root_adding_type: typeof is_adding_type = null;
 
-	function handleAdd({ detail: name }: { detail: string }) {
-		console.log(name);
-		// if (add === 'file') {
-		// 	webcontainer.add_file(`${base_path}${file}/${name}`);
-		// } else if (add === 'folder') {
-		// 	webcontainer.add_folder(`${base_path}${file}/${name}`);
-		// }
+	async function handleAdd(path_name: string, type: typeof is_adding_type) {
+		const path = path_name.split('/');
+		const name = path.pop();
+		let prefix = '/';
+		for (const dir of path) {
+			if (dir === '.') continue;
+			await webcontainer.add_folder(prefix + dir);
+			prefix = prefix + dir + '/';
+		}
+		if (type === 'file') {
+			await webcontainer.add_file(prefix + name);
+		} else if (type === 'folder') {
+			await webcontainer.add_folder(prefix + name);
+		}
 	}
 
 	$: tree = get_subtree_from_path(base_path, $files_store);
@@ -48,7 +55,7 @@
 				<button
 					title="New File"
 					on:click={() => {
-						root_is_adding = 'file';
+						root_adding_type = 'file';
 					}}
 				>
 					<Plus />
@@ -56,7 +63,7 @@
 				<button
 					title="New Folder"
 					on:click={() => {
-						root_is_adding = 'folder';
+						root_adding_type = 'folder';
 					}}
 				>
 					<FolderAdd />
@@ -72,12 +79,16 @@
 				</button>
 			</div>
 		</li>
-		{#if root_is_adding}
+		{#if root_adding_type}
 			<li>
 				<AddFile
-					on:add={handleAdd}
+					type={root_adding_type}
+					on:add={async ({ detail: path }) => {
+						await handleAdd(path, root_adding_type);
+						root_adding_type = null;
+					}}
 					on:cancel={() => {
-						root_is_adding = null;
+						root_adding_type = null;
 					}}
 				/>
 			</li>
@@ -102,7 +113,7 @@
 					<button
 						title="New File"
 						on:click={() => {
-							is_adding = 'file';
+							is_adding_type = 'file';
 							// @ts-ignore
 							tree[node_name].open = true;
 						}}
@@ -112,7 +123,7 @@
 					<button
 						title="New Folder"
 						on:click={() => {
-							is_adding = 'folder';
+							is_adding_type = 'folder';
 							// @ts-ignore
 							tree[node_name].open = true;
 						}}
@@ -138,12 +149,16 @@
 			</li>
 			{#if node.open}
 				<svelte:self base_path={`${base_path}${node_name}/`}>
-					{#if is_adding}
+					{#if is_adding_type}
 						<li>
 							<AddFile
-								on:add={handleAdd}
+								type={is_adding_type}
+								on:add={async ({ detail: name }) => {
+									await handleAdd(`${base_path}${node_name}/${name}`, is_adding_type);
+									is_adding_type = null;
+								}}
 								on:cancel={() => {
-									is_adding = null;
+									is_adding_type = null;
 								}}
 							/>
 						</li>
