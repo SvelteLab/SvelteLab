@@ -42,16 +42,15 @@
 		if (is_dir(tree[node_a]) && is_dir(tree[node_b])) {
 			return node_a.localeCompare(node_b);
 		}
-		//if file_one is dir put it first
-		if (is_dir(tree[node_a])) return -1;
-		//if file_two is dir put it first
-		if (is_dir(tree[node_b])) return 1;
+		//if file_one is dir put it last
+		if (is_dir(tree[node_a])) return 1;
+		//if file_two is dir put it last
+		if (is_dir(tree[node_b])) return -1;
 		//if they are both files order alphabetically
 		return node_a.localeCompare(node_b);
 	});
 </script>
 
-{base_path}
 <ul>
 	{#if base_path === $base_path_store}
 		<li class="root">
