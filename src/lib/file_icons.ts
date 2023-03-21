@@ -2,7 +2,7 @@ import File from '~icons/material-symbols/description-rounded';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
 import JS from '~icons/vscode-icons/file-type-js-official';
-import JSON from '~icons/vscode-icons/file-type-json';
+import JSON from '~icons/mdi/code-json'
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
 import TS from '~icons/vscode-icons/file-type-typescript-official';
