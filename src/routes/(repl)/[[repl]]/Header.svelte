@@ -12,7 +12,7 @@
 	import { get_theme } from '$lib/theme';
 	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
-	import SignIn from '~icons/material-symbols/account-circle';
+	import Profile from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
@@ -29,7 +29,11 @@
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
-	let share_menu_open = false;
+	let open_menu = null as null | 'share' | 'profile';
+
+	function toggle_menu(kind: typeof open_menu & {}) {
+		open_menu = open_menu === kind ? null : kind;
+	}
 
 	async function share_with_hash() {
 		const share_url = await webcontainer.get_share_url();
@@ -100,22 +104,22 @@
 			<Share />
 		</button>
 	{:else}
-		<div class="share-wrapper">
+		<div class="drop-down-wrapper">
 			<button
 				on:click={async () => {
-					share_menu_open = !share_menu_open;
+					toggle_menu('share');
 				}}
 				title="Share"
 			>
 				<Share />
 			</button>
-			<ul aria-hidden={!share_menu_open}>
+			<ul aria-hidden={open_menu !== 'share'}>
 				<li>
 					<button
 						title="Share via id"
 						on:click={() => {
 							share_with_id();
-							share_menu_open = false;
+							open_menu = null;
 						}}><Url /> Share via id</button
 					>
 				</li>
@@ -124,7 +128,7 @@
 						title="Share via hash"
 						on:click={() => {
 							share_with_hash();
-							share_menu_open = false;
+							open_menu = null;
 						}}><Tag /> Share via hash</button
 					>
 				</li>
@@ -177,21 +181,37 @@
 				<Save />
 			</AsyncButton>
 		{/if}
-		<a href="/profile" class="btn" title="Profile">
-			<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
-		</a>
-		<form
-			use:enhance={() => () => {
-				//on logout we invalidate authed:user which reload the page
-				invalidate('authed:user');
-			}}
-			method="POST"
-			action="?/logout"
-		>
-			<button title="Sign out">
-				<SignOut />
+		<div class="drop-down-wrapper">
+			<button
+				on:click={() => {
+					toggle_menu('profile');
+				}}
+			>
+				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 			</button>
-		</form>
+			<ul class="right-aligned" aria-hidden={open_menu !== 'profile'}>
+				<li>
+					<a href="/profile" class="btn" title="Profile"><Profile /> Your profile</a>
+				</li>
+				<li>
+					<form
+						use:enhance={() => {
+							open_menu = null;
+							return () => {
+								//on logout we invalidate authed:user which reload the page
+								invalidate('authed:user');
+							};
+						}}
+						method="POST"
+						action="?/logout"
+					>
+						<button title="Sign out">
+							<SignOut /> Log out
+						</button>
+					</form>
+				</li>
+			</ul>
+		</div>
 	{:else}
 		<a
 			use:async_click={async (e) => {
@@ -215,7 +235,7 @@
 			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
-			<SignIn />
+			<Profile />
 		</a>
 	{/if}
 </header>
@@ -278,10 +298,10 @@
 	ul[aria-hidden='true'] {
 		display: none;
 	}
-	.share-wrapper {
+	.drop-down-wrapper {
 		position: relative;
 	}
-	.share-wrapper::after {
+	.drop-down-wrapper::after {
 		content: '▾';
 		position: absolute;
 		bottom: -0.5rem;
@@ -290,9 +310,6 @@
 		font-size: 1rem;
 	}
 	ul {
-		overflow: hidden;
-		border-bottom-left-radius: 0.2em;
-		border-bottom-right-radius: 0.2em;
 		position: absolute;
 		background-color: var(--sk-back-4);
 		list-style: none;
@@ -303,7 +320,15 @@
 		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
 		z-index: 10;
 	}
-	li > button {
+	ul :last-child {
+		border-bottom-left-radius: 0.2em;
+		border-bottom-right-radius: 0.2em;
+	}
+	.right-aligned {
+		left: auto;
+		right: 0;
+	}
+	li :is(button, a) {
 		background-color: var(--sk-back-1);
 		display: flex;
 		gap: 1rem;
@@ -311,5 +336,10 @@
 		padding: 0.75rem;
 		white-space: nowrap;
 		font-size: 1.6rem;
+		isolation: isolate;
+	}
+	li :is(button, a):focus-visible {
+		/* this is to always show the outline on top */
+		z-index: 20;
 	}
 </style>
