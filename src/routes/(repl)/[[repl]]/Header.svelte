@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { scale } from 'svelte/transition';
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -283,7 +282,7 @@
 		position: relative;
 	}
 	.share-wrapper::after {
-		content: '⮟';
+		content: '▾';
 		position: absolute;
 		bottom: -0.5rem;
 		right: -0.5rem;
