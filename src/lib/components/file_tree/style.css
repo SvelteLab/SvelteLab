@@ -1,0 +1,160 @@
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 1rem;
+	padding-block: 0rem;
+	padding-inline-end: 0rem;
+	background-color: var(--sk-back-3);
+	height: 100%;
+	overflow: auto;
+}
+
+/*style reset for nested folders*/
+ul :global(ul) {
+	height: auto !important;
+	padding-block: 0 !important;
+}
+
+.root {
+	background-color: var(--sk-back-1);
+	margin-inline-start: -1rem;
+	padding: 0.5em;
+	padding-inline-start: 1em;
+}
+
+.root .hover-group {
+	background-color: var(--sk-back-1);
+}
+
+li {
+	display: grid;
+	align-items: center;
+	gap: 0.5em;
+	color: var(--sk-text-1);
+	min-height: 2em;
+	overflow: hidden;
+	white-space: nowrap;
+	padding: 0.5rem;
+	position: relative;
+}
+
+.node {
+	flex: 1 0 auto;
+	min-width: 0;
+}
+
+.node span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.hover-group {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	padding: 0.5rem;
+	align-items: center;
+	justify-content: end;
+	background-color: var(--sk-back-3);
+	color: var(--sk-text-3);
+}
+
+.hover-group button:hover {
+	color: var(--sk-text-1);
+}
+
+li .hover-group {
+	display: none;
+}
+
+li:hover .hover-group {
+	display: flex;
+}
+
+@media (hover: none) {
+	li .hover-group {
+		display: flex;
+		font-size: 1.75rem;
+	}
+}
+
+li:not(.open, .root) {
+	filter: grayscale(70%) opacity(80%);
+}
+
+li.open:not(.folder) {
+	color: var(--sk-theme-1);
+	position: relative;
+	border-bottom-color: var(--sk-theme-1);
+}
+
+li.open:not(.folder)::after {
+	content: '';
+	position: absolute;
+	background-color: var(--sk-theme-1);
+	inset: 0;
+	top: calc(100% - 3px);
+}
+
+button {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	border: 0;
+	position: relative;
+}
+
+button :global(svg) {
+	min-width: 18px;
+}
+
+form {
+	margin-left: calc(20px + 0.75rem);
+	display: flex;
+	gap: 0.5rem;
+}
+
+input {
+	border: none;
+	color: var(--sk-text-2);
+	flex-grow: 1;
+	font-family: inherit;
+	font-size: inherit;
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+}
+
+input:focus {
+	background-color: var(--sk-back-2);
+	outline: 1px solid var(--sk-theme-1);
+}
+
+.hover-group button {
+	padding: 0.3em;
+}
+
+button[aria-pressed='true']::after {
+	content: '';
+	position: absolute;
+	background-color: var(--sk-theme-1);
+	right: 1px;
+	left: 1px;
+	bottom: 0;
+	top: calc(100% - 3px);
+}
+
+button {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	border: 0;
+	position: relative;
+}
+
+button :global(svg) {
+	min-width: 18px;
+}

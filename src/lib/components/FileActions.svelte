@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import { base_path } from '$lib/stores/base_path_store';
-	import FileTree from './FileTree.svelte';
+	import FileTree from './file_tree/FileTree.svelte';
 	import RunScripts from './RunScripts.svelte';
 	export let minSize = 5;
 </script>
