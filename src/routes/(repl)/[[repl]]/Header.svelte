@@ -6,7 +6,6 @@
 	import { save_repl } from '$lib/api/client/repls';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import Dialog from '$lib/components/Dialog.svelte';
 	import { share } from '$lib/share';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -18,16 +17,19 @@
 	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
+	import Url from '~icons/material-symbols/link';
 	import SignOut from '~icons/material-symbols/logout-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Save from '~icons/material-symbols/save';
 	import Share from '~icons/material-symbols/share';
+	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
+	let share_menu_open = false;
 
 	async function share_with_hash() {
 		const share_url = await webcontainer.get_share_url();
@@ -88,18 +90,47 @@
 			<Moon />
 		{/if}
 	</button>
-	<button
-		on:click={async () => {
-			if (!$repl_id) {
+	{#if !$repl_id}
+		<button
+			on:click={async () => {
 				share_with_hash();
-				return;
-			}
-			share_with_id();
-		}}
-		title="Share"
-	>
-		<Share />
-	</button>
+			}}
+			title="Share"
+		>
+			<Share />
+		</button>
+	{:else}
+		<div class="share-wrapper">
+			<button
+				on:click={async () => {
+					share_menu_open = !share_menu_open;
+				}}
+				title="Share"
+			>
+				<Share />
+			</button>
+			<ul aria-hidden={!share_menu_open}>
+				<li>
+					<button
+						title="Share via id"
+						on:click={() => {
+							share_with_id();
+							share_menu_open = false;
+						}}><Url /> Share via id</button
+					>
+				</li>
+				<li>
+					<button
+						title="Share via hash"
+						on:click={() => {
+							share_with_hash();
+							share_menu_open = false;
+						}}><Tag /> Share via hash</button
+					>
+				</li>
+			</ul>
+		</div>
+	{/if}
 	<AsyncButton
 		click={async () => {
 			await webcontainer.save_as_zip();
@@ -191,7 +222,8 @@
 
 <style>
 	header {
-		padding: 0.75em 1.5em;
+		--padding-y: 0.75em;
+		padding: var(--padding-y) 1.5em;
 		display: flex;
 		gap: 1em;
 		background-color: var(--sk-back-2);
@@ -242,5 +274,42 @@
 		left: 1px;
 		bottom: 0;
 		top: calc(100% - 3px);
+	}
+	ul[aria-hidden='true'] {
+		display: none;
+	}
+	.share-wrapper {
+		position: relative;
+	}
+	.share-wrapper::after {
+		content: '▾';
+		position: absolute;
+		bottom: -0.5rem;
+		right: -0.5rem;
+		font-family: monospace;
+		font-size: 1rem;
+	}
+	ul {
+		overflow: hidden;
+		border-bottom-left-radius: 0.2em;
+		border-bottom-right-radius: 0.2em;
+		position: absolute;
+		background-color: var(--sk-back-4);
+		list-style: none;
+		top: calc(100% + var(--padding-y));
+		padding: 0;
+		margin: 0;
+		left: 0;
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
+		z-index: 10;
+	}
+	li > button {
+		background-color: var(--sk-back-1);
+		display: flex;
+		gap: 1rem;
+		width: 100%;
+		padding: 0.75rem;
+		white-space: nowrap;
+		font-size: 1.6rem;
 	}
 </style>
