@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Pending from '~icons/eos-icons/loading';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
+	import Pending from '~icons/eos-icons/loading';
 
 	export let click: (
 		event: MouseEvent & {
@@ -26,7 +26,7 @@
 </script>
 
 <button
-	class={badged ? 'badged' : undefined}
+	class:badged
 	on:click={async (e) => {
 		is_loading = true;
 		await click(e);
@@ -51,11 +51,11 @@
 		position: relative;
 	}
 	.badged::after {
-		content: '';
+		content: '·';
 		position: absolute;
-		inset: 0;
-		top: auto;
-		height: 0.25rem;
-		background-color: var(--sk-theme-1);
+		right: -0.1em;
+		font-size: 3em;
+		top: -0.7em;
+		color: var(--sk-theme-1);
 	}
 </style>
