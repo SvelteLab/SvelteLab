@@ -102,7 +102,7 @@
 				<AddFile
 					type={root_adding_type}
 					on:add={async ({ detail: path }) => {
-						await handleAdd(path, root_adding_type);
+						await handleAdd(base_path + path, root_adding_type);
 						root_adding_type = null;
 					}}
 					on:cancel={() => {
