@@ -290,6 +290,9 @@
 		font-size: 1rem;
 	}
 	ul {
+		overflow: hidden;
+		border-bottom-left-radius: 0.2em;
+		border-bottom-right-radius: 0.2em;
 		position: absolute;
 		background-color: var(--sk-back-4);
 		list-style: none;
@@ -297,13 +300,13 @@
 		padding: 0;
 		margin: 0;
 		left: 0;
-		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 30%), 0 2px 4px -2px rgb(0 0 0 / 70%);
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
 		z-index: 10;
 	}
 	li > button {
+		background-color: var(--sk-back-1);
 		display: flex;
 		gap: 1rem;
-		border-bottom: 1px solid var(--sk-theme-1);
 		width: 100%;
 		padding: 0.75rem;
 		white-space: nowrap;
