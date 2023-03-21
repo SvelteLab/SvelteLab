@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { get_folder_icon, get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
-	import { layout_store } from '$lib/stores/layout_store';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
+	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { current_tab, open_file } from '$lib/tabs';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
@@ -84,8 +84,33 @@
 			</div>
 		</li>
 	{/if}
+	{#if is_adding}
+		<li>
+			<form
+				on:submit={(e) => {
+					e.preventDefault();
+					if (!is_adding) return;
+					const formData = new FormData(e.currentTarget);
+					const path = formData.get('path');
+					if (!path) return;
+					if (base_path === $base_path_store) {
+						handleAdd({
+							name: path.toString(),
+							add: is_adding,
+							file: ''
+						});
+						is_adding = null;
+					} else {
+						dispatch(`add`, path);
+					}
+				}}
+			>
+				<!-- svelte-ignore a11y-autofocus -->
+				<input name="path" autofocus /><button title="Create file"><Check /></button>
+			</form>
+		</li>
+	{/if}
 	{#each nodes as node_name}
-	{node_name}
 		{@const icon = get_folder_icon(node_name)}
 		{@const node = tree[node_name]}
 		{#if is_dir(node)}
@@ -177,32 +202,6 @@
 			</li>
 		{/if}
 	{/each}
-	{#if is_adding}
-		<li>
-			<form
-				on:submit={(e) => {
-					e.preventDefault();
-					if (!is_adding) return;
-					const formData = new FormData(e.currentTarget);
-					const path = formData.get('path');
-					if (!path) return;
-					if (base_path === $base_path_store) {
-						handleAdd({
-							name: path.toString(),
-							add: is_adding,
-							file: ''
-						});
-						is_adding = null;
-					} else {
-						dispatch(`add`, path);
-					}
-				}}
-			>
-				<!-- svelte-ignore a11y-autofocus -->
-				<input name="path" autofocus /><button title="Create file"><Check /></button>
-			</form>
-		</li>
-	{/if}
 </ul>
 
 <style>
