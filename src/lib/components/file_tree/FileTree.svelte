@@ -10,7 +10,7 @@
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
-	import Sorting from '~icons/material-symbols/swap-vert-rounded';
+	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
@@ -78,15 +78,6 @@
 					<FolderAdd />
 				</button>
 				<button
-					aria-pressed={$layout_store.show_config}
-					on:click={() => {
-						layout_store.toggle_config();
-					}}
-					title="Toggle Config Files"
-				>
-					<ConfigFiles />
-				</button>
-				<button
 					aria-pressed={$layout_store.folders_first}
 					on:click={() => {
 						layout_store.toggle_sort();
@@ -94,6 +85,15 @@
 					title="Toggle Folder / File Sort Order"
 				>
 					<Sorting />
+				</button>
+				<button
+					aria-pressed={$layout_store.show_config}
+					on:click={() => {
+						layout_store.toggle_config();
+					}}
+					title="Toggle Config Files"
+				>
+					<ConfigFiles />
 				</button>
 			</div>
 		</li>
