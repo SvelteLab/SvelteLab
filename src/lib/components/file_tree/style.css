@@ -107,12 +107,12 @@ button {
 	position: relative;
 }
 
-button :global(svg) {
+button :global(svg),
+form :global(svg) {
 	min-width: 18px;
 }
 
 form {
-	margin-left: calc(20px + 0.75rem);
 	display: flex;
 	gap: 0.5rem;
 }
@@ -145,16 +145,4 @@ button[aria-pressed='true']::after {
 	left: 1px;
 	bottom: 0;
 	top: calc(100% - 3px);
-}
-
-button {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	border: 0;
-	position: relative;
-}
-
-button :global(svg) {
-	min-width: 18px;
 }
