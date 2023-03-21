@@ -25,7 +25,7 @@
 <div class="container">
 	<Header mobile />
 	<main>
-		<div class="editor" hidden={showing !== 'code' && showing !== 'files'}>
+		<div class="editor" class:hidden={showing !== 'code' && showing !== 'files'}>
 			<Dialog
 				isOpen={showing === 'files'}
 				on:dismiss={() => (showing = 'code')}
@@ -51,10 +51,10 @@
 			</Dialog>
 			<svelte:component this={Editor} />
 		</div>
-		<div hidden={showing !== 'iframe'}>
+		<div class:hidden={showing !== 'iframe'}>
 			<Iframe />
 		</div>
-		<div hidden={showing !== 'terminal'}>
+		<div class:hidden={showing !== 'terminal'}>
 			<svelte:component this={Console} bind:update_height />
 		</div>
 	</main>
@@ -79,5 +79,8 @@
 		display: grid;
 		grid-template-rows: min-content 1fr;
 		position: relative;
+	}
+	.hidden{
+		display: none
 	}
 </style>
