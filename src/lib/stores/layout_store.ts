@@ -4,33 +4,32 @@ interface LayoutStore {
 	file_tree: boolean;
 	terminal: boolean;
 	show_config: boolean;
+	folders_first: boolean;
 }
 
 const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: true,
 	terminal: false,
-	show_config: false
+	show_config: false,
+	folders_first: false
 });
 
-function toggle_file_tree() {
+async function toggle_state(key: keyof LayoutStore) {
 	update((state) => ({
 		...state,
-		file_tree: !state.file_tree
+		[key]: !state[key]
 	}));
 }
 
-function toggle_terminal() {
-	update((state) => ({
-		...state,
-		terminal: !state.terminal
-	}));
-}
+const toggle_file_tree = () => toggle_state('file_tree');
+const toggle_terminal = () => toggle_state('terminal');
+const toggle_config = () => toggle_state('show_config');
+const toggle_sort = () => toggle_state('folders_first');
 
-function toggle_config() {
-	update((state) => ({
-		...state,
-		show_config: !state.show_config
-	}));
-}
-
-export const layout_store = { subscribe, toggle_file_tree, toggle_terminal, toggle_config };
+export const layout_store = {
+	subscribe,
+	toggle_file_tree,
+	toggle_terminal,
+	toggle_config,
+	toggle_sort
+};
