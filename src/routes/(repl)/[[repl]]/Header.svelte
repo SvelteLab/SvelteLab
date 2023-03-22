@@ -12,6 +12,7 @@
 	import { get_theme } from '$lib/theme';
 	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
+	import { onMount } from 'svelte';
 	import Profile from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Download from '~icons/material-symbols/download-rounded';
@@ -24,11 +25,13 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import { on_command } from '../commands';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
+	let fork_form: HTMLFormElement;
 	let open_menu = null as null | 'share' | 'profile';
 
 	function toggle_menu(kind: typeof open_menu & {}) {
@@ -53,6 +56,12 @@
 			url: share_url.toString()
 		});
 	}
+
+	onMount(() => {
+		return on_command('fork', () => {
+			fork_form.submit();
+		});
+	});
 </script>
 
 <header>
@@ -143,8 +152,9 @@
 		<Download />
 	</AsyncButton>
 
-	{#if user}
+	{#if user && $repl_id}
 		<form
+			bind:this={fork_form}
 			use:enhance={() => {
 				forking = true;
 				return ({ update }) => {
