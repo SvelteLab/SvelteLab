@@ -25,7 +25,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import { on_command } from '../commands';
+	import { on_command } from '../command_runner/commands';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});

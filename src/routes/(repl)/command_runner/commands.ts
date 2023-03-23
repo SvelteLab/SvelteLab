@@ -2,11 +2,11 @@ import { page } from '$app/stores';
 import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
 import { open_file } from '$lib/tabs';
-import { error } from '$lib/toast';
 import type { Command } from '$lib/types';
 import { files } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
 import { derived, type Readable } from 'svelte/store';
+import AddRoute from './commands_components/AddRoute.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -50,7 +50,6 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}));
 
 	// ADD SAVE TO COMMANDS
-	console.log($page.data.user);
 	if ($page.data.user) {
 		if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
 			commands_to_return.push({
@@ -80,11 +79,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			command: 'create-route',
 			title: 'Create route',
 			subtitle: 'create a new sveltekit route',
-			action(path) {
-				if (path) {
-					console.log(path);
-				}
-			}
+			action_component: AddRoute
 		});
 
 		// ADD CREATE ROUTE
@@ -92,10 +87,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			command: 'open',
 			title: 'Open',
 			subtitle: 'open a file',
-			action(path) {
-				if (path) {
-					open_file(path);
-				}
+			action() {
+				console.log('');
 			}
 		});
 	}

@@ -11,8 +11,8 @@
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Tip from '~icons/material-symbols/tips-and-updates';
 	import type { LayoutData } from './$types';
-	import CommandRunner from './CommandRunner.svelte';
-	import { commands } from './commands';
+	import CommandRunner from './command_runner/CommandRunner.svelte';
+	import { commands } from './command_runner/commands';
 
 	export let data: LayoutData;
 
