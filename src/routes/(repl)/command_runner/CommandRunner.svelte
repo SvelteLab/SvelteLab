@@ -72,7 +72,7 @@
 				}
 			}}
 		>
-			<input bind:value={search} placeholder="🔍 search for a command... [Esc to quit]" />
+			<input bind:value={search} placeholder="🔍 search for a file (type > for commands)..." />
 		</form>
 	</section>
 	<ul>
@@ -159,6 +159,7 @@
 		display: grid;
 		align-content: start;
 		gap: 0.5rem;
+		list-style: none;
 	}
 	section:before {
 		content: '';
