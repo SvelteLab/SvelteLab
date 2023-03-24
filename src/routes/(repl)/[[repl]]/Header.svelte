@@ -25,7 +25,9 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import { on_command } from '../command_runner/commands';
+	import { command_runner } from '$lib/stores/command_runner_store';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
@@ -86,7 +88,14 @@
 		</button>
 	{/if}
 	<div class="grow" />
-
+	<button
+		on:click={() => {
+			command_runner.open();
+		}}
+		title="Open Command runner"
+	>
+		<Cmd />
+	</button>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {

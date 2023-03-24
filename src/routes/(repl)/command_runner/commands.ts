@@ -7,6 +7,7 @@ import { files } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
 import { derived, type Readable } from 'svelte/store';
 import AddRoute from './commands_components/AddRoute.svelte';
+import { get_theme } from '$lib/theme';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -73,25 +74,35 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				}
 			});
 		}
-
-		// ADD CREATE ROUTE
-		commands_to_return.push({
-			command: 'create-route',
-			title: 'Create route',
-			subtitle: 'create a new sveltekit route',
-			action_component: AddRoute
-		});
-
-		// ADD CREATE ROUTE
-		commands_to_return.push({
-			command: 'open',
-			title: 'Open',
-			subtitle: 'open a file',
-			action() {
-				console.log('');
-			}
-		});
 	}
+
+	// ADD CREATE ROUTE
+	commands_to_return.push({
+		command: 'create-route',
+		title: 'Create route',
+		subtitle: 'create a new sveltekit route',
+		action_component: AddRoute
+	});
+
+	// ADD SWITCH THEME
+	commands_to_return.push({
+		command: 'switch-theme',
+		title: 'Switch theme',
+		subtitle: 'switch the theme for the webapp',
+		action() {
+			get_theme().change_preference();
+		}
+	});
+
+	// ADD REMOVE PREFERENCE
+	commands_to_return.push({
+		command: 'remove-theme-preference',
+		title: 'Remove theme Preference',
+		subtitle: 'remove the theme preference for the webapp',
+		action() {
+			get_theme().remove_preference();
+		}
+	});
 
 	return commands_to_return;
 });

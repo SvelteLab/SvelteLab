@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
 	import { onMount } from 'svelte';
 
@@ -22,31 +23,41 @@
 
 	let click_outside_handler: ((e: MouseEvent) => void) | undefined = undefined;
 
-	onMount(() => {
-		dialog.addEventListener('close', () => {
-			search = '';
-			click_outside_handler = undefined;
-		});
-	});
+	function open_command_runner() {
+		dialog.showModal();
+		click_outside_handler = DEFAULT_CLICK_OUTSIDE_HANDLER;
+	}
+
+	$: {
+		if ($command_runner) {
+			open_command_runner();
+		}
+	}
 </script>
 
 <svelte:window
 	on:click={click_outside_handler}
 	on:keydown={(e) => {
-		if (!(e.code === 'KeyE' && e.ctrlKey)) return;
+		if (!(e.code === 'KeyE' && e.ctrlKey) || dialog.open) return;
 		e.preventDefault();
-		dialog.showModal();
-		click_outside_handler = DEFAULT_CLICK_OUTSIDE_HANDLER;
+		open_command_runner();
 	}}
 	on:keydown={(e) => {
-		if (!(e.code === 'KeyP' && e.ctrlKey)) return;
+		if (!(e.code === 'KeyP' && e.ctrlKey) || dialog.open) return;
 		e.preventDefault();
-		dialog.showModal();
 		search = '> ';
-		click_outside_handler = DEFAULT_CLICK_OUTSIDE_HANDLER;
+		open_command_runner();
 	}}
 />
-<dialog bind:this={dialog}>
+<dialog
+	bind:this={dialog}
+	on:close={() => {
+		search = '';
+		showed_action_component = null;
+		click_outside_handler = undefined;
+		command_runner.close();
+	}}
+>
 	<section>
 		<form
 			on:submit|preventDefault={() => {
@@ -109,7 +120,7 @@
 		border: 0;
 		padding: 1rem;
 		margin: auto;
-		min-width: 50vw;
+		width: min(80rem, 90%);
 		background-color: transparent;
 		color: var(--sk-text-1);
 		filter: drop-shadow(0 4px 8px rgb(0 0 0 / 30%)) drop-shadow(0 2px 8px rgb(0 0 0 / 30%));
@@ -137,7 +148,7 @@
 		z-index: 10;
 	}
 	ul {
-		height: 30vh;
+		height: 40vh;
 		overflow-y: auto;
 		background-color: var(--result-bg);
 		margin: 0;

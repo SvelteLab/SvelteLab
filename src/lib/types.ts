@@ -1,4 +1,5 @@
-import type { SvelteComponentTyped } from 'svelte';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { ComponentType, SvelteComponentTyped } from 'svelte';
 
 export type SvelteError = {
 	name: string;
@@ -17,10 +18,8 @@ export type SvelteError = {
 	frame: string;
 } & Error;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DistributedKeyOf<T> = T extends any ? keyof T : never;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type CreateExclusiveUnion<T, U = T> = T extends any
 	? T & Partial<Record<Exclude<DistributedKeyOf<U>, keyof T>, never>>
 	: never;
@@ -34,10 +33,6 @@ export type Command = {
 			action: () => void;
 	  }
 	| {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			action_component: new (...args: any[]) => SvelteComponentTyped<
-				any,
-				{ completed: CustomEvent<unknown> }
-			>;
+			action_component: ComponentType<SvelteComponentTyped<any, { completed: CustomEvent<any> }>>;
 	  }
 >;
