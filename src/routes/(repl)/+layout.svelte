@@ -2,16 +2,17 @@
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
+	import Dialog from '$lib/components/Dialog.svelte';
 	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { tips_store } from '$lib/stores/tips_store';
 	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
-	import Dialog from '$lib/components/Dialog.svelte';
-	import { onMount } from 'svelte';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Tip from '~icons/material-symbols/tips-and-updates';
 	import type { LayoutData } from './$types';
+	import CommandRunner from './command_runner/CommandRunner.svelte';
+	import { commands } from './command_runner/commands';
 
 	export let data: LayoutData;
 
@@ -66,7 +67,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <slot />
-
+<CommandRunner commands={$commands} />
 <Dialog is_open={isTipOpen && $tips_store.no_config && first_time}>
 	<svelte:fragment slot="dialog-title">
 		<Tip />[TIP] No config to the extreme
