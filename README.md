@@ -19,6 +19,7 @@ Find us on:
 
 - [🐙 GitHub](https://github.com/svelteblitz/svelteblitz)
 - [💬 Discord](https://discord.gg/FbnT6wujQx)
+- 🐦 Twitter [@PaoloRicciuti](https://twitter.com/PaoloRicciuti) and[@SarcevicAntonio](https://twitter.com/SarcevicAntonio)
 
 ---
 
