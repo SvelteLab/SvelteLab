@@ -119,9 +119,10 @@
 <style>
 	dialog {
 		border: 0;
-		padding: 1rem;
+		padding: 1px;
 		margin: auto;
-		width: min(80rem, 90%);
+		max-width: 80rem;
+		width: 100%;
 		background-color: transparent;
 		color: var(--sk-text-1);
 		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
@@ -199,5 +200,11 @@
 	.action-component {
 		background-color: var(--sk-back-4);
 		padding: 1rem;
+	}
+	@media only screen and (max-width: 500px) {
+		ul,
+		input {
+			border-radius: 0;
+		}
 	}
 </style>
