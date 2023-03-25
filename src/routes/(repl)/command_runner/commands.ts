@@ -4,16 +4,18 @@ import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
 import { layout_store } from '$lib/stores/layout_store';
-import { open_file } from '$lib/tabs';
+import { close_file, current_tab, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
-import { derived, type Readable } from 'svelte/store';
+import { tick } from 'svelte';
+import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
+import Format from '~icons/material-symbols/cleaning-services';
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
@@ -63,6 +65,20 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			open_file(file.path);
 		}
 	}));
+
+	commands_to_return.push({
+		command: 'format-current',
+		title: 'Format',
+		subtitle: 'prettier current file',
+		icon: Format,
+		async action() {
+			const $current_tab = get(current_tab);
+			close_file($current_tab);
+			await tick();
+			await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
+			open_file($current_tab);
+		}
+	});
 
 	commands_to_return.push({
 		command: 'create-route',
