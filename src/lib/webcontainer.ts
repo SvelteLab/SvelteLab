@@ -8,9 +8,10 @@ import {
 	type WebContainerProcess
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent } from 'lz-string';
+import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
 import { is_repl_to_save, repl_name } from './stores/repl_id_store';
-import { open_file } from './tabs';
+import { close_all_tabs, open_file } from './tabs';
 import { deferred_promise } from './utils';
 
 /**
@@ -286,6 +287,9 @@ export const webcontainer = {
 	subscribe,
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
+		// avoid ghost files from previous projects
+		close_all_tabs();
+		await tick();
 		// we do this here to avoid opening a non existing file
 		if (does_file_exist(files, './src/routes/+page.svelte')) {
 			open_file('./src/routes/+page.svelte');
