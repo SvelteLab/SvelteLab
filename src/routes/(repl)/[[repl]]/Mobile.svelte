@@ -10,7 +10,8 @@
 	export let Console: ComponentType<SvelteComponentTyped>;
 	export let Editor: ComponentType<SvelteComponentTyped>;
 
-	export let showing: 'files' | 'code' | 'iframe' | 'terminal' = 'code';
+	let showing: 'code' | 'iframe' | 'terminal' = 'code';
+	let showing_files = false;
 
 	let update_height: () => void;
 
@@ -25,30 +26,29 @@
 <div class="container">
 	<Header mobile />
 	<main>
-		<div class="editor" class:hidden={showing !== 'code' && showing !== 'files'}>
-			<Dialog
-				isOpen={showing === 'files'}
-				on:dismiss={() => (showing = 'code')}
-				noCloseButton
-				includedTrigger={false}
-				dialogIn={fly}
-				dialogOut={fly}
-				dialogInOptions={{ x: -500 }}
-				dialogOutOptions={{ x: -500 }}
-				autofocus={false}
-				--as-dialog-padding="0"
-				--as-dialog-top="calc(50% + 3.8rem)"
-				--as-dialog-left="0"
-				--as-dialog-right="auto"
-				--as-dialog-transform="translateY(-50%)"
-				--as-dialog-border-radius="0"
-				--as-dialog-width="calc(100% - 4em)"
-				--as-dialog-max-width="800px"
-				--as-dialog-height="100%"
-				--as-dialog-max-height="calc(100% - 2em)"
-			>
-				<FileActions />
-			</Dialog>
+		<Dialog
+			bind:isOpen={showing_files}
+			noCloseButton
+			includedTrigger={false}
+			dialogIn={fly}
+			dialogOut={fly}
+			dialogInOptions={{ x: -500 }}
+			dialogOutOptions={{ x: -500 }}
+			autofocus={false}
+			--as-dialog-padding="0"
+			--as-dialog-top="calc(50% + 3.8rem)"
+			--as-dialog-left="0"
+			--as-dialog-right="auto"
+			--as-dialog-transform="translateY(-50%)"
+			--as-dialog-border-radius="0"
+			--as-dialog-width="calc(100% - 4em)"
+			--as-dialog-max-width="800px"
+			--as-dialog-height="100%"
+			--as-dialog-max-height="calc(100% - 2em)"
+		>
+			<FileActions />
+		</Dialog>
+		<div class="editor" class:hidden={showing !== 'code'}>
 			<svelte:component this={Editor} />
 		</div>
 		<div class:hidden={showing !== 'iframe'}>
@@ -58,7 +58,7 @@
 			<svelte:component this={Console} bind:update_height />
 		</div>
 	</main>
-	<MobileFooter bind:showing />
+	<MobileFooter bind:showing bind:showing_files />
 </div>
 
 <style>
@@ -80,7 +80,7 @@
 		grid-template-rows: min-content 1fr;
 		position: relative;
 	}
-	.hidden{
-		display: none
+	.hidden {
+		display: none;
 	}
 </style>

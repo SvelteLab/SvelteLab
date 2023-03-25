@@ -4,14 +4,15 @@
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 
-	export let showing: 'files' | 'code' | 'iframe' | 'terminal' = 'code';
+	export let showing: 'code' | 'iframe' | 'terminal' = 'code';
+	export let showing_files = false;
 </script>
 
 <nav>
 	<button
 		title="Show File Browser"
-		aria-pressed={showing === 'files'}
-		on:click={() => (showing = 'files')}
+		aria-pressed={showing_files}
+		on:click={() => (showing_files = true)}
 	>
 		<FileBrowser />
 	</button>
