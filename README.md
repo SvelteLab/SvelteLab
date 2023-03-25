@@ -15,8 +15,7 @@
 > **Note**
 > If you are using an AdBlocker like uBlock Origin, you might have to disable it while developing due to the Vercel Analytics script.
 
-````
+```
 pnpm i
 pnpm dev
 ```
-````
