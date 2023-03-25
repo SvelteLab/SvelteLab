@@ -103,15 +103,17 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		}
 	});
 
-	commands_to_return.push({
-		command: 'profile',
-		title: 'Profile',
-		subtitle: 'browse your saved projects',
-		icon: Profile,
-		action() {
-			goto('/profile');
-		}
-	});
+	if ($page.data.user) {
+		commands_to_return.push({
+			command: 'profile',
+			title: 'Profile',
+			subtitle: 'browse your saved projects',
+			icon: Profile,
+			action() {
+				goto('/profile');
+			}
+		});
+	}
 
 	commands_to_return.push({
 		command: 'new-project',
