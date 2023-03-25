@@ -139,7 +139,7 @@ a {
 :root {
 	--sb-track-color: var(--sk-back-1);
 	--sb-thumb-color: var(--sk-back-5);
-	--sb-size: 8px;
+	--sb-size: 1rem;
 }
 
 * {
@@ -153,6 +153,7 @@ a {
 
 *::-webkit-scrollbar {
 	width: var(--sb-size);
+	height: var(--sb-size);
 }
 
 *::-webkit-scrollbar-track {
