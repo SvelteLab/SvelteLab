@@ -394,6 +394,9 @@ export const webcontainer = {
 		return run_command('npm run dev');
 	},
 	run_command,
+	async spawn(command: string, args: string[]) {
+		return webcontainer_instance.spawn(command, args);
+	},
 	async add_file(path: string) {
 		await webcontainer_instance.fs.writeFile(path, '');
 		//if we are not already listening we can add the file in store ourself
