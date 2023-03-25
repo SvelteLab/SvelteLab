@@ -1,3 +1,5 @@
+import README from '../../../README.md?raw';
+
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 
 declare module '@webcontainer/api' {
@@ -10,7 +12,11 @@ const project = import.meta.glob('./**/!(package-lock.json)', {
 	as: 'raw',
 	eager: true
 });
+
+project['./project/README.md'] = README;
+
 const project_files: FileSystemTree = {};
+
 for (const file in project) {
 	const path = file.split('/').slice(2);
 	let subtree = project_files;
