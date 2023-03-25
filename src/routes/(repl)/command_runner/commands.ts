@@ -1,17 +1,21 @@
+import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
 import { open_file } from '$lib/tabs';
+import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
-import { files } from '$lib/webcontainer';
+import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
 import { derived, type Readable } from 'svelte/store';
-import AddRoute from './commands_components/AddRoute.svelte';
-import { get_theme } from '$lib/theme';
-import Save from '~icons/material-symbols/save';
-import Fork from '~icons/material-symbols/fork-right-rounded';
+import Profile from '~icons/material-symbols/account-circle';
+import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
+import Download from '~icons/material-symbols/download-rounded';
+import Fork from '~icons/material-symbols/fork-right-rounded';
 import Themes from '~icons/material-symbols/routine';
+import Save from '~icons/material-symbols/save';
+import AddRoute from './commands_components/AddRoute.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -54,7 +58,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		}
 	}));
 
-	// ADD SAVE TO COMMANDS
+	commands_to_return.push({
+		command: 'create-route',
+		title: 'Create route',
+		subtitle: 'create a new sveltekit route',
+		icon: Route,
+		action_component: AddRoute
+	});
+
 	if ($page.data.user) {
 		if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
 			commands_to_return.push({
@@ -82,16 +93,36 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		}
 	}
 
-	// ADD CREATE ROUTE
 	commands_to_return.push({
-		command: 'create-route',
-		title: 'Create route',
-		subtitle: 'create a new sveltekit route',
-		icon: Route,
-		action_component: AddRoute
+		command: 'download-zip',
+		title: 'Download',
+		subtitle: 'download current project as .zip',
+		icon: Download,
+		action() {
+			webcontainer.save_as_zip();
+		}
 	});
 
-	// ADD SWITCH THEME
+	commands_to_return.push({
+		command: 'profile',
+		title: 'Profile',
+		subtitle: 'browse your saved projects',
+		icon: Profile,
+		action() {
+			goto('/profile');
+		}
+	});
+
+	commands_to_return.push({
+		command: 'new-project',
+		title: 'New',
+		subtitle: 'create a new blank project',
+		icon: New,
+		action() {
+			goto('/');
+		}
+	});
+
 	commands_to_return.push({
 		command: 'switch-theme',
 		title: 'Switch Theme',
@@ -102,13 +133,11 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		}
 	});
 
-	// ADD REMOVE PREFERENCE
 	commands_to_return.push({
 		command: 'remove-theme-preference',
 		title: 'Remove Theme Preference',
 		subtitle: 'use OS preference',
 		icon: Themes,
-
 		action() {
 			get_theme().remove_preference();
 		}
