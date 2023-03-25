@@ -8,6 +8,10 @@ import type { FileSystemTree } from '@webcontainer/api';
 import { derived, type Readable } from 'svelte/store';
 import AddRoute from './commands_components/AddRoute.svelte';
 import { get_theme } from '$lib/theme';
+import Save from '~icons/material-symbols/save';
+import Fork from '~icons/material-symbols/fork-right-rounded';
+import Route from '~icons/material-symbols/alt-route-rounded';
+import Themes from '~icons/material-symbols/routine';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -55,8 +59,9 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
 			commands_to_return.push({
 				command: 'save',
-				title: 'Save project',
+				title: 'Save',
 				subtitle: 'save the current project',
+				icon: Save,
 				action() {
 					save_repl();
 				}
@@ -65,8 +70,9 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		if ($page.data.id) {
 			commands_to_return.push({
 				command: 'fork',
-				title: 'Fork project',
+				title: 'Fork',
 				subtitle: 'fork the current project',
+				icon: Fork,
 				action() {
 					commands_callbacks.get('fork')?.forEach((callback) => {
 						if (typeof callback === 'function') callback();
@@ -81,14 +87,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		command: 'create-route',
 		title: 'Create route',
 		subtitle: 'create a new sveltekit route',
+		icon: Route,
 		action_component: AddRoute
 	});
 
 	// ADD SWITCH THEME
 	commands_to_return.push({
 		command: 'switch-theme',
-		title: 'Switch theme',
-		subtitle: 'switch the theme for the webapp',
+		title: 'Switch Theme',
+		subtitle: 'switch the theme',
+		icon: Themes,
 		action() {
 			get_theme().change_preference();
 		}
@@ -97,8 +105,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	// ADD REMOVE PREFERENCE
 	commands_to_return.push({
 		command: 'remove-theme-preference',
-		title: 'Remove theme Preference',
-		subtitle: 'remove the theme preference for the webapp',
+		title: 'Remove Theme Preference',
+		subtitle: 'use OS preference',
+		icon: Themes,
+
 		action() {
 			get_theme().remove_preference();
 		}

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ComponentType, SvelteComponentTyped } from 'svelte';
+import type { ComponentType, SvelteComponent, SvelteComponentTyped } from 'svelte';
 
 export type SvelteError = {
 	name: string;
@@ -27,6 +27,7 @@ type CreateExclusiveUnion<T, U = T> = T extends any
 export type Command = {
 	title: string;
 	subtitle?: string;
+	icon?: typeof SvelteComponent;
 	command?: string;
 } & CreateExclusiveUnion<
 	| {

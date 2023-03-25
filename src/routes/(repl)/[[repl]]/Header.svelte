@@ -92,7 +92,7 @@
 		on:click={() => {
 			command_runner.open();
 		}}
-		title="Open Command runner"
+		title="Open Command Runner (CTRL+E)"
 	>
 		<Cmd />
 	</button>

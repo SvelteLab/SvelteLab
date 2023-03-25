@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { get_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
-	import { onMount } from 'svelte';
 
 	let search = '';
 	let dialog: HTMLDialogElement;
@@ -72,7 +72,7 @@
 				}
 			}}
 		>
-			<input bind:value={search} placeholder="🔍 search for a file (type > for commands)..." />
+			<input bind:value={search} placeholder="🔍 Search for files, or type `>` for commands..." />
 		</form>
 	</section>
 	<ul>
@@ -92,12 +92,13 @@
 					title="Launch command {command.title}"
 				>
 					{#if mode === 'file'}
-						{command.title}
-					{:else}
-						> {command.command}
+						<svelte:component this={get_icon(command.title)} />
+					{:else if command.icon}
+						<svelte:component this={command.icon} />
 					{/if}
+					{command.title}
 					{#if command.subtitle}
-						- <small>{command.subtitle}</small>
+						<small>{command.subtitle}</small>
 					{/if}
 				</button>
 				{#if command.action_component && showed_action_component === command.command}
@@ -123,11 +124,11 @@
 		width: min(80rem, 90%);
 		background-color: transparent;
 		color: var(--sk-text-1);
-		filter: drop-shadow(0 4px 8px rgb(0 0 0 / 30%)) drop-shadow(0 2px 8px rgb(0 0 0 / 30%));
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
 		--result-bg: var(--sk-back-3);
 	}
 	dialog::backdrop {
-		background-color: transparent;
+		background-color: hsla(0, 0%, 0%, 0.2);
 		backdrop-filter: blur(2px);
 	}
 	section {
@@ -136,14 +137,15 @@
 	input {
 		width: 100%;
 		border: 0;
-		padding: 1rem 2.5rem;
+		padding: 1.5rem 2.5rem;
 		font-size: 2rem;
-		background-color: var(--sk-back-4);
-		border-radius: 100vmax;
+		background-color: var(--sk-back-3);
+		border-top-left-radius: 1rem;
+		border-top-right-radius: 1rem;
 		color: inherit;
-		outline-color: white;
 	}
 	input:focus-visible {
+		outline-style: solid;
 		position: relative;
 		z-index: 10;
 	}
@@ -153,12 +155,13 @@
 		background-color: var(--result-bg);
 		margin: 0;
 		position: relative;
+		border-top: 1px solid var(--sk-back-4);
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
 		padding: 1rem;
 		display: grid;
 		align-content: start;
-		gap: 0.5rem;
+		gap: 1rem;
 		list-style: none;
 	}
 	section:before {
@@ -171,13 +174,20 @@
 		z-index: -1;
 	}
 	button {
-		background-color: var(--sk-back-5);
-		padding: 0.5rem;
+		background-color: var(--sk-back-3);
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 0.5rem 1rem;
 		border-radius: 0.5rem;
 		width: 100%;
 		text-align: left;
 		z-index: 10;
 		position: relative;
+	}
+	button:hover,
+	button:focus {
+		background-color: var(--sk-back-4);
 	}
 	.opened {
 		border-bottom-left-radius: 0;
