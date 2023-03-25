@@ -1,4 +1,4 @@
-![A mockup of a phone with a Screenshot of SvelteBlitz opened. SvelteBlitz: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!](./header.png)
+<img crossorigin="anonymous" src="https://i.imgur.com/6deSDsC.png" alt="A mockup of a phone with a Screenshot of SvelteBlitz opened. SvelteBlitz: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
 
 # ⚡ SvelteBlitz
 
@@ -7,6 +7,20 @@
 🧡 Made with Svelte, for Svelte, by Svelte lovers!
 
 🔌 Powered by SvelteKit, WebContainers, CodeMirror, Xterm.js and PocketBase
+
+Features:
+
+- 🔀 save, share and fork SvelteKit projects
+- 🔌 full power of Node available anywhere
+- 🧹 clean UI with hidable configs
+- ⌨️ command palette with extra features like route scaffolding and formatting
+
+Find us on:
+
+- [🐙 GitHub](https://github.com/svelteblitz/svelteblitz)
+- [💬 Discord](https://discord.gg/FbnT6wujQx)
+
+---
 
 [➡️ Try it out now!](https://svelteblitz.vercel.app/)
 
