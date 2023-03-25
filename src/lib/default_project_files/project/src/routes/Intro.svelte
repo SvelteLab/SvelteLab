@@ -1,10 +1,10 @@
 <script>
-	import { html } from '../../README.md';
-	const intro = html.split('<hr>')[0];
+	import README from '../../README.md?raw';
+	import { marked } from 'marked';
 </script>
 
 <section>
-	{@html intro}
+	{@html marked(README.split('---')[0])}
 </section>
 
 <style>
