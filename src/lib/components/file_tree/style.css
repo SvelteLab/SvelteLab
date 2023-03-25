@@ -1,9 +1,8 @@
 ul {
 	list-style: none;
 	margin: 0;
-	padding: 1rem;
-	padding-block: 0rem;
-	padding-inline-end: 0rem;
+	padding: 0;
+	padding-inline-start: 0.5em;
 	background-color: var(--sk-back-3);
 	height: 100%;
 	overflow: auto;
@@ -28,7 +27,7 @@ ul :global(ul) {
 
 li {
 	display: grid;
-	align-items: center;
+	align-items: stretch;
 	gap: 0.5em;
 	color: var(--sk-text-1);
 	min-height: 2em;
@@ -55,8 +54,8 @@ li {
 	bottom: 0;
 	right: 0;
 	display: flex;
-	padding: 0.5rem;
-	align-items: center;
+	padding-inline: 0.5rem;
+	align-items: stretch;
 	justify-content: end;
 	background-color: var(--sk-back-3);
 	color: var(--sk-text-3);
@@ -75,6 +74,9 @@ li:hover .hover-group {
 }
 
 @media (hover: none) {
+	li {
+		min-height: 3em;
+	}
 	li .hover-group {
 		display: flex;
 		font-size: 1.75rem;

@@ -72,9 +72,8 @@
 	ul {
 		list-style: none;
 		margin: 0;
-		padding: 1rem;
-		padding-block: 0rem;
-		padding-inline-end: 0rem;
+		padding: 0;
+		padding-inline-start: 0.5em;
 		background-color: var(--sk-back-3);
 		height: 100%;
 	}
@@ -146,6 +145,11 @@
 	}
 
 	@media (hover: none) {
+		.heading,
+		li {
+			min-height: 2.5em;
+		}
+
 		.heading .hover-group,
 		li .hover-group {
 			display: flex;
