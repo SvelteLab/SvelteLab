@@ -10,10 +10,7 @@ export default defineConfig({
 		Icons({
 			compiler: 'svelte',
 			customCollections: {
-				'vscode-material-icon-theme': FileSystemIconLoader(
-					'./src/icons/vscode-material-icon-theme',
-					(svg) => svg.replace(/^<svg /, '<svg fill="currentColor" ')
-				)
+				'material-icon-theme': FileSystemIconLoader('./node_modules/material-icon-theme/icons')
 			}
 		}),
 		visualizer({

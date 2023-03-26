@@ -36,6 +36,7 @@ specifiers:
   jszip: ^3.10.1
   lz-string: ^1.5.0
   marked: ^4.3.0
+  material-icon-theme: ^4.25.0
   pocketbase: ^0.12.0
   postcss: '>=8.4.6 <9.0.0'
   prettier: ^2.8.0
@@ -81,6 +82,7 @@ dependencies:
   codemirror: 6.0.1_@lezer+common@1.0.2
   jszip: 3.10.1
   lz-string: 1.5.0
+  material-icon-theme: 4.25.0
   pocketbase: 0.12.0
   svelte-codemirror-editor: 1.1.0_codemirror@6.0.1
   svelte-splitpanes: 0.7.12_svelte@3.55.1
@@ -1851,7 +1853,6 @@ packages:
 
   /lodash.merge/4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
-    dev: true
 
   /loupe/2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
@@ -1897,6 +1898,13 @@ packages:
     engines: {node: '>= 12'}
     hasBin: true
     dev: true
+
+  /material-icon-theme/4.25.0:
+    resolution: {integrity: sha512-hiA6JD1tyE5zUdqnkofcYWMRIdA6fSc4qH0awaEtrd1nc/coW2asjnSqYUsQv57ybImHGG/TL+ec2yU72fII2Q==}
+    engines: {vscode: ^1.51.0}
+    dependencies:
+      lodash.merge: 4.6.2
+    dev: false
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}

@@ -7,9 +7,9 @@ import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
 import TS from '~icons/vscode-icons/file-type-typescript-official';
 import Vite from '~icons/vscode-icons/file-type-vite';
-import FolderLib from '~icons/vscode-material-icon-theme/folder-lib';
-import FolderRoutes from '~icons/vscode-material-icon-theme/folder-routes';
-import FolderSrc from '~icons/vscode-material-icon-theme/folder-src';
+import FolderLib from '~icons/material-icon-theme/folder-lib';
+import FolderRoutes from '~icons/material-icon-theme/folder-routes';
+import FolderSrc from '~icons/material-icon-theme/folder-src';
 import Folder from '~icons/material-symbols/folder-rounded';
 
 const folder_icons = new Map<RegExp, typeof File>([
