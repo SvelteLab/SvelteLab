@@ -1,4 +1,8 @@
+import README from '../../../README.md?raw';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
+import { marked } from 'marked';
+
+const intro = marked(README.split('---')[0]);
 
 declare module '@webcontainer/api' {
 	export interface DirectoryNode {
@@ -10,7 +14,9 @@ const project = import.meta.glob('./**/!(package-lock.json)', {
 	as: 'raw',
 	eager: true
 });
+
 const project_files: FileSystemTree = {};
+
 for (const file in project) {
 	const path = file.split('/').slice(2);
 	let subtree = project_files;
@@ -27,7 +33,7 @@ for (const file in project) {
 		} else {
 			subtree[part] = {
 				file: {
-					contents: project[file]
+					contents: project[file].replace('%sveltekit.intro%', intro)
 				}
 			};
 		}

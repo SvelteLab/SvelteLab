@@ -6,7 +6,8 @@
 	import { save_repl } from '$lib/api/client/repls';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { share } from '$lib/share';
+	import { share_with_hash, share_with_id } from '$lib/share';
+	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
@@ -17,6 +18,7 @@
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
+	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import Sun from '~icons/material-symbols/light-mode';
 	import Url from '~icons/material-symbols/link';
 	import SignOut from '~icons/material-symbols/logout-rounded';
@@ -25,9 +27,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import { on_command } from '../command_runner/commands';
-	import { command_runner } from '$lib/stores/command_runner_store';
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
@@ -38,25 +38,6 @@
 
 	function toggle_menu(kind: typeof open_menu & {}) {
 		open_menu = open_menu === kind ? null : kind;
-	}
-
-	async function share_with_hash() {
-		const share_url = await webcontainer.get_share_url();
-		await share({
-			text: `Take a look at my REPL - ${repl_name}`,
-			title: 'Svelteblitz',
-			url: share_url.toString()
-		});
-	}
-
-	async function share_with_id() {
-		const share_url = new URL(window.location.href);
-		share_url.pathname = $repl_id ?? '';
-		await share({
-			text: `Take a look at my REPL - ${repl_name}`,
-			title: 'Svelteblitz',
-			url: share_url.toString()
-		});
 	}
 
 	onMount(() => {
@@ -117,7 +98,7 @@
 			on:click={async () => {
 				share_with_hash();
 			}}
-			title="Share"
+			title="Share via Hash"
 		>
 			<Share />
 		</button>

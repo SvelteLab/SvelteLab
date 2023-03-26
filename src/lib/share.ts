@@ -1,4 +1,26 @@
+import { get } from 'svelte/store';
+import { repl_id, repl_name } from './stores/repl_id_store';
 import { error, success } from './toast';
+import { webcontainer } from './webcontainer';
+
+export async function share_with_hash() {
+	const share_url = await webcontainer.get_share_url();
+	await share({
+		text: `Take a look at my REPL - ${get(repl_name)}`,
+		title: 'Svelteblitz',
+		url: share_url.toString()
+	});
+}
+
+export async function share_with_id() {
+	const share_url = new URL(window.location.href);
+	share_url.pathname = get(repl_id) ?? '';
+	await share({
+		text: `Take a look at my REPL - ${get(repl_name)}`,
+		title: 'Svelteblitz',
+		url: share_url.toString()
+	});
+}
 
 export async function share(
 	shareInfo: ShareData,

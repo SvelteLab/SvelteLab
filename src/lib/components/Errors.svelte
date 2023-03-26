@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { SvelteError } from '$lib/types';
 	import { compile } from 'svelte/compiler';
+	import { slide } from 'svelte/transition';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
-	import WarningIcon from '~icons/material-symbols/warning-outline';
+	import WarningIcon from '~icons/material-symbols/warning-outline-rounded';
 
 	export let code = '';
 	export let warnings = [] as Warning[];
@@ -22,62 +23,48 @@
 	$: parse(code);
 </script>
 
-<ul class="errors-container">
+<ul>
 	{#if error}
-		<li class="error"><ErrorIcon />{error.message} at {error.start.line}:{error.start.column}</li>
+		<li class="error" transition:slide={{ delay: 250, duration: 250 }}>
+			<ErrorIcon />{error.message} at {error.start.line}:{error.start.column}
+		</li>
 	{/if}
 
 	{#each warnings as warning}
-		<li class="warning"><WarningIcon />{warning.message}</li>
+		<li class="warning" transition:slide={{ delay: 250, duration: 250 }}>
+			<WarningIcon />{warning.message}
+			{#if warning.start}
+				at {warning.start.line}:{warning.start.column}
+			{/if}
+		</li>
 	{/each}
 </ul>
 
 <style>
-	.errors-container {
+	ul {
 		position: absolute;
 		inset: 0;
 		top: auto;
-		color: hsl(0, 0%, 10%);
-		font-weight: bold;
+		color: var(--sk-back-1);
 		font-size: var(--sk-text-xs);
 		margin: 0;
 		padding: 0;
 	}
 	li {
 		padding: 0.3em;
-		border-bottom: 1px solid hsl(0, 0%, 10%);
-		display: grid;
-		grid-template-columns: min-content 1fr;
-		gap: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding: 0.5em;
+		border-top: 1px solid var(--sk-back-4);
+	}
+	li :global(svg) {
+		font-size: var(--sk-text-m);
 	}
 	.warning {
-		background-image: linear-gradient(
-			80deg,
-			hsl(29deg 100% 50%) 0%,
-			hsl(32deg 100% 50%) 15%,
-			hsl(36deg 100% 50%) 27%,
-			hsl(39deg 100% 49%) 37%,
-			hsl(43deg 100% 48%) 46%,
-			hsl(46deg 100% 48%) 55%,
-			hsl(51deg 100% 47%) 65%,
-			hsl(55deg 100% 45%) 74%,
-			hsl(60deg 93% 46%) 85%,
-			hsl(65deg 83% 53%) 100%
-		);
+		background-color: hsl(32, 92%, 47%);
 	}
 	.error {
-		background-image: linear-gradient(
-			80deg,
-			hsl(0deg 100% 50%) 0%,
-			hsl(0deg 98% 51%) 15%,
-			hsl(0deg 97% 51%) 27%,
-			hsl(0deg 95% 52%) 37%,
-			hsl(0deg 93% 52%) 46%,
-			hsl(0deg 91% 53%) 55%,
-			hsl(0deg 89% 53%) 65%,
-			hsl(0deg 87% 53%) 74%,
-			hsl(0deg 85% 53%) 85%,
-			hsl(0deg 83% 53%) 100%
-		);
+		background-color: hsl(332, 86%, 46%);
 	}
 </style>
