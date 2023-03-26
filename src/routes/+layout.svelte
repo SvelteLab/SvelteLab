@@ -26,6 +26,7 @@
 		position: absolute;
 		z-index: 999;
 		padding: 1em;
+		left: -90001px;
 		background-color: var(--sk-back-1);
 		color: var(--sk-text-1);
 		opacity: 0;
@@ -34,6 +35,7 @@
 		border-radius: 0.5rem;
 	}
 	.skip-to-main-content-link:focus {
+		left: 0;
 		opacity: 1;
 	}
 </style>
