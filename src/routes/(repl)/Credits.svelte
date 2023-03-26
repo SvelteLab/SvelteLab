@@ -5,7 +5,7 @@
 	export function open_credits() {
 		show_credits.set(true);
 	}
-	const show_credits = writable(true);
+	const show_credits = writable(false);
 </script>
 
 <script>
