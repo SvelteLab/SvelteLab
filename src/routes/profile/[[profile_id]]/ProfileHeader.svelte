@@ -87,7 +87,8 @@
 
 <style>
 	header {
-		padding: 0.75em 1.5em;
+		--padding-y: 0.5em;
+		padding: var(--padding-y) 1em;
 		display: flex;
 		gap: 1em;
 		background-color: var(--sk-back-2);
@@ -132,11 +133,18 @@
 		aspect-ratio: 1;
 	}
 
+	a,
 	button {
-		font-size: 1.25em;
-		display: grid;
-		place-items: center;
+		gap: 1rem;
+		display: flex;
+		align-items: center;
 		position: relative;
-		padding-block: 0.25rem;
+		padding: 0.5rem;
+		color: var(--sk-text-1);
+	}
+
+	a :global(svg),
+	button :global(svg) {
+		font-size: 1.25em;
 	}
 </style>

@@ -15,6 +15,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import Profile from '~icons/material-symbols/account-circle';
+	import Login from '~icons/material-symbols/login-rounded';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
@@ -28,6 +29,8 @@
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import { on_command } from '../command_runner/commands';
+
+	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
@@ -57,7 +60,7 @@
 			on:click={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree}
 		>
-			<FileBrowser />
+			<FileBrowser /> Files
 		</button>
 
 		<button
@@ -65,7 +68,7 @@
 			on:click={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal}
 		>
-			<Terminal />
+			<Terminal /> Terminal
 		</button>
 	{/if}
 	<div class="grow" />
@@ -193,7 +196,7 @@
 			</button>
 			<ul class="right-aligned" aria-hidden={open_menu !== 'profile'}>
 				<li>
-					<a href="/profile" class="btn" title="Profile"><Profile /> Your profile</a>
+					<a href="/profile" title="Profile"><Profile /> Your profile</a>
 				</li>
 				<li>
 					<form
@@ -233,19 +236,19 @@
 					}
 				}
 			}}
-			class="btn"
+			class="login"
 			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
-			<Profile />
+			<Login /> Login with GitHub
 		</a>
 	{/if}
 </header>
 
 <style>
 	header {
-		--padding-y: 0.75em;
-		padding: var(--padding-y) 1.5em;
+		--padding-y: 0.5em;
+		padding: var(--padding-y) 1em;
 		display: flex;
 		gap: 1em;
 		background-color: var(--sk-back-2);
@@ -280,12 +283,19 @@
 		aspect-ratio: 1;
 	}
 
+	a,
 	button {
-		font-size: 1.25em;
-		display: grid;
-		place-items: center;
+		gap: 1rem;
+		display: flex;
+		align-items: center;
 		position: relative;
-		padding-block: 0.25rem;
+		padding: 0.5rem;
+		color: var(--sk-text-1);
+	}
+
+	a :global(svg),
+	button :global(svg) {
+		font-size: 1.25em;
 	}
 
 	button[aria-pressed='true']::after {
@@ -315,7 +325,7 @@
 		position: absolute;
 		background-color: var(--sk-back-4);
 		list-style: none;
-		top: calc(100% + var(--padding-y));
+		/* top: calc(100% + var(--padding-y)); */
 		padding: 0;
 		margin: 0;
 		left: 0;
@@ -343,5 +353,8 @@
 	li :is(button, a):focus-visible {
 		/* this is to always show the outline on top */
 		z-index: 20;
+	}
+	.login {
+		color: var(--sk-theme-1);
 	}
 </style>
