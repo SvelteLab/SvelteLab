@@ -43,13 +43,18 @@
 
 <style>
 	button {
-		font-size: 1.25em;
-		display: grid;
-		place-items: center;
+		gap: 1rem;
+		display: flex;
+		align-items: center;
 		position: relative;
-		padding-block: 0.25rem;
-		position: relative;
+		padding: 0.5rem;
+		color: var(--sk-text-1);
 	}
+
+	button :global(svg) {
+		font-size: 1.25em;
+	}
+
 	.badged::after {
 		content: '·';
 		position: absolute;

@@ -15,13 +15,12 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import Profile from '~icons/material-symbols/account-circle';
-	import Login from '~icons/material-symbols/login-rounded';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
-	import Download from '~icons/material-symbols/download-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import Sun from '~icons/material-symbols/light-mode';
 	import Url from '~icons/material-symbols/link';
+	import Login from '~icons/material-symbols/login-rounded';
 	import SignOut from '~icons/material-symbols/logout-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Save from '~icons/material-symbols/save';
@@ -73,14 +72,6 @@
 	{/if}
 	<div class="grow" />
 	<button
-		on:click={() => {
-			command_runner.open();
-		}}
-		title="Open Command Runner (CTRL+E)"
-	>
-		<Cmd />
-	</button>
-	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
 				theme.remove_preference();
@@ -96,54 +87,14 @@
 			<Moon />
 		{/if}
 	</button>
-	{#if !$repl_id}
-		<button
-			on:click={async () => {
-				share_with_hash();
-			}}
-			title="Share via Hash"
-		>
-			<Share />
-		</button>
-	{:else}
-		<div class="drop-down-wrapper">
-			<button
-				on:click={async () => {
-					toggle_menu('share');
-				}}
-				title="Share"
-			>
-				<Share />
-			</button>
-			<ul aria-hidden={open_menu !== 'share'}>
-				<li>
-					<button
-						title="Share via id"
-						on:click={() => {
-							share_with_id();
-							open_menu = null;
-						}}><Url /> Share via id</button
-					>
-				</li>
-				<li>
-					<button
-						title="Share via hash"
-						on:click={() => {
-							share_with_hash();
-							open_menu = null;
-						}}><Tag /> Share via hash</button
-					>
-				</li>
-			</ul>
-		</div>
-	{/if}
-	<AsyncButton
-		click={async () => {
-			await webcontainer.save_as_zip();
+	<button
+		on:click={() => {
+			command_runner.open();
 		}}
+		title="Open Command Runner (CTRL+E)"
 	>
-		<Download />
-	</AsyncButton>
+		<Cmd />
+	</button>
 
 	{#if user}
 		{#if $repl_id}
@@ -186,6 +137,49 @@
 				<Save />
 			</AsyncButton>
 		{/if}
+
+		{#if !$repl_id}
+			<button
+				on:click={async () => {
+					share_with_hash();
+				}}
+				title="Share via Hash"
+			>
+				<Share />
+			</button>
+		{:else}
+			<div class="drop-down-wrapper">
+				<button
+					on:click={async () => {
+						toggle_menu('share');
+					}}
+					title="Share"
+				>
+					<Share />
+				</button>
+				<ul aria-hidden={open_menu !== 'share'}>
+					<li>
+						<button
+							title="Share via id"
+							on:click={() => {
+								share_with_id();
+								open_menu = null;
+							}}><Url /> Share via id</button
+						>
+					</li>
+					<li>
+						<button
+							title="Share via hash"
+							on:click={() => {
+								share_with_hash();
+								open_menu = null;
+							}}><Tag /> Share via hash</button
+						>
+					</li>
+				</ul>
+			</div>
+		{/if}
+
 		<div class="drop-down-wrapper">
 			<button
 				on:click={() => {
@@ -194,7 +188,7 @@
 			>
 				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 			</button>
-			<ul class="right-aligned" aria-hidden={open_menu !== 'profile'}>
+			<ul aria-hidden={open_menu !== 'profile'}>
 				<li>
 					<a href="/profile" title="Profile"><Profile /> Your profile</a>
 				</li>
@@ -327,7 +321,7 @@
 		top: calc(100% + var(--padding-y));
 		padding: 0;
 		margin: 0;
-		left: 0;
+		right: 0;
 		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
 		z-index: 10;
 	}
@@ -335,10 +329,6 @@
 		border-bottom-left-radius: 0.2em;
 		border-bottom-right-radius: 0.2em;
 		overflow: hidden;
-	}
-	.right-aligned {
-		left: auto;
-		right: 0;
 	}
 	li :is(button, a) {
 		background-color: var(--sk-back-1);
