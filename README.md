@@ -10,16 +10,12 @@
 
 Features:
 
-- 🔀 save, share and fork SvelteKit projects
+- 🔀 edit, save, share and fork SvelteKit projects
 - 🔌 full power of Node available anywhere
 - 🧹 clean UI with hidable configs
 - ⌨️ command palette with extra features like route scaffolding and formatting
 
-Find us on:
-
-- [🐙 GitHub](https://github.com/svelteblitz/svelteblitz)
-- [💬 Discord](https://discord.gg/FbnT6wujQx)
-- 🐦 Twitter [@PaoloRicciuti](https://twitter.com/PaoloRicciuti) and[@SarcevicAntonio](https://twitter.com/SarcevicAntonio)
+Find us on • [🐙 GitHub](https://github.com/svelteblitz/svelteblitz) • [💬 Discord](https://discord.gg/FbnT6wujQx) • 🐦 Twitter [@PaoloRicciuti](https://twitter.com/PaoloRicciuti) and [@SarcevicAntonio](https://twitter.com/SarcevicAntonio)
 
 ---
 

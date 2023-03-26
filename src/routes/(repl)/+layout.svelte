@@ -3,9 +3,7 @@
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import Dialog from '$lib/components/Dialog.svelte';
-	import { first_time } from '$lib/first_load';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
-	import { tips_store } from '$lib/stores/tips_store';
 	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
@@ -15,8 +13,6 @@
 	import { commands } from './command_runner/commands';
 
 	export let data: LayoutData;
-
-	let isTipOpen = true;
 
 	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
@@ -67,24 +63,5 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <slot />
-<CommandRunner commands={$commands} />
-<Dialog is_open={isTipOpen && $tips_store.no_config && first_time}>
-	<svelte:fragment slot="dialog-title">
-		<Tip />[TIP] No config to the extreme
-	</svelte:fragment>
-	<p>
-		By default we don't show the usual config files associated with a Sveltekit project to keep
-		things clean and easy in the file tree. If you need to do modifications to any of this config
-		files you can tap on the little <ConfigFiles /> button at the root of the file tree.
-	</p>
-	<svelte:fragment slot="dialog-actions">
-		<button on:click={() => ($tips_store.no_config = false)}>Don't show me this again</button>
-		<button class="primary" on:click={() => (isTipOpen = false)}>Got it</button>
-	</svelte:fragment>
-</Dialog>
 
-<style>
-	.primary {
-		color: var(--sk-theme-1);
-	}
-</style>
+<CommandRunner commands={$commands} />
