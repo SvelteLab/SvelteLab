@@ -142,33 +142,35 @@
 		<Download />
 	</AsyncButton>
 
-	{#if user && $repl_id}
-		<form
-			bind:this={fork_form}
-			use:enhance={() => {
-				forking = true;
-				return ({ update }) => {
-					forking = false;
-					update();
-				};
-			}}
-			method="POST"
-			action="?/fork"
-		>
-			<input type="hidden" value={$repl_id} name="id" />
-			<AsyncButton
-				click={(e) => {
-					if (!window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
+	{#if user}
+		{#if $repl_id}
+			<form
+				bind:this={fork_form}
+				use:enhance={() => {
+					forking = true;
+					return ({ update }) => {
+						forking = false;
+						update();
+					};
 				}}
-				title="Fork Project"
-				loading={forking}
+				method="POST"
+				action="?/fork"
 			>
-				<Fork />
-			</AsyncButton>
-		</form>
+				<input type="hidden" value={$repl_id} name="id" />
+				<AsyncButton
+					click={(e) => {
+						if (!window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
+							e.stopPropagation();
+							e.preventDefault();
+						}
+					}}
+					title="Fork Project"
+					loading={forking}
+				>
+					<Fork />
+				</AsyncButton>
+			</form>
+		{/if}
 		{#if !owner_id || user.id === owner_id}
 			<AsyncButton
 				badged={$is_repl_to_save}
