@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { get_icon } from '$lib/file_icons';
 	import { close_all_tabs, close_file, current_tab, open_file, tabs } from '$lib/tabs';
 	import { onDestroy } from 'svelte';
@@ -8,6 +8,10 @@
 		//close the tabs when we unmount the component
 		close_all_tabs();
 	});
+
+	const button_refs: Record<string, HTMLButtonElement> = {};
+
+	$: $current_tab && button_refs[$current_tab]?.scrollIntoView();
 </script>
 
 <section>
@@ -15,6 +19,7 @@
 		{@const file_name = path.split('/').at(-1)}
 		<article aria-selected={path === $current_tab}>
 			<button
+				bind:this={button_refs[path]}
 				on:click={() => {
 					open_file(path);
 				}}
