@@ -8,7 +8,7 @@
 	--as-dialog-width="max(50vw, 35rem)"
 	--as-dialog--actions-justify-content="flex-end"
 	--as-dialog--actions--child-button-flex-grow="0"
-	--as-dialog-border-radius=".25rem"
+	--as-dialog-border-radius=".5rem"
 	--as-dialog-background="var(--sk-back-2)"
 	--as-dialog-padding="3rem"
 	noCloseButton

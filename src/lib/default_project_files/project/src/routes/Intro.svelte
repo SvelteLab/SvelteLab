@@ -29,7 +29,7 @@
 
 	section {
 		margin-block: 1rem;
-		border-radius: 0.4rem;
+		border-radius: 0.5rem;
 		padding: 1rem;
 		background: var(--sk-back-1);
 		border: 1px solid var(--sk-back-5);
