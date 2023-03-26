@@ -2,6 +2,8 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
+import { share_with_hash, share_with_id } from '$lib/share';
+import { layout_store } from '$lib/stores/layout_store';
 import { open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
@@ -11,10 +13,13 @@ import { derived, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
+import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 import Download from '~icons/material-symbols/download-rounded';
+import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
+import Share from '~icons/material-symbols/share';
 import AddRoute from './commands_components/AddRoute.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
@@ -128,10 +133,52 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'switch-theme',
 		title: 'Switch Theme',
-		subtitle: 'switch the theme',
+		subtitle: 'toggle light or dark theme',
 		icon: Themes,
 		action() {
 			get_theme().change_preference();
+		}
+	});
+
+	commands_to_return.push({
+		command: 'toggle-config',
+		title: 'Toggle Config Files',
+		subtitle: 'toggle wether file tree starts from project root or src folder',
+		icon: ConfigFiles,
+		action() {
+			layout_store.toggle_config();
+		}
+	});
+
+	commands_to_return.push({
+		command: 'toggle-sort',
+		title: 'Toggle Folder / File Sort Order',
+		subtitle: 'toggle wether files or folders show up first',
+		icon: Sorting,
+		action() {
+			layout_store.toggle_sort();
+		}
+	});
+
+	if ($page.data.id) {
+		commands_to_return.push({
+			command: 'share-id',
+			title: 'Share via id',
+			subtitle: 'copy link that shares current project via id',
+			icon: Share,
+			action() {
+				share_with_id();
+			}
+		});
+	}
+
+	commands_to_return.push({
+		command: 'share-hash',
+		title: 'Share via Hash',
+		subtitle: 'copy link that shares current project via hash',
+		icon: Share,
+		action() {
+			share_with_hash();
 		}
 	});
 
