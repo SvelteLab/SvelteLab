@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_icon } from '$lib/file_icons';
+	import { get_file_icon } from '$lib/file_icons';
 	import { close_all_tabs, close_file, current_tab, open_file, tabs } from '$lib/tabs';
 	import { onDestroy } from 'svelte';
 	import Close from '~icons/material-symbols/close-rounded';
@@ -27,7 +27,7 @@
 					close_file(path);
 				}}
 			>
-				<svelte:component this={get_icon(file_name || '')} />
+				<svelte:component this={get_file_icon(file_name || '')} />
 				{file_name}
 			</button>
 			<button

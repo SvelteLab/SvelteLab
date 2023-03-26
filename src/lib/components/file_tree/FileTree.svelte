@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_folder_icon, get_icon } from '$lib/file_icons';
+	import { get_folder_icon, get_file_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
 	import { expanded_paths, expand_path, toggle_path } from '$lib/stores/expanded_paths';
@@ -116,10 +116,10 @@
 	{/if}
 	<slot />
 	{#each nodes as node_name}
-		{@const icon = get_folder_icon(node_name)}
 		{@const node = tree[node_name]}
 		{@const path = base_path + node_name}
 		{@const expanded = $expanded_paths.has(path)}
+		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
 			<li class="folder" class:open={expanded}>
 				<button
@@ -185,7 +185,7 @@
 				</svelte:self>
 			{/if}
 		{:else}
-			{@const icon = get_icon(node_name)}
+			{@const icon = get_file_icon(node_name)}
 			{@const path = base_path + node_name}
 			<li class:open={$current_tab === path}>
 				<button class="node" on:click={() => open_file(path)}>

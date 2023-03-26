@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_icon } from '$lib/file_icons';
+	import { get_file_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
 
@@ -92,7 +92,7 @@
 					title="Launch command {command.title}"
 				>
 					{#if mode === 'file'}
-						<svelte:component this={get_icon(command.title)} />
+						<svelte:component this={get_file_icon(command.title)} />
 					{:else if command.icon}
 						<svelte:component this={command.icon} />
 					{/if}

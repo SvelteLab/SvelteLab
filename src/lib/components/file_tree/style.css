@@ -87,11 +87,6 @@ li.open button {
 	font-weight: 600;
 }
 
-li:not(.open, .root) {
-	color: var(--sk-text-2);
-	filter: grayscale(100%);
-}
-
 li.open:not(.folder) {
 	color: var(--sk-theme-1);
 	position: relative;
