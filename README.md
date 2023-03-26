@@ -1,8 +1,8 @@
-<img crossorigin="anonymous" src="https://i.imgur.com/6deSDsC.png" alt="A mockup of a phone with a Screenshot of SvelteBlitz opened. SvelteBlitz: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
+<img crossorigin="anonymous" src="https://i.imgur.com/h0zlRMr.png" alt="A mockup of a phone with a Screenshot of SvelteBlitz opened. SvelteBlitz: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
 
 # ⚡ SvelteBlitz
 
-🏗️ We are crafting a supercharged REPL for Svelte: instantly spin up a Sveltekit project and share it with the world.
+🏗️ We are crafting a _supercharged_ REPL for Svelte: instantly spin up a SvelteKit project and share it with the world.
 
 🧡 Made with Svelte, for Svelte, by Svelte lovers!
 
