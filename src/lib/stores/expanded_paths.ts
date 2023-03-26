@@ -23,3 +23,14 @@ export const toggle_path = (path: string) => {
 		expand_path(path);
 	}
 };
+
+export function expand_path_to_file(file_path: string) {
+	const path = file_path.split('/');
+	path.pop(); // remove file name
+	let prefix = './';
+	for (const dir of path) {
+		if (dir === '.') continue;
+		expand_path(prefix + dir);
+		prefix = prefix + dir + '/';
+	}
+}

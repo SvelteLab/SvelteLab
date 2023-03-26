@@ -1,4 +1,5 @@
 import { get, writable } from 'svelte/store';
+import { expand_path_to_file } from './stores/expanded_paths';
 
 const { subscribe: subscribe_tabs, update: update_tabs } = writable(new Set<string>());
 export const tabs = { subscribe: subscribe_tabs };
@@ -9,6 +10,7 @@ export const current_tab = { subscribe: subscribe_current_tab };
 export function open_file(path: string) {
 	set_current_tab(path);
 	update_tabs(($tabs) => $tabs.add(path));
+	expand_path_to_file(path);
 }
 
 export function close_file(path: string) {
