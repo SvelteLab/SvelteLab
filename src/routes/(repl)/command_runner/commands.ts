@@ -2,12 +2,11 @@ import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
-import { close_file, current_tab, open_file } from '$lib/tabs';
+import { current_tab, current_tab_contents, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
-import { tick } from 'svelte';
 import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
@@ -67,10 +66,19 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Format,
 		async action() {
 			const $current_tab = get(current_tab);
-			close_file($current_tab);
-			await tick();
-			await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
-			open_file($current_tab);
+			const process = await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
+			process.output.pipeTo(
+				new WritableStream({
+					write(chunk) {
+						console.log(chunk);
+					}
+				})
+			);
+
+			await process.exit;
+			console.log('process exited');
+			current_tab_contents.set(await webcontainer.read_file($current_tab));
+			console.log('setted');
 		}
 	});
 

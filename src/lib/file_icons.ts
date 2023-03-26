@@ -2,9 +2,10 @@ import File from '~icons/material-symbols/description-rounded';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
 import JS from '~icons/vscode-icons/file-type-js-official';
-import JSON from '~icons/mdi/code-json'
+import JSON from '~icons/mdi/code-json';
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
+import Prettier from '~icons/simple-icons/prettier';
 import TS from '~icons/vscode-icons/file-type-typescript-official';
 import Vite from '~icons/vscode-icons/file-type-vite';
 import FolderLib from '~icons/vscode-material-icon-theme/folder-lib';
@@ -23,6 +24,7 @@ const icons = new Map<RegExp, typeof File>([
 	[/vite\.config\.(ts|js)$/, Vite],
 	[/tailwind\.config\.(cjs|js)$/, Tailwind],
 	[/svelte\.config\.(ts|js)$/, Svelte],
+	[/\.prettierrc$/, Prettier],
 	[/.*\.svelte$/, Svelte],
 	[/.*\.ts$/, TS],
 	[/.*\.(js|cjs|mjs)$/, JS],
