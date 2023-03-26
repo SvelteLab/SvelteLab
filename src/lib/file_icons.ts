@@ -15,6 +15,8 @@ import FolderSrc from '~icons/material-icon-theme/folder-src';
 import FolderSrcOpen from '~icons/material-icon-theme/folder-src-open';
 import FolderStatic from '~icons/material-icon-theme/folder-resource';
 import FolderStaticOpen from '~icons/material-icon-theme/folder-resource-open';
+import FolderServer from '~icons/material-icon-theme/folder-server';
+import FolderServerOpen from '~icons/material-icon-theme/folder-server-open';
 import Folder from '~icons/material-symbols/folder-rounded';
 import FolderOpen from '~icons/material-symbols/folder-open-rounded';
 import type { SvelteComponent } from 'svelte';
@@ -47,6 +49,7 @@ const folder_icons = new Map<
 	[/lib$/, { closed: FolderLib, open: FolderLibOpen }],
 	[/src$/, { closed: FolderSrc, open: FolderSrcOpen }],
 	[/static$/, { closed: FolderStatic, open: FolderStaticOpen }],
+	[/server$/, { closed: FolderServer, open: FolderServerOpen }],
 	[/routes$/, { closed: FolderRoutes, open: FolderRoutesOpen }],
 	[/.*/, { closed: Folder, open: FolderOpen }]
 ]);
