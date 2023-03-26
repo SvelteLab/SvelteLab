@@ -323,18 +323,18 @@
 	}
 	ul {
 		position: absolute;
-		background-color: var(--sk-back-4);
 		list-style: none;
-		/* top: calc(100% + var(--padding-y)); */
+		top: calc(100% + var(--padding-y));
 		padding: 0;
 		margin: 0;
 		left: 0;
 		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
 		z-index: 10;
 	}
-	ul :last-child {
+	ul > :last-child {
 		border-bottom-left-radius: 0.2em;
 		border-bottom-right-radius: 0.2em;
+		overflow: hidden;
 	}
 	.right-aligned {
 		left: auto;
