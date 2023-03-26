@@ -1,14 +1,7 @@
-<script>
-	import README from '../../README.md?raw';
-	import { marked } from 'marked';
-</script>
-
-<section>
-	{@html marked(README.split('---')[0])}
-</section>
+%sveltekit.intro%
 
 <style>
-	section :global(img) {
+	img {
 		max-width: 100%;
 	}
 </style>
