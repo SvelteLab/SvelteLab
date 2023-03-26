@@ -64,7 +64,7 @@
 	.license {
 		margin-left: auto;
 	}
-	@media only screen and (min-width: 1000px) {
+	@media only screen and (min-width: 800px) {
 		li {
 			flex-direction: row;
 			gap: 0.5rem;
@@ -84,7 +84,7 @@
 		display: inline;
 	}
 	.version {
-		font-size: 0.75rem;
-		color: var(--md-on-surface-variant);
+		font-size: var(--sk-text-xs);
+		color: var(--sk-text-3);
 	}
 </style>
