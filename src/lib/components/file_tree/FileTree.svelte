@@ -28,6 +28,7 @@
 		}
 		if (type === 'file') {
 			await webcontainer.add_file(prefix + name);
+			open_file(prefix + name);
 		} else if (type === 'folder') {
 			await webcontainer.add_folder(prefix + name);
 		}
