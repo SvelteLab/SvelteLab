@@ -83,8 +83,13 @@ li:hover .hover-group {
 	}
 }
 
+li.open button {
+	font-weight: 600;
+}
+
 li:not(.open, .root) {
-	filter: grayscale(70%) opacity(80%);
+	color: var(--sk-text-2);
+	filter: grayscale(100%);
 }
 
 li.open:not(.folder) {
@@ -99,6 +104,8 @@ li.open:not(.folder)::after {
 	background-color: var(--sk-theme-1);
 	inset: 0;
 	top: calc(100% - 3px);
+	border-end-start-radius: 1em;
+	border-start-start-radius: 1em;
 }
 
 button {
@@ -123,8 +130,7 @@ input {
 	border: none;
 	color: var(--sk-text-2);
 	flex-grow: 1;
-	font-family: inherit;
-	font-size: inherit;
+	font: inherit;
 	height: 100%;
 	width: 100%;
 	background-color: transparent;

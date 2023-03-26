@@ -4,12 +4,6 @@ import { marked } from 'marked';
 
 const intro = marked(README.split('---')[0]);
 
-declare module '@webcontainer/api' {
-	export interface DirectoryNode {
-		open?: boolean;
-	}
-}
-
 const project = import.meta.glob('./**/!(package-lock.json)', {
 	as: 'raw',
 	eager: true

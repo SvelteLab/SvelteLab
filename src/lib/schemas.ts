@@ -13,7 +13,6 @@ export const fileSchema = z.object({
 
 export const directorySchema: z.ZodType<DirectoryNode> = z.object({
 	directory: z.lazy(() => fileSystemSchema),
-	open: z.boolean().optional()
 });
 
 export const fileSystemSchema = z.record(z.union([fileSchema, directorySchema]));

@@ -2,6 +2,7 @@
 	import { get_folder_icon, get_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
+	import { expanded_paths, expand_path, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { current_tab, open_file } from '$lib/tabs';
@@ -117,13 +118,14 @@
 	{#each nodes as node_name}
 		{@const icon = get_folder_icon(node_name)}
 		{@const node = tree[node_name]}
+		{@const path = base_path + node_name}
+		{@const expanded = $expanded_paths.has(path)}
 		{#if is_dir(node)}
-			<li class="folder" class:open={node.open}>
+			<li class="folder" class:open={expanded}>
 				<button
 					class="node"
 					on:click={() => {
-						// @ts-ignore
-						tree[node_name].open = !node.open;
+						toggle_path(path);
 					}}
 				>
 					<svelte:component this={icon} />{node_name}
@@ -133,8 +135,7 @@
 						title="New File"
 						on:click={() => {
 							is_adding_type = 'file';
-							// @ts-ignore
-							tree[node_name].open = true;
+							expand_path(path);
 						}}
 					>
 						<Plus />
@@ -143,8 +144,7 @@
 						title="New Folder"
 						on:click={() => {
 							is_adding_type = 'folder';
-							// @ts-ignore
-							tree[node_name].open = true;
+							expand_path(path);
 						}}
 					>
 						<FolderAdd />
@@ -166,7 +166,7 @@
 					</button>
 				</div>
 			</li>
-			{#if node.open}
+			{#if expanded}
 				<svelte:self base_path={`${base_path}${node_name}/`}>
 					{#if is_adding_type}
 						<li>
