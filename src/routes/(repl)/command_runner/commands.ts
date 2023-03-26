@@ -20,9 +20,9 @@ import Fork from '~icons/material-symbols/fork-right-rounded';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
-import AddRoute from './commands_components/AddRoute.svelte';
+import Credits from '~icons/mdi/license';
 import { open_credits } from '../Credits.svelte';
-
+import AddRoute from './commands_components/AddRoute.svelte';
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {
@@ -197,7 +197,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		command: 'credits',
 		title: 'Credits',
 		subtitle: 'Show Open Source dependency credits',
-		// icon:,
+		icon: Credits,
 		action() {
 			open_credits();
 		}
