@@ -20,29 +20,32 @@
 
 <div class="grid">
 	<Header />
-	<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-		<Pane>
-			<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-				{#if $layout_store.file_tree}
-					<Pane size={30} {minSize}><FileActions {minSize} /></Pane>
-				{/if}
-				<Pane>
-					<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-						<Pane {minSize} class="editor-pane">
-							<svelte:component this={Editor} />
-						</Pane>
-						{#if $layout_store.terminal}
-							<Pane size={30} {minSize}><svelte:component this={Console} bind:update_height /></Pane
-							>
-						{/if}
-					</Splitpanes>
-				</Pane>
-			</Splitpanes>
-		</Pane>
-		<Pane size={42} {minSize}>
-			<Iframe />
-		</Pane>
-	</Splitpanes>
+	<main id="main">
+		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+			<Pane>
+				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+					{#if $layout_store.file_tree}
+						<Pane size={30} {minSize}><FileActions {minSize} /></Pane>
+					{/if}
+					<Pane>
+						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
+							<Pane {minSize} class="editor-pane">
+								<svelte:component this={Editor} />
+							</Pane>
+							{#if $layout_store.terminal}
+								<Pane size={30} {minSize}>
+									<svelte:component this={Console} bind:update_height />
+								</Pane>
+							{/if}
+						</Splitpanes>
+					</Pane>
+				</Splitpanes>
+			</Pane>
+			<Pane size={42} {minSize}>
+				<Iframe />
+			</Pane>
+		</Splitpanes>
+	</main>
 </div>
 
 <style>

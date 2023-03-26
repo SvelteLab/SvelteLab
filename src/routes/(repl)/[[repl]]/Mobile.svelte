@@ -25,7 +25,7 @@
 
 <div class="container">
 	<Header mobile />
-	<main>
+	<main id="main">
 		<Dialog
 			bind:isOpen={showing_files}
 			noCloseButton

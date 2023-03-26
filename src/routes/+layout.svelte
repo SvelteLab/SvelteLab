@@ -8,6 +8,8 @@
 	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
+<a href="#main" class="skip-to-main-content-link">Skip to main content</a>
+
 <LoadingIndicator />
 <slot />
 
@@ -20,12 +22,18 @@
 />
 
 <style>
-	:global(:root) {
-		--toastContainerBottom: 1.5rem;
-		--toastContainerTop: auto;
-		--toastMsgPadding: 1.5rem;
-		--toastWidth: min(auto, 100%);
-		--toastBackground: var(--sk-back-2);
-		--toastColor: var(--sk-text-1);
+	.skip-to-main-content-link {
+		position: absolute;
+		z-index: 999;
+		padding: 1em;
+		background-color: var(--sk-back-1);
+		color: var(--sk-text-1);
+		opacity: 0;
+		border: 1px solid var(--sk-theme-1);
+		margin: 1em;
+		border-radius: 0.5rem;
+	}
+	.skip-to-main-content-link:focus {
+		opacity: 1;
 	}
 </style>
