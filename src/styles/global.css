@@ -2,6 +2,14 @@
 @import 'xterm/css/xterm.css';
 @import './components.css';
 
+@font-face {
+	font-family: 'JetBrains Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: local('JetBrains Mono Regular '), local('JetBrains Mono-Regular'),
+		url('./JetBrainsMono-Regular.woff2') format('woff2');
+}
+
 :root {
 	--toastContainerBottom: 1.5rem;
 	--toastContainerTop: auto;
@@ -9,6 +17,8 @@
 	--toastWidth: min(auto, 100%);
 	--toastBackground: var(--sk-back-2);
 	--toastColor: var(--sk-text-1);
+
+	--sk-font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 }
 
 *,
