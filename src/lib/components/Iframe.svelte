@@ -98,10 +98,13 @@
 		outline: 1px solid var(--sk-theme-1);
 	}
 
-	iframe,
-	section {
-		width: 100%;
+	section  {
 		height: 100%;
+	}
+
+	iframe {
+		width: 100%;
+		height: calc(100% - 2.4em);
 		border: none;
 	}
 </style>
