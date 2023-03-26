@@ -37,6 +37,23 @@ function get_files_from_tree(tree: FileSystemTree, path = './') {
 	return files;
 }
 
+async function prettierAction() {
+	const $current_tab = get(current_tab);
+	const process = await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
+	process.output.pipeTo(
+		new WritableStream({
+			write(chunk) {
+				console.log(chunk);
+			}
+		})
+	);
+
+	await process.exit;
+	console.log('process exited');
+	current_tab_contents.set(await webcontainer.read_file($current_tab));
+	console.log('setted');
+}
+
 type KnownCommands = 'fork' | 'save';
 
 type AutocompletableString = KnownCommands | Omit<string, KnownCommands>;
@@ -69,22 +86,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Format',
 		subtitle: 'prettier current file',
 		icon: Format,
-		async action() {
-			const $current_tab = get(current_tab);
-			const process = await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
-			process.output.pipeTo(
-				new WritableStream({
-					write(chunk) {
-						console.log(chunk);
-					}
-				})
-			);
-
-			await process.exit;
-			console.log('process exited');
-			current_tab_contents.set(await webcontainer.read_file($current_tab));
-			console.log('setted');
-		}
+		action: prettierAction
 	});
 
 	commands_to_return.push({
