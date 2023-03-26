@@ -240,7 +240,7 @@
 			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
 			title="Login with GitHub"
 		>
-			<Login /> Login with GitHub
+			<Login /> <span>Login with GitHub</span>
 		</a>
 	{/if}
 </header>
@@ -356,5 +356,11 @@
 	}
 	.login {
 		color: var(--sk-theme-1);
+	}
+
+	@media only screen and (max-width: 500px) {
+		a span {
+			display: none;
+		}
 	}
 </style>
