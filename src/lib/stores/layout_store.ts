@@ -11,7 +11,7 @@ const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: true,
 	terminal: false,
 	show_config: false,
-	folders_first: false
+	folders_first: true
 });
 
 async function toggle_state(key: keyof LayoutStore) {
