@@ -13,8 +13,8 @@
 
 <Dialog is_open={$show_credits}>
 	<h2>
-		<img src="/logo.svg" alt="svelteblitz logo" />
-		SvelteBlitz Credits
+		<img src="/logo.svg" alt="sveltelab logo" />
+		SvelteLab Credits
 	</h2>
 	<p>
 		Made with 🧡 by
@@ -23,8 +23,8 @@
 		<a target="_blank" rel="noreferrer" href="https://www.sarcevic.dev/"> Antonio Sarcevic </a>
 	</p>
 	<p>
-		View the source code on <a href="https://github.com/svelteblitz/svelteblitz">
-			github.com/svelteblitz/svelteblitz
+		View the source code on <a href="https://github.com/sveltelab/sveltelab">
+			github.com/sveltelab/sveltelab
 		</a>
 	</p>
 	<h3 class="headline-5">Made possible thanks to the following open source work</h3>

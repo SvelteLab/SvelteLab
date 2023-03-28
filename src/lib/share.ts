@@ -7,7 +7,7 @@ export async function share_with_hash() {
 	const share_url = await webcontainer.get_share_url();
 	await share({
 		text: `Take a look at my REPL - ${get(repl_name)}`,
-		title: 'Svelteblitz',
+		title: 'Sveltelab',
 		url: share_url.toString()
 	});
 }
@@ -17,7 +17,7 @@ export async function share_with_id() {
 	share_url.pathname = get(repl_id) ?? '';
 	await share({
 		text: `Take a look at my REPL - ${get(repl_name)}`,
-		title: 'Svelteblitz',
+		title: 'Sveltelab',
 		url: share_url.toString()
 	});
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './global.css';
-	import SvelteBlitzIntro from './Intro.svelte';
+	import SvelteLabIntro from './Intro.svelte';
 	export let data;
 </script>
 
@@ -8,4 +8,4 @@
 
 <hr />
 
-<SvelteBlitzIntro />
+<SvelteLabIntro />

@@ -13,7 +13,7 @@ const handle_headers: Handle = async ({ event, resolve }) => {
 	return resolve(event, {
 		transformPageChunk(input) {
 			const theme = event.cookies.get(PUBLIC_THEME_COOKIE_NAME) ?? '';
-			return input.html.replace('%svelteblitz.theme%', theme);
+			return input.html.replace('%sveltelab.theme%', theme);
 		}
 	});
 };

@@ -6,6 +6,7 @@
 	import { save_repl } from '$lib/api/client/repls';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import { share_with_hash, share_with_id } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
@@ -51,7 +52,7 @@
 
 <header>
 	<a href="/" title="New REPL">
-		<img src="/logo.svg" alt="svelteblitz logo" />
+		<Logo />
 	</a>
 	{#if !mobile}
 		<button
@@ -270,11 +271,6 @@
 
 	.grow {
 		flex-grow: 1;
-	}
-
-	img {
-		width: 3rem;
-		aspect-ratio: 1;
 	}
 
 	a,

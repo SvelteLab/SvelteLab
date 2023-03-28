@@ -1,6 +1,6 @@
 {
-	"name": "Svelteblitz",
-	"short_name": "Svelteblitz",
+	"name": "SvelteLab",
+	"short_name": "SvelteLab",
 	"start_url": "/",
 	"display": "standalone",
 	"theme_color": "#ff3e00",

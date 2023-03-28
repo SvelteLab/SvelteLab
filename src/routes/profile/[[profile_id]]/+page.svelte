@@ -48,7 +48,7 @@
 					on:click={() => {
 						share({
 							text: `Take a look at my REPL`,
-							title: `Svelteblitz - ${project.name}`,
+							title: `SvelteLab - ${project.name}`,
 							url: `/${project.id}`
 						});
 					}}

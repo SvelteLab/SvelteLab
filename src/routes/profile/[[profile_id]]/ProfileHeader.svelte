@@ -3,6 +3,7 @@
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import { share } from '$lib/share';
 	import { get_theme } from '$lib/theme';
 	import { error } from '$lib/toast';
@@ -19,7 +20,7 @@
 
 <header>
 	<a href="/" title="New REPL">
-		<img src="/logo.svg" alt="svelteblitz logo" />
+		<Logo />
 	</a>
 	<h1>{profile?.username ?? 'nobody'} profile</h1>
 	<div class="grow" />
@@ -48,8 +49,8 @@
 				return;
 			}
 			await share({
-				text: 'Take a look at my Svelteblitz profile',
-				title: `${profile.username} - Svelteblitz`,
+				text: 'Take a look at my SvelteLab profile',
+				title: `${profile.username} - SvelteLab`,
 				url: `/profile/${profile.id}`
 			});
 		}}
@@ -126,11 +127,6 @@
 
 	.grow {
 		flex-grow: 1;
-	}
-
-	img {
-		width: 3rem;
-		aspect-ratio: 1;
 	}
 
 	a,
