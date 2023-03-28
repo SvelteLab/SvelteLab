@@ -9,11 +9,12 @@
 </script>
 
 <script>
+	import Logo from '$lib/components/Logo.svelte';
 </script>
 
 <Dialog is_open={$show_credits}>
 	<h2>
-		<img src="/logo.svg" alt="sveltelab logo" />
+		<Logo />
 		SvelteLab Credits
 	</h2>
 	<p>
