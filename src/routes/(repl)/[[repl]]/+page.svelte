@@ -29,7 +29,7 @@
 	<meta property="og:url" content="https://sveltelab.dev/" />
 	<meta property="og:description" content={''} />
 	<meta content="summary_large_image" name="twitter:card" />
-	<meta content="./og?repl_id={$repl_id}" property="og:image" />
+	<meta content="./og?repl_id={$repl_id ?? ''}" property="og:image" />
 </svelte:head>
 
 <svelte:window bind:innerWidth={width} />
