@@ -11,7 +11,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 	import deps_json from '$lib/dependency-report.json';
 
-	type Dep = {
+	type Dependency = {
 		department?: string;
 		relatedTo?: string;
 		name: string;
@@ -25,7 +25,7 @@
 		author: string;
 	};
 
-	let extra_deps: Dep[] = [
+	let extra_deps: Dependency[] = [
 		{
 			name: 'r-icons',
 			installedVersion: '0.1.0',
@@ -35,11 +35,12 @@
 		}
 	];
 
-	let deps = [...deps_json, ...extra_deps].sort(compareFn) as Dep[];
+	let deps = [...deps_json, ...extra_deps].sort(compareDependencyByName) as Dependency[];
 
-	function compareFn({ name: a }: Dep, { name: b }: Dep) {
+	function compareDependencyByName({ name: a }: Dependency, { name: b }: Dependency) {
 		if (a.startsWith('@')) a = a.substring(1);
 		if (b.startsWith('@')) b = b.substring(1);
+
 		return a.localeCompare(b);
 	}
 </script>
