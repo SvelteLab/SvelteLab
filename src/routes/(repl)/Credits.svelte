@@ -8,24 +8,40 @@
 </script>
 
 <script lang="ts">
-	import deps_json from '$lib/dependency-report.json';
 	import Logo from '$lib/components/Logo.svelte';
+	import deps_json from '$lib/dependency-report.json';
 
 	type Dep = {
-		department: string;
-		relatedTo: string;
+		department?: string;
+		relatedTo?: string;
 		name: string;
-		licensePeriod: string;
-		material: string;
+		licensePeriod?: string;
+		material?: string;
 		licenseType: string;
 		link: string;
-		remoteVersion: string;
+		remoteVersion?: string;
 		installedVersion: string;
-		definedVersion: string;
+		definedVersion?: string;
 		author: string;
 	};
 
-	let deps = deps_json as Dep[];
+	let extra_deps: Dep[] = [
+		{
+			name: 'r-icons',
+			installedVersion: '0.1.0',
+			author: 'Rinconx64',
+			link: 'https://github.com/Rinconx64/r-icons',
+			licenseType: 'MIT'
+		}
+	];
+
+	let deps = [...deps_json, ...extra_deps].sort(compareFn) as Dep[];
+
+	function compareFn({ name: a }: Dep, { name: b }: Dep) {
+		if (a.startsWith('@')) a = a.substring(1);
+		if (b.startsWith('@')) b = b.substring(1);
+		return a.localeCompare(b);
+	}
 </script>
 
 <Dialog is_open={$show_credits}>

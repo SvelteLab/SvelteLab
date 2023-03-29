@@ -10,7 +10,8 @@ export default defineConfig({
 		Icons({
 			compiler: 'svelte',
 			customCollections: {
-				'material-icon-theme': FileSystemIconLoader('./node_modules/material-icon-theme/icons')
+				'material-icon-theme': FileSystemIconLoader('./node_modules/material-icon-theme/icons'),
+				'r-icons': FileSystemIconLoader('./src/lib/icons/Rinconx64_r-icons')
 			}
 		}),
 		visualizer({

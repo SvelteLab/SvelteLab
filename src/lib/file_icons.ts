@@ -1,27 +1,43 @@
+import type { SvelteComponent } from 'svelte';
+import FolderLib from '~icons/material-icon-theme/folder-lib';
+import FolderLibOpen from '~icons/material-icon-theme/folder-lib-open';
+import FolderStatic from '~icons/material-icon-theme/folder-resource';
+import FolderStaticOpen from '~icons/material-icon-theme/folder-resource-open';
+import FolderRoutes from '~icons/material-icon-theme/folder-routes';
+import FolderRoutesOpen from '~icons/material-icon-theme/folder-routes-open';
+import FolderServer from '~icons/material-icon-theme/folder-server';
+import FolderServerOpen from '~icons/material-icon-theme/folder-server-open';
+import FolderSrc from '~icons/material-icon-theme/folder-src';
+import FolderSrcOpen from '~icons/material-icon-theme/folder-src-open';
 import File from '~icons/material-symbols/description-rounded';
+import FolderOpen from '~icons/material-symbols/folder-open-rounded';
+import Folder from '~icons/material-symbols/folder-rounded';
+import JSON from '~icons/mdi/code-json';
+import LayoutScript from '~icons/r-icons/script_layout';
+import LayoutServer from '~icons/r-icons/script_layout_server';
+import PageScript from '~icons/r-icons/script_page';
+import PageServer from '~icons/r-icons/script_page_server';
+import Server from '~icons/r-icons/script_server';
+import Error from '~icons/r-icons/svelte_error';
+import Layout from '~icons/r-icons/svelte_layout';
+import Page from '~icons/r-icons/svelte_page';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
 import JS from '~icons/vscode-icons/file-type-js-official';
-import JSON from '~icons/mdi/code-json';
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
 import TS from '~icons/vscode-icons/file-type-typescript-official';
 import Vite from '~icons/vscode-icons/file-type-vite';
-import FolderLib from '~icons/material-icon-theme/folder-lib';
-import FolderLibOpen from '~icons/material-icon-theme/folder-lib-open';
-import FolderRoutes from '~icons/material-icon-theme/folder-routes';
-import FolderRoutesOpen from '~icons/material-icon-theme/folder-routes-open';
-import FolderSrc from '~icons/material-icon-theme/folder-src';
-import FolderSrcOpen from '~icons/material-icon-theme/folder-src-open';
-import FolderStatic from '~icons/material-icon-theme/folder-resource';
-import FolderStaticOpen from '~icons/material-icon-theme/folder-resource-open';
-import FolderServer from '~icons/material-icon-theme/folder-server';
-import FolderServerOpen from '~icons/material-icon-theme/folder-server-open';
-import Folder from '~icons/material-symbols/folder-rounded';
-import FolderOpen from '~icons/material-symbols/folder-open-rounded';
-import type { SvelteComponent } from 'svelte';
 
 const file_icons = new Map<RegExp, typeof File>([
+	[/\+layout\.(ts|js)$/, LayoutScript],
+	[/\+layout\.server\.(ts|js)$/, LayoutServer],
+	[/\+layout\.svelte$/, Layout],
+	[/\+page\.server\.(ts|js)$/, PageServer],
+	[/\+page\.(ts|js)$/, PageScript],
+	[/\+page\.svelte$/, Page],
+	[/\+server\.(ts|js)$/, Server],
+	[/\+error\.svelte$/, Error],
 	[/vite\.config\.(ts|js)$/, Vite],
 	[/tailwind\.config\.(cjs|js)$/, Tailwind],
 	[/svelte\.config\.(ts|js)$/, Svelte],
