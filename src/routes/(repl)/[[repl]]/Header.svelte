@@ -98,6 +98,7 @@
 	</button>
 
 	{#if user}
+		<!-- Fork button -->
 		{#if $repl_id}
 			<form
 				bind:this={fork_form}
@@ -126,6 +127,7 @@
 				</AsyncButton>
 			</form>
 		{/if}
+		<!-- Save button -->
 		{#if !owner_id || user.id === owner_id}
 			<AsyncButton
 				badged={$is_repl_to_save}
@@ -138,49 +140,51 @@
 				<Save />
 			</AsyncButton>
 		{/if}
-
-		{#if !$repl_id}
+	{/if}
+	<!-- Share button or dropdown -->
+	{#if !$repl_id}
+		<button
+			on:click={async () => {
+				share_with_hash();
+			}}
+			title="Share via Hash"
+		>
+			<Share />
+		</button>
+	{:else}
+		<div class="drop-down-wrapper">
 			<button
 				on:click={async () => {
-					share_with_hash();
+					toggle_menu('share');
 				}}
-				title="Share via Hash"
+				title="Share"
 			>
 				<Share />
 			</button>
-		{:else}
-			<div class="drop-down-wrapper">
-				<button
-					on:click={async () => {
-						toggle_menu('share');
-					}}
-					title="Share"
-				>
-					<Share />
-				</button>
-				<ul aria-hidden={open_menu !== 'share'}>
-					<li>
-						<button
-							title="Share via id"
-							on:click={() => {
-								share_with_id();
-								open_menu = null;
-							}}><Url /> Share via id</button
-						>
-					</li>
-					<li>
-						<button
-							title="Share via hash"
-							on:click={() => {
-								share_with_hash();
-								open_menu = null;
-							}}><Tag /> Share via hash</button
-						>
-					</li>
-				</ul>
-			</div>
-		{/if}
-
+			<ul aria-hidden={open_menu !== 'share'}>
+				<li>
+					<button
+						title="Share via id"
+						on:click={() => {
+							share_with_id();
+							open_menu = null;
+						}}><Url /> Share via id</button
+					>
+				</li>
+				<li>
+					<button
+						title="Share via hash"
+						on:click={() => {
+							share_with_hash();
+							open_menu = null;
+						}}><Tag /> Share via hash</button
+					>
+				</li>
+			</ul>
+		</div>
+	{/if}
+	{#if user}
+		<!-- Profile or login -->
 		<div class="drop-down-wrapper">
 			<button
 				on:click={() => {

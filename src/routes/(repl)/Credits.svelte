@@ -1,6 +1,5 @@
 <script context="module">
 	import Dialog from '$lib/components/Dialog.svelte';
-	import deps from '$lib/dependency-report.json';
 	import { writable } from 'svelte/store';
 	export function open_credits() {
 		show_credits.set(true);
@@ -8,8 +7,25 @@
 	const show_credits = writable(false);
 </script>
 
-<script>
+<script lang="ts">
+	import deps_json from '$lib/dependency-report.json';
 	import Logo from '$lib/components/Logo.svelte';
+
+	type Dep = {
+		department: string;
+		relatedTo: string;
+		name: string;
+		licensePeriod: string;
+		material: string;
+		licenseType: string;
+		link: string;
+		remoteVersion: string;
+		installedVersion: string;
+		definedVersion: string;
+		author: string;
+	};
+
+	let deps = deps_json as Dep[];
 </script>
 
 <Dialog is_open={$show_credits}>
@@ -31,7 +47,7 @@
 	<h3 class="headline-5">Made possible thanks to the following open source work</h3>
 	<ul>
 		{#each deps as dep}
-			{@const link = dep.link.replace('git://', 'https://').replace('git+', '')}
+			{@const link = dep.link.replace('git://', 'https://').replace('git+', '').replace('.git', '')}
 			<li>
 				<a target="_blank" rel="noreferrer" href={link}>{dep.name}</a>
 				<span class="version">@ {dep.installedVersion}</span>
