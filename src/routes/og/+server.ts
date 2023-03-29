@@ -10,6 +10,10 @@ import { default_project_files } from '$lib/default_project_files';
 const height = 630;
 const width = 1200;
 
+export const config = {
+	runtime: 'nodejs18.x'
+};
+
 async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	const record = await pocketbase.collection('repls').getOne(id, {
 		expand: 'user'
