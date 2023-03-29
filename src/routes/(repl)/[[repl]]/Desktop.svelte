@@ -22,12 +22,12 @@
 	<Header />
 	<main id="main">
 		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-			<Pane>
+			<Pane {minSize}>
 				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
 					{#if $layout_store.file_tree}
 						<Pane size={30} {minSize}><FileActions {minSize} /></Pane>
 					{/if}
-					<Pane>
+					<Pane {minSize}>
 						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 							<Pane {minSize} class="editor-pane">
 								<svelte:component this={Editor} />
