@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import PlaceholderComponent from '$lib/components/PlaceholderComponent.svelte';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -29,7 +30,10 @@
 	<meta property="og:url" content="https://sveltelab.dev/" />
 	<meta property="og:description" content={''} />
 	<meta content="summary_large_image" name="twitter:card" />
-	<meta content="./og?repl_id={$repl_id ?? ''}" property="og:image" />
+	<meta
+		content="{$page.url.protocol}//{$page.url.host}/og?repl_id={$repl_id ?? ''}"
+		property="og:image"
+	/>
 </svelte:head>
 
 <svelte:window bind:innerWidth={width} />
