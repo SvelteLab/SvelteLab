@@ -3,6 +3,19 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
+import fs from 'fs';
+
+function raw_fonts(ext: string[]) {
+	return {
+		name: 'vite-plugin-raw-fonts',
+		transform(_code: string, id: string) {
+			if (ext.some((e) => id.endsWith(e))) {
+				const buffer = fs.readFileSync(id);
+				return { code: `export default ${JSON.stringify(buffer)}`, map: null };
+			}
+		}
+	};
+}
 
 export default defineConfig({
 	plugins: [
@@ -17,7 +30,8 @@ export default defineConfig({
 		visualizer({
 			emitFile: true,
 			filename: 'stats.html'
-		})
+		}),
+		raw_fonts(['.ttf'])
 	],
 	define: {
 		'process.env.NODE_ENV': '"production"'
