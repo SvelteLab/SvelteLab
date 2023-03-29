@@ -49,6 +49,7 @@
 		position: relative;
 		padding: 0.5rem;
 		color: var(--sk-text-1);
+		position: relative;
 	}
 
 	button :global(svg) {
@@ -56,11 +57,13 @@
 	}
 
 	.badged::after {
-		content: '·';
+		content: '';
 		position: absolute;
-		right: -0.1em;
-		font-size: 3em;
-		top: -0.7em;
-		color: var(--sk-theme-1);
+		right: 0;
+		height: 0.75rem;
+		aspect-ratio: 1;
+		top: 0;
+		background-color: var(--sk-theme-1);
+		border-radius: 50%;
 	}
 </style>

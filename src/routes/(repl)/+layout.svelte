@@ -5,6 +5,7 @@
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
+	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
 	import CommandRunner from './command_runner/CommandRunner.svelte';
 	import { commands } from './command_runner/commands';
@@ -32,7 +33,24 @@
 				/* empty */
 			}
 			window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+		} else {
+			// check if there's the hash
+			const hash = window.location.hash.substring(1);
+			if (hash) {
+				const url_search_params = new URLSearchParams(hash);
+				const code = url_search_params.get('code');
+				if (code) {
+					const project = decompressFromEncodedURIComponent(code);
+					try {
+						const to_mount = JSON.parse(project);
+						await webcontainer.set_file_system(to_mount);
+					} catch (e) {
+						/* empty */
+					}
+				}
+			}
 		}
+
 		webcontainer.init().then(() => webcontainer.mount_files());
 		// for debugging
 		(window as any).wc = webcontainer;
