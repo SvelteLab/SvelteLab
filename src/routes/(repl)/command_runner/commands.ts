@@ -15,7 +15,6 @@ import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
 import Format from '~icons/material-symbols/cleaning-services';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
-import Format from '~icons/material-symbols/cleaning-services';
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';

@@ -21,13 +21,12 @@ import Server from '~icons/r-icons/script_server';
 import Error from '~icons/r-icons/svelte_error';
 import Layout from '~icons/r-icons/svelte_layout';
 import Page from '~icons/r-icons/svelte_page';
+import Prettier from '~icons/simple-icons/prettier';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
 import JS from '~icons/vscode-icons/file-type-js-official';
-import JSON from '~icons/mdi/code-json';
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
-import Prettier from '~icons/simple-icons/prettier';
 import TS from '~icons/vscode-icons/file-type-typescript-official';
 import Vite from '~icons/vscode-icons/file-type-vite';
 
