@@ -54,7 +54,7 @@
 		display: flex;
 		width: 75%;
 		flex-direction: column;
-		padding: 30px;
+		padding: 40px;
 		align-items: flex-start;
 		flex-grow: 1;
 		gap: 10px;
@@ -83,7 +83,7 @@
 		border-radius: 10px;
 	}
 	p {
-		font-size: 20px;
+		font-size: 35px;
 	}
 	.tree :global(svg) {
 		position: absolute;

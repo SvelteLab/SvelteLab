@@ -23,7 +23,8 @@ const handle_headers: Handle = async ({ event, resolve }) => {
 		transformPageChunk(input) {
 			const theme = event.cookies.get(PUBLIC_THEME_COOKIE_NAME) ?? '';
 			let html = input.html.replace('%sveltelab.theme%', theme);
-			const og_function = routes_og_map.get(event.route.id ?? 'default');
+			const og_function =
+				routes_og_map.get(event.route.id ?? 'default') ?? routes_og_map.get('default');
 			if (typeof og_function === 'function') {
 				html = html.replace('%sveltelab.og%', og_function(event));
 			}
