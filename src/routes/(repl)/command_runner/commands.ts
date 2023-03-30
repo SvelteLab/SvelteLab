@@ -13,6 +13,7 @@ import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
+import Format from '~icons/material-symbols/cleaning-services';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 import Format from '~icons/material-symbols/cleaning-services';
 import Download from '~icons/material-symbols/download-rounded';
