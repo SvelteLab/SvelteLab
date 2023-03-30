@@ -2,6 +2,8 @@
 	import { is_dir } from '$lib/file_system';
 	import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 	export let tree: FileSystemTree;
+	export let file_color = 'var(--sk-text-1)';
+	export let folder_color = 'var(--sk-theme-1)';
 	let _tree = (tree.src as DirectoryNode)?.directory || tree;
 	const padding = 3;
 
@@ -27,7 +29,7 @@
 				x2: start_x + length,
 				y1: (start_y + retval.length) * 3,
 				y2: (start_y + retval.length) * 3,
-				stroke: is_dir(dir[file]) ? 'var(--sk-theme-1)' : 'var(--sk-text-1)'
+				stroke: is_dir(dir[file]) ? folder_color : file_color
 			});
 			const current_dir = dir[file];
 			if (is_dir(current_dir)) {

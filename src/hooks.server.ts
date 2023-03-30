@@ -4,6 +4,15 @@ import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import PocketBase from 'pocketbase';
+import type { RequestEvent } from '@sveltejs/kit';
+
+const routes_og_map = new Map([
+	['default', (event: RequestEvent) => `${event.url.origin}/default_og.png`],
+	[
+		'/(repl)/[[repl]]',
+		(event: RequestEvent) => `${event.url.origin}/og?repl_id=${event.params.repl ?? ''}`
+	]
+]);
 
 const handle_headers: Handle = async ({ event, resolve }) => {
 	event.setHeaders({
@@ -13,7 +22,13 @@ const handle_headers: Handle = async ({ event, resolve }) => {
 	return resolve(event, {
 		transformPageChunk(input) {
 			const theme = event.cookies.get(PUBLIC_THEME_COOKIE_NAME) ?? '';
-			return input.html.replace('%sveltelab.theme%', theme);
+			let html = input.html.replace('%sveltelab.theme%', theme);
+			const og_function =
+				routes_og_map.get(event.route.id ?? 'default') ?? routes_og_map.get('default');
+			if (typeof og_function === 'function') {
+				html = html.replace('%sveltelab.og%', og_function(event));
+			}
+			return html;
 		}
 	});
 };

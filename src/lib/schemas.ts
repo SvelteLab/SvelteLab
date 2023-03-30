@@ -12,7 +12,7 @@ export const fileSchema = z.object({
 });
 
 export const directorySchema: z.ZodType<DirectoryNode> = z.object({
-	directory: z.lazy(() => fileSystemSchema),
+	directory: z.lazy(() => fileSystemSchema)
 });
 
 export const fileSystemSchema = z.record(z.union([fileSchema, directorySchema]));
@@ -21,5 +21,6 @@ export const replSchema = z.object({
 	name: z.string().min(2),
 	id: z.string().optional(),
 	files: fileSystemSchema,
-	user: z.string()
+	user: z.string(),
+	expand: z.record(z.string(), z.any()).optional()
 });
