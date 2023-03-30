@@ -4,7 +4,7 @@ import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
 import { layout_store } from '$lib/stores/layout_store';
-import { current_tab, current_tab_contents, open_file } from '$lib/tabs';
+import { current_tab, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
@@ -24,6 +24,8 @@ import Share from '~icons/material-symbols/share';
 import Credits from '~icons/mdi/license';
 import { open_credits } from '../Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
+import { error } from '$lib/toast';
+
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {
@@ -38,24 +40,24 @@ function get_files_from_tree(tree: FileSystemTree, path = './') {
 	return files;
 }
 
-async function prettierAction() {
-	const $current_tab = get(current_tab);
-	const process = await webcontainer.spawn(`npx`, ['prettier', '--write', $current_tab]);
-	process.output.pipeTo(
-		new WritableStream({
-			write(chunk) {
-				console.log(chunk);
-			}
-		})
-	);
-
-	await process.exit;
-	console.log('process exited');
-	current_tab_contents.set(await webcontainer.read_file($current_tab));
-	console.log('setted');
+function run_callbacks(kind: KnownCommands) {
+	commands_callbacks.get(kind)?.forEach((callback) => {
+		if (typeof callback === 'function') callback();
+	});
 }
 
-type KnownCommands = 'fork' | 'save';
+async function prettier_action() {
+	const $current_tab = get(current_tab);
+	const process = await webcontainer.spawn(`prettier`, ['--write', $current_tab]);
+	const code = await process.exit;
+	if (code === 0) {
+		run_callbacks('format-current');
+	} else {
+		error('Something went wrong prettyifing this file!');
+	}
+}
+
+type KnownCommands = 'fork' | 'save' | 'format-current';
 
 type AutocompletableString = KnownCommands | Omit<string, KnownCommands>;
 
@@ -87,7 +89,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Format',
 		subtitle: 'prettier current file',
 		icon: Format,
-		action: prettierAction
+		action: prettier_action
 	});
 
 	commands_to_return.push({
@@ -117,9 +119,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				subtitle: 'fork the current project',
 				icon: Fork,
 				action() {
-					commands_callbacks.get('fork')?.forEach((callback) => {
-						if (typeof callback === 'function') callback();
-					});
+					run_callbacks('fork');
 				}
 			});
 		}

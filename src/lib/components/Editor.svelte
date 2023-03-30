@@ -16,6 +16,7 @@
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
+	import { on_command } from '../../routes/(repl)/command_runner/commands';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 
@@ -41,9 +42,21 @@
 		md: markdown()
 	};
 
+	let code: string;
+
+	function read_current_tab(current_tab: string) {
+		webcontainer.read_file(current_tab).then((file) => {
+			code = file;
+		});
+	}
+
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
 	$: lang = langs[current_lang];
-	$: code = $current_tab_contents;
+	$: read_current_tab($current_tab);
+
+	on_command('format-current', () => {
+		read_current_tab($current_tab);
+	});
 
 	const warnings_and_errors = {
 		warnings: [] as Warning[],
