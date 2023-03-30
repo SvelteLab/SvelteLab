@@ -2,10 +2,11 @@ import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import JetBrainsMono from './JetBrainsMono-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
-import OG from './OG.svelte';
+import OG from './OGDefault.svelte';
 import { replSchema } from '$lib/schemas';
 import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
+import type { RequestHandler } from './$types';
 
 const height = 630;
 const width = 1200;
@@ -21,19 +22,20 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	return replSchema.parse(record);
 }
 
-/** @type {import('./$types').RequestHandler} */
-export const GET = async ({ url, locals }) => {
+export const GET: RequestHandler = async ({ url, locals }) => {
 	const repl_id = url.searchParams.get('repl_id');
 	let files = default_project_files;
 	let name = 'Hello SvelteLab!';
 	let id;
-	let img = `${url.href.replace(url.pathname, '')}/icon192.png`;
+	let img = `${url.origin}/icon192.png`;
 	if (repl_id) {
 		const record = await get_repl_from_id(repl_id, locals.pocketbase);
-		files = record.files;
-		name = record.name;
-		id = record.id;
-		img = record.expand?.user.avatarUrl;
+		if (record) {
+			files = record.files;
+			name = record.name;
+			id = record.id;
+			img = record.expand?.user.avatarUrl;
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -22,20 +22,6 @@
 	let width: number;
 </script>
 
-<svelte:head>
-	<title>SvelteLab - {title}</title>
-	<meta property="og:site_name" content="SvelteLab" />
-	<meta property="og:title" content="SvelteLab - {title}" />
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://sveltelab.dev/" />
-	<meta property="og:description" content={''} />
-	<meta content="summary_large_image" name="twitter:card" />
-	<meta
-		content="{$page.url.protocol}//{$page.url.host}/og?repl_id={$repl_id ?? ''}"
-		property="og:image"
-	/>
-</svelte:head>
-
 <svelte:window bind:innerWidth={width} />
 
 {#if width >= 500}
