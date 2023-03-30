@@ -2,7 +2,7 @@ import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import JetBrainsMono from './JetBrainsMono-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
-import OG from './OG.svelte';
+import OG from './OGDefault.svelte';
 import { replSchema } from '$lib/schemas';
 import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
