@@ -39,3 +39,62 @@ export type Command = {
 			action_component: ComponentType<SvelteComponentTyped<any, { completed: CustomEvent<any> }>>;
 	  }
 >;
+
+export type NpmResponse = {
+	objects: NpmObject[];
+	total: number;
+	time: string;
+};
+
+export type NpmObject = {
+	package: Package;
+	score: Score;
+	searchScore: number;
+};
+
+export type Package = {
+	name: string;
+	scope: string;
+	version: string;
+	description: string;
+	keywords?: string[];
+	date: string;
+	links: Links;
+	author?: Author;
+	publisher: Publisher;
+	maintainers: Maintainer[];
+};
+
+export type Links = {
+	npm: string;
+	homepage: string;
+	repository: string;
+	bugs: string;
+};
+
+export type Author = {
+	name: string;
+	email?: string;
+	username?: string;
+};
+
+export type Publisher = {
+	username: string;
+	email: string;
+};
+
+export type Maintainer = {
+	username: string;
+	email: string;
+};
+
+export type Score = {
+	final: number;
+	detail: Detail;
+};
+
+export type Detail = {
+	quality: number;
+	popularity: number;
+	maintenance: number;
+};

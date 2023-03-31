@@ -24,7 +24,9 @@ import Share from '~icons/material-symbols/share';
 import Credits from '~icons/mdi/license';
 import { open_credits } from '$lib/components/Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
+import NpmInstall from './commands_components/NpmInstall.svelte';
 import { error } from '$lib/toast';
+import NPM from '~icons/vscode-icons/file-type-npm';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -103,6 +105,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Route,
 		action_component: AddRoute
 	});
+
 	commands_to_return.push({
 		command: 'save',
 		title: 'Save',
@@ -124,6 +127,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			keys: ['S']
 		}
 	});
+
 	if ($page.data.id) {
 		commands_to_return.push({
 			command: 'fork',
@@ -135,6 +139,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			}
 		});
 	}
+
+	commands_to_return.push({
+		command: 'npm-install',
+		title: 'Install package',
+		subtitle: 'install a package from npm',
+		icon: NPM,
+		action_component: NpmInstall
+	});
 
 	commands_to_return.push({
 		command: 'download-zip',
