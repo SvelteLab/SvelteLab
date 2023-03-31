@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './global.css';
-	import SvelteLabIntro from './Intro.svelte';
+	import SvelteLabIntro from '$lib/Intro.svelte';
 	export let data;
 </script>
 
