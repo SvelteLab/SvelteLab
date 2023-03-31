@@ -1,14 +1,12 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
-	import { save_repl } from '$lib/api/client/repls';
+	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
+	import { commands } from '$lib/command_runner/commands';
 	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
-	import { error } from '$lib/toast';
 	import { webcontainer } from '$lib/webcontainer';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
-	import CommandRunner from './command_runner/CommandRunner.svelte';
-	import { commands } from './command_runner/commands';
 	import Credits from './Credits.svelte';
 
 	export let data: LayoutData;

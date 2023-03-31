@@ -28,7 +28,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import { on_command } from '../command_runner/commands';
+	import { on_command } from '$lib/command_runner/commands';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
