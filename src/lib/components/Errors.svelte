@@ -62,9 +62,9 @@
 		font-size: var(--sk-text-m);
 	}
 	.warning {
-		background-color: hsl(32, 92%, 47%);
+		background-color: #e2aa53;
 	}
 	.error {
-		background-color: hsl(332, 86%, 46%);
+		background-color: #ff5555;
 	}
 </style>
