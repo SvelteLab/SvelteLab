@@ -1,18 +1,11 @@
 import { get, writable } from 'svelte/store';
 import { expand_path_to_file } from './stores/expanded_paths';
-import { webcontainer } from './webcontainer';
 
 const { subscribe: subscribe_tabs, update: update_tabs } = writable(new Set<string>());
 export const tabs = { subscribe: subscribe_tabs };
 
 const { subscribe: subscribe_current_tab, set: set_current_tab } = writable('');
 export const current_tab = { subscribe: subscribe_current_tab };
-
-export const current_tab_contents = writable('');
-
-current_tab.subscribe(async ($current_tab) => {
-	current_tab_contents.set(await webcontainer.read_file($current_tab));
-});
 
 export function open_file(path: string) {
 	set_current_tab(path);

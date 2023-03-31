@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
-	import { current_tab, current_tab_contents } from '$lib/tabs';
+	import { current_tab } from '$lib/tabs';
 	import type { SvelteError } from '$lib/types';
 	import { webcontainer } from '$lib/webcontainer';
 	import { css } from '@codemirror/lang-css';
@@ -16,7 +17,6 @@
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
-	import { on_command } from '$lib/command_runner/commands';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 
