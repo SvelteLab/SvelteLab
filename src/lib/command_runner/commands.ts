@@ -22,7 +22,7 @@ import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Credits from '~icons/mdi/license';
-import { open_credits } from '../Credits.svelte';
+import { open_credits } from '$lib/components/Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
 import { error } from '$lib/toast';
 
