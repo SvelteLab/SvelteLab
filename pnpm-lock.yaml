@@ -52,6 +52,7 @@ specifiers:
   svelte-preprocess: ^5.0.3
   svelte-splitpanes: ^0.7.12
   sveltekit-search-params: ^1.0.11
+  tinykeys: ^1.4.0
   tslib: ^2.4.1
   typescript: ^5.0.2
   unplugin-icons: ^0.15.3
@@ -89,6 +90,7 @@ dependencies:
   pocketbase: 0.12.0
   svelte-codemirror-editor: 1.1.0_codemirror@6.0.1
   svelte-splitpanes: 0.7.12_svelte@3.55.1
+  tinykeys: 1.4.0
   xterm: 5.1.0
   xterm-addon-fit: 0.7.0_xterm@5.1.0
   zod: 3.21.4
@@ -2915,6 +2917,10 @@ packages:
   /tinybench/2.3.1:
     resolution: {integrity: sha512-hGYWYBMPr7p4g5IarQE7XhlyWveh1EKhy4wUBS1LrHXCKYgvz+4/jCqgmJqZxxldesn05vccrtME2RLLZNW7iA==}
     dev: true
+
+  /tinykeys/1.4.0:
+    resolution: {integrity: sha512-ysnVd2E4nWbNXIbHaUidcKGLTmNimqP0hdpsD0Ph5hPJ84ntCF6PHj+Jg3im9nZt9/hNsBg/E6m1psHc2KaPnQ==}
+    dev: false
 
   /tinypool/0.3.1:
     resolution: {integrity: sha512-zLA1ZXlstbU2rlpA4CIeVaqvWq41MTWqLY3FfsAXgC8+f7Pk7zroaJQxDgxn1xNudKW6Kmj4808rPFShUlIRmQ==}

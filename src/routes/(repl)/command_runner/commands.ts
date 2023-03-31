@@ -89,7 +89,11 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Format',
 		subtitle: 'prettier current file',
 		icon: Format,
-		action: prettier_action
+		action: prettier_action,
+		key_bind: {
+			mod: ['Shift', 'Alt'],
+			keys: ['F']
+		}
 	});
 
 	commands_to_return.push({
@@ -99,30 +103,37 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Route,
 		action_component: AddRoute
 	});
-
-	if ($page.data.user) {
-		if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
-			commands_to_return.push({
-				command: 'save',
-				title: 'Save',
-				subtitle: 'save the current project',
-				icon: Save,
-				action() {
+	commands_to_return.push({
+		command: 'save',
+		title: 'Save',
+		subtitle: 'save the current project',
+		icon: Save,
+		action() {
+			if ($page.data.user) {
+				if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
 					save_repl();
+					return;
 				}
-			});
+				error('You are trying to save a REPL not owned by you. You might want to fork it first.');
+				return;
+			}
+			error('It seems you are trying to save. Login to save your project.');
+		},
+		key_bind: {
+			mod: ['$mod'],
+			keys: ['S']
 		}
-		if ($page.data.id) {
-			commands_to_return.push({
-				command: 'fork',
-				title: 'Fork',
-				subtitle: 'fork the current project',
-				icon: Fork,
-				action() {
-					run_callbacks('fork');
-				}
-			});
-		}
+	});
+	if ($page.data.id) {
+		commands_to_return.push({
+			command: 'fork',
+			title: 'Fork',
+			subtitle: 'fork the current project',
+			icon: Fork,
+			action() {
+				run_callbacks('fork');
+			}
+		});
 	}
 
 	commands_to_return.push({
@@ -154,6 +165,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: New,
 		action() {
 			goto('/');
+		},
+		key_bind: {
+			mod: ['$mod', 'Shift'],
+			keys: ['C']
 		}
 	});
 
@@ -164,6 +179,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Themes,
 		action() {
 			get_theme().change_preference();
+		},
+		key_bind: {
+			mod: ['$mod'],
+			keys: ['0']
 		}
 	});
 

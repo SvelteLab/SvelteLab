@@ -2,6 +2,9 @@
 	import { get_file_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
+	import { onDestroy, onMount } from 'svelte';
+	import { get_key_bind } from './shortcuts-utilities';
+	import tinykeys, { parseKeybinding } from 'tinykeys';
 
 	let search = '';
 	let dialog: HTMLDialogElement;
@@ -10,7 +13,7 @@
 	$: mode = search.startsWith('>') ? 'command' : 'file';
 	$: filtered_commands = commands.filter((command) => {
 		if (mode === 'file') {
-			return command.title.toLowerCase().includes(search.toLowerCase()) && !command.command;
+			return command.title.toLowerCase().includes(search.trim().toLowerCase()) && !command.command;
 		}
 		return command.command?.includes(search.substring(1).trim().split(' ')[0]);
 	});
@@ -33,22 +36,112 @@
 			open_command_runner();
 		}
 	}
+
+	let search_element: HTMLInputElement;
+
+	function swap_focus(where: 1 | -1) {
+		const focusable =
+			'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+		const elements = [...document.querySelectorAll(focusable)];
+		const active_index = elements.findIndex(
+			(focusable_element) => focusable_element === document.activeElement
+		);
+		if (active_index !== -1) {
+			let next_element = elements[active_index + where];
+			if (!dialog.contains(next_element)) {
+				next_element = search_element;
+			}
+			if (next_element instanceof HTMLElement) {
+				next_element.focus();
+			}
+		}
+	}
+
+	let unbind_function: () => void;
+
+	async function key_bind_commands(commands: Command[]) {
+		if (typeof unbind_function === 'function') {
+			unbind_function();
+		}
+		const key_binds: Record<string, (event: KeyboardEvent) => void> = {};
+		for (let command of commands) {
+			if (command.key_bind) {
+				key_binds[get_key_bind(command.key_bind)] = (event) => {
+					console.log('running', command.command);
+					if (typeof command.action === 'function') {
+						event.preventDefault();
+						event.stopImmediatePropagation();
+						event.stopPropagation();
+						command.action();
+					}
+				};
+			}
+		}
+
+		// OPEN COMMAND RUNNER
+		key_binds[
+			get_key_bind({
+				mod: ['$mod'],
+				keys: ['E']
+			})
+		] = (event) => {
+			if (!dialog.open) {
+				event.preventDefault();
+				open_command_runner();
+			}
+		};
+
+		// OPEN COMMAND RUNNER IN COMMAND MODE
+		key_binds[
+			get_key_bind({
+				mod: ['$mod'],
+				keys: ['P']
+			})
+		] = (event) => {
+			if (!dialog.open) {
+				event.preventDefault();
+				search = '> ';
+				open_command_runner();
+			}
+		};
+
+		key_binds[
+			get_key_bind({
+				keys: ['ArrowDown']
+			})
+		] = (event) => {
+			if (dialog.open) {
+				event.preventDefault();
+				swap_focus(1);
+			}
+		};
+
+		key_binds[
+			get_key_bind({
+				keys: ['ArrowUp']
+			})
+		] = (event) => {
+			if (dialog.open) {
+				event.preventDefault();
+				swap_focus(-1);
+			}
+		};
+
+		console.log(key_binds);
+
+		unbind_function = tinykeys(window, key_binds);
+	}
+
+	$: key_bind_commands(commands);
+
+	onDestroy(() => {
+		if (typeof unbind_function === 'function') {
+			unbind_function();
+		}
+	});
 </script>
 
-<svelte:window
-	on:click={click_outside_handler}
-	on:keydown={(e) => {
-		if (!(e.code === 'KeyE' && e.ctrlKey) || dialog.open) return;
-		e.preventDefault();
-		open_command_runner();
-	}}
-	on:keydown={(e) => {
-		if (!(e.code === 'KeyP' && e.ctrlKey) || dialog.open) return;
-		e.preventDefault();
-		search = '> ';
-		open_command_runner();
-	}}
-/>
+<svelte:window on:click={click_outside_handler} />
 <dialog
 	bind:this={dialog}
 	on:close={() => {
@@ -72,11 +165,21 @@
 				}
 			}}
 		>
-			<input bind:value={search} placeholder="🔍 Search for files, or type `>` for commands..." />
+			<input
+				bind:this={search_element}
+				bind:value={search}
+				placeholder="🔍 Search for files, or type `>` for commands..."
+			/>
 		</form>
 	</section>
 	<ul>
 		{#each filtered_commands as command}
+			{@const key_bind = command.key_bind ? parseKeybinding(get_key_bind(command.key_bind)) : null}
+			{@const key_bind_sequence = key_bind
+				?.map((bind) => {
+					return bind.flat(Infinity).join('+');
+				})
+				.join(' ')}
 			<li>
 				<button
 					class:opened={command.action_component && showed_action_component === command.command}
@@ -99,6 +202,11 @@
 					{command.title}
 					{#if command.subtitle}
 						<small>{command.subtitle}</small>
+					{/if}
+					{#if key_bind_sequence}
+						<kbd>
+							{key_bind_sequence}
+						</kbd>
 					{/if}
 				</button>
 				{#if command.action_component && showed_action_component === command.command}
@@ -201,10 +309,19 @@
 		background-color: var(--sk-back-4);
 		padding: 1rem;
 	}
+	kbd {
+		margin-left: auto;
+		background-color: var(--sk-back-5);
+		padding: 0.25rem 1rem;
+		line-height: 1.5rem;
+	}
 	@media only screen and (max-width: 500px) {
 		ul,
 		input {
 			border-radius: 0;
+		}
+		kbd {
+			display: none;
 		}
 	}
 </style>
