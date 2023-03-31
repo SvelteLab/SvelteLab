@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ComponentType, SvelteComponent, SvelteComponentTyped } from 'svelte';
+import type { KeyBinds } from '../routes/(repl)/command_runner/shortcuts-utilities';
 
 export type SvelteError = {
 	name: string;
@@ -31,6 +32,7 @@ export type Command = {
 	command?: string;
 } & CreateExclusiveUnion<
 	| {
+			key_bind?: KeyBinds;
 			action: () => void;
 	  }
 	| {

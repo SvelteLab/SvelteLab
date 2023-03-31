@@ -60,23 +60,7 @@
 		fix_for_double_after = false;
 		$webcontainer.running_process?.kill?.();
 	});
-
-	async function handleKeydown(e: KeyboardEvent) {
-		if (!(e.code === 'KeyS' && e.ctrlKey)) return;
-		e.preventDefault();
-		if (data.user) {
-			if (!data.owner_id || data.user.id === data.owner_id) {
-				await save_repl();
-				return;
-			}
-			error('You are trying to save a REPL not owned by you. You might want to fork it first.');
-			return;
-		}
-		error('It seems you are trying to save. Login to save your project.');
-	}
 </script>
-
-<svelte:window on:keydown={handleKeydown} />
 
 <slot />
 
