@@ -16,7 +16,7 @@
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
-	import { on_command } from '../../routes/(repl)/command_runner/commands';
+	import { on_command } from '$lib/command_runner/commands';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 

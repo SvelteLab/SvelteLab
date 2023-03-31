@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ComponentType, SvelteComponent, SvelteComponentTyped } from 'svelte';
-import type { KeyBinds } from '../routes/(repl)/command_runner/shortcuts-utilities';
+import type { KeyBinds } from './command_runner/shortcuts-utilities';
 
 export type SvelteError = {
 	name: string;
