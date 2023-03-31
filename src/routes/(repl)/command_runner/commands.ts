@@ -4,15 +4,16 @@ import { save_repl } from '$lib/api/client/repls';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
 import { layout_store } from '$lib/stores/layout_store';
-import { open_file } from '$lib/tabs';
+import { current_tab, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
-import { derived, type Readable } from 'svelte/store';
+import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
+import Format from '~icons/material-symbols/cleaning-services';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
@@ -23,6 +24,8 @@ import Share from '~icons/material-symbols/share';
 import Credits from '~icons/mdi/license';
 import { open_credits } from '../Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
+import { error } from '$lib/toast';
+
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {
@@ -37,7 +40,24 @@ function get_files_from_tree(tree: FileSystemTree, path = './') {
 	return files;
 }
 
-type KnownCommands = 'fork' | 'save';
+function run_callbacks(kind: KnownCommands) {
+	commands_callbacks.get(kind)?.forEach((callback) => {
+		if (typeof callback === 'function') callback();
+	});
+}
+
+async function prettier_action() {
+	const $current_tab = get(current_tab);
+	const process = await webcontainer.spawn(`prettier`, ['--write', $current_tab]);
+	const code = await process.exit;
+	if (code === 0) {
+		run_callbacks('format-current');
+	} else {
+		error('Something went wrong prettyifing this file!');
+	}
+}
+
+type KnownCommands = 'fork' | 'save' | 'format-current';
 
 type AutocompletableString = KnownCommands | Omit<string, KnownCommands>;
 
@@ -63,6 +83,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			open_file(file.path);
 		}
 	}));
+
+	commands_to_return.push({
+		command: 'format-current',
+		title: 'Format',
+		subtitle: 'prettier current file',
+		icon: Format,
+		action: prettier_action
+	});
 
 	commands_to_return.push({
 		command: 'create-route',
@@ -91,9 +119,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				subtitle: 'fork the current project',
 				icon: Fork,
 				action() {
-					commands_callbacks.get('fork')?.forEach((callback) => {
-						if (typeof callback === 'function') callback();
-					});
+					run_callbacks('fork');
 				}
 			});
 		}

@@ -21,6 +21,7 @@ import Server from '~icons/r-icons/script_server';
 import Error from '~icons/r-icons/svelte_error';
 import Layout from '~icons/r-icons/svelte_layout';
 import Page from '~icons/r-icons/svelte_page';
+import Prettier from '~icons/simple-icons/prettier';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
 import JS from '~icons/vscode-icons/file-type-js-official';
@@ -41,6 +42,7 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/vite\.config\.(ts|js)$/, Vite],
 	[/tailwind\.config\.(cjs|js)$/, Tailwind],
 	[/svelte\.config\.(ts|js)$/, Svelte],
+	[/\.prettierrc$/, Prettier],
 	[/.*\.svelte$/, Svelte],
 	[/.*\.ts$/, TS],
 	[/.*\.(js|cjs|mjs)$/, JS],
