@@ -7,7 +7,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
-	import Credits from './Credits.svelte';
+	import Credits from '$lib/components/Credits.svelte';
 
 	export let data: LayoutData;
 
