@@ -2,9 +2,9 @@
 	import { get_file_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
-	import { onDestroy, onMount } from 'svelte';
-	import { get_key_bind } from './shortcuts-utilities';
+	import { onDestroy } from 'svelte';
 	import tinykeys, { parseKeybinding } from 'tinykeys';
+	import { get_key_bind } from './shortcuts-utilities';
 
 	let search = '';
 	let dialog: HTMLDialogElement;
@@ -82,7 +82,7 @@
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['E']
+				keys: ['P']
 			})
 		] = (event) => {
 			if (!dialog.open) {
@@ -94,7 +94,7 @@
 		// OPEN COMMAND RUNNER IN COMMAND MODE
 		key_binds[
 			get_key_bind({
-				mod: ['$mod'],
+				mod: ['$mod', 'Shift'],
 				keys: ['P']
 			})
 		] = (event) => {
@@ -197,7 +197,7 @@
 					{#if mode === 'file'}
 						<svelte:component this={get_file_icon(command.title)} />
 					{:else if command.icon}
-						<svelte:component this={command.icon} />
+						<svelte:component this={command.icon} style="color: var(--sk-text-1)" />
 					{/if}
 					{command.title}
 					{#if command.subtitle}
@@ -273,6 +273,9 @@
 		gap: 1rem;
 		list-style: none;
 	}
+	li {
+		min-width: 0;
+	}
 	section:before {
 		content: '';
 		position: absolute;
@@ -298,6 +301,9 @@
 	button:focus {
 		background-color: var(--sk-back-4);
 	}
+	button :global(path) {
+		fill: currentColor;
+	}
 	.opened {
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
@@ -308,6 +314,7 @@
 	.action-component {
 		background-color: var(--sk-back-4);
 		padding: 1rem;
+		width: 100%;
 	}
 	kbd {
 		margin-left: auto;
