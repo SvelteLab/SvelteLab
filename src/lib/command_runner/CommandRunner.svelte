@@ -82,7 +82,7 @@
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['E']
+				keys: ['P']
 			})
 		] = (event) => {
 			if (!dialog.open) {
@@ -94,7 +94,7 @@
 		// OPEN COMMAND RUNNER IN COMMAND MODE
 		key_binds[
 			get_key_bind({
-				mod: ['$mod'],
+				mod: ['$mod', 'Shift'],
 				keys: ['P']
 			})
 		] = (event) => {
