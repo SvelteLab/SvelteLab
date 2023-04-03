@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@codemirror/autocomplete': ^6.0.0
+  '@codemirror/commands': ^6.2.2
   '@codemirror/lang-css': ^6.0.1
   '@codemirror/lang-html': ^6.2.0
   '@codemirror/lang-javascript': ^6.1.1
@@ -11,6 +12,7 @@ specifiers:
   '@codemirror/lint': ^6.2.0
   '@codemirror/state': ^6.0.0
   '@codemirror/view': ^6.0.0
+  '@emmetio/codemirror6-plugin': ^0.2.0
   '@iconify/json': ^2.2.27
   '@lezer/common': ^1.0.0
   '@lezer/highlight': ^1.0.0
@@ -65,6 +67,7 @@ specifiers:
 
 dependencies:
   '@codemirror/autocomplete': 6.4.2_4brt7ssv37vk5p4hmzax5oqmt4
+  '@codemirror/commands': 6.2.2
   '@codemirror/lang-css': 6.0.2_ttv5njx7qsalq25z3buack72ki
   '@codemirror/lang-html': 6.4.2
   '@codemirror/lang-javascript': 6.1.4
@@ -74,6 +77,7 @@ dependencies:
   '@codemirror/lint': 6.2.0
   '@codemirror/state': 6.2.0
   '@codemirror/view': 6.9.1
+  '@emmetio/codemirror6-plugin': 0.2.0_jfjtlc5hjuft427yk3ytbfn47e
   '@lezer/common': 1.0.2
   '@lezer/highlight': 1.1.3
   '@lezer/javascript': 1.4.1
@@ -155,8 +159,8 @@ packages:
       '@lezer/common': 1.0.2
     dev: false
 
-  /@codemirror/commands/6.2.1:
-    resolution: {integrity: sha512-FFiNKGuHA5O8uC6IJE5apI5rT9gyjlw4whqy4vlcX0wE/myxL6P1s0upwDhY4HtMWLOwzwsp0ap3bjdQhvfDOA==}
+  /@codemirror/commands/6.2.2:
+    resolution: {integrity: sha512-s9lPVW7TxXrI/7voZ+HmD/yiAlwAYn9PH5SUVSUhsxXHhv4yl5eZ3KLntSoTynfdgVYM0oIpccQEWRBQgmNZyw==}
     dependencies:
       '@codemirror/language': 6.6.0
       '@codemirror/state': 6.2.0
@@ -257,6 +261,54 @@ packages:
       '@codemirror/state': 6.2.0
       style-mod: 4.0.0
       w3c-keyname: 2.2.6
+    dev: false
+
+  /@emmetio/abbreviation/2.3.1:
+    resolution: {integrity: sha512-QXgYlXZGprqb6aCBJPPWVBN/Jb69khJF73GGJkOk//PoMgSbPGuaHn1hCRolctnzlBHjCIC6Om97Pw46/1A23g==}
+    dependencies:
+      '@emmetio/scanner': 1.0.2
+    dev: false
+
+  /@emmetio/codemirror6-plugin/0.2.0_jfjtlc5hjuft427yk3ytbfn47e:
+    resolution: {integrity: sha512-F+Aw0I9imEudLstDLQtXDAmx04M631ye+W1bhf+o07Wy4O9btnA54CPOkXLEjWEWve+8hh9JWvH/y4A8mFiF0w==}
+    peerDependencies:
+      '@codemirror/autocomplete': ^6.1.0
+      '@codemirror/commands': ^6.0.1
+      '@codemirror/highlight': ^0.19.8
+      '@codemirror/history': ^0.19.2
+      '@codemirror/lang-css': ^6.0.0
+      '@codemirror/lang-html': ^6.1.0
+      '@codemirror/language': ^6.2.1
+      '@codemirror/state': ^6.1.1
+      '@codemirror/view': ^6.2.0
+      '@lezer/common': ^1.0.0
+    dependencies:
+      '@codemirror/autocomplete': 6.4.2_4brt7ssv37vk5p4hmzax5oqmt4
+      '@codemirror/commands': 6.2.2
+      '@codemirror/lang-css': 6.0.2_ttv5njx7qsalq25z3buack72ki
+      '@codemirror/lang-html': 6.4.2
+      '@codemirror/language': 6.6.0
+      '@codemirror/state': 6.2.0
+      '@codemirror/view': 6.9.1
+      '@emmetio/math-expression': 1.0.4
+      '@lezer/common': 1.0.2
+      emmet: 2.4.1
+    dev: false
+
+  /@emmetio/css-abbreviation/2.1.6:
+    resolution: {integrity: sha512-bvuPogt0OvwcILRg+ZD/oej1H72xwOhUDPWOmhCWLJrZZ8bMTazsWnvw8a8noaaVqUhOE9PsC0tYgGVv5N7fsw==}
+    dependencies:
+      '@emmetio/scanner': 1.0.2
+    dev: false
+
+  /@emmetio/math-expression/1.0.4:
+    resolution: {integrity: sha512-1m7y8/VeXCAfgFoPGTerbqCIadApcIINujd3TaM/LRLPPKiod8aT1PPmh542spnsUSsSnZJjbuF7xiO4WFA42g==}
+    dependencies:
+      '@emmetio/scanner': 1.0.2
+    dev: false
+
+  /@emmetio/scanner/1.0.2:
+    resolution: {integrity: sha512-1ESCGgXRgn1r29hRmz8K0G4Ywr5jDWezMgRnICComBCWmg3znLWU8+tmakuM1og1Vn4W/sauvlABl/oq2pve8w==}
     dev: false
 
   /@esbuild/android-arm/0.16.17:
@@ -1295,7 +1347,7 @@ packages:
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
       '@codemirror/autocomplete': 6.4.2_4brt7ssv37vk5p4hmzax5oqmt4
-      '@codemirror/commands': 6.2.1
+      '@codemirror/commands': 6.2.2
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.0
       '@codemirror/search': 6.2.3
@@ -1436,6 +1488,13 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /emmet/2.4.1:
+    resolution: {integrity: sha512-8rZn/3b0WRT21UeGjQ+bzUqg3up6xBKqRjeWRZA1mrzHokNf4brqPx88XQ53+s9lK2p/pWI2VlTIu1S59OwDtA==}
+    dependencies:
+      '@emmetio/abbreviation': 2.3.1
+      '@emmetio/css-abbreviation': 2.1.6
+    dev: false
 
   /emoji-regex/10.2.1:
     resolution: {integrity: sha512-97g6QgOk8zlDRdgq1WxwgTMgEWGVAQvB5Fdpgc1MkNy56la5SKP9GsMXKDOdqwn90/41a8yPwIGk1Y6WVbeMQA==}
