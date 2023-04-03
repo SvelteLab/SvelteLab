@@ -363,7 +363,20 @@ export const webcontainer = {
 			init_callbacks.add(update);
 		}
 	},
-
+	/**
+	 * Rename a file in the webcontainer
+	 */
+	rename_file(path: string, new_name: string) {
+		const update = () => {
+			webcontainer_instance.fs.webcontainer_instance.fs.writeFile(path, content);
+			is_repl_to_save.set(true);
+		};
+		if (webcontainer_instance instanceof WebContainer) {
+			update();
+		} else {
+			init_callbacks.add(update);
+		}
+	},
 	/**
 	 * Run the initial npm install
 	 * @returns a promise that fulfill when the command has finished to run
