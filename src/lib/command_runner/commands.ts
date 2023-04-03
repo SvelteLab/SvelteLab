@@ -26,7 +26,7 @@ import { open_credits } from '$lib/components/Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
 import { error } from '$lib/toast';
-import NPM from '~icons/vscode-icons/file-type-npm';
+import NPM from '~icons/material-symbols/install-desktop';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];

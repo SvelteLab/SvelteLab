@@ -5,7 +5,8 @@
 	import { expanded_paths, expand_path, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
-	import { current_tab, open_file } from '$lib/tabs';
+	import { close_file, current_tab, open_file } from '$lib/tabs';
+	import { error } from '$lib/toast';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
 	import Plus from '~icons/material-symbols/add-rounded';
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
@@ -15,13 +16,16 @@
 	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
-	export let is_adding_type: 'folder' | 'file' | null = null;
-	export let root_adding_type: typeof is_adding_type = null;
+	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
+		path: null,
+		kind: null
+	};
+	export let root_adding_type: typeof is_adding_type.kind = null;
 
-	async function handleAdd(path_name: string, type: typeof is_adding_type) {
+	async function handleAdd(path_name: string, type: typeof is_adding_type.kind) {
 		const path = path_name.split('/');
 		const name = path.pop();
-		let prefix = '/';
+		let prefix = './';
 		for (const dir of path) {
 			if (dir === '.') continue;
 			await webcontainer.add_folder(prefix + dir);
@@ -134,7 +138,7 @@
 					<button
 						title="New File"
 						on:click={() => {
-							is_adding_type = 'file';
+							is_adding_type = { path, kind: 'file' };
 							expand_path(path);
 						}}
 					>
@@ -143,7 +147,7 @@
 					<button
 						title="New Folder"
 						on:click={() => {
-							is_adding_type = 'folder';
+							is_adding_type = { path, kind: 'folder' };
 							expand_path(path);
 						}}
 					>
@@ -168,16 +172,28 @@
 			</li>
 			{#if expanded}
 				<svelte:self base_path={`${base_path}${node_name}/`}>
-					{#if is_adding_type}
+					{#if is_adding_type.path === path && is_adding_type.kind}
 						<li>
 							<AddFile
-								type={is_adding_type}
+								type={is_adding_type.kind}
 								on:add={async ({ detail: name }) => {
-									await handleAdd(`${base_path}${node_name}/${name}`, is_adding_type);
-									is_adding_type = null;
+									const new_path = `${base_path}${node_name}/${name}`;
+									const folder_arr = new_path.split('/');
+									const last_part = folder_arr.pop();
+									let subtree;
+									try {
+										subtree = get_subtree_from_path(folder_arr.join('/'), $files_store);
+									} catch (e) {
+										/* empty */
+									}
+									if (last_part && subtree?.[last_part]) {
+										return error(`The ${is_adding_type.kind} already exist.`);
+									}
+									await handleAdd(`${base_path}${node_name}/${name}`, is_adding_type.kind);
+									is_adding_type = { path: null, kind: null };
 								}}
 								on:cancel={() => {
-									is_adding_type = null;
+									is_adding_type = { path: null, kind: null };
 								}}
 							/>
 						</li>
@@ -201,6 +217,7 @@
 							/// TODO: use proper component
 							if (window.confirm(`Are you sure you want to delete "${node_name}"?`)) {
 								webcontainer.delete_file(`${base_path}${node_name}`);
+								close_file(`${base_path}${node_name}`);
 							}
 						}}
 					>

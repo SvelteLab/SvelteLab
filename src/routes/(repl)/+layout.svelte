@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
 	import { commands } from '$lib/command_runner/commands';
-	import { repl_id, repl_name } from '$lib/stores/repl_id_store';
+	import Credits from '$lib/components/Credits.svelte';
+	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
-	import Credits from '$lib/components/Credits.svelte';
 
 	export let data: LayoutData;
 
@@ -17,6 +18,20 @@
 	$: webcontainer.set_file_system(data.repl!);
 
 	let fix_for_double_after = false;
+
+	const onbeforeunload_handler = (e: BeforeUnloadEvent) =>
+		'You will lose your progress are you sure you want to close?';
+
+	function handle_unload(is_repl_to_save: boolean) {
+		if (!browser) return;
+		if (is_repl_to_save) {
+			window.onbeforeunload = onbeforeunload_handler;
+		} else {
+			window.onbeforeunload = null;
+		}
+	}
+
+	$: handle_unload($is_repl_to_save);
 
 	afterNavigate(async () => {
 		if (fix_for_double_after) return;
