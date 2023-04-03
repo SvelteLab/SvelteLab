@@ -67,7 +67,6 @@
 		for (let command of commands) {
 			if (command.key_bind) {
 				key_binds[get_key_bind(command.key_bind)] = (event) => {
-					console.log('running', command.command);
 					if (typeof command.action === 'function') {
 						event.preventDefault();
 						event.stopImmediatePropagation();
@@ -79,17 +78,27 @@
 		}
 
 		// OPEN COMMAND RUNNER
+		function open_command_runner_bind(event: KeyboardEvent) {
+			if (!dialog.open) {
+				event.preventDefault();
+				open_command_runner();
+			}
+		}
+
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
 				keys: ['P']
 			})
-		] = (event) => {
-			if (!dialog.open) {
-				event.preventDefault();
-				open_command_runner();
-			}
-		};
+		] = open_command_runner_bind;
+
+		// OPEN COMMAND RUNNER
+		key_binds[
+			get_key_bind({
+				mod: ['$mod'],
+				keys: ['E']
+			})
+		] = open_command_runner_bind;
 
 		// OPEN COMMAND RUNNER IN COMMAND MODE
 		key_binds[
@@ -126,8 +135,6 @@
 				swap_focus(-1);
 			}
 		};
-
-		console.log(key_binds);
 
 		unbind_function = tinykeys(window, key_binds);
 	}
@@ -300,9 +307,6 @@
 	button:hover,
 	button:focus {
 		background-color: var(--sk-back-4);
-	}
-	button :global(path) {
-		fill: currentColor;
 	}
 	.opened {
 		border-bottom-left-radius: 0;
