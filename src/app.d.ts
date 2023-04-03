@@ -16,5 +16,14 @@ declare global {
 		// interface Platform {}
 	}
 }
-
+module 'svelte/types/compiler/interfaces' {
+	export interface Warning {
+		start?: {
+			character: number;
+		};
+		end?: {
+			character: number;
+		};
+	}
+}
 export {};

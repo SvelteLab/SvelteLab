@@ -71,8 +71,8 @@
 		for (let warning of warnings_and_errors.warnings) {
 			if (!warning.start || !warning.end) continue;
 			diagnostcs.push({
-				from: warning.start.character,
-				to: warning.end.character,
+				from: (warning.start as any).character,
+				to: (warning.end as any).character,
 				severity: 'warning',
 				message: warning.message
 			});

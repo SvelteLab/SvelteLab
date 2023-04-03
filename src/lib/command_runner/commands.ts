@@ -1,11 +1,13 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
 import { save_repl } from '$lib/api/client/repls';
+import { open_credits } from '$lib/components/Credits.svelte';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
 import { layout_store } from '$lib/stores/layout_store';
 import { current_tab, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
+import { error } from '$lib/toast';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
@@ -18,15 +20,15 @@ import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounde
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
+import NPM from '~icons/material-symbols/install-desktop';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Credits from '~icons/mdi/license';
-import { open_credits } from '$lib/components/Credits.svelte';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
-import { error } from '$lib/toast';
-import NPM from '~icons/material-symbols/install-desktop';
+import GitHub from '~icons/mdi/github';
+import { PUBLIC_GITHUB_REPO } from '$env/static/public';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -247,6 +249,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Themes,
 		action() {
 			get_theme().remove_preference();
+		}
+	});
+
+	commands_to_return.push({
+		command: 'open-sveltelab-github',
+		title: 'Open GitHub',
+		subtitle: 'Open the SvelteLab github repo',
+		icon: GitHub,
+		action() {
+			window.open(PUBLIC_GITHUB_REPO, '_blank');
 		}
 	});
 
