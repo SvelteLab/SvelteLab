@@ -5,7 +5,7 @@
 	import Check from '~icons/material-symbols/done';
 
 	export let type: 'folder' | 'file';
-	let name = '';
+	export let name = '';
 
 	const dispatch = createEventDispatcher();
 </script>

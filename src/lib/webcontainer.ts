@@ -368,7 +368,8 @@ export const webcontainer = {
 	 */
 	rename_file(path: string, new_name: string) {
 		const update = () => {
-			webcontainer_instance.fs.webcontainer_instance.fs.writeFile(path, content);
+			// TODO fix this
+			webcontainer_instance.fs.writeFile(path, '');
 			is_repl_to_save.set(true);
 		};
 		if (webcontainer_instance instanceof WebContainer) {
