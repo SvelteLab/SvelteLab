@@ -5,6 +5,7 @@
 	import { current_tab } from '$lib/tabs';
 	import type { SvelteError } from '$lib/types';
 	import { webcontainer } from '$lib/webcontainer';
+	import { indentLess, indentWithTab } from '@codemirror/commands';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -13,6 +14,8 @@
 	import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
+	import { keymap } from '@codemirror/view';
+	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
 	import CodeMirror from 'svelte-codemirror-editor';
@@ -97,10 +100,16 @@
 	<CodeMirror
 		{lang}
 		{theme}
-		useTab
+		useTab={false}
 		tabSize={3}
 		value={code ?? ''}
-		extensions={[js_snippets, svelte_snippets, linter(return_diagnostics)]}
+		extensions={[
+			js_snippets,
+			svelte_snippets,
+			linter(return_diagnostics),
+			abbreviationTracker(),
+			keymap.of([indentWithTab])
+		]}
 		on:change={(e) => {
 			webcontainer.update_file($current_tab, e.detail);
 			code = e.detail;
@@ -140,7 +149,8 @@
 				'border-color': 'var(--sk-code-base)'
 			},
 			'.cm-tooltip': {
-				border: 'none'
+				border: 'none',
+				background: 'var(--sk-back-3)'
 			},
 			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
 				background: 'var(--sk-back-3)'
