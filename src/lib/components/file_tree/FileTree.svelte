@@ -8,11 +8,13 @@
 	import { close_file, current_tab, open_file } from '$lib/tabs';
 	import { error } from '$lib/toast';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
+	import type { FileSystemTree } from '@webcontainer/api';
 	import Plus from '~icons/material-symbols/add-rounded';
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
+	import Edit from '~icons/material-symbols/edit';
 	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
@@ -22,7 +24,28 @@
 	};
 	export let root_adding_type: typeof is_adding_type.kind = null;
 
-	async function handleAdd(path_name: string, type: typeof is_adding_type.kind) {
+	let renaming_path = null as string | null;
+
+	async function handle_add(
+		path_name: string,
+		type: 'file' | null,
+		content?: string
+	): Promise<void>;
+	async function handle_add(
+		path_name: string,
+		type: 'folder' | null,
+		content?: FileSystemTree
+	): Promise<void>;
+	async function handle_add(
+		path_name: string,
+		type: typeof is_adding_type.kind,
+		content?: undefined
+	): Promise<void>;
+	async function handle_add(
+		path_name: string,
+		type: typeof is_adding_type.kind,
+		content?: string | FileSystemTree
+	) {
 		const path = path_name.split('/');
 		const name = path.pop();
 		let prefix = './';
@@ -33,6 +56,9 @@
 		}
 		if (type === 'file') {
 			await webcontainer.add_file(prefix + name);
+			if (content && typeof content === 'string') {
+				await webcontainer.update_file(prefix + name, content);
+			}
 			open_file(prefix + name);
 		} else if (type === 'folder') {
 			await webcontainer.add_folder(prefix + name);
@@ -108,7 +134,7 @@
 				<AddFile
 					type={root_adding_type}
 					on:add={async ({ detail: path }) => {
-						await handleAdd(base_path + path, root_adding_type);
+						await handle_add(base_path + path, root_adding_type);
 						root_adding_type = null;
 					}}
 					on:cancel={() => {
@@ -126,49 +152,70 @@
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
 			<li class="folder" class:open={expanded}>
-				<button
-					class="node"
-					on:click={() => {
-						toggle_path(path);
-					}}
-				>
-					<svelte:component this={icon} />{node_name}
-				</button>
-				<div class="hover-group">
+				{#if renaming_path === path}
+					<AddFile
+						type="folder"
+						name={node_name}
+						on:add={async ({ detail: path }) => {
+							renaming_path = null;
+						}}
+						on:cancel={() => {
+							renaming_path = null;
+						}}
+					/>
+				{:else}
 					<button
-						title="New File"
+						class="node"
 						on:click={() => {
-							is_adding_type = { path, kind: 'file' };
-							expand_path(path);
+							toggle_path(path);
 						}}
 					>
-						<Plus />
+						<svelte:component this={icon} />{node_name}
 					</button>
-					<button
-						title="New Folder"
-						on:click={() => {
-							is_adding_type = { path, kind: 'folder' };
-							expand_path(path);
-						}}
-					>
-						<FolderAdd />
-					</button>
-					<button
-						title="Delete folder"
-						on:click={() => {
-							/// TODO: use proper component
-							if (
-								window.confirm(
-									`Are you sure you want to delete "${node_name}" and everything inside?`
-								)
-							) {
-								webcontainer.delete_file(`${base_path}${node_name}`);
-							}
-						}}
-					>
-						<Delete />
-					</button>
-				</div>
+					<div class="hover-group">
+						<button
+							title="Edit"
+							on:click={() => {
+								renaming_path = path;
+							}}
+						>
+							<Edit />
+						</button>
+						<button
+							title="New File"
+							on:click={() => {
+								is_adding_type = { path, kind: 'file' };
+								expand_path(path);
+							}}
+						>
+							<Plus />
+						</button>
+						<button
+							title="New Folder"
+							on:click={() => {
+								is_adding_type = { path, kind: 'folder' };
+								expand_path(path);
+							}}
+						>
+							<FolderAdd />
+						</button>
+						<button
+							title="Delete folder"
+							on:click={() => {
+								/// TODO: use proper component
+								if (
+									window.confirm(
+										`Are you sure you want to delete "${node_name}" and everything inside?`
+									)
+								) {
+									webcontainer.delete_file(`${base_path}${node_name}`);
+								}
+							}}
+						>
+							<Delete />
+						</button>
+					</div>
+				{/if}
 			</li>
 			{#if expanded}
 				<svelte:self base_path={`${base_path}${node_name}/`}>
@@ -189,7 +236,7 @@
 									if (last_part && subtree?.[last_part]) {
 										return error(`The ${is_adding_type.kind} already exist.`);
 									}
-									await handleAdd(`${base_path}${node_name}/${name}`, is_adding_type.kind);
+									await handle_add(`${base_path}${node_name}/${name}`, is_adding_type.kind);
 									is_adding_type = { path: null, kind: null };
 								}}
 								on:cancel={() => {
@@ -204,26 +251,60 @@
 			{@const icon = get_file_icon(node_name)}
 			{@const path = base_path + node_name}
 			<li class:open={$current_tab === path}>
-				<button class="node" on:click={() => open_file(path)}>
-					<svelte:component this={icon} />
-					<span>
-						{node_name}
-					</span>
-				</button>
-				<div class="hover-group">
-					<button
-						title="Delete {node_name}"
-						on:click={() => {
-							/// TODO: use proper component
-							if (window.confirm(`Are you sure you want to delete "${node_name}"?`)) {
-								webcontainer.delete_file(`${base_path}${node_name}`);
-								close_file(`${base_path}${node_name}`);
-							}
+				{#if renaming_path === path}
+					<AddFile
+						type="file"
+						name={node_name}
+						on:add={async ({ detail: name }) => {
+							// const new_path = `${base_path}${node_name}/${name}`;
+							// const folder_arr = new_path.split('/');
+							// const last_part = folder_arr.pop();
+							// let subtree;
+							// try {
+							// 	subtree = get_subtree_from_path(folder_arr.join('/'), $files_store);
+							// } catch (e) {
+							// 	/* empty */
+							// }
+							// if (last_part && subtree?.[last_part]) {
+							// 	return error(`The ${is_adding_type.kind} already exist.`);
+							// }
+							// await handle_add(`${base_path}${node_name}/${name}`, is_adding_type.kind);
+							// is_adding_type = { path: null, kind: null };
 						}}
-					>
-						<Delete />
+						on:cancel={() => {
+							renaming_path = null;
+						}}
+					/>
+				{:else}
+					<button class="node" on:click={() => open_file(path)}>
+						<svelte:component this={icon} />
+						<span>
+							{node_name}
+						</span>
 					</button>
-				</div>
+					<div class="hover-group">
+						<button
+							title="Edit"
+							on:click={() => {
+								renaming_path = path;
+							}}
+						>
+							<Edit />
+						</button>
+						<button
+							title="Delete {node_name}"
+							on:click={() => {
+								/// TODO: use proper component
+								if (window.confirm(`Are you sure you want to delete "${node_name}"?`)) {
+									webcontainer.delete_file(`${base_path}${node_name}`);
+									close_file(`${base_path}${node_name}`);
+								}
+							}}
+						>
+							<Delete />
+						</button>
+					</div>
+				{/if}
 			</li>
 		{/if}
 	{/each}

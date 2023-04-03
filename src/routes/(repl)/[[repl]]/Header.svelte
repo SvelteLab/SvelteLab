@@ -12,7 +12,7 @@
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
-	import { async_click } from '$lib/test/utils';
+	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
 	import Profile from '~icons/material-symbols/account-circle';
