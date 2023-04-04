@@ -285,6 +285,9 @@ function does_file_exist(files: FileSystemTree, path: `./${string}`) {
  */
 export const webcontainer = {
 	subscribe,
+	async sync_file_system() {
+		files_store.set(await get_tree_from_container());
+	},
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
 		// avoid ghost files from previous projects
@@ -355,21 +358,6 @@ export const webcontainer = {
 	update_file(path: string, content: string) {
 		const update = () => {
 			webcontainer_instance.fs.writeFile(path, content);
-			is_repl_to_save.set(true);
-		};
-		if (webcontainer_instance instanceof WebContainer) {
-			update();
-		} else {
-			init_callbacks.add(update);
-		}
-	},
-	/**
-	 * Rename a file in the webcontainer
-	 */
-	rename_file(path: string, new_name: string) {
-		const update = () => {
-			// TODO fix this
-			webcontainer_instance.fs.writeFile(path, '');
 			is_repl_to_save.set(true);
 		};
 		if (webcontainer_instance instanceof WebContainer) {
