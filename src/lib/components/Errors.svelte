@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { SvelteError } from '$lib/types';
+	import { getContext, onMount } from 'svelte';
 	import { compile } from 'svelte/compiler';
 	import { slide } from 'svelte/transition';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
@@ -9,11 +10,30 @@
 	export let code = '';
 	export let warnings = [] as Warning[];
 	export let error: SvelteError | null = null;
+	const svelte_compiler = getContext('svelte-compiler') as Worker;
+
+	onMount(() => {
+		const handler = (...e: any[]) => {
+			console.log(e);
+		};
+		svelte_compiler.addEventListener('message', handler);
+		return () => {
+			svelte_compiler.removeEventListener('message', handler);
+		};
+	});
 
 	function parse(code: string) {
 		warnings = [];
 		error = null;
 		try {
+			svelte_compiler.postMessage({
+				type: 'compile',
+				id: '',
+				source: code,
+				options: {},
+				return_ast: true
+			});
+
 			warnings = compile(code)?.warnings ?? [];
 		} catch (e) {
 			error = e as SvelteError;
