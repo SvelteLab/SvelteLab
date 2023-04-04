@@ -16,7 +16,10 @@
 
 <section>
 	{#each [...$tabs] as path}
-		{@const file_name = path.split('/').at(-1)}
+		{@const route_arr = path.split('/')}
+		{@const route =
+			route_arr.length > 2 ? `/${(route_arr.slice(3, route_arr.length - 1) ?? []).join('/')}` : ''}
+		{@const file_name = route_arr.at(-1)}
 		<article aria-selected={path === $current_tab}>
 			<button
 				bind:this={button_refs[path]}
@@ -29,6 +32,11 @@
 			>
 				<svelte:component this={get_file_icon(file_name || '')} />
 				{file_name}
+				{#if route}
+					<small>
+						{route}
+					</small>
+				{/if}
 			</button>
 			<button
 				on:click={() => {
@@ -70,5 +78,8 @@
 		left: 1px;
 		bottom: 0;
 		top: calc(100% - 3px);
+	}
+	small {
+		opacity: 0.5;
 	}
 </style>
