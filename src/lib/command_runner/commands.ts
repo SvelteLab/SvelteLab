@@ -29,6 +29,7 @@ import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
 import GitHub from '~icons/mdi/github';
 import { PUBLIC_GITHUB_REPO } from '$env/static/public';
+import SvelteAdd from './commands_components/SvelteAdd.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -106,6 +107,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'create a new sveltekit route',
 		icon: Route,
 		action_component: AddRoute
+	});
+
+	commands_to_return.push({
+		command: 'svelte-add',
+		title: 'svelte-add',
+		subtitle: 'quickly add a svelte integration',
+		icon: Route,
+		action_component: SvelteAdd
 	});
 
 	commands_to_return.push({

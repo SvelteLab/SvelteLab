@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import './global.css';
 	import SvelteLabIntro from '$lib/Intro.svelte';
 	export let data;
