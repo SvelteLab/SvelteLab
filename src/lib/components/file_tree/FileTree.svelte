@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { get_folder_icon, get_file_icon } from '$lib/file_icons';
+	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
 	import { expanded_paths, expand_path, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
-	import { close_file, current_tab, open_file } from '$lib/tabs';
+	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
 	import { error } from '$lib/toast';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
-	import type { FileSystemTree } from '@webcontainer/api';
 	import Plus from '~icons/material-symbols/add-rounded';
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';
@@ -26,26 +25,7 @@
 
 	let renaming_path = null as string | null;
 
-	async function handle_add(
-		path_name: string,
-		type: 'file' | null,
-		content?: string
-	): Promise<void>;
-	async function handle_add(
-		path_name: string,
-		type: 'folder' | null,
-		content?: FileSystemTree
-	): Promise<void>;
-	async function handle_add(
-		path_name: string,
-		type: typeof is_adding_type.kind,
-		content?: undefined
-	): Promise<void>;
-	async function handle_add(
-		path_name: string,
-		type: typeof is_adding_type.kind,
-		content?: string | FileSystemTree
-	) {
+	async function handle_add(path_name: string, type: typeof is_adding_type.kind) {
 		const path = path_name.split('/');
 		const name = path.pop();
 		let prefix = './';
@@ -56,9 +36,6 @@
 		}
 		if (type === 'file') {
 			await webcontainer.add_file(prefix + name);
-			if (content && typeof content === 'string') {
-				await webcontainer.update_file(prefix + name, content);
-			}
 			open_file(prefix + name);
 		} else if (type === 'folder') {
 			await webcontainer.add_folder(prefix + name);
@@ -156,8 +133,19 @@
 					<AddFile
 						type="folder"
 						name={node_name}
-						on:add={async ({ detail: path }) => {
-							renaming_path = null;
+						on:add={async ({ detail: name }) => {
+							const current_path = node_name.split('/');
+							current_path.pop();
+							const new_path = `${base_path}${current_path.join('/')}${name}`;
+							const process = await webcontainer.spawn('mv', ['-t', new_path, path]);
+							const exit_code = await process.exit;
+							if (exit_code === 0) {
+								await webcontainer.sync_file_system();
+								close_all_subpath(path);
+								renaming_path = null;
+							} else {
+								error('There was a problem renaming this folder');
+							}
 						}}
 						on:cancel={() => {
 							renaming_path = null;
@@ -256,20 +244,17 @@
 						type="file"
 						name={node_name}
 						on:add={async ({ detail: name }) => {
-							// const new_path = `${base_path}${node_name}/${name}`;
-							// const folder_arr = new_path.split('/');
-							// const last_part = folder_arr.pop();
-							// let subtree;
-							// try {
-							// 	subtree = get_subtree_from_path(folder_arr.join('/'), $files_store);
-							// } catch (e) {
-							// 	/* empty */
-							// }
-							// if (last_part && subtree?.[last_part]) {
-							// 	return error(`The ${is_adding_type.kind} already exist.`);
-							// }
-							// await handle_add(`${base_path}${node_name}/${name}`, is_adding_type.kind);
-							// is_adding_type = { path: null, kind: null };
+							const current_path = node_name.split('/');
+							current_path.pop();
+							const new_path = `${base_path}${current_path.join('/')}${name}`;
+							const process = await webcontainer.spawn('mv', ['-t', new_path, path]);
+							const exit_code = await process.exit;
+							if (exit_code === 0) {
+								renaming_path = null;
+								rename_tab(path, new_path);
+							} else {
+								error('There was an error renaming this file.');
+							}
 						}}
 						on:cancel={() => {
 							renaming_path = null;

@@ -28,6 +28,28 @@ export function close_file(path: string) {
 	});
 }
 
+export function close_all_subpath(path: string) {
+	update_tabs(($tabs) => {
+		[...$tabs].forEach((tab) => {
+			if (tab.startsWith(path)) {
+				$tabs.delete(tab);
+			}
+		});
+		return $tabs;
+	});
+}
+
+export function rename_tab(old_path: string, new_path: string) {
+	console.log({ old_path, new_path });
+	update_tabs(($tabs) => {
+		if ($tabs.has(old_path)) {
+			$tabs.delete(old_path);
+			$tabs.add(new_path);
+		}
+		return $tabs;
+	});
+}
+
 export function close_all_tabs() {
 	update_tabs(($tabs) => {
 		$tabs.clear();
