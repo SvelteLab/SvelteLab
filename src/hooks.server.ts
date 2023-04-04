@@ -1,10 +1,8 @@
-import { dev } from '$app/environment';
 import { POCKETBASE_URL } from '$env/static/private';
 import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import PocketBase from 'pocketbase';
-import type { RequestEvent } from '@sveltejs/kit';
 
 const routes_og_map = new Map([
 	['default', (event: RequestEvent) => `${event.url.origin}/default_og.png`],
@@ -49,9 +47,11 @@ const handle_poketbase: Handle = async ({ event, resolve }) => {
 	}
 
 	const response = await resolve(event);
+	const expires = new Date();
+	expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24 * 7);
 	response.headers.append(
 		'set-cookie',
-		event.locals.pocketbase.authStore.exportToCookie({ secure: !dev })
+		event.locals.pocketbase.authStore.exportToCookie({ secure: true, expires, sameSite: 'none' })
 	);
 
 	return response;
