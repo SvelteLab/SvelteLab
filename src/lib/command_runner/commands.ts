@@ -1,5 +1,6 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
+import { PUBLIC_DISCORD_INVITE, PUBLIC_GITHUB_REPO } from '$env/static/public';
 import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
 import { is_dir } from '$lib/file_system';
@@ -24,11 +25,13 @@ import NPM from '~icons/material-symbols/install-desktop';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
+import GitHub from '~icons/mdi/github';
+import Discord from '~icons/mdi/discord';
 import Credits from '~icons/mdi/license';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
-import GitHub from '~icons/mdi/github';
-import { PUBLIC_GITHUB_REPO } from '$env/static/public';
+import SvelteAdd from './commands_components/SvelteAdd.svelte';
+import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -106,6 +109,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'create a new sveltekit route',
 		icon: Route,
 		action_component: AddRoute
+	});
+
+	commands_to_return.push({
+		command: 'svelte-add',
+		title: 'Svelte add',
+		subtitle: 'quickly add a svelte integration',
+		icon: SvelteAddIcon,
+		action_component: SvelteAdd
 	});
 
 	commands_to_return.push({
@@ -259,6 +270,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: GitHub,
 		action() {
 			window.open(PUBLIC_GITHUB_REPO, '_blank');
+		}
+	});
+
+	commands_to_return.push({
+		command: 'join-discord',
+		title: 'Join Discord',
+		subtitle: 'Join our Discord server',
+		icon: Discord,
+		action() {
+			window.open(PUBLIC_DISCORD_INVITE, '_blank');
 		}
 	});
 

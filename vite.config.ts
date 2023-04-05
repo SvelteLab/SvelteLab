@@ -24,7 +24,8 @@ export default defineConfig({
 			compiler: 'svelte',
 			customCollections: {
 				'material-icon-theme': FileSystemIconLoader('./node_modules/material-icon-theme/icons'),
-				'r-icons': FileSystemIconLoader('./src/lib/icons/Rinconx64_r-icons')
+				'r-icons': FileSystemIconLoader('./src/lib/icons/Rinconx64_r-icons'),
+				sveltelab: FileSystemIconLoader('./src/lib/icons/sveltelab')
 			}
 		}),
 		visualizer({
