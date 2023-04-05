@@ -15,7 +15,7 @@
 	import { fly } from 'svelte/transition';
 	import { is_intro_open } from '$lib/stores/intro_store';
 	import { onMount, setContext } from 'svelte';
-	import SvelteCompilerWorker from '$lib/workers/svelte-compiler?worker';
+	import SvelteCompiler from '$lib/workers/svelte-compiler?worker';
 
 	export let data: LayoutData;
 
@@ -40,13 +40,15 @@
 
 	$: handle_unload($is_repl_to_save);
 
+	const svelte_compiler = new SvelteCompiler();
+	console.log(SvelteCompiler);
+	svelte_compiler.postMessage({ type: 'init' });
+	setContext('svelte-compiler', svelte_compiler);
+
 	onMount(() => {
 		setTimeout(() => {
 			$is_intro_open = true;
 		}, 500);
-		const svelte_compiler = new SvelteCompilerWorker();
-		svelte_compiler.postMessage('init', {});
-		setContext('svelte-compiler', new SvelteCompilerWorker());
 	});
 
 	afterNavigate(async () => {
