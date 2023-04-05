@@ -290,13 +290,6 @@ export const webcontainer = {
 	},
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
-		// avoid ghost files from previous projects
-		close_all_tabs();
-		await tick();
-		// we do this here to avoid opening a non existing file
-		if (does_file_exist(files, './src/routes/+page.svelte')) {
-			open_file('./src/routes/+page.svelte');
-		}
 	},
 	/**
 	 * init the webcontainer and mount the files
@@ -325,7 +318,15 @@ export const webcontainer = {
 	 */
 	async mount_files() {
 		await clear_webcontainer_fs();
-		await webcontainer_instance.mount(get(files_store));
+		const files = get(files_store);
+		await webcontainer_instance.mount(files);
+		// avoid ghost files from previous projects
+		close_all_tabs();
+		await tick();
+		// we do this here to avoid opening a non existing file
+		if (does_file_exist(files, './src/routes/+page.svelte')) {
+			open_file('./src/routes/+page.svelte');
+		}
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
 				callback();
