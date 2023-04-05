@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { SvelteError } from '$lib/types';
 	import { getContext, onMount } from 'svelte';
-	import { compile } from 'svelte/compiler';
 	import { slide } from 'svelte/transition';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
@@ -13,8 +12,9 @@
 	const svelte_compiler = getContext('svelte-compiler') as Worker;
 
 	onMount(() => {
-		const handler = (...e: any[]) => {
-			console.log(e);
+		const handler = (e: any) => {
+			warnings = e.data?.result?.warnings ?? [];
+			error = e.data?.result?.error;
 		};
 		svelte_compiler.addEventListener('message', handler);
 		return () => {
@@ -25,19 +25,13 @@
 	function parse(code: string) {
 		warnings = [];
 		error = null;
-		try {
-			svelte_compiler.postMessage({
-				type: 'compile',
-				id: '',
-				source: code,
-				options: {},
-				return_ast: true
-			});
-
-			warnings = compile(code)?.warnings ?? [];
-		} catch (e) {
-			error = e as SvelteError;
-		}
+		svelte_compiler.postMessage({
+			type: 'compile',
+			id: '',
+			source: code,
+			options: {},
+			return_ast: true
+		});
 	}
 
 	$: parse(code);
