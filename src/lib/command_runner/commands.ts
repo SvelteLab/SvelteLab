@@ -1,6 +1,6 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
-import { PUBLIC_GITHUB_REPO } from '$env/static/public';
+import { PUBLIC_DISCORD_INVITE, PUBLIC_GITHUB_REPO } from '$env/static/public';
 import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
 import { is_dir } from '$lib/file_system';
@@ -26,6 +26,7 @@ import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import GitHub from '~icons/mdi/github';
+import Discord from '~icons/mdi/discord';
 import Credits from '~icons/mdi/license';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
@@ -269,6 +270,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: GitHub,
 		action() {
 			window.open(PUBLIC_GITHUB_REPO, '_blank');
+		}
+	});
+
+	commands_to_return.push({
+		command: 'join-discord',
+		title: 'Join Discord',
+		subtitle: 'Join our Discord server',
+		icon: Discord,
+		action() {
+			window.open(PUBLIC_DISCORD_INVITE, '_blank');
 		}
 	});
 
