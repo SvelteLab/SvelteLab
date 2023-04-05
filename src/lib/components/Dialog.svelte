@@ -5,7 +5,7 @@
 
 <Dialog
 	--as-dialog-container-z-index="9999"
-	--as-dialog-width="max(50vw, 35rem)"
+	--as-dialog-width="max-content"
 	--as-dialog--actions-justify-content="flex-end"
 	--as-dialog--actions--child-button-flex-grow="0"
 	--as-dialog-border-radius=".5rem"

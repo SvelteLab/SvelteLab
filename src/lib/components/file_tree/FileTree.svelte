@@ -15,6 +15,7 @@
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import Edit from '~icons/material-symbols/edit';
 	import AddFile from './AddFile.svelte';
+	import Dialog from '../Dialog.svelte';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -63,6 +64,8 @@
 		//if they are both files order alphabetically
 		return node_a.localeCompare(node_b);
 	});
+
+	let deleting_file = null as null | { kind: 'folder' | 'file'; name: string };
 </script>
 
 <ul>
@@ -190,14 +193,7 @@
 						<button
 							title="Delete folder"
 							on:click={() => {
-								/// TODO: use proper component
-								if (
-									window.confirm(
-										`Are you sure you want to delete "${node_name}" and everything inside?`
-									)
-								) {
-									webcontainer.delete_file(`${base_path}${node_name}`);
-								}
+								deleting_file = { kind: 'folder', name: node_name };
 							}}
 						>
 							<Delete />
@@ -279,11 +275,7 @@
 						<button
 							title="Delete {node_name}"
 							on:click={() => {
-								/// TODO: use proper component
-								if (window.confirm(`Are you sure you want to delete "${node_name}"?`)) {
-									webcontainer.delete_file(`${base_path}${node_name}`);
-									close_file(`${base_path}${node_name}`);
-								}
+								deleting_file = { kind: 'file', name: node_name };
 							}}
 						>
 							<Delete />
@@ -294,5 +286,36 @@
 		{/if}
 	{/each}
 </ul>
+
+<Dialog is_open={!!deleting_file}>
+	<svelte:fragment slot="dialog-title">
+		Delete "{deleting_file?.name}" ?
+	</svelte:fragment>
+	Are you sure you want to delete "{deleting_file?.name}"
+	{#if deleting_file?.kind === 'folder'}
+		and everything inside?
+	{:else}
+		?
+	{/if}
+	<svelte:fragment slot="dialog-actions">
+		<button
+			style:margin-top="1rem"
+			style:color="var(--sk-theme-1)"
+			on:click={() => {
+				deleting_file = null;
+			}}>No</button
+		>
+		<button
+			style:margin-top="1rem"
+			on:click={() => {
+				webcontainer.delete_file(`${base_path}${deleting_file}`);
+				if (deleting_file?.kind === 'file') {
+					close_file(`${base_path}${deleting_file}`);
+				}
+				deleting_file = null;
+			}}>Yes</button
+		>
+	</svelte:fragment>
+</Dialog>
 
 <style src="./style.css"></style>
