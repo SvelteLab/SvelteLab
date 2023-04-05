@@ -122,7 +122,9 @@
 {/if}
 
 <aside class="github">
-	<a href={PUBLIC_GITHUB_REPO} target="_blank" rel="noopener noreferrer"><GitHub /></a>
+	<a title="Go to GitHub" href={PUBLIC_GITHUB_REPO} target="_blank" rel="noopener noreferrer"
+		><GitHub /></a
+	>
 </aside>
 
 <style>
