@@ -1,38 +1,40 @@
 <script lang="ts">
+	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 	import IFrame from '~icons/material-symbols/browse-activity-outline-rounded';
 	import Code from '~icons/material-symbols/code-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-
-	export let showing: 'code' | 'iframe' | 'terminal' = 'code';
-	export let showing_files = false;
 </script>
 
 <nav>
 	<button
 		title="Show File Browser"
-		aria-pressed={showing_files}
-		on:click={() => (showing_files = true)}
+		aria-pressed={$showing_files}
+		on:click={() => ($showing_files = true)}
 	>
 		<FileBrowser />
 	</button>
 
-	<button title="Show Code" aria-pressed={showing === 'code'} on:click={() => (showing = 'code')}>
+	<button
+		title="Show Code"
+		aria-pressed={$mobile_showing === 'code'}
+		on:click={() => mobile_showing.show_code()}
+	>
 		<Code />
 	</button>
 
 	<button
 		title="Show iFrame"
-		aria-pressed={showing === 'iframe'}
-		on:click={() => (showing = 'iframe')}
+		aria-pressed={$mobile_showing === 'iframe'}
+		on:click={() => mobile_showing.show_iframe()}
 	>
 		<IFrame />
 	</button>
 
 	<button
 		title="Show Terminal"
-		aria-pressed={showing === 'terminal'}
-		on:click={() => (showing = 'terminal')}
+		aria-pressed={$mobile_showing === 'terminal'}
+		on:click={() => mobile_showing.show_terminal()}
 	>
 		<Terminal />
 	</button>

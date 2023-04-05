@@ -8,7 +8,6 @@ const ready = new Promise((f) => {
 });
 
 self.addEventListener('message', async (event) => {
-	console.log(event);
 	switch (event.data.type) {
 		case 'init':
 			try {

@@ -41,7 +41,6 @@
 	$: handle_unload($is_repl_to_save);
 
 	const svelte_compiler = new SvelteCompiler();
-	console.log(SvelteCompiler);
 	svelte_compiler.postMessage({ type: 'init' });
 	setContext('svelte-compiler', svelte_compiler);
 
@@ -105,6 +104,7 @@
 		}}
 	>
 		<button
+			title="Close tootlip"
 			on:click={() => {
 				$is_intro_open = false;
 			}}><Close /></button

@@ -22,14 +22,14 @@
 	$: $current_tab && button_refs[$current_tab]?.scrollIntoView();
 </script>
 
-<section>
+<ul role="tablist">
 	{#each [...$tabs] as path}
 		{@const route_arr = path.split('/').slice(1)}
 		{@const main_folder = route_arr.length > 2 ? route_arr[1] : null}
 		{@const route =
 			route_arr.length > 1 ? `/${(route_arr.slice(2, route_arr.length - 1) ?? []).join('/')}` : ''}
 		{@const file_name = route_arr.at(-1)}
-		<article aria-selected={path === $current_tab}>
+		<li role="tab" aria-selected={path === $current_tab}>
 			<button
 				bind:this={button_refs[path]}
 				on:click={() => {
@@ -57,25 +57,28 @@
 				{/if}
 			</button>
 			<button
+				title="Close {file_name}"
 				on:click={() => {
 					close_file(path);
 				}}
 			>
 				<Close />
 			</button>
-		</article>
+		</li>
 	{/each}
-</section>
+</ul>
 
 <style>
-	section {
+	ul {
 		display: flex;
 		max-width: 100%;
 		overflow-x: auto;
 		background-color: var(--sk-back-1);
 		border-bottom: 1px solid var(--sk-back-4);
+		margin: 0;
+		list-style: none;
 	}
-	article {
+	li {
 		padding: 0.5em;
 		display: flex;
 		align-items: center;
@@ -88,7 +91,7 @@
 		gap: 0.5em;
 		width: max-content;
 	}
-	article[aria-selected='true']::after {
+	li[aria-selected='true']::after {
 		content: '';
 		position: absolute;
 		background-color: var(--sk-theme-1);

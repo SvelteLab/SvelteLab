@@ -1,5 +1,6 @@
 import { get, writable } from 'svelte/store';
 import { expand_path_to_file } from './stores/expanded_paths';
+import { mobile_showing, showing_files } from './stores/mobile_showing_store';
 
 const { subscribe: subscribe_tabs, update: update_tabs } = writable(new Set<string>());
 export const tabs = { subscribe: subscribe_tabs };
@@ -11,6 +12,8 @@ export function open_file(path: string) {
 	set_current_tab(path);
 	update_tabs(($tabs) => $tabs.add(path));
 	expand_path_to_file(path);
+	mobile_showing.show_code();
+	showing_files.set(false);
 }
 
 export function close_file(path: string) {
@@ -40,7 +43,6 @@ export function close_all_subpath(path: string) {
 }
 
 export function rename_tab(old_path: string, new_path: string) {
-	console.log({ old_path, new_path });
 	update_tabs(($tabs) => {
 		if ($tabs.has(old_path)) {
 			$tabs.delete(old_path);

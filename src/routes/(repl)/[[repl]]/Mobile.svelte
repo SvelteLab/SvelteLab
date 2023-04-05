@@ -6,18 +6,16 @@
 	import { fly } from 'svelte/transition';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
+	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 
 	export let Console: ComponentType<SvelteComponentTyped>;
 	export let Editor: ComponentType<SvelteComponentTyped>;
 
-	let showing: 'code' | 'iframe' | 'terminal' = 'code';
-	let showing_files = false;
-
 	let update_height: () => void;
 
-	$: handle_showing_change(showing);
+	$: handle_showing_change($mobile_showing);
 
-	async function handle_showing_change(_: typeof showing) {
+	async function handle_showing_change(_: typeof $mobile_showing) {
 		await tick();
 		if (update_height) update_height();
 	}
@@ -27,7 +25,7 @@
 	<Header mobile />
 	<main id="main">
 		<Dialog
-			bind:isOpen={showing_files}
+			bind:isOpen={$showing_files}
 			noCloseButton
 			includedTrigger={false}
 			dialogIn={fly}
@@ -48,17 +46,17 @@
 		>
 			<FileActions />
 		</Dialog>
-		<div class="editor" class:hidden={showing !== 'code'}>
+		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
 			<svelte:component this={Editor} />
 		</div>
-		<div class:hidden={showing !== 'iframe'}>
+		<div class:hidden={$mobile_showing !== 'iframe'}>
 			<Iframe />
 		</div>
-		<div class:hidden={showing !== 'terminal'}>
+		<div class:hidden={$mobile_showing !== 'terminal'}>
 			<svelte:component this={Console} bind:update_height />
 		</div>
 	</main>
-	<MobileFooter bind:showing bind:showing_files />
+	<MobileFooter />
 </div>
 
 <style>
