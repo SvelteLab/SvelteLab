@@ -7,6 +7,7 @@ import { replSchema } from '$lib/schemas';
 import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
 import type { RequestHandler } from './$types';
+import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 
 const height = 630;
 const width = 1200;
@@ -24,7 +25,9 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 
 export const GET: RequestHandler = async ({ url, locals }) => {
 	const repl_id = url.searchParams.get('repl_id');
-	let files = default_project_files;
+	const template = url.searchParams.get('t') ?? 'basic';
+	const default_files = default_project_files[template] ?? default_project_files['basic'];
+	let files: FileSystemTree = (default_files as DirectoryNode).directory;
 	let name = 'Hello SvelteLab!';
 	let id;
 	let img = `${url.origin}/icon192.png`;
