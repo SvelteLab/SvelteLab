@@ -31,6 +31,7 @@ import Credits from '~icons/mdi/license';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
+import StartTemplate from './commands_components/StartTemplate.svelte';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
@@ -195,6 +196,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			mod: ['$mod', 'Shift'],
 			keys: ['C']
 		}
+	});
+
+	commands_to_return.push({
+		command: 'new-project-template',
+		title: 'Open Template',
+		subtitle: 'create a new blank project with a starter template',
+		icon: New,
+		action_component: StartTemplate
 	});
 
 	commands_to_return.push({

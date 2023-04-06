@@ -1,0 +1,7 @@
+<script>
+   export let title;
+</script>
+
+# Hello {title}!
+
+This is the **mdsvex** template from **SvelteLab**.

@@ -12,10 +12,12 @@ const project = import.meta.glob('./**/!(package-lock.json)', {
 const project_files: FileSystemTree = {};
 
 for (const file in project) {
-	const path = file.split('/').slice(2);
+	const path = file.split('/').slice(1);
 	let subtree = project_files;
 	for (let i = 0; i < path.length; i++) {
-		const part = path[i];
+		// this is to avoid vite complaining when importing the project if
+		// it's a valid tsconfig
+		const part = path[i].replace('txtjson', 'json');
 		const is_directory = i !== path.length - 1;
 		if (is_directory) {
 			if (!subtree[part]) {
@@ -33,5 +35,7 @@ for (const file in project) {
 		}
 	}
 }
+
+export const templates = Object.keys(project_files);
 
 export const default_project_files = project_files satisfies FileSystemTree;

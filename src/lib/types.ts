@@ -36,7 +36,7 @@ export type Command = {
 			action: () => void;
 	  }
 	| {
-			action_component: ComponentType<SvelteComponentTyped<any, { completed: CustomEvent<any> }>>;
+			action_component: ComponentType<SvelteComponentTyped>;
 	  }
 >;
 

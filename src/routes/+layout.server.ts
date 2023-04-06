@@ -1,4 +1,5 @@
 import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
+import { templates } from '$lib/default_project_files';
 import { REDIRECT_URI } from '$lib/env.server';
 import type { LayoutServerLoad } from './$types';
 
@@ -7,7 +8,8 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 
 	if (locals.user) {
 		return {
-			user: locals.user
+			user: locals.user,
+			templates
 		};
 	}
 
@@ -24,6 +26,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 
 	return {
 		github_login,
-		REDIRECT_URI
+		REDIRECT_URI,
+		templates
 	};
 };

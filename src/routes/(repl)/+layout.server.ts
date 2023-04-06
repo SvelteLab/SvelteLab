@@ -1,7 +1,7 @@
 import { default_project_files } from '$lib/default_project_files';
 import { replSchema } from '$lib/schemas';
 import { redirect } from '@sveltejs/kit';
-import type { FileSystemTree } from '@webcontainer/api';
+import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
 import type { LayoutServerLoad } from './$types';
 
@@ -17,7 +17,9 @@ export const load: LayoutServerLoad = async ({ params, locals, url }) => {
 	// if there's a ?login query param we are back from the login and we can try load files
 	// from the local storage so don't bother getting them from pocketbase
 	const from_login = url.searchParams.get('login') !== null;
-	let files: FileSystemTree = default_project_files;
+	const template = url.searchParams.get('t') ?? 'basic';
+	const default_files = default_project_files[template] ?? default_project_files['basic'];
+	let files: FileSystemTree = (default_files as DirectoryNode).directory;
 	let name = 'Hello world';
 
 	if (!repl || from_login) {
