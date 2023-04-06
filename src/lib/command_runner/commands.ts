@@ -278,7 +278,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'Open the SvelteLab github repo',
 		icon: GitHub,
 		action() {
-			window.open(PUBLIC_GITHUB_REPO, '_blank');
+			window.open(`${PUBLIC_GITHUB_REPO}#readme`, '_blank');
 		}
 	});
 

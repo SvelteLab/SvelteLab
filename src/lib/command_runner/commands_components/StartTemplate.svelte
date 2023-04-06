@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { PUBLIC_GITHUB_REPO } from '$env/static/public';
+	import GitHub from '~icons/mdi/github';
+
 	function capitalize(title: string) {
 		return `${title.charAt(0).toUpperCase()}${title.substring(1)}`;
 	}
@@ -18,6 +21,12 @@
 		</li>
 	{/each}
 </ul>
+<a
+	href="{PUBLIC_GITHUB_REPO}/issues/new"
+	target="_blank"
+	rel="noopener noreferrer"
+	title="Propose a new template"><GitHub /> Propose a new template</a
+>
 
 <style>
 	ul {
@@ -27,5 +36,11 @@
 		list-style: none;
 		justify-content: space-evenly;
 		flex-wrap: wrap;
+	}
+	a {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		gap: 1ch;
 	}
 </style>

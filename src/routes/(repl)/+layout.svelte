@@ -115,15 +115,18 @@
 			</span>
 		</p>
 		<p><em>a supercharged REPL for Svelte</em></p>
-		<a href={PUBLIC_GITHUB_REPO} target="_blank" rel="noopener noreferrer"
+		<a href="{PUBLIC_GITHUB_REPO}#readme" target="_blank" rel="noopener noreferrer"
 			><GitHub /> Learn more on GitHub</a
 		>
 	</aside>
 {/if}
 
 <aside class="github">
-	<a title="Go to GitHub" href={PUBLIC_GITHUB_REPO} target="_blank" rel="noopener noreferrer"
-		><GitHub /></a
+	<a
+		title="Go to GitHub"
+		href="{PUBLIC_GITHUB_REPO}#readme"
+		target="_blank"
+		rel="noopener noreferrer"><GitHub /></a
 	>
 </aside>
 
