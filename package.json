@@ -34,6 +34,7 @@
 		"@lezer/javascript": "^1.2.0",
 		"@lezer/lr": "^1.0.0",
 		"@replit/codemirror-lang-svelte": "^6.0.0",
+		"@replit/codemirror-vim": "^6.0.11",
 		"@sveltejs/site-kit": "^3.2.2",
 		"@vercel/analytics": "^0.1.11",
 		"@webcontainer/api": "^1.0.2",

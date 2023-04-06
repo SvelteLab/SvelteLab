@@ -20,6 +20,7 @@ specifiers:
   '@lezer/lr': ^1.0.0
   '@playwright/test': ^1.28.1
   '@replit/codemirror-lang-svelte': ^6.0.0
+  '@replit/codemirror-vim': ^6.0.11
   '@resvg/resvg-js': ^2.4.1
   '@sveltejs/adapter-auto': ^2.0.0
   '@sveltejs/adapter-vercel': ^2.3.1
@@ -83,6 +84,7 @@ dependencies:
   '@lezer/javascript': 1.4.1
   '@lezer/lr': 1.3.3
   '@replit/codemirror-lang-svelte': 6.0.0_rydcvkemlwbfotfpumwnboxoc4
+  '@replit/codemirror-vim': 6.0.11_iiuen4r7cdau5k6ygjm6gg2tfe
   '@sveltejs/site-kit': 3.2.2
   '@vercel/analytics': 0.1.11
   '@webcontainer/api': 1.0.2
@@ -718,6 +720,21 @@ packages:
       '@lezer/highlight': 1.1.3
       '@lezer/javascript': 1.4.1
       '@lezer/lr': 1.3.3
+    dev: false
+
+  /@replit/codemirror-vim/6.0.11_iiuen4r7cdau5k6ygjm6gg2tfe:
+    resolution: {integrity: sha512-b3umG+3DR9LfNjrPBk1849Cp8WHgFbYFhlFvGg62br03NdVquVKxaQonK7xA8WGurzQeQOpBW+hhr7mzZxWksA==}
+    peerDependencies:
+      '@codemirror/commands': ^6.0.0
+      '@codemirror/language': ^6.1.0
+      '@codemirror/search': ^6.2.0
+      '@codemirror/state': ^6.0.1
+      '@codemirror/view': ^6.0.3
+    dependencies:
+      '@codemirror/commands': 6.2.2
+      '@codemirror/language': 6.6.0
+      '@codemirror/state': 6.2.0
+      '@codemirror/view': 6.9.1
     dev: false
 
   /@resvg/resvg-js-android-arm-eabi/2.4.1:

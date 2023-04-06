@@ -6,6 +6,8 @@
 	import Routes from '~icons/material-symbols/alt-route';
 	import Lib from '~icons/material-symbols/local-library';
 	import Folder from '~icons/material-symbols/folder';
+	import Vim from '~icons/vscode-icons/file-type-vim';
+	import { editor_config } from '$lib/stores/editor_config_store';
 
 	const base_icons = {
 		routes: Routes,
@@ -22,61 +24,86 @@
 	$: $current_tab && button_refs[$current_tab]?.scrollIntoView();
 </script>
 
-<ul role="tablist">
-	{#each [...$tabs] as path}
-		{@const route_arr = path.split('/').slice(1)}
-		{@const main_folder = route_arr.length > 2 ? route_arr[1] : null}
-		{@const route =
-			route_arr.length > 1 ? `/${(route_arr.slice(2, route_arr.length - 1) ?? []).join('/')}` : ''}
-		{@const file_name = route_arr.at(-1)}
-		<li role="tab" aria-selected={path === $current_tab}>
-			<button
-				bind:this={button_refs[path]}
-				on:click={() => {
-					open_file(path);
-				}}
-				on:auxclick={() => {
-					close_file(path);
-				}}
-			>
-				<svelte:component this={get_file_icon(file_name || '')} />
-				{file_name}
-				{#if route}
-					<small>
-						{route}
-						{#if main_folder}
-							{@const main_icon = base_icons[main_folder]}
-							{#if !main_icon}
-								<Folder />
-								{main_folder}
-							{:else}
-								<svelte:component this={main_icon} />
+<section class="wrapper">
+	<ul role="tablist">
+		{#each [...$tabs] as path}
+			{@const route_arr = path.split('/').slice(1)}
+			{@const main_folder = route_arr.length > 2 ? route_arr[1] : null}
+			{@const route =
+				route_arr.length > 1
+					? `/${(route_arr.slice(2, route_arr.length - 1) ?? []).join('/')}`
+					: ''}
+			{@const file_name = route_arr.at(-1)}
+			<li role="tab" aria-selected={path === $current_tab}>
+				<button
+					bind:this={button_refs[path]}
+					on:click={() => {
+						open_file(path);
+					}}
+					on:auxclick={() => {
+						close_file(path);
+					}}
+				>
+					<svelte:component this={get_file_icon(file_name || '')} />
+					{file_name}
+					{#if route}
+						<small>
+							{route}
+							{#if main_folder}
+								{@const main_icon = base_icons[main_folder]}
+								{#if !main_icon}
+									<Folder />
+									{main_folder}
+								{:else}
+									<svelte:component this={main_icon} />
+								{/if}
 							{/if}
-						{/if}
-					</small>
-				{/if}
-			</button>
-			<button
-				title="Close {file_name}"
-				on:click={() => {
-					close_file(path);
-				}}
-			>
-				<Close />
-			</button>
-		</li>
-	{/each}
-</ul>
+						</small>
+					{/if}
+				</button>
+				<button
+					title="Close {file_name}"
+					on:click={() => {
+						close_file(path);
+					}}
+				>
+					<Close />
+				</button>
+			</li>
+		{/each}
+	</ul>
+	<section class="configs">
+		<button
+			class:inactive={!$editor_config.vim}
+			on:click={() => {
+				$editor_config.vim = !$editor_config.vim;
+			}}><Vim /></button
+		>
+	</section>
+</section>
 
 <style>
+	.wrapper {
+		display: grid;
+		width: 100%;
+		grid-template-columns: 1fr max-content;
+	}
+	.configs {
+		grid-column: -1;
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+	.configs :global(svg) {
+		height: 3rem !important;
+	}
 	ul {
 		display: flex;
-		max-width: 100%;
-		overflow-x: auto;
 		background-color: var(--sk-back-1);
 		border-bottom: 1px solid var(--sk-back-4);
 		margin: 0;
 		list-style: none;
+		overflow-x: auto;
 	}
 	li {
 		padding: 0.5em;
@@ -85,7 +112,7 @@
 		gap: 0.5rem;
 		position: relative;
 	}
-	button {
+	ul button {
 		display: flex;
 		align-items: center;
 		gap: 0.5em;
@@ -105,5 +132,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+	}
+	.inactive {
+		opacity: 0.5;
 	}
 </style>

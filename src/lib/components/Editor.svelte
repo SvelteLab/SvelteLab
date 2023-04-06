@@ -5,7 +5,7 @@
 	import { current_tab } from '$lib/tabs';
 	import type { SvelteError } from '$lib/types';
 	import { webcontainer } from '$lib/webcontainer';
-	import { indentLess, indentWithTab } from '@codemirror/commands';
+	import { indentWithTab } from '@codemirror/commands';
 	import { css } from '@codemirror/lang-css';
 	import { html } from '@codemirror/lang-html';
 	import { javascript } from '@codemirror/lang-javascript';
@@ -18,10 +18,13 @@
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
+	import { vim } from '@replit/codemirror-vim';
+	import { basicSetup } from 'codemirror';
 	import CodeMirror from 'svelte-codemirror-editor';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
+	import { editor_config } from '$lib/stores/editor_config_store';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -46,6 +49,27 @@
 	};
 
 	let code: string;
+
+	function get_extensions(config: typeof $editor_config) {
+		const extensions = [
+			basicSetup,
+			js_snippets,
+			svelte_snippets,
+			linter(return_diagnostics),
+			abbreviationTracker(),
+			keymap.of([indentWithTab])
+		];
+		if (config.vim) {
+			extensions.unshift(
+				vim({
+					status: true
+				})
+			);
+		}
+		return extensions;
+	}
+
+	$: extensions = get_extensions($editor_config);
 
 	function read_current_tab(current_tab: string) {
 		webcontainer.read_file(current_tab).then((file) => {
@@ -92,24 +116,18 @@
 	}
 </script>
 
-<Tabs />
-
 {#if !$current_tab}
 	<VoidEditor />
 {:else}
+	<Tabs />
 	<CodeMirror
 		{lang}
 		{theme}
+		basic={false}
 		useTab={false}
 		tabSize={3}
 		value={code ?? ''}
-		extensions={[
-			js_snippets,
-			svelte_snippets,
-			linter(return_diagnostics),
-			abbreviationTracker(),
-			keymap.of([indentWithTab])
-		]}
+		{extensions}
 		on:change={(e) => {
 			webcontainer.update_file($current_tab, e.detail);
 			code = e.detail;
@@ -160,6 +178,10 @@
 				color: 'var(--sk-text-1)'
 			},
 			'.cm-tooltip-lint': {
+				background: 'var(--sk-back-3)',
+				color: 'var(--sk-text-1)'
+			},
+			'.cm-panels': {
 				background: 'var(--sk-back-3)',
 				color: 'var(--sk-text-1)'
 			}
