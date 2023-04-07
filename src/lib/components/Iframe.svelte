@@ -17,6 +17,17 @@
 			webcontainer.set_iframe_path('/' + url);
 		}
 	}
+	let timeout_cancellation: ReturnType<typeof setTimeout>;
+	let slow_booting = false;
+	$: {
+		clearTimeout(timeout_cancellation);
+		slow_booting = false;
+		if ($webcontainer.status === 'booting' || $webcontainer.status === 'waiting') {
+			timeout_cancellation = setTimeout(() => {
+				slow_booting = true;
+			}, 15000);
+		}
+	}
 </script>
 
 <section>
@@ -62,6 +73,15 @@
 				<span> Server Closed </span>
 				<span>Try running a script...</span>
 			{/if}
+			{#if slow_booting && $webcontainer.status !== 'server_closed'}
+				<small>
+					It seems like this is taking time. Make sure i've <a
+						href="https://developer.stackblitz.com/platform/webcontainers/browser-config"
+						target="_blank"
+						rel="noopener noreferrer">setupped your browser correctly</a
+					>.
+				</small>
+			{/if}
 		</div>
 	{/if}
 </section>
@@ -98,7 +118,7 @@
 		outline: 1px solid var(--sk-theme-1);
 	}
 
-	section  {
+	section {
 		height: 100%;
 	}
 
@@ -106,5 +126,14 @@
 		width: 100%;
 		height: calc(100% - 2.4em);
 		border: none;
+	}
+	small {
+		font-size: initial;
+		max-width: 50%;
+	}
+	small > a {
+		display: inline;
+		color: var(--sk-theme-1);
+		text-decoration: underline;
 	}
 </style>

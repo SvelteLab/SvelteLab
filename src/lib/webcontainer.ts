@@ -39,7 +39,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 
 const { subscribe, set } = writable({
 	webcontainer_url: '',
-	status: 'booting',
+	status: 'booting' as 'booting' | 'waiting' | 'server_closed',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
