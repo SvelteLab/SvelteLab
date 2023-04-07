@@ -72,6 +72,7 @@
 	$: extensions = get_extensions($editor_config);
 
 	function read_current_tab(current_tab: string) {
+		if (!current_tab) return;
 		webcontainer.read_file(current_tab).then((file) => {
 			code = file;
 		});

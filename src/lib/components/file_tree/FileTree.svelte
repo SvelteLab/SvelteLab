@@ -308,9 +308,9 @@
 		<button
 			style:margin-top="1rem"
 			on:click={() => {
-				webcontainer.delete_file(`${base_path}${deleting_file}`);
+				webcontainer.delete_file(`${base_path}${deleting_file?.name}`);
 				if (deleting_file?.kind === 'file') {
-					close_file(`${base_path}${deleting_file}`);
+					close_file(`${base_path}${deleting_file?.name}`);
 				}
 				deleting_file = null;
 			}}>Yes</button
