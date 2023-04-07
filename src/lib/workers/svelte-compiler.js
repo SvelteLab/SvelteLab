@@ -8,35 +8,13 @@ import { originalPositionFor, TraceMap } from '@jridgewell/trace-mapping';
 
 self.window = self; // egregious hack to get magic-string to work in a worker
 
-let fulfil_ready;
-const ready = new Promise((f) => {
-	fulfil_ready = f;
-});
-
 self.addEventListener('message', async (event) => {
 	switch (event.data.type) {
-		case 'init':
-			try {
-				importScripts(
-					'https://unpkg.com/@jridgewell/trace-mapping@0.3.18/dist/trace-mapping.umd.js'
-				);
-			} catch (e) {
-				console.log(e);
-				await import(
-					/* @vite-ignore */ 'https://unpkg.com/@jridgewell/trace-mapping@0.3.18/dist/trace-mapping.umd.js'
-				);
-			}
-
-			fulfil_ready();
-			break;
-
 		case 'compile':
-			await ready;
 			try {
 				postMessage(compile(event.data));
 			} catch (e) {
 				/*empty*/
-				console.log(e);
 			}
 			break;
 	}
