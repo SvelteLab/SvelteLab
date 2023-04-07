@@ -94,7 +94,7 @@
 	function return_diagnostics() {
 		const diagnostcs: Diagnostic[] = [];
 		for (let warning of warnings_and_errors.warnings) {
-			if (!warning.start || !warning.end) continue;
+			if (!(warning.start as any)?.character || !(warning.end as any)?.character) continue;
 			diagnostcs.push({
 				from: (warning.start as any).character,
 				to: (warning.end as any).character,
@@ -104,7 +104,7 @@
 		}
 		if (warnings_and_errors.error) {
 			const { error } = warnings_and_errors;
-			if (error.start && error.end) {
+			if (error.start?.character && error.end?.character) {
 				diagnostcs.push({
 					from: error.start.character,
 					to: error.end.character,
