@@ -58,7 +58,7 @@
 		<button
 			title="Toggle File Browser"
 			on:click={layout_store.toggle_file_tree}
-			aria-pressed={$layout_store.file_tree}
+			aria-pressed={$layout_store.file_tree !== 0}
 		>
 			<FileBrowser /> Files
 		</button>
@@ -66,7 +66,7 @@
 		<button
 			title="Toggle Terminal"
 			on:click={layout_store.toggle_terminal}
-			aria-pressed={$layout_store.terminal}
+			aria-pressed={$layout_store.terminal !== 0}
 		>
 			<Terminal /> Terminal
 		</button>

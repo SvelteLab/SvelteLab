@@ -13,9 +13,14 @@
 		if (update_height) update_height();
 	}
 
+	$: {
+		$layout_store.terminal;
+		handle_pane();
+	}
+
 	let update_height: () => void;
 
-	const minSize = 5;
+	const minSize = 0;
 </script>
 
 <div class="grid">
@@ -24,19 +29,15 @@
 		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
 			<Pane {minSize}>
 				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-					{#if $layout_store.file_tree}
-						<Pane size={30} {minSize}><FileActions {minSize} /></Pane>
-					{/if}
+					<Pane bind:size={$layout_store.file_tree} {minSize}><FileActions {minSize} /></Pane>
 					<Pane {minSize}>
 						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 							<Pane {minSize} class="editor-pane">
 								<svelte:component this={Editor} />
 							</Pane>
-							{#if $layout_store.terminal}
-								<Pane size={30} {minSize}>
-									<svelte:component this={Console} bind:update_height />
-								</Pane>
-							{/if}
+							<Pane bind:size={$layout_store.terminal} {minSize}>
+								<svelte:component this={Console} bind:update_height />
+							</Pane>
 						</Splitpanes>
 					</Pane>
 				</Splitpanes>

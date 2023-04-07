@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { layout_store } from '$lib/stores/layout_store';
 	import { fitAddon, terminal } from '$lib/terminal';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	let div: HTMLDivElement;
 
@@ -14,6 +15,13 @@
 	export const update_height = () => {
 		fitAddon.fit();
 	};
+
+	$: {
+		$layout_store.terminal;
+		setTimeout(() => {
+			update_height();
+		}, 300);
+	}
 </script>
 
 <div bind:this={div} />
