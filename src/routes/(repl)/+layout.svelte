@@ -36,7 +36,6 @@
 	$: handle_unload($is_repl_to_save);
 
 	const svelte_compiler = new SvelteCompiler();
-	svelte_compiler.postMessage({ type: 'init' });
 	setContext('svelte-compiler', svelte_compiler);
 
 	afterNavigate(async () => {
