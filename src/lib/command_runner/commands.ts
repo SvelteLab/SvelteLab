@@ -25,6 +25,7 @@ import NPM from '~icons/material-symbols/install-desktop';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
+import Bookmark from '~icons/material-symbols/star-outline';
 import GitHub from '~icons/mdi/github';
 import Discord from '~icons/mdi/discord';
 import Credits from '~icons/mdi/license';
@@ -32,6 +33,7 @@ import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
 import StartTemplate from './commands_components/StartTemplate.svelte';
+import SaveStartTemplate from './commands_components/SaveStartTemplate.svelte';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
@@ -204,6 +206,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'create a new blank project with a starter template',
 		icon: New,
 		action_component: StartTemplate
+	});
+
+	commands_to_return.push({
+		command: 'default-project-template',
+		title: 'Default Template',
+		subtitle: 'choose the template we will load as the default',
+		icon: Bookmark,
+		action_component: SaveStartTemplate
 	});
 
 	commands_to_return.push({

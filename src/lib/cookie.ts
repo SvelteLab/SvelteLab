@@ -10,3 +10,7 @@ export function get_cookies() {
 export function get_cookie(name: string): string | undefined {
 	return get_cookies()[name];
 }
+
+export function set_cookie(name: string, value: string) {
+	document.cookie = `${name}=${value}`;
+}
