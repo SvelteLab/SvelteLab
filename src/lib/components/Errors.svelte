@@ -40,7 +40,7 @@
 <ul>
 	{#if error}
 		<li class="error" transition:slide={{ delay: 250, duration: 250 }}>
-			<ErrorIcon />{error.message} at {error.start.line}:{error.start.column}
+			<ErrorIcon />{error.message} at {error.start?.line}:{error.start?.column}
 		</li>
 	{/if}
 
@@ -48,7 +48,7 @@
 		<li class="warning" transition:slide={{ delay: 250, duration: 250 }}>
 			<WarningIcon />{warning.message}
 			{#if warning.start}
-				at {warning.start.line}:{warning.start.column}
+				at {warning.start?.line}:{warning.start?.column}
 			{/if}
 		</li>
 	{/each}
