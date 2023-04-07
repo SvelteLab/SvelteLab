@@ -1,6 +1,6 @@
 <img crossorigin="anonymous" src="https://i.imgur.com/GCSowrb.png" alt="A mockup of a phone with a Screenshot of SvelteLab opened. SvelteLab: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
 
-# {🧪} SvelteLab
+# &lcub;🧪&rcub; SvelteLab
 
 🏗️ We are crafting a _supercharged_ REPL for Svelte: instantly spin up a SvelteKit project and share it with the world.
 
