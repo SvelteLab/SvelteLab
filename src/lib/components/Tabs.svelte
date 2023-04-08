@@ -6,7 +6,7 @@
 	import Routes from '~icons/material-symbols/alt-route';
 	import Lib from '~icons/material-symbols/local-library';
 	import Folder from '~icons/material-symbols/folder';
-	import Vim from '~icons/vscode-icons/file-type-vim';
+	import Vim from '~icons/file-icons/macvim';
 	import { editor_config } from '$lib/stores/editor_config_store';
 
 	const base_icons = {
