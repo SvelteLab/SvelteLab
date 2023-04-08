@@ -1,5 +1,23 @@
 import { persisted } from 'svelte-local-storage-store';
 
-export const editor_config = persisted('editor_config', {
+interface EditorConfigStore {
+	vim: boolean;
+}
+
+const { subscribe, update } = persisted<EditorConfigStore>('editor_config', {
 	vim: false
 });
+
+function toggle_state(key: keyof EditorConfigStore) {
+	update((state) => ({
+		...state,
+		[key]: !state[key]
+	}));
+}
+
+const toggle_vim = () => toggle_state('vim');
+
+export const editor_config = {
+	subscribe,
+	toggle_vim
+};

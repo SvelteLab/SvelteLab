@@ -73,12 +73,15 @@
 		{/each}
 	</ul>
 	<section class="configs">
-		<button
-			class:inactive={!$editor_config.vim}
-			on:click={() => {
-				$editor_config.vim = !$editor_config.vim;
-			}}><Vim /></button
-		>
+		{#if $editor_config.vim}
+			<button
+				on:click={() => {
+					editor_config.toggle_vim();
+				}}
+			>
+				<Vim />
+			</button>
+		{/if}
 	</section>
 </section>
 
