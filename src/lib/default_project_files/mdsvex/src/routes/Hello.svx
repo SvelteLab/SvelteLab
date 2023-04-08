@@ -1,7 +1,8 @@
 <script>
+   import Counter from "$lib/Counter.svelte";
    export let title;
 </script>
 
 # Hello {title}!
 
-This is the **mdsvex** template from **SvelteLab**.
+<Counter />
