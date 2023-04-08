@@ -1,12 +1,15 @@
 <script lang="ts">
+	import Dialog from '$lib/components/Dialog.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
-	import { Dialog } from 'as-comps';
+	import { is_intro_open } from '$lib/stores/intro_store';
+	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import { Dialog as RawDialog } from 'as-comps';
 	import { SvelteComponentTyped, tick, type ComponentType } from 'svelte';
 	import { fly } from 'svelte/transition';
+	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 
 	export let Console: ComponentType<SvelteComponentTyped>;
 	export let Editor: ComponentType<SvelteComponentTyped>;
@@ -24,7 +27,7 @@
 <div class="container">
 	<Header mobile />
 	<main id="main">
-		<Dialog
+		<RawDialog
 			bind:isOpen={$showing_files}
 			noCloseButton
 			includedTrigger={false}
@@ -45,7 +48,7 @@
 			--as-dialog-max-height="calc(100% - 2em)"
 		>
 			<FileActions />
-		</Dialog>
+		</RawDialog>
 		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
 			<svelte:component this={Editor} />
 		</div>
@@ -58,6 +61,10 @@
 	</main>
 	<MobileFooter />
 </div>
+
+<Dialog bind:is_open={$is_intro_open} padding="0">
+	<Intro />
+</Dialog>
 
 <style>
 	.container {

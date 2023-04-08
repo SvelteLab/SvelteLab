@@ -5,6 +5,7 @@ import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
+import { intro_hidden_forever, is_intro_open } from '$lib/stores/intro_store';
 import { layout_store } from '$lib/stores/layout_store';
 import { current_tab, open_file } from '$lib/tabs';
 import { get_theme } from '$lib/theme';
@@ -26,15 +27,15 @@ import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Bookmark from '~icons/material-symbols/star-outline';
-import GitHub from '~icons/mdi/github';
 import Discord from '~icons/mdi/discord';
+import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
+import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 import AddRoute from './commands_components/AddRoute.svelte';
 import NpmInstall from './commands_components/NpmInstall.svelte';
-import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import StartTemplate from './commands_components/StartTemplate.svelte';
 import SaveStartTemplate from './commands_components/SaveStartTemplate.svelte';
-import SvelteAddIcon from '~icons/sveltelab/svelte-add';
+import StartTemplate from './commands_components/StartTemplate.svelte';
+import SvelteAdd from './commands_components/SvelteAdd.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -288,7 +289,17 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'Open the SvelteLab github repo',
 		icon: GitHub,
 		action() {
-			window.open(`${PUBLIC_GITHUB_REPO}#readme`, '_blank');
+			window.open(`${PUBLIC_GITHUB_REPO}`, '_blank');
+		}
+	});
+
+	commands_to_return.push({
+		command: 'submit-issue',
+		title: 'Submit Issue',
+		subtitle: 'Open new Issue for SvelteLab',
+		icon: GitHub,
+		action() {
+			window.open(`${PUBLIC_GITHUB_REPO}issues/new`, '_blank');
 		}
 	});
 
@@ -309,6 +320,17 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Credits,
 		action() {
 			open_credits();
+		}
+	});
+
+	commands_to_return.push({
+		command: 'show-intro',
+		title: 'Show Intro',
+		subtitle: 'Show Intro again and remove hidden forever preference',
+		icon: Credits,
+		action() {
+			intro_hidden_forever.set(false);
+			is_intro_open.set(true);
 		}
 	});
 

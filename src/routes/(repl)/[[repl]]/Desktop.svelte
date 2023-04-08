@@ -1,9 +1,11 @@
 <script lang="ts">
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
+	import { is_intro_open } from '$lib/stores/intro_store';
 	import { layout_store } from '$lib/stores/layout_store';
 	import type { ComponentType, SvelteComponentTyped } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
+	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 
 	export let Console: ComponentType<SvelteComponentTyped>;
@@ -43,7 +45,16 @@
 				</Splitpanes>
 			</Pane>
 			<Pane size={42} {minSize}>
-				<Iframe />
+				<Splitpanes horizontal>
+					<Pane {minSize}>
+						<Iframe />
+					</Pane>
+					{#if $is_intro_open}
+						<Pane>
+							<Intro />
+						</Pane>
+					{/if}
+				</Splitpanes>
 			</Pane>
 		</Splitpanes>
 	</main>
