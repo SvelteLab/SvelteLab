@@ -3,6 +3,7 @@
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
 	import { is_intro_open } from '$lib/stores/intro_store';
+	import { browser } from '$app/environment';
 	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 	import { Dialog as RawDialog } from 'as-comps';
 	import { SvelteComponentTyped, tick, type ComponentType } from 'svelte';
@@ -62,7 +63,7 @@
 	<MobileFooter />
 </div>
 
-<Dialog bind:is_open={$is_intro_open} padding="0">
+<Dialog bind:is_open={$is_intro_open && browser} padding="0">
 	<Intro />
 </Dialog>
 
