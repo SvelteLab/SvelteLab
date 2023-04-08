@@ -23,6 +23,7 @@
 		await tick();
 		if (update_height) update_height();
 	}
+	$: is_modal_open = $is_intro_open && browser;
 </script>
 
 <div class="container">
@@ -63,7 +64,7 @@
 	<MobileFooter />
 </div>
 
-<Dialog bind:is_open={$is_intro_open && browser} padding="0">
+<Dialog bind:is_open={is_modal_open} padding="0">
 	<Intro />
 </Dialog>
 
