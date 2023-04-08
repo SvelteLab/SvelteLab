@@ -107,6 +107,7 @@
 		margin: 0;
 		list-style: none;
 		overflow-x: auto;
+		--sb-size: 0.5rem;
 	}
 	li {
 		padding: 0.5em;

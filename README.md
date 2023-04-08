@@ -1,8 +1,6 @@
 <img crossorigin="anonymous" src="https://i.imgur.com/GCSowrb.png" alt="A mockup of a phone with a Screenshot of SvelteLab opened. SvelteLab: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
 
-<div style="display:flex; gap: 3rem; justify-content: center">
-<a href="https://github.com/sveltelab/sveltelab"><img src="https://api.iconify.design/simple-icons:github.svg?color=%23ff531a" alt="GitHub" height="32px" margin-right="30px"></a> <a href="https://discord.gg/FbnT6wujQx"><img src="https://api.iconify.design/simple-icons:discord.svg?color=%23ff531a" alt="Discord" height="32px"></a>
-</div>
+---
 
 **✨ Features:**
 
@@ -20,7 +18,9 @@
 
 ---
 
-[➡️ Try it out now!](https://sveltelab.vercel.app/)
+[🧪 Try it out now!](https://sveltelab.vercel.app/)
+
+⇨ Get in touch via [![](https://api.iconify.design/material-symbols:error-circle-rounded.svg?color=%23ff531a) GitHub Issues](/issues/new) [![](https://api.iconify.design/simple-icons:discord.svg?color=%23ff531a) Discord](https://discord.gg/FbnT6wujQx) or ![](https://api.iconify.design/simple-icons:twitter.svg?color=%23ff531a) Twitter: [@PaoloRicciuti](https://twitter.com/PaoloRicciuti), [@SarcevicAntonio](https://twitter.com/SarcevicAntonio)
 
 ## Development
 

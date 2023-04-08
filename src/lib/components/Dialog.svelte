@@ -17,7 +17,7 @@
 	isOpen={is_open}
 	includedTrigger={false}
 >
-	<h1><slot name="dialog-title" /></h1>
+	<h2><slot name="dialog-title" /></h2>
 	<slot />
 	<svelte:fragment slot="dialog-actions">
 		<slot name="dialog-actions" />
