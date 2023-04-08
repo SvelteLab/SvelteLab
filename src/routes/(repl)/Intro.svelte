@@ -73,8 +73,9 @@
 		font-size: 2.6rem;
 	}
 
-	aside :global(p) {
-		margin: 0.1rem;
+	aside :global(p),
+	aside :global(ul) {
+		margin: 0.5rem;
 	}
 
 	.dismiss {
