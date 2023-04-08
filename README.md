@@ -1,4 +1,4 @@
-<img crossorigin="anonymous" src="https://i.imgur.com/GCSowrb.png" alt="A mockup of a phone with a Screenshot of SvelteLab opened. SvelteLab: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!">
+[![A mockup of a phone with a Screenshot of SvelteLab opened. SvelteLab: A REPL for SvelteKit projects: quickly spin up a SvelteKit Projects and share it with the world!](./header.png)](https://www.sveltelab.dev/)
 
 ---
 
