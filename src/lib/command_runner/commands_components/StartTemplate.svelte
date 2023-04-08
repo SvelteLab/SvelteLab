@@ -8,7 +8,7 @@
 	}
 
 	function fix_title(title: string) {
-		return title.split('_').map(capitalize).join('+');
+		return title.split('_').map(capitalize).join(' + ');
 	}
 </script>
 
