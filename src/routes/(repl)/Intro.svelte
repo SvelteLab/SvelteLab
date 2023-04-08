@@ -44,7 +44,6 @@
 		align-items: center;
 		gap: 1rem;
 		margin: auto;
-		background-color: var(--sk-back-3);
 		padding: 1rem 2rem;
 		border-radius: 0.5rem;
 		margin-bottom: 1rem;
