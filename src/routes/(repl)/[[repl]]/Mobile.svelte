@@ -23,8 +23,11 @@
 		await tick();
 		if (update_height) update_height();
 	}
-	$: is_modal_open = $is_intro_open && browser;
+	let width;
+	$: is_modal_open = $is_intro_open && width < 500;
 </script>
+
+<svelte:window bind:innerWidth={width} />
 
 <div class="container">
 	<Header mobile />
