@@ -17,6 +17,14 @@
 	--sk-font-mono: 'Fira Mono', monospace;
 }
 
+body {
+	background-color: var(--sk-back-3);
+	color: var(--sk-text-1);
+	margin: 0.75em;
+	font-family: var(--sk-font);
+	accent-color: var(--sk-theme-1);
+}
+
 @media (prefers-color-scheme: dark) {
 	:root {
 		--sk-back-1: hsl(0, 0%, 10%);
@@ -28,11 +36,16 @@
 		--sk-text-2: hsl(0, 0%, 80%);
 		--sk-text-3: hsl(0, 0%, 65%);
 	}
-}
 
-body {
-	background-color: var(--sk-back-3);
-	color: var(--sk-text-1);
-	margin: 0.75em;
-	font-family: var(--sk-font);
+	body {
+		color-scheme: dark;
+	}
+
+	a {
+		color: var(--sk-theme-3);
+	}
+
+	a:visited {
+		color: hsl(267, 100%, 75%);
+	}
 }
