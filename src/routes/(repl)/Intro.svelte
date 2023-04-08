@@ -65,6 +65,8 @@
 	}
 	section {
 		padding: 0.5em 1em;
+		max-width: 70ch;
+		margin: auto;
 	}
 	section :global(img) {
 		max-width: 100%;
