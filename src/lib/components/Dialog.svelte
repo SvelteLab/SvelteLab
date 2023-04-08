@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Dialog } from 'as-comps';
 	export let is_open = false;
+	export let padding = '3rem';
 </script>
 
 <Dialog
@@ -10,7 +11,7 @@
 	--as-dialog--actions--child-button-flex-grow="0"
 	--as-dialog-border-radius=".5rem"
 	--as-dialog-background="var(--sk-back-2)"
-	--as-dialog-padding="3rem"
+	--as-dialog-padding={padding}
 	noCloseButton
 	autofocus={false}
 	isOpen={is_open}
