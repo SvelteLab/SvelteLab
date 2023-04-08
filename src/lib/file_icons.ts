@@ -24,6 +24,7 @@ import Page from '~icons/r-icons/svelte_page';
 import Prettier from '~icons/simple-icons/prettier';
 import CSS from '~icons/vscode-icons/file-type-css';
 import HTML from '~icons/vscode-icons/file-type-html';
+import PostCSS from '~icons/vscode-icons/file-type-postcss';
 import JS from '~icons/vscode-icons/file-type-js-official';
 import Svelte from '~icons/vscode-icons/file-type-svelte';
 import Tailwind from '~icons/vscode-icons/file-type-tailwind';
@@ -45,6 +46,8 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/\.prettierrc$/, Prettier],
 	[/.*\.svelte$/, Svelte],
 	[/.*\.ts$/, TS],
+	[/^postcss\.(js|cjs|mjs)$/, PostCSS],
+	[/.*\.postcss$/, PostCSS],
 	[/.*\.(js|cjs|mjs)$/, JS],
 	[/.*\.css$/, CSS],
 	[/.*\.json$/, JSON],
