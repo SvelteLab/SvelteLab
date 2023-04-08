@@ -75,11 +75,15 @@
 			{/if}
 			{#if slow_booting && $webcontainer.status !== 'server_closed'}
 				<small>
-					It seems like this is taking time. Make sure i've <a
+					It seems like this is taking time.
+					<a
 						href="https://developer.stackblitz.com/platform/webcontainers/browser-config"
 						target="_blank"
-						rel="noopener noreferrer">setupped your browser correctly</a
-					>.
+						rel="noopener noreferrer"
+					>
+						Make sure your browser is setup correctly
+					</a>
+					.
 				</small>
 			{/if}
 		</div>
