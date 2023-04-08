@@ -48,7 +48,6 @@
 					{file_name}
 					{#if route}
 						<small>
-							{route}
 							{#if main_folder}
 								{@const main_icon = base_icons[main_folder]}
 								{#if !main_icon}
@@ -58,6 +57,7 @@
 									<svelte:component this={main_icon} />
 								{/if}
 							{/if}
+							{route}
 						</small>
 					{/if}
 				</button>
