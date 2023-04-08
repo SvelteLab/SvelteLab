@@ -36,12 +36,3 @@ body {
 	margin: 0.75em;
 	font-family: var(--sk-font);
 }
-
-a {
-	color: var(--sk-theme-3);
-}
-
-hr {
-	border-style: solid;
-	border-color: var(--sk-back-5);
-}

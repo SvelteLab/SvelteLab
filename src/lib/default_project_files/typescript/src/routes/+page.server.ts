@@ -1,5 +1,5 @@
 export async function load() {
 	return {
-		name: 'World'
+		name: 'TypeScript'
 	};
 }

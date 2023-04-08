@@ -1,8 +1,4 @@
-import README from '../../../README.md?raw';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
-import { marked } from 'marked';
-
-const intro = marked(README.split('---')[0]);
 
 const project = import.meta.glob('./**/!(package-lock.json)', {
 	as: 'raw',
@@ -29,7 +25,7 @@ for (const file in project) {
 		} else {
 			subtree[part] = {
 				file: {
-					contents: project[file].replace('%sveltekit.intro%', intro)
+					contents: project[file]
 				}
 			};
 		}

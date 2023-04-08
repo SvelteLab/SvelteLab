@@ -1,15 +1,13 @@
 <script>
+	import Counter from '$lib/Counter.svelte';
 	import './global.css';
-	import SvelteLabIntro from '$lib/Intro.svelte';
 	export let data;
 </script>
 
-<h1>Hello {data.name}!</h1>
-<p>
-	This is the <strong>library</strong> template from <strong>SvelteLab</strong>. Head over to the
-	lib folder to start crafting!
-</p>
+<h1>
+	Hello {data.name}!
+</h1>
 
-<hr />
+<p>Head over to the lib folder to start crafting!</p>
 
-<SvelteLabIntro />
+<Counter />
