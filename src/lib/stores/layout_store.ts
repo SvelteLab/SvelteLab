@@ -10,7 +10,7 @@ interface LayoutStore {
 const { subscribe, update, set } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: 30,
 	terminal: 30,
-	show_config: false,
+	show_config: true,
 	folders_first: true
 });
 
