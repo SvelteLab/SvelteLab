@@ -5,6 +5,7 @@ import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
+import { editor_config } from '$lib/stores/editor_config_store';
 import { intro_hidden_forever, is_intro_open } from '$lib/stores/intro_store';
 import { layout_store } from '$lib/stores/layout_store';
 import { current_tab, open_file } from '$lib/tabs';
@@ -21,12 +22,15 @@ import Format from '~icons/material-symbols/cleaning-services';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
+import Issue from '~icons/material-symbols/error-circle-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
 import NPM from '~icons/material-symbols/install-desktop';
+import Keyboard from '~icons/material-symbols/keyboard';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Bookmark from '~icons/material-symbols/star-outline';
+import Intro from '~icons/material-symbols/waving-hand-rounded';
 import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
@@ -158,6 +162,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}
 
 	commands_to_return.push({
+		command: 'vim-keybindings',
+		title: 'Vim Keybindings',
+		subtitle: 'toggle vim keybindings',
+		icon: Keyboard,
+		action: editor_config.toggle_vim
+	});
+
+	commands_to_return.push({
 		command: 'npm-install',
 		title: 'Install package',
 		subtitle: 'install a package from npm',
@@ -166,8 +178,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
-		command: 'download-zip',
-		title: 'Download',
+		command: 'export-download-zip',
+		title: 'Export',
 		subtitle: 'download current project as .zip',
 		icon: Download,
 		action() {
@@ -286,7 +298,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'open-sveltelab-github',
 		title: 'Open GitHub',
-		subtitle: 'Open the SvelteLab github repo',
+		subtitle: 'open SvelteLab GitHub Repo',
 		icon: GitHub,
 		action() {
 			window.open(`${PUBLIC_GITHUB_REPO}`, '_blank');
@@ -296,10 +308,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'submit-issue',
 		title: 'Submit Issue',
-		subtitle: 'Open new Issue for SvelteLab',
-		icon: GitHub,
+		subtitle: 'open new Issue for SvelteLab',
+		icon: Issue,
 		action() {
-			window.open(`${PUBLIC_GITHUB_REPO}issues/new`, '_blank');
+			window.open(`${PUBLIC_GITHUB_REPO}/issues/new`, '_blank');
 		}
 	});
 
@@ -327,7 +339,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		command: 'show-intro',
 		title: 'Show Intro',
 		subtitle: 'Show Intro again and remove hidden forever preference',
-		icon: Credits,
+		icon: Intro,
 		action() {
 			intro_hidden_forever.set(false);
 			is_intro_open.set(true);
