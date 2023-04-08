@@ -60,7 +60,7 @@
 
 	aside {
 		background-color: var(--sk-back-1);
-		max-height: 100%;
+		height: 100%;
 		overflow: auto;
 	}
 	section {
