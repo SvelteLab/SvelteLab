@@ -6,16 +6,15 @@
 	import { commands } from '$lib/command_runner/commands';
 	import Credits from '$lib/components/Credits.svelte';
 	import Logo from '$lib/components/Logo.svelte';
+	import { is_intro_open } from '$lib/stores/intro_store';
 	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
-	import type { LayoutData } from './$types';
-	import GitHub from '~icons/mdi/github';
-	import Close from '~icons/material-symbols/close-rounded';
+	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';
-	import { is_intro_open } from '$lib/stores/intro_store';
-	import { onMount, setContext } from 'svelte';
-	import SvelteCompiler from '$lib/workers/svelte-compiler?worker';
+	import Close from '~icons/material-symbols/close-rounded';
+	import GitHub from '~icons/mdi/github';
+	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
 
@@ -39,9 +38,6 @@
 	}
 
 	$: handle_unload($is_repl_to_save);
-
-	const svelte_compiler = new SvelteCompiler();
-	setContext('svelte-compiler', svelte_compiler);
 
 	onMount(() => {
 		setTimeout(() => {

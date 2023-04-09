@@ -2,17 +2,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { compile as svelte_compile } from 'svelte/compiler';
-import { transpile } from 'typescript';
-import MagicString from 'magic-string';
-import { originalPositionFor, TraceMap } from '@jridgewell/trace-mapping';
 
 self.window = self; // egregious hack to get magic-string to work in a worker
+
+let transpile, originalPositionFor, TraceMap, MagicString;
+let ts_ready = false;
 
 self.addEventListener('message', async (event) => {
 	switch (event.data.type) {
 		case 'compile':
 			try {
-				postMessage(compile(event.data));
+				postMessage(await compile(event.data));
 			} catch (e) {
 				/*empty*/
 			}
@@ -34,26 +34,40 @@ function get_character_from_pos(line, column, source) {
 	return sum;
 }
 
-function compile({ id, source, options, return_ast }) {
+async function compile({ id, source, options, return_ast }) {
 	let trace_map;
 	try {
 		const matches = source.match(/<script\s+lang=(?:"ts"|'ts'|`ts`)>(?<code>[\s\S]*)<\/script>/m);
 		let new_source = source;
 		if (matches && matches.groups) {
-			const transpiled = transpile(matches.groups.code, {
-				target: 'es6',
-				preserveValueImports: true
-			});
-			const magic_code = new MagicString(source);
-			const start = matches.index + matches[0].indexOf('>') + 1;
-			const end = start + matches.groups.code.length;
-			magic_code.update(start, end, transpiled);
-			new_source = magic_code.toString();
-			let source_map = magic_code.generateMap({
-				hires: true,
-				includeContent: true
-			});
-			trace_map = new TraceMap(source_map);
+			if (!ts_ready) {
+				const [ts, ms, tm] = await Promise.all([
+					import('typescript'),
+					import('magic-string'),
+					import('@jridgewell/trace-mapping')
+				]);
+				transpile = ts.transpile;
+				MagicString = ms.default;
+				TraceMap = tm.TraceMap;
+				originalPositionFor = tm.originalPositionFor;
+				ts_ready = true;
+			}
+			if (transpile && MagicString && TraceMap && originalPositionFor) {
+				const transpiled = transpile(matches.groups.code, {
+					target: 'es6',
+					preserveValueImports: true
+				});
+				const magic_code = new MagicString(source);
+				const start = matches.index + matches[0].indexOf('>') + 1;
+				const end = start + matches.groups.code.length;
+				magic_code.update(start, end, transpiled);
+				new_source = magic_code.toString();
+				let source_map = magic_code.generateMap({
+					hires: true,
+					includeContent: true
+				});
+				trace_map = new TraceMap(source_map);
+			}
 		}
 		const { warnings, ast } = svelte_compile(
 			new_source,
