@@ -5,11 +5,11 @@
 	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
 	import { commands } from '$lib/command_runner/commands';
 	import Credits from '$lib/components/Credits.svelte';
+	import { is_intro_open } from '$lib/stores/intro_store';
 	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
-	import SvelteCompiler from '$lib/workers/svelte-compiler?worker';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
-	import { setContext } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -35,9 +35,11 @@
 
 	$: handle_unload($is_repl_to_save);
 
-	const svelte_compiler = new SvelteCompiler();
-	svelte_compiler.postMessage({ type: 'init' });
-	setContext('svelte-compiler', svelte_compiler);
+	onMount(() => {
+		setTimeout(() => {
+			$is_intro_open = true;
+		}, 500);
+	});
 
 	afterNavigate(async () => {
 		if (fix_for_double_after) return;
