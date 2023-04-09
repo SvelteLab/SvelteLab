@@ -39,6 +39,9 @@ function coep_plugin(): Plugin {
 }
 
 export default defineConfig({
+	worker: {
+		format: 'es'
+	},
 	plugins: [
 		sveltekit(),
 		Icons({

@@ -5,12 +5,18 @@
 	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
 	import { commands } from '$lib/command_runner/commands';
 	import Credits from '$lib/components/Credits.svelte';
+	import Logo from '$lib/components/Logo.svelte';
+	import { is_intro_open } from '$lib/stores/intro_store';
 	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import SvelteCompiler from '$lib/workers/svelte-compiler?worker';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import { setContext } from 'svelte';
 	import type { LayoutData } from './$types';
+	import { onMount } from 'svelte';
+	import { fly } from 'svelte/transition';
+	import Close from '~icons/material-symbols/close-rounded';
+	import GitHub from '~icons/mdi/github';
 
 	export let data: LayoutData;
 
@@ -37,6 +43,12 @@
 
 	const svelte_compiler = new SvelteCompiler();
 	setContext('svelte-compiler', svelte_compiler);
+
+	onMount(() => {
+		setTimeout(() => {
+			$is_intro_open = true;
+		}, 500);
+	});
 
 	afterNavigate(async () => {
 		if (fix_for_double_after) return;
