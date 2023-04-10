@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { NpmResponse } from '$lib/types';
-	import Loading from '~icons/eos-icons/loading';
-	import { createEventDispatcher } from 'svelte';
-	import { webcontainer } from '$lib/webcontainer';
 	import { terminal } from '$lib/terminal';
+	import type { NpmResponse } from '$lib/types';
+	import { webcontainer } from '$lib/webcontainer';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { createEventDispatcher } from 'svelte';
+	import Loading from '~icons/eos-icons/loading';
 
 	let search = '';
 
@@ -32,6 +33,10 @@
 			<li>
 				<button
 					on:click={async () => {
+						const progress_toast = toast.push(`Installing ${library.name}...`, {
+							initial: 0,
+							dismissable: false
+						});
 						const process = await webcontainer.spawn('npm', ['i', library.name]);
 						process.output.pipeTo(
 							new WritableStream({
@@ -41,6 +46,8 @@
 							})
 						);
 						dispatch('completed');
+						await process.exit;
+						toast.pop(progress_toast);
 					}}
 				>
 					<p>
