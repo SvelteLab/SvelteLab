@@ -37,6 +37,9 @@
 
 Simply put, no. SvelteLab not meant as a IDE for building real world applications, but for sharing Svelte expeirments. **Do not** use it to store private API keys or other secrets, as all contents will be saved or shared as plaintext.
 
+## Where can I enable Vim Keybindings?
+
+Use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD + Shift + P<kbd> and search for "Vim".
 
 ## Why not just use StackBlitz or similar?
 
