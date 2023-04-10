@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { terminal } from '$lib/terminal';
 	import { webcontainer } from '$lib/webcontainer';
+	import { toast } from '@zerodevx/svelte-toast';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
@@ -24,6 +25,10 @@
 
 <form
 	on:submit|preventDefault={async (e) => {
+		const progress_toast = toast.push(`Adding ${to_create.join(', ')}...`, {
+			initial: 0,
+			dismissable: false
+		});
 		webcontainer
 			.spawn('npx', ['svelte-add@latest', to_create.join('+'), '--install'])
 			.then(async (process) => {
@@ -36,6 +41,7 @@
 					})
 				);
 				await process.exit;
+				toast.pop(progress_toast);
 				terminal.writeln(
 					'Finished svelte-add...you might need to restart your server for everything to properly work'
 				);

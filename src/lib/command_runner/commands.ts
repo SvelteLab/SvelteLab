@@ -14,6 +14,7 @@ import { error } from '$lib/toast';
 import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
+import { toast } from '@zerodevx/svelte-toast';
 import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
@@ -132,10 +133,15 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Save',
 		subtitle: 'save the current project',
 		icon: Save,
-		action() {
+		async action() {
 			if ($page.data.user) {
 				if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
-					save_repl();
+					const progress_toast = toast.push(`Saving...`, {
+						initial: 0,
+						dismissable: false
+					});
+					await save_repl();
+					toast.pop(progress_toast);
 					return;
 				}
 				error('You are trying to save a REPL not owned by you. You might want to fork it first.');
@@ -170,7 +176,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
-		command: 'npm-install',
+		command: 'npm-install-package',
 		title: 'Install package',
 		subtitle: 'install a package from npm',
 		icon: NPM,
@@ -182,8 +188,13 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Export',
 		subtitle: 'download current project as .zip',
 		icon: Download,
-		action() {
-			webcontainer.save_as_zip();
+		async action() {
+			const progress_toast = toast.push(`Zipping up the filesystem...`, {
+				initial: 0,
+				dismissable: false
+			});
+			await webcontainer.save_as_zip();
+			toast.pop(progress_toast);
 		}
 	});
 
@@ -269,8 +280,13 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			title: 'Share via id',
 			subtitle: 'copy link that shares current project via id',
 			icon: Share,
-			action() {
-				share_with_id();
+			async action() {
+				const progress_toast = toast.push(`Sharing...`, {
+					initial: 0,
+					dismissable: false
+				});
+				await share_with_id();
+				toast.pop(progress_toast);
 			}
 		});
 	}
@@ -280,8 +296,13 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Share via Hash',
 		subtitle: 'copy link that shares current project via hash',
 		icon: Share,
-		action() {
-			share_with_hash();
+		async action() {
+			const progress_toast = toast.push(`Sharing...`, {
+				initial: 0,
+				dismissable: false
+			});
+			await share_with_hash();
+			toast.pop(progress_toast);
 		}
 	});
 
