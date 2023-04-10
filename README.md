@@ -31,6 +31,13 @@
 
 ---
 
+# FAQ
+
+## Are my projects secure?
+
+Simply put, no. SvelteLab not meant as a IDE for building real world applications, but for sharing Svelte expeirments. **Do not** use it to store private API keys or other secrets, as all contents will be saved or shared as plaintext.
+
+
 ## Why not just use StackBlitz or similar?
 
 Our aim isn't to create a fully fledged online web dev development environment as StackBlitz and other tools do that already.
@@ -41,7 +48,7 @@ Therefore we aim on providing a focused user interface for quickly building and 
 
 ---
 
-## Development
+# Development
 
 > **Note**
 > If you are using an AdBlocker like uBlock Origin, you might have to disable it while developing due to the Vercel Analytics script.
