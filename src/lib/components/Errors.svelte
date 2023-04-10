@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { SvelteError } from '$lib/types';
-	import { getContext, onMount } from 'svelte';
+	import { svelte_compiler } from '$lib/workers';
+	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
@@ -9,7 +10,6 @@
 	export let code = '';
 	export let warnings = [] as Warning[];
 	export let error: SvelteError | null = null;
-	const svelte_compiler = getContext('svelte-compiler') as Worker;
 
 	onMount(() => {
 		const handler = (e: any) => {

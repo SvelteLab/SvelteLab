@@ -23,13 +23,3 @@
 		<slot name="dialog-actions" />
 	</svelte:fragment>
 </Dialog>
-
-<style>
-	h1 {
-		font-size: 2rem;
-		display: flex;
-		gap: 1rem;
-		color: var(--sk-theme-1);
-		font-weight: bold;
-	}
-</style>

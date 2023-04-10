@@ -4,11 +4,6 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../styles/global.css';
 	import LoadingIndicator from './LoadingIndicator.svelte';
-	import SvelteCompiler from '$lib/workers/svelte-compiler?worker';
-	import { setContext } from 'svelte';
-
-	const svelte_compiler = new SvelteCompiler();
-	setContext('svelte-compiler', svelte_compiler);
 
 	inject({ mode: dev ? 'development' : 'production' });
 </script>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import TreeMap from '$lib/components/TreeMap.svelte';
-	import { share } from '$lib/share';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import Pending from '~icons/eos-icons/loading';
@@ -10,8 +9,16 @@
 	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
+	import { onMount } from 'svelte';
+	import type { ShareFn } from '$lib/share';
 
 	export let data: PageData;
+
+	let share: ShareFn;
+
+	onMount(async () => {
+		share = (await import('$lib/share')).share;
+	});
 
 	const search = queryParam('s', ssp.string(), {
 		pushHistory: false
@@ -46,7 +53,7 @@
 			<div class="buttons">
 				<button
 					on:click={() => {
-						share({
+						share?.({
 							text: `Take a look at my REPL`,
 							title: `SvelteLab - ${project.name}`,
 							url: `/${project.id}`

@@ -23,7 +23,7 @@
 		await tick();
 		if (update_height) update_height();
 	}
-	let width;
+	let width: number;
 	$: is_modal_open = $is_intro_open && width < 500;
 </script>
 

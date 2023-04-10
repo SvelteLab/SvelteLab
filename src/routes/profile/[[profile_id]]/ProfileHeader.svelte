@@ -4,9 +4,10 @@
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Logo from '$lib/components/Logo.svelte';
-	import { share } from '$lib/share';
+	import type { ShareFn } from '$lib/share';
 	import { get_theme } from '$lib/theme';
 	import { error } from '$lib/toast';
+	import { onMount } from 'svelte';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Sun from '~icons/material-symbols/light-mode';
@@ -14,6 +15,12 @@
 	import Share from '~icons/material-symbols/share';
 
 	const theme = get_theme(false);
+
+	let share: ShareFn;
+
+	onMount(async () => {
+		share = (await import('$lib/share')).share;
+	});
 
 	$: ({ user, github_login, profile, REDIRECT_URI } = $page.data ?? {});
 </script>

@@ -44,3 +44,5 @@ export async function share(
 		}
 	}
 }
+
+export type ShareFn = typeof share;
