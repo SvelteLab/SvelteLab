@@ -31,6 +31,16 @@
 
 ---
 
+## Why not just use StackBlitz or similar?
+
+Our aim isn't to create a fully fledged online web dev development environment as StackBlitz and other tools do that already.
+
+We wanted to create something that has the ease of use of the Svelte REPL, but allows for more types of experiments that require SvelteKit because of routing or other features. We also wanted to provides features that we craved for the REPL like dark mode and code formatting.
+
+Therefore we aim on providing a focused user interface for quickly building and sharing SvelteKit explorations, building on the same WebContainer API that also powers StackBlitz while providing useful features in a command palette.
+
+---
+
 ## Development
 
 > **Note**
