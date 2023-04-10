@@ -37,7 +37,8 @@ function get_character_from_pos(line, column, source) {
 function compile({ id, source, options, return_ast }) {
 	let trace_map;
 	try {
-		const matches = source.match(/<script\s+lang=(?:"ts"|'ts'|`ts`)>(?<code>[\s\S]*)<\/script>/m);
+		// this avoid running the regex unless 'lang=' is present to improve performance 
+		const matches = source.includes('lang=') && source.match(/<script\s+lang=(?:"ts"|'ts'|`ts`)>(?<code>[\s\S]*)<\/script>/m);
 		let new_source = source;
 		if (matches && matches.groups) {
 			const transpiled = transpile(matches.groups.code, {
