@@ -64,8 +64,13 @@ function run_callbacks(kind: KnownCommands) {
 
 async function prettier_action() {
 	const $current_tab = get(current_tab);
+	const progress_toast = toast.push(`Formatting ${$current_tab}...`, {
+		initial: 0,
+		dismissable: false
+	});
 	const process = await webcontainer.spawn(`prettier`, ['--write', $current_tab]);
 	const code = await process.exit;
+	toast.pop(progress_toast);
 	if (code === 0) {
 		run_callbacks('format-current');
 	} else {
