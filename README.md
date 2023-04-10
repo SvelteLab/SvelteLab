@@ -21,7 +21,7 @@
 
 ---
 
-[🧪 Try it out now!](https://sveltelab.vercel.app/)
+[🧪 Try it out now!](https://sveltelab.dev/)
 
 [![](https://api.iconify.design/material-symbols:error-circle-rounded.svg?color=%23ff4000) Create New Issue](https://github.com/sveltelab/sveltelab/issues/new/choose)
 
