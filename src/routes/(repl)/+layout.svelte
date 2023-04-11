@@ -5,7 +5,7 @@
 	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
 	import { commands } from '$lib/command_runner/commands';
 	import Credits from '$lib/components/Credits.svelte';
-	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
+	import { is_repl_to_save, repl_category, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
@@ -15,6 +15,7 @@
 	// keep the repl stores up to date in case data changes
 	$: repl_id.set(data.id);
 	$: repl_name.set(data.repl_name);
+	$: repl_category.set(data.repl_category);
 	$: webcontainer.set_file_system(data.repl!);
 
 	let fix_for_double_after = false;

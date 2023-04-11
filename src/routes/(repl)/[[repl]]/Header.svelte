@@ -28,12 +28,14 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import Apps from '~icons/material-symbols/apps';
 	import { on_command } from '$lib/command_runner/commands';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
+	$: ({ categorized_repls } = $page.data?.promises ?? {});
 	export let mobile = false;
 	let forking = false;
 	let fork_form: HTMLFormElement;
@@ -55,6 +57,15 @@
 		<Logo />
 	</a>
 	{#if !mobile}
+		{#if categorized_repls}
+			<button
+				title="Toggle Apps"
+				on:click={layout_store.toggle_apps}
+				aria-pressed={!!$layout_store.apps && $layout_store.apps !== 0}
+			>
+				<Apps /> Repls
+			</button>
+		{/if}
 		<button
 			title="Toggle File Browser"
 			on:click={layout_store.toggle_file_tree}

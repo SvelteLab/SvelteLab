@@ -3,7 +3,7 @@ import { Resvg } from '@resvg/resvg-js';
 import JetBrainsMono from './JetBrainsMono-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
 import OG from './OG.svelte';
-import { replSchema } from '$lib/schemas';
+import { repl_schema } from '$lib/schemas';
 import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
 import type { RequestHandler } from './$types';
@@ -20,7 +20,7 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	const record = await pocketbase.collection('repls').getOne(id, {
 		expand: 'user'
 	});
-	return replSchema.parse(record);
+	return repl_schema.parse(record);
 }
 
 export const GET: RequestHandler = async ({ url, locals }) => {

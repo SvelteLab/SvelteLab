@@ -7,6 +7,8 @@
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
+	import { page } from '$app/stores';
+	import Apps from '$lib/components/ReplsList.svelte';
 
 	export let Console: ComponentType<SvelteComponentTyped>;
 	export let Editor: ComponentType<SvelteComponentTyped>;
@@ -14,6 +16,8 @@
 	function handle_pane() {
 		if (update_height) update_height();
 	}
+
+	$: ({ categorized_repls } = $page.data?.promises ?? {});
 
 	$: {
 		$layout_store.terminal;
@@ -29,6 +33,11 @@
 	<Header />
 	<main id="main">
 		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+			{#if categorized_repls}
+				<Pane maxSize={$layout_store.apps !== undefined ? 15 : 0} bind:size={$layout_store.apps}>
+					<Apps />
+				</Pane>
+			{/if}
 			<Pane {minSize}>
 				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
 					<Pane bind:size={$layout_store.file_tree}><FileActions {minSize} /></Pane>
