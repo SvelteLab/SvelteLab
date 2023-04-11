@@ -1,12 +1,29 @@
 <script lang="ts">
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import {
+		mobile_showing,
+		showing_files,
+		showing_repls_list
+	} from '$lib/stores/mobile_showing_store';
 	import IFrame from '~icons/material-symbols/browse-activity-outline-rounded';
 	import Code from '~icons/material-symbols/code-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import Apps from '~icons/material-symbols/apps';
+	import { page } from '$app/stores';
+
+	$: ({ categorized_repls } = $page.data?.promises ?? {});
 </script>
 
 <nav>
+	{#if categorized_repls}
+		<button
+			title="Show Repl List"
+			aria-pressed={$showing_repls_list}
+			on:click={() => ($showing_repls_list = true)}
+		>
+			<Apps />
+		</button>
+	{/if}
 	<button
 		title="Show File Browser"
 		aria-pressed={$showing_files}

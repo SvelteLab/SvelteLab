@@ -6,8 +6,10 @@
 	import { closed_categories_store } from '$lib/stores/closed_categories_store';
 	import { flip } from 'svelte/animate';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
+	import { showing_repls_list } from '$lib/stores/mobile_showing_store';
 
 	let search = '';
+	let width: number;
 
 	let categorized_repls: Promise<CategorizedRepl[]>;
 	$: ({ categorized_repls } = $page.data.promises ?? {});
@@ -33,7 +35,13 @@
 	}
 </script>
 
-<aside class:hidden={!($layout_store.apps && $layout_store.apps > 0)}>
+<svelte:window bind:innerWidth={width} />
+
+<aside
+	class:hidden={width < 500
+		? !$showing_repls_list
+		: !($layout_store.apps && $layout_store.apps > 0)}
+>
 	<input placeholder="🔍 search you repls..." bind:value={search} />
 	<button class="refresh" title="Refresh" on:click={handle_refresh}><Refresh /> refresh</button>
 	{#await categorized_repls}
@@ -54,7 +62,14 @@
 				</li>
 				<ul hidden={$closed_categories_store.includes(folder)}>
 					{#each folders_obj[folder] as repl (repl.id)}
-						<li title="Open {repl.name}" animate:flip><a href="/{repl.id}">{repl.name}</a></li>
+						<li title="Open {repl.name}" animate:flip>
+							<a
+								on:click={() => {
+									$showing_repls_list = false;
+								}}
+								href="/{repl.id}">{repl.name}</a
+							>
+						</li>
 					{/each}
 				</ul>
 			</ul>
