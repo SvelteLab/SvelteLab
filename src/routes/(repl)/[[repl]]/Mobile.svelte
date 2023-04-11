@@ -4,12 +4,19 @@
 	import Iframe from '$lib/components/Iframe.svelte';
 	import { is_intro_open } from '$lib/stores/intro_store';
 	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import { browser } from '$app/environment';
+	import {
+		mobile_showing,
+		showing_files,
+		showing_repls_list
+	} from '$lib/stores/mobile_showing_store';
 	import { Dialog as RawDialog } from 'as-comps';
 	import { SvelteComponent, tick, type ComponentType } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
+	import ReplsList from '$lib/components/ReplsList.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
@@ -56,6 +63,29 @@
 			--as-dialog-max-height="calc(100% - 2em)"
 		>
 			<FileActions mobile />
+		</RawDialog>
+		<RawDialog
+			bind:isOpen={$showing_repls_list}
+			noCloseButton
+			includedTrigger={false}
+			dialogIn={fly}
+			dialogOut={fly}
+			dialogInOptions={{ x: -500 }}
+			dialogOutOptions={{ x: -500 }}
+			autofocus={false}
+			--as-dialog-background="var(--sk-back-1)"
+			--as-dialog-padding="0"
+			--as-dialog-top="calc(50% + 3.8rem)"
+			--as-dialog-left="0"
+			--as-dialog-right="auto"
+			--as-dialog-transform="translateY(-50%)"
+			--as-dialog-border-radius="0"
+			--as-dialog-width="calc(100% - 4em)"
+			--as-dialog-max-width="800px"
+			--as-dialog-height="100%"
+			--as-dialog-max-height="calc(100% - 2em)"
+		>
+			<ReplsList />
 		</RawDialog>
 		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
 			<svelte:component this={Editor} />
