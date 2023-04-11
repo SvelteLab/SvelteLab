@@ -38,7 +38,7 @@
 <div class="container">
 	<label for="package-search"> Package Name </label>
 	<!-- svelte-ignore a11y-autofocus -->
-	<input id="package-search" autofocus bind:value={search} type="search" on:input={handle_search} />
+	<input class="field" id="package-search" autofocus bind:value={search} type="search" on:input={handle_search} />
 
 	{#if loading}
 		<section><Loading /></section>
@@ -50,14 +50,14 @@
 						on:click={async () => {
 							const progress_toast = toast.push(`Installing ${library.name}...`, {
 								initial: 0,
-								dismissable: false
+								dismissable: false,
 							});
 							const process = await webcontainer.spawn('npm', ['i', library.name]);
 							process.output.pipeTo(
 								new WritableStream({
 									write(chunk) {
 										terminal.write(chunk);
-									}
+									},
 								})
 							);
 							dispatch('completed');
@@ -109,13 +109,7 @@
 	p {
 		margin: 0;
 	}
-	input {
-		width: 100%;
-		color: inherit;
-		border-radius: 0.5rem;
-		border: 1px solid var(--sk-back-5);
-		padding: 1rem 1.25rem;
-	}
+
 	section {
 		display: grid;
 		place-items: center;

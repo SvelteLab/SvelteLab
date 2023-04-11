@@ -76,7 +76,7 @@
 <style>
 	form {
 		display: grid;
-		gap: 0.5rem;
+		gap: 2rem;
 		margin: 2rem;
 	}
 
@@ -100,5 +100,9 @@
 
 	small {
 		margin-inline-start: auto;
+	}
+
+	p {
+		margin: 0;
 	}
 </style>
