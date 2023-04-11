@@ -217,7 +217,7 @@
 						<small>{command.subtitle}</small>
 					{/if}
 					{#if key_bind_sequence}
-						<ul class="keybinds">
+						<ul class="key_binds">
 							{#each key_bind_sequence || [] as sequence}
 								<li>
 									{#each sequence as kbd}
@@ -300,11 +300,11 @@
 		gap: 1rem;
 	}
 
-	ul.keybinds {
+	ul.key_binds {
 		margin-inline-start: auto;
 	}
 
-	ul.keybinds > li {
+	ul.key_binds > li {
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
