@@ -5,7 +5,7 @@
 **✨ Features:**
 
 - 🌗 Light / Dark Mode
-- 🎨 Command Palette
+- 🎨 Command Palette: <kbd>Ctrl / CMD</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>
 - 🧹 Code Formatting
 - 📒 Templates (TypeScript, Tailwind, mdsvex)
 - 📄 SvelteKit File Icons
@@ -39,7 +39,7 @@ Simply put, no. SvelteLab not meant as a IDE for building real world application
 
 ## Where can I enable Vim Keybindings?
 
-Use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD + Shift + P</kbd> and search for "Vim".
+Use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and search for "Vim".
 
 ## Why not just use StackBlitz or similar?
 
