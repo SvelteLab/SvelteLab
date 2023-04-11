@@ -18,17 +18,17 @@
 	const dispatch = createEventDispatcher();
 
 	const addable = [
-		{ label: 'Svelte Cubed', icon: Cubed, name: '3d' },
-		{ label: 'Bootstrap', icon: Bootstrap, name: 'bootstrap' },
-		{ label: 'Bulma', icon: Bulma, name: 'bulma' },
-		{ label: 'CoffeeScript', icon: Coffeescript, name: 'coffeescript' },
-		{ label: 'Imagetools*', icon: Imagetools, name: 'imagetools' },
-		{ label: 'mdsvex', icon: Markdown, name: 'mdsvex' },
 		{ label: 'PostCSS', icon: PostCSS, name: 'postcss' },
-		{ label: 'Routify*', icon: Routify, name: 'routify' },
 		{ label: 'SCSS', icon: Sass, name: 'scss' },
 		{ label: 'Tailwind CSS', icon: Tailwind, name: 'tailwindcss' },
-		{ label: 'Tauri*', icon: Tauri, name: 'tauri' },
+		{ label: 'Bootstrap', icon: Bootstrap, name: 'bootstrap' },
+		{ label: 'Bulma', icon: Bulma, name: 'bulma' },
+		{ label: 'Imagetools*', icon: Imagetools, name: 'imagetools' },
+		{ label: 'mdsvex', icon: Markdown, name: 'mdsvex' },
+		{ label: 'CoffeeScript', icon: Coffeescript, name: 'coffeescript' },
+		// { label: 'Svelte Cubed', icon: Cubed, name: '3d' },
+		// { label: 'Routify*', icon: Routify, name: 'routify' },
+		// { label: 'Tauri*', icon: Tauri, name: 'tauri' },
 	];
 
 	let integrations_to_add: Array<(typeof addable)[0]> = [];
