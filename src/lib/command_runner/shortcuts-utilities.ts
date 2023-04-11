@@ -163,11 +163,13 @@ type Keys = (typeof keys)[number];
 export type KeyBinds = {
 	mod?: Mods[];
 	keys?: Keys[];
-	next?: KeyBinds;
+	// next?: KeyBinds;
 };
 
+/**
+ * allows for typesafe tinykey bindings
+ */
 export function get_key_bind(key_bind: KeyBinds): string {
-	return `${[...(key_bind?.mod ?? []), ...(key_bind?.keys ?? [])].join('+')}${
-		key_bind.next ? ' ' + get_key_bind(key_bind.next) : ''
-	}`;
+	return [...(key_bind?.mod ?? []), ...(key_bind?.keys ?? [])].join('+');
+	// +(key_bind.next ? ' ' + get_key_bind(key_bind.next) : '');
 }

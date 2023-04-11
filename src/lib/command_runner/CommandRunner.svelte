@@ -3,7 +3,7 @@
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
 	import { onDestroy } from 'svelte';
-	import tinykeys, { parseKeybinding } from 'tinykeys';
+	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
 	import { get_key_bind } from './shortcuts-utilities';
 
 	let search = '';
@@ -63,7 +63,8 @@
 		if (typeof unbind_function === 'function') {
 			unbind_function();
 		}
-		const key_binds: Record<string, (event: KeyboardEvent) => void> = {};
+		const key_binds: KeyBindingMap = {};
+
 		for (let command of commands) {
 			if (command.key_bind) {
 				key_binds[get_key_bind(command.key_bind)] = (event) => {
@@ -77,8 +78,8 @@
 			}
 		}
 
-		// OPEN COMMAND RUNNER
 		function open_command_runner_bind(event: KeyboardEvent) {
+			// TODO: replace with clear input action
 			if (!dialog.open) {
 				event.preventDefault();
 				open_command_runner();
@@ -92,7 +93,6 @@
 			})
 		] = open_command_runner_bind;
 
-		// OPEN COMMAND RUNNER
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
@@ -100,15 +100,16 @@
 			})
 		] = open_command_runner_bind;
 
-		// OPEN COMMAND RUNNER IN COMMAND MODE
 		key_binds[
 			get_key_bind({
 				mod: ['$mod', 'Shift'],
 				keys: ['P']
 			})
 		] = (event) => {
+			// TODO: replace with clear input action
 			if (!dialog.open) {
 				event.preventDefault();
+				// open command runner in command mode
 				search = '> ';
 				open_command_runner();
 			}
@@ -162,6 +163,7 @@
 		<form
 			on:submit|preventDefault={() => {
 				if (filtered_commands.length === 1) {
+					// TODO: replace with ghetto focus management to allow typing and selecting to be more seamless
 					const command = filtered_commands[0];
 					if (typeof command.action === 'function') {
 						command.action();
@@ -179,19 +181,15 @@
 			/>
 		</form>
 	</section>
-	<ul>
+	<ul class="commands">
 		{#each filtered_commands as command}
 			{@const key_bind = command.key_bind ? parseKeybinding(get_key_bind(command.key_bind)) : null}
-			{@const key_bind_sequence = key_bind
-				?.map((bind) => {
-					return bind.flat(Infinity).join('+');
-				})
-				.join(' ')}
+			{@const key_bind_sequence = key_bind?.map((bind) => bind.flat(Infinity))}
 			<li>
+				<!-- TODO: rework how action components work: replace palette instead of inline -->
 				<button
 					class:opened={command.action_component && showed_action_component === command.command}
 					on:click={() => {
-						const args = search.split(' ').slice(1);
 						if (typeof command.action === 'function') {
 							command.action();
 							dialog.close();
@@ -211,9 +209,17 @@
 						<small>{command.subtitle}</small>
 					{/if}
 					{#if key_bind_sequence}
-						<kbd>
-							{key_bind_sequence}
-						</kbd>
+						<ul class="keybinds">
+							{#each key_bind_sequence || [] as sequence}
+								<li>
+									{#each sequence as kbd}
+										<kbd>
+											{kbd}
+										</kbd>
+									{/each}
+								</li>
+							{/each}
+						</ul>
 					{/if}
 				</button>
 				{#if command.action_component && showed_action_component === command.command}
@@ -241,7 +247,7 @@
 		background-color: transparent;
 		color: var(--sk-text-1);
 		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
-		--result-bg: var(--sk-back-3);
+		--palette-back: var(--sk-back-3);
 	}
 	dialog::backdrop {
 		background-color: hsla(0, 0%, 0%, 0.2);
@@ -266,10 +272,16 @@
 		z-index: 10;
 	}
 	ul {
+		margin: 0;
+		list-style: none;
+	}
+	li {
+		min-width: 0;
+	}
+	ul.commands {
 		height: 40vh;
 		overflow-y: auto;
-		background-color: var(--result-bg);
-		margin: 0;
+		background-color: var(--palette-back);
 		position: relative;
 		border-top: 1px solid var(--sk-back-4);
 		border-bottom-left-radius: 1rem;
@@ -278,17 +290,36 @@
 		display: grid;
 		align-content: start;
 		gap: 1rem;
-		list-style: none;
 	}
-	li {
-		min-width: 0;
+
+	ul.keybinds {
+		margin-inline-start: auto;
 	}
+
+	ul.keybinds > li {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	kbd {
+		margin-left: auto;
+		font-family: var(--sk-font);
+		font-weight: 800;
+		text-transform: uppercase;
+		background-color: var(--sk-back-4);
+		color: var(--sk-text-2);
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		line-height: 1.5rem;
+	}
+
 	section:before {
 		content: '';
 		position: absolute;
 		width: 100%;
 		height: 50%;
-		background-color: var(--result-bg);
+		background-color: var(--palette-back);
 		bottom: 0;
 		z-index: -1;
 	}
@@ -309,6 +340,7 @@
 		background-color: var(--sk-back-4);
 	}
 	.opened {
+		background-color: var(--sk-back-4);
 		border-bottom-left-radius: 0;
 		border-bottom-right-radius: 0;
 	}
@@ -320,14 +352,8 @@
 		padding: 1rem;
 		width: 100%;
 	}
-	kbd {
-		margin-left: auto;
-		background-color: var(--sk-back-5);
-		padding: 0.25rem 1rem;
-		line-height: 1.5rem;
-	}
 	@media only screen and (max-width: 500px) {
-		ul,
+		ul.commands,
 		input {
 			border-radius: 0;
 		}
