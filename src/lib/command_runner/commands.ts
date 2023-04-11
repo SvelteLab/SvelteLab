@@ -41,6 +41,8 @@ import NpmInstall from './commands_components/NpmInstall.svelte';
 import SaveStartTemplate from './commands_components/SaveStartTemplate.svelte';
 import StartTemplate from './commands_components/StartTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
+import FileBrowser from '~icons/material-symbols/menu-rounded';
+import Terminal from '~icons/material-symbols/terminal-rounded';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -260,6 +262,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		command: 'toggle-file-tree',
+		title: 'Toggle File Tree',
+		subtitle: 'toggle wether file tree is shown',
+		icon: FileBrowser,
+		action() {
+			layout_store.toggle_file_tree();
+		}
+	});
+
+	commands_to_return.push({
 		command: 'toggle-config',
 		title: 'Toggle Config Files',
 		subtitle: 'toggle wether file tree starts from project root or src folder',
@@ -276,6 +288,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Sorting,
 		action() {
 			layout_store.toggle_sort();
+		}
+	});
+
+	commands_to_return.push({
+		command: 'toggle-terminal',
+		title: 'Toggle Terminal',
+		subtitle: 'toggle wether terminal is shown',
+		icon: Terminal,
+		action() {
+			layout_store.toggle_terminal();
 		}
 	});
 
