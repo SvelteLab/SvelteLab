@@ -36,9 +36,16 @@
 </script>
 
 <div class="container">
-	<label for="package-search"> Package Name </label>
+	<label for="package-search"> npm Package Name </label>
 	<!-- svelte-ignore a11y-autofocus -->
-	<input class="field" id="package-search" autofocus bind:value={search} type="search" on:input={handle_search} />
+	<input
+		class="field"
+		id="package-search"
+		autofocus
+		bind:value={search}
+		type="search"
+		on:input={handle_search}
+	/>
 
 	{#if loading}
 		<section><Loading /></section>
@@ -87,6 +94,7 @@
 <style>
 	.container {
 		margin: 2rem;
+		height: 37.2rem;
 	}
 	ul {
 		list-style: none;

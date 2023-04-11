@@ -254,7 +254,7 @@
 							<small>{command.subtitle}</small>
 						{/if}
 						{#if command.action_component}
-							<span class="action_arrow" title="Open">
+							<span class="action-arrow" title="Open">
 								<Forward />
 							</span>
 						{/if}
@@ -324,7 +324,7 @@
 	}
 
 	ul.commands {
-		height: 40vh;
+		height: 32rem;
 		overflow-y: auto;
 		position: relative;
 		border-top: 1px solid var(--sk-back-4);
@@ -398,7 +398,9 @@
 		}
 	}
 
-	.action_arrow {
+	.action-arrow {
 		margin-inline-start: auto;
+		display: flex;
+		align-items: center;
 	}
 </style>

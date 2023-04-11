@@ -54,7 +54,7 @@
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.27",
+		"@iconify/json": "^2.2.48",
 		"@playwright/test": "^1.28.1",
 		"@resvg/resvg-js": "^2.4.1",
 		"@sveltejs/adapter-auto": "^2.0.0",

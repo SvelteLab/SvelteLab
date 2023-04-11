@@ -3,35 +3,50 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { createEventDispatcher } from 'svelte';
+	import Routify from '~icons/material-symbols/alt-route-rounded';
+	import Imagetools from '~icons/material-symbols/imagesmode';
+	import Bulma from '~icons/mdi/bulma';
+	import Sass from '~icons/mdi/sass';
+	import Tailwind from '~icons/mdi/tailwind';
+	import Cubed from '~icons/ph/cube-bold';
+	import Bootstrap from '~icons/ri/bootstrap-fill';
+	import Coffeescript from '~icons/simple-icons/coffeescript';
+	import Markdown from '~icons/simple-icons/markdown';
+	import PostCSS from '~icons/simple-icons/postcss';
+	import Tauri from '~icons/simple-icons/tauri';
 
 	const dispatch = createEventDispatcher();
 
 	const addable = [
-		{ label: 'Svelte Cubed', icon: null, name: '3d' },
-		{ label: 'Bootstrap', icon: null, name: 'bootstrap' },
-		{ label: 'Bulma', icon: null, name: 'bulma' },
-		{ label: 'CoffeeScript', icon: null, name: 'coffeescript' },
-		{ label: 'Imagetools *', icon: null, name: 'imagetools' },
-		{ label: 'mdsvex', icon: null, name: 'mdsvex' },
-		{ label: 'PostCSS', icon: null, name: 'postcss' },
-		{ label: 'Routify *', icon: null, name: 'routify' },
-		{ label: 'SCSS', icon: null, name: 'scss' },
-		{ label: 'Tailwind CSS', icon: null, name: 'tailwindcss' },
-		{ label: 'Tauri *', icon: null, name: 'tauri' },
+		{ label: 'Svelte Cubed', icon: Cubed, name: '3d' },
+		{ label: 'Bootstrap', icon: Bootstrap, name: 'bootstrap' },
+		{ label: 'Bulma', icon: Bulma, name: 'bulma' },
+		{ label: 'CoffeeScript', icon: Coffeescript, name: 'coffeescript' },
+		{ label: 'Imagetools*', icon: Imagetools, name: 'imagetools' },
+		{ label: 'mdsvex', icon: Markdown, name: 'mdsvex' },
+		{ label: 'PostCSS', icon: PostCSS, name: 'postcss' },
+		{ label: 'Routify*', icon: Routify, name: 'routify' },
+		{ label: 'SCSS', icon: Sass, name: 'scss' },
+		{ label: 'Tailwind CSS', icon: Tailwind, name: 'tailwindcss' },
+		{ label: 'Tauri*', icon: Tauri, name: 'tauri' },
 	];
 
-	let to_add = [] as string[];
-	$: list = to_add.join(', ');
+	let integrations_to_add: Array<(typeof addable)[0]> = [];
+	$: integrations_to_add_as_string = integrations_to_add.map((i) => i.label).join(', ');
 </script>
 
 <form
 	on:submit|preventDefault={async (e) => {
-		const progress_toast = toast.push(`Adding ${to_add.join(', ')}...`, {
+		const progress_toast = toast.push(`Adding ${integrations_to_add_as_string}...`, {
 			initial: 0,
 			dismissable: false,
 		});
 		webcontainer
-			.spawn('npx', ['svelte-add@latest', to_add.join('+'), '--install'])
+			.spawn('npx', [
+				'svelte-add@latest',
+				integrations_to_add.map((i) => i.name).join('+'),
+				'--install',
+			])
 			.then(async (process) => {
 				dispatch('completed');
 				process.output.pipeTo(
@@ -57,16 +72,19 @@
 		{#each addable as integration}
 			<li>
 				<label>
-					<input value={integration.name} type="checkbox" bind:group={to_add} />
+					<input value={integration} type="checkbox" bind:group={integrations_to_add} />
+					<svelte:component this={integration.icon} />
 					{integration.label}
 				</label>
 			</li>
 		{/each}
 	</ul>
 	<small>* work in progress</small>
-	<button disabled={to_add.length === 0} class="confirm">
-		{#if to_add.length > 0}
-			Add "{list}" to your project
+	<button disabled={integrations_to_add.length === 0} class="confirm">
+		{#if integrations_to_add.length > 0}
+			Add
+			{integrations_to_add_as_string}
+			to your project
 		{:else}
 			Select some integrations above
 		{/if}
