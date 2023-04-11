@@ -39,7 +39,7 @@ Simply put, no. SvelteLab not meant as a IDE for building real world application
 
 ## Where can I enable Vim Keybindings?
 
-Use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD + Shift + P<kbd> and search for "Vim".
+Use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD + Shift + P</kbd> and search for "Vim".
 
 ## Why not just use StackBlitz or similar?
 
@@ -57,6 +57,7 @@ Therefore we aim on providing a focused user interface for quickly building and 
 > If you are using an AdBlocker like uBlock Origin, you might have to disable it while developing due to the Vercel Analytics script.
 
 ```
+cp .env.sample .env
 pnpm i
 pnpm dev
 ```
