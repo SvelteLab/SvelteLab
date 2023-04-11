@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 
 const { subscribe, set } = writable<'code' | 'iframe' | 'terminal'>('code');
 export const showing_files = writable(false);
+export const showing_repls_list = writable(false);
 
 export const mobile_showing = {
 	subscribe,

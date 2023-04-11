@@ -1,15 +1,26 @@
 import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
 import { templates } from '$lib/default_project_files';
 import { REDIRECT_URI } from '$lib/env.server';
+import { categorized_repls_schema } from '$lib/schemas';
 import type { LayoutServerLoad } from './$types';
+import type PoketBase from 'pocketbase';
+
+async function get_folders_from_user(pocketbase: PoketBase) {
+	const record = await pocketbase.collection('categorized_repls').getFullList();
+	return categorized_repls_schema.parse(record);
+}
 
 export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	depends('authed:user');
-
+	depends('user:repls');
 	if (locals.user) {
+		const categorized_repls = get_folders_from_user(locals.pocketbase);
 		return {
 			user: locals.user,
-			templates
+			templates,
+			promises: {
+				categorized_repls
+			}
 		};
 	}
 
