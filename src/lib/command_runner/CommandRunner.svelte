@@ -82,10 +82,10 @@
 			event.preventDefault();
 			if (!dialog.open) {
 				open_command_runner();
-			} else {
-				search_element.focus();
-				search_element.setSelectionRange(0, search.length);
+				return;
 			}
+			search_element.focus();
+			search_element.setSelectionRange(0, search.length);
 		}
 
 		key_binds[
@@ -113,14 +113,14 @@
 				// open command runner in command mode
 				search = '> ';
 				open_command_runner();
-			} else {
-				if (!search.startsWith('>')) {
-					search = '> ' + search;
-				}
-				await tick();
-				search_element.focus();
-				search_element.setSelectionRange(1, search.length);
+				return;
 			}
+			if (!search.startsWith('>')) {
+				search = '> ' + search;
+			}
+			await tick();
+			search_element.focus();
+			search_element.setSelectionRange(1, search.length);
 		};
 
 		key_binds[
