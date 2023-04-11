@@ -6,11 +6,31 @@
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
 	import { get_key_bind } from './shortcuts-utilities';
 
+	export let commands = [] as Command[];
+
 	let search = '';
 	let dialog: HTMLDialogElement;
 	let showed_action_component: null | string = null;
-	export let commands = [] as Command[];
+	let handle_window_click: ((e: MouseEvent) => void) | undefined = undefined;
+
+	let input_element: HTMLInputElement;
+	let command_button_elements: Record<number, HTMLButtonElement> = {};
+
+	let unbind_function: () => void;
+
+	const close_dialog_on_out_click = (e: MouseEvent) => {
+		if (dialog === e.target) dialog.close();
+	};
+
+	function open_command_runner() {
+		dialog.showModal();
+		handle_window_click = close_dialog_on_out_click;
+	}
+
+	$: key_bind_commands(commands);
+
 	$: mode = search.startsWith('>') ? 'command' : 'file';
+
 	$: filtered_commands = commands.filter((command) => {
 		if (mode === 'file') {
 			return command.title.toLowerCase().includes(search.trim().toLowerCase()) && !command.command;
@@ -18,18 +38,7 @@
 		return command.command?.includes(search.substring(1).trim().split(' ')[0]);
 	});
 
-	const DEFAULT_CLICK_OUTSIDE_HANDLER = (e: MouseEvent) => {
-		if (dialog === e.target) {
-			dialog.close();
-		}
-	};
-
-	let click_outside_handler: ((e: MouseEvent) => void) | undefined = undefined;
-
-	function open_command_runner() {
-		dialog.showModal();
-		click_outside_handler = DEFAULT_CLICK_OUTSIDE_HANDLER;
-	}
+	$: current_command = filtered_commands[0] as Command | null;
 
 	$: {
 		if ($command_runner) {
@@ -37,27 +46,21 @@
 		}
 	}
 
-	let search_element: HTMLInputElement;
-
-	function swap_focus(where: 1 | -1) {
-		const focusable =
-			'a:not([disabled]), button:not([disabled]), input:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
-		const elements = [...document.querySelectorAll(focusable)];
-		const active_index = elements.findIndex(
-			(focusable_element) => focusable_element === document.activeElement
-		);
-		if (active_index !== -1) {
-			let next_element = elements[active_index + where];
-			if (!dialog.contains(next_element)) {
-				next_element = search_element;
-			}
-			if (next_element instanceof HTMLElement) {
-				next_element.focus();
-			}
+	function swap_current_command(where: 1 | -1) {
+		const previous_index = filtered_commands.findIndex((command) => command === current_command);
+		let next_index = previous_index + where;
+		if (previous_index === -1) {
+			input_element.focus();
+			next_index = 0;
 		}
-	}
 
-	let unbind_function: () => void;
+		// wrap around
+		if (next_index >= filtered_commands.length) next_index = 0;
+		if (next_index <= -1) next_index = filtered_commands.length - 1;
+
+		current_command = filtered_commands[next_index];
+		command_button_elements[next_index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
 
 	async function key_bind_commands(commands: Command[]) {
 		if (typeof unbind_function === 'function') {
@@ -84,8 +87,8 @@
 				open_command_runner();
 				return;
 			}
-			search_element.focus();
-			search_element.setSelectionRange(0, search.length);
+			input_element.focus();
+			input_element.setSelectionRange(0, search.length);
 		}
 
 		key_binds[
@@ -119,8 +122,8 @@
 				search = '> ' + search;
 			}
 			await tick();
-			search_element.focus();
-			search_element.setSelectionRange(1, search.length);
+			input_element.focus();
+			input_element.setSelectionRange(1, search.length);
 		};
 
 		key_binds[
@@ -130,7 +133,7 @@
 		] = (event) => {
 			if (dialog.open) {
 				event.preventDefault();
-				swap_focus(1);
+				swap_current_command(1);
 			}
 		};
 
@@ -141,14 +144,12 @@
 		] = (event) => {
 			if (dialog.open) {
 				event.preventDefault();
-				swap_focus(-1);
+				swap_current_command(-1);
 			}
 		};
 
 		unbind_function = tinykeys(window, key_binds);
 	}
-
-	$: key_bind_commands(commands);
 
 	onDestroy(() => {
 		if (typeof unbind_function === 'function') {
@@ -157,45 +158,49 @@
 	});
 </script>
 
-<svelte:window on:click={click_outside_handler} />
+<svelte:window on:click={handle_window_click} />
+
 <dialog
 	bind:this={dialog}
 	on:close={() => {
 		search = '';
 		showed_action_component = null;
-		click_outside_handler = undefined;
+		handle_window_click = undefined;
 		command_runner.close();
 	}}
 >
 	<section>
 		<form
 			on:submit|preventDefault={() => {
-				if (filtered_commands.length === 1) {
-					// TODO: replace with ghetto focus management to allow typing and selecting to be more seamless
-					const command = filtered_commands[0];
-					if (typeof command.action === 'function') {
-						command.action();
-						dialog.close();
-					} else if (command.action_component && command.command) {
-						showed_action_component = command.command;
-					}
+				if (typeof current_command?.action === 'function') {
+					current_command.action();
+					dialog.close();
+				} else if (current_command?.action_component && current_command.command) {
+					showed_action_component = current_command.command;
 				}
 			}}
 		>
 			<input
-				bind:this={search_element}
+				bind:this={input_element}
 				bind:value={search}
+				on:blur={() => {
+					current_command = null;
+				}}
 				placeholder="🔍 Search for files, or type `>` for commands..."
 			/>
 		</form>
 	</section>
 	<ul class="commands">
-		{#each filtered_commands as command}
+		{#each filtered_commands as command, index}
 			{@const key_bind = command.key_bind ? parseKeybinding(get_key_bind(command.key_bind)) : null}
 			{@const key_bind_sequence = key_bind?.map((bind) => bind.flat(Infinity))}
+			{@const current = command === current_command}
 			<li>
 				<!-- TODO: rework how action components work: replace palette instead of inline -->
 				<button
+					class:current
+					aria-current={current}
+					bind:this={command_button_elements[index]}
 					class:opened={command.action_component && showed_action_component === command.command}
 					on:click={() => {
 						if (typeof command.action === 'function') {
@@ -255,7 +260,7 @@
 		background-color: transparent;
 		color: var(--sk-text-1);
 		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
-		--palette-back: var(--sk-back-3);
+		--palette-back: var(--sk-back-2);
 	}
 	dialog::backdrop {
 		background-color: hsla(0, 0%, 0%, 0.2);
@@ -269,7 +274,7 @@
 		border: 0;
 		padding: 1.5rem 2.5rem;
 		font-size: 2rem;
-		background-color: var(--sk-back-3);
+		background-color: var(--palette-back);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
 		color: inherit;
@@ -310,13 +315,17 @@
 		gap: 0.25rem;
 	}
 
+	.current {
+		background-color: var(--sk-back-4);
+	}
+
 	kbd {
 		margin-left: auto;
 		font-family: var(--sk-font);
 		font-weight: 800;
 		text-transform: uppercase;
-		background-color: var(--sk-back-4);
-		color: var(--sk-text-2);
+		border: 1px solid var(--sk-back-5);
+		color: var(--sk-text-3);
 		padding: 0.5rem 1rem;
 		border-radius: 0.5rem;
 		line-height: 1.5rem;
@@ -332,7 +341,7 @@
 		z-index: -1;
 	}
 	button {
-		background-color: var(--sk-back-3);
+		background-color: var(--palette-back);
 		display: flex;
 		align-items: center;
 		gap: 1rem;
@@ -343,9 +352,8 @@
 		z-index: 10;
 		position: relative;
 	}
-	button:hover,
-	button:focus {
-		background-color: var(--sk-back-4);
+	button:hover {
+		background-color: var(--sk-back-3);
 	}
 	.opened {
 		background-color: var(--sk-back-4);
