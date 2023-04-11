@@ -319,18 +319,6 @@
 		background-color: var(--sk-back-4);
 	}
 
-	kbd {
-		margin-left: auto;
-		font-family: var(--sk-font);
-		font-weight: 800;
-		text-transform: uppercase;
-		border: 1px solid var(--sk-back-5);
-		color: var(--sk-text-3);
-		padding: 0.5rem 1rem;
-		border-radius: 0.5rem;
-		line-height: 1.5rem;
-	}
-
 	section:before {
 		content: '';
 		position: absolute;
