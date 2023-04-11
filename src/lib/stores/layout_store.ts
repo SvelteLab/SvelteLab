@@ -7,7 +7,7 @@ interface LayoutStore {
 	folders_first: boolean;
 }
 
-const { subscribe, update } = persisted<LayoutStore>('layout_preferences', {
+const { subscribe, update, set } = persisted<LayoutStore>('layout_preferences', {
 	file_tree: 30,
 	terminal: 30,
 	show_config: true,
@@ -39,6 +39,7 @@ const toggle_sort = () => toggle_state('folders_first');
 
 export const layout_store = {
 	subscribe,
+	set, // used by <Pane bind:size> inside Desktop.svelte
 	toggle_file_tree,
 	toggle_terminal,
 	toggle_config,
