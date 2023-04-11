@@ -1,80 +1,108 @@
 <script lang="ts">
 	import { terminal } from '$lib/terminal';
-	import type { NpmResponse } from '$lib/types';
 	import { webcontainer } from '$lib/webcontainer';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { createEventDispatcher } from 'svelte';
 	import Loading from '~icons/eos-icons/loading';
 
-	let search = '';
-
 	const dispatch = createEventDispatcher();
 
-	let searchQuery = Promise.resolve(null) as Promise<null | NpmResponse>;
+	let search = '';
+	let loading = false;
+	let packages: Array<{
+		package: {
+			name: string;
+			scope: string;
+			version: string;
+			description: string;
+		};
+	}> = [];
+	let NPM_SEARCH_URL = 'https://registry.npmjs.org/-/v1/search?size=5&text=';
 	let debounceTimeout: ReturnType<typeof setTimeout>;
-	$: {
+
+	function handle_search() {
+		if (!search) {
+			packages = [];
+			return;
+		}
+		loading = true;
 		clearTimeout(debounceTimeout);
-		debounceTimeout = setTimeout(() => {
-			searchQuery = fetch('https://registry.npmjs.org/-/v1/search?size=5&text=' + search).then(
-				(res) => res.json()
-			);
+		debounceTimeout = setTimeout(async () => {
+			const json = await fetch(NPM_SEARCH_URL + search).then((res) => res.json());
+			packages = json.objects;
+			loading = false;
 		}, 500);
 	}
 </script>
 
-<input bind:value={search} type="search" />
+<div class="container">
+	<label for="package-search"> Package Name </label>
+	<!-- svelte-ignore a11y-autofocus -->
+	<input id="package-search" autofocus bind:value={search} type="search" on:input={handle_search} />
 
-{#await searchQuery}
-	<section><Loading /></section>
-{:then results}
-	<ul>
-		{#each results?.objects ?? [] as pack}
-			{@const library = pack.package}
-			<li>
-				<button
-					on:click={async () => {
-						const progress_toast = toast.push(`Installing ${library.name}...`, {
-							initial: 0,
-							dismissable: false
-						});
-						const process = await webcontainer.spawn('npm', ['i', library.name]);
-						process.output.pipeTo(
-							new WritableStream({
-								write(chunk) {
-									terminal.write(chunk);
-								}
-							})
-						);
-						dispatch('completed');
-						await process.exit;
-						toast.pop(progress_toast);
-					}}
-				>
-					<p>
-						{library.name}@{library.version}
-					</p>
-					<small>
-						{library.description}
-					</small>
-				</button>
-			</li>
-		{/each}
-	</ul>
-{/await}
+	{#if loading}
+		<section><Loading /></section>
+	{:else}
+		<ul>
+			{#each packages ?? [] as { package: library }}
+				<li>
+					<button
+						on:click={async () => {
+							const progress_toast = toast.push(`Installing ${library.name}...`, {
+								initial: 0,
+								dismissable: false
+							});
+							const process = await webcontainer.spawn('npm', ['i', library.name]);
+							process.output.pipeTo(
+								new WritableStream({
+									write(chunk) {
+										terminal.write(chunk);
+									}
+								})
+							);
+							dispatch('completed');
+							await process.exit;
+							toast.pop(progress_toast);
+						}}
+					>
+						<p>
+							{library.name}@{library.version}
+						</p>
+						<small>
+							{library.description}
+						</small>
+					</button>
+				</li>
+			{:else}
+				{#if !search}
+					<section>type to search for an npm package</section>
+				{:else}
+					<section>No Results</section>
+				{/if}
+			{/each}
+		</ul>
+	{/if}
+</div>
 
 <style>
+	.container {
+		margin: 2rem;
+	}
 	ul {
 		list-style: none;
-		margin: 0;
-		padding-block: 0.5rem;
-		display: grid;
-		gap: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 		width: 100%;
 	}
+
 	li {
 		min-width: 0;
 	}
+
 	button {
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.5rem;
 		width: 100%;
 		text-align: left;
 	}
@@ -82,17 +110,17 @@
 		margin: 0;
 	}
 	input {
-		background-color: var(--sk-back-2);
 		width: 100%;
-		color: var(--sk-text-1);
-		padding: 0.5rem;
-		border: 0;
+		color: inherit;
 		border-radius: 0.5rem;
+		border: 1px solid var(--sk-back-5);
+		padding: 1rem 1.25rem;
 	}
 	section {
 		display: grid;
 		place-items: center;
 		padding: 1rem;
+		font-size: 2rem;
 	}
 	small {
 		white-space: nowrap;

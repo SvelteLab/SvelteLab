@@ -5,7 +5,6 @@
 	import type { FileSystemTree } from '@webcontainer/api';
 	import { createEventDispatcher, tick } from 'svelte';
 	import TS from '~icons/vscode-icons/file-type-typescript-official';
-	import Back from '~icons/material-symbols/arrow-back-rounded';
 
 	const dispatch = createEventDispatcher();
 
@@ -56,19 +55,6 @@
 		});
 	}
 </script>
-
-<div class="header">
-	<button
-		class="cancel"
-		title="Cancel route creation"
-		on:click={() => {
-			dispatch('cancel');
-		}}
-	>
-		<Back />
-	</button>
-	<h2>Create Route</h2>
-</div>
 
 <form
 	on:submit|preventDefault={async (e) => {
@@ -140,18 +126,8 @@
 </form>
 
 <style>
-	.header {
-		padding: 2rem;
-		border-bottom: 1px solid var(--sk-back-4);
-	}
-
-	button.cancel {
-		border-radius: 0.5rem;
-		padding: 0.5rem;
-	}
-
 	form {
-		padding: 2rem;
+		margin: 2rem;
 	}
 
 	ul {
@@ -164,8 +140,7 @@
 		padding: 0;
 	}
 
-	li > label,
-	.header {
+	li > label {
 		display: flex;
 		align-items: center;
 		gap: 1rem;

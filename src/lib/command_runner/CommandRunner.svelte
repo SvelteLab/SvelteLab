@@ -2,21 +2,23 @@
 	import { get_file_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
-	import { SvelteComponentTyped, onDestroy, tick, type ComponentType } from 'svelte';
+	import { onDestroy, tick } from 'svelte';
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
+	import Back from '~icons/material-symbols/arrow-back-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
 
 	export let commands = [] as Command[];
 
 	let search = '';
+
 	let dialog: HTMLDialogElement;
-	let current_action_component: ComponentType<SvelteComponentTyped> | null = null;
-	let handle_window_click: ((e: MouseEvent) => void) | null = null;
-
 	let input_element: HTMLInputElement;
-	let command_button_elements: Record<number, HTMLButtonElement> = {};
 
-	let unbind_function: () => void;
+	let command_button_elements: Record<number, HTMLButtonElement> = {};
+	let current_action_command: Command | null = null;
+
+	let handle_window_click: ((e: MouseEvent) => void) | null = null;
+	let unbind_function: () => void | undefined;
 
 	const close_dialog_on_out_click = (e: MouseEvent) => {
 		if (dialog === e.target) dialog.close();
@@ -38,7 +40,7 @@
 		return command.command?.includes(search.substring(1).trim().split(' ')[0]);
 	});
 
-	$: current_command = filtered_commands[0] as Command | null;
+	$: marked_command = filtered_commands[0] as Command | null;
 
 	$: {
 		if ($command_runner) {
@@ -47,10 +49,10 @@
 	}
 
 	function swap_current_command(where: 1 | -1) {
-		const previous_index = filtered_commands.findIndex((command) => command === current_command);
+		const previous_index = filtered_commands.findIndex((command) => command === marked_command);
 		let next_index = previous_index + where;
 		if (previous_index === -1) {
-			input_element.focus();
+			input_element?.focus();
 			next_index = 0;
 		}
 
@@ -58,8 +60,8 @@
 		if (next_index >= filtered_commands.length) next_index = 0;
 		if (next_index <= -1) next_index = filtered_commands.length - 1;
 
-		current_command = filtered_commands[next_index];
-		command_button_elements[next_index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+		marked_command = filtered_commands[next_index];
+		command_button_elements[next_index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	}
 
 	async function key_bind_commands(commands: Command[]) {
@@ -83,14 +85,14 @@
 
 		async function open_file_palette(event: KeyboardEvent) {
 			event.preventDefault();
-			current_action_component = null;
+			current_action_command = null;
 			if (!dialog.open) {
 				open_command_runner();
 				return;
 			}
 			search = '';
 			await tick();
-			input_element.focus();
+			input_element?.focus();
 		}
 
 		key_binds[
@@ -114,7 +116,7 @@
 			})
 		] = async (event) => {
 			event.preventDefault();
-			current_action_component = null;
+			current_action_command = null;
 			if (!dialog.open) {
 				// open command runner in command mode
 				search = '> ';
@@ -125,8 +127,8 @@
 				search = '> ' + search;
 			}
 			await tick();
-			input_element.focus();
-			input_element.setSelectionRange(1, search.length);
+			input_element?.focus();
+			input_element?.setSelectionRange(1, search.length);
 		};
 
 		key_binds[
@@ -167,20 +169,32 @@
 	bind:this={dialog}
 	on:close={() => {
 		search = '';
-		current_action_component = null;
+		current_action_command = null;
 		handle_window_click = null;
 		command_runner.close();
 	}}
 >
-	{#if current_action_component}
+	{#if current_action_command}
 		<section class="action-component">
+			<div class="header">
+				<svelte:component this={current_action_command.icon} />
+				<h2>
+					{current_action_command.title}
+				</h2>
+				<button
+					class="cancel"
+					title="Back to Command Palette"
+					on:click={() => {
+						current_action_command = null;
+					}}
+				>
+					<Back />
+				</button>
+			</div>
 			<svelte:component
-				this={current_action_component}
+				this={current_action_command.action_component}
 				on:completed={() => {
 					dialog.close();
-				}}
-				on:cancel={() => {
-					current_action_component = null;
 				}}
 			/>
 		</section>
@@ -188,11 +202,11 @@
 		<section>
 			<form
 				on:submit|preventDefault={() => {
-					if (typeof current_command?.action === 'function') {
-						current_command.action();
+					if (typeof marked_command?.action === 'function') {
+						marked_command.action();
 						dialog.close();
-					} else if (current_command?.action_component) {
-						current_action_component = current_command.action_component;
+					} else if (marked_command?.action_component) {
+						current_action_command = marked_command;
 					}
 				}}
 			>
@@ -200,7 +214,7 @@
 					bind:this={input_element}
 					bind:value={search}
 					on:blur={() => {
-						current_command = null;
+						marked_command = null;
 					}}
 					placeholder="🔍 Search for files, or type `>` for commands..."
 				/>
@@ -212,7 +226,7 @@
 					? parseKeybinding(get_key_bind(command.key_bind))
 					: null}
 				{@const key_bind_sequence = key_bind?.map((bind) => bind.flat(Infinity))}
-				{@const current = command === current_command}
+				{@const current = command === marked_command}
 				<li>
 					<!-- TODO: rework how action components work: replace palette instead of inline -->
 					<button
@@ -224,7 +238,7 @@
 								command.action();
 								dialog.close();
 							} else if (command.action_component) {
-								current_action_component = command.action_component;
+								current_action_command = command;
 							}
 						}}
 						title="Launch command {command.title}"
@@ -285,6 +299,7 @@
 		color: inherit;
 		border-start-start-radius: 1rem;
 		border-start-end-radius: 1rem;
+		background-color: transparent;
 	}
 
 	input:focus-visible {
@@ -303,15 +318,15 @@
 	}
 
 	ul.commands {
-		max-height: 40vh;
+		height: 40vh;
 		overflow-y: auto;
 		position: relative;
 		border-top: 1px solid var(--sk-back-4);
 		border-bottom-left-radius: 1rem;
 		border-bottom-right-radius: 1rem;
 		padding: 1rem;
-		display: grid;
-		align-content: start;
+		display: flex;
+		flex-direction: column;
 		gap: 1rem;
 	}
 
@@ -329,7 +344,7 @@
 		background-color: var(--sk-back-4);
 	}
 
-	button {
+	.commands button {
 		display: flex;
 		align-items: center;
 		gap: 1rem;
@@ -339,6 +354,24 @@
 		text-align: left;
 		z-index: 10;
 		position: relative;
+	}
+
+	.header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 2rem;
+		border-bottom: 1px solid var(--sk-back-4);
+	}
+
+	h2 {
+		font-size: 2rem;
+	}
+
+	button.cancel {
+		margin-inline-start: auto;
+		border-radius: 0.5rem;
+		padding: 0.5rem;
 	}
 
 	button:hover {
