@@ -12,7 +12,7 @@
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
 	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
-	import { repl_name } from '$lib/stores/repl_id_store';
+	import { repl_category, repl_name } from '$lib/stores/repl_id_store';
 	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
 	import { error } from '$lib/toast';
 	import { drop_assets, handle_files } from '$lib/upload_assets';
@@ -29,6 +29,8 @@
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
+	import { page } from '$app/stores';
+	import type { CategorizedRepl } from '$lib/schemas';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -39,6 +41,8 @@
 
 	let renaming_path = null as string | null;
 
+	let categorized_repls: Promise<CategorizedRepl[]>;
+	$: ({ categorized_repls } = $page.data.promises ?? {});
 	async function handle_add(
 		path_name: string,
 		type: typeof is_adding_type.kind,
@@ -132,6 +136,42 @@
 	}}
 >
 	{#if base_path === $base_path_store}
+		<li class="category">
+			<label for="category"
+				>category:
+				<input
+					id="category"
+					placeholder="uncategorized"
+					aria-label="REPL category"
+					bind:value={$repl_category}
+				/>
+			</label>
+
+			{#await categorized_repls then repls}
+				{@const categories = [
+					...new Set(
+						repls
+							?.map((repl) => repl.category)
+							?.filter((category) => {
+								return !!category && category.toLowerCase().includes($repl_category.toLowerCase());
+							})
+					)
+				]}
+				<ul class="autocomplete">
+					{#each categories as category}
+						<li>
+							<button
+								on:click={(e) => {
+									$repl_category = category;
+									e.currentTarget.blur();
+								}}
+								>{category}
+							</button>
+						</li>
+					{/each}
+				</ul>
+			{/await}
+		</li>
 		<li class="root">
 			<label for="project_name">
 				<Label></Label>

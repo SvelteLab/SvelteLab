@@ -20,12 +20,15 @@
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
+	import Apps from '~icons/material-symbols/apps';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
+
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
+	$: ({ categorized_repls } = $page.data?.promises ?? {});
 	export let mobile = false;
 	let forking = false;
 
@@ -96,6 +99,15 @@
 		</div>
 	</div>
 	{#if !mobile}
+		{#if categorized_repls}
+			<button
+				title="Toggle Apps"
+				on:click={layout_store.toggle_apps}
+				aria-pressed={!!$layout_store.apps && $layout_store.apps !== 0}
+			>
+				<Apps /> Repls
+			</button>
+		{/if}
 		<button
 			class="supplemental"
 			title="Toggle File Browser"

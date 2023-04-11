@@ -1,18 +1,19 @@
 import { persisted } from 'svelte-local-storage-store';
+import type { Writable } from 'svelte/store';
 
-interface LayoutStore {
-	file_tree: number;
-	terminal: number;
-	show_config: boolean;
-	folders_first: boolean;
-}
-
-const { subscribe, update, set } = persisted<LayoutStore>('layout_preferences', {
+const layout_preferences = persisted('layout_preferences', {
 	file_tree: 30,
 	terminal: 30,
+	apps: 0,
 	show_config: true,
 	folders_first: true,
 });
+
+const { subscribe, update, set } = layout_preferences;
+
+type LayoutStore = typeof layout_preferences extends Writable<infer WritableType>
+	? WritableType
+	: never;
 
 function toggle_state(key: keyof LayoutStore) {
 	update((state) => ({
@@ -25,21 +26,23 @@ type LayoutKeysByType<T> = keyof {
 	[Key in keyof LayoutStore as LayoutStore[Key] extends T ? Key : never]: LayoutStore[Key];
 };
 
-function toggle_number(key: LayoutKeysByType<number>) {
+function toggle_number(key: LayoutKeysByType<number>, base_number: number) {
 	update((state) => ({
 		...state,
-		[key]: state[key] === 0 ? 30 : 0,
+		[key]: state[key] === 0 ? base_number : 0
 	}));
 }
 
-const toggle_file_tree = () => toggle_number('file_tree');
-const toggle_terminal = () => toggle_number('terminal');
+const toggle_apps = () => toggle_number('apps', 15);
+const toggle_file_tree = () => toggle_number('file_tree', 30);
+const toggle_terminal = () => toggle_number('terminal', 30);
 const toggle_config = () => toggle_state('show_config');
 const toggle_sort = () => toggle_state('folders_first');
 
 export const layout_store = {
 	subscribe,
-	set, // used by <Pane bind:size> inside Desktop.svelte
+	set,
+	toggle_apps,
 	toggle_file_tree,
 	toggle_terminal,
 	toggle_config,

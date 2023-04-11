@@ -9,6 +9,42 @@
 	transition: background-color 100ms;
 }
 
+.category {
+	--padding: .25rem;
+	position: relative;
+	overflow: visible;
+	padding-inline: var(--padding);
+}
+
+.category label {
+	display: flex;
+	gap: .5rem;
+}
+
+ul.autocomplete {
+	position: absolute;
+	top: calc(100% - var(--padding));
+	left: var(--padding);
+	width: calc(100% - var(--padding) * 2);
+	background-color: var(--sk-back-1);
+	z-index: 10;
+	padding: 0;
+	outline: 1px solid var(--sk-theme-1);
+	display: none;
+}
+
+ul:empty {
+	outline-color: transparent;
+}
+
+.category:focus-within .autocomplete {
+	display: block;
+}
+
+.autocomplete>li:not(:last-child) {
+	border-bottom: 1px solid var(--sk-theme-1);
+}
+
 /*style reset for nested folders*/
 .file-tree :global(.file-tree) {
 	height: auto !important;

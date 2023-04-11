@@ -1,12 +1,12 @@
-import { replSchema } from '$lib/schemas';
+import { repl_schema } from '$lib/schemas';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, request }) => {
-	const { id, files, name, is_forking } = await request.json();
+	const { id, files, name, is_forking , category} = await request.json();
 	let to_save;
 	try {
-		to_save = replSchema.parse({ id, files, name, user: locals.user?.id });
+		to_save = repl_schema.parse({ id, files, name, user: locals.user?.id, category });
 	} catch (e) {
 		return new Response('Parsing error', {
 			status: 500,
@@ -20,6 +20,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			await repl_collection.update(id.toString(), {
 				files: to_save.files,
 				name: to_save.name,
+				category: to_save.category
 			});
 		} else {
 			// delete to_save.id just to be sure

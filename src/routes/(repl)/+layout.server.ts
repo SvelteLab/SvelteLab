@@ -1,7 +1,7 @@
 import { GITHUB_TOKEN } from '$env/static/private';
 import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$lib/constants';
 import { default_project_files } from '$lib/default_project_files';
-import { replSchema } from '$lib/schemas';
+import { repl_schema } from '$lib/schemas';
 import { redirect } from '@sveltejs/kit';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
@@ -12,7 +12,7 @@ export const ssr = false;
 
 async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	const record = await pocketbase.collection('repls').getOne(id);
-	return replSchema.parse(record);
+	return repl_schema.parse(record);
 }
 
 async function fetch_github_repo(base_url: string, is_dir = true) {
@@ -50,7 +50,9 @@ export const load: LayoutServerLoad = async ({
 	locals,
 	url: { searchParams: search_params },
 	cookies,
+	depends,
 }) => {
+	depends('user:repls');
 	const { repl } = params;
 	const provider = search_params.get('provider');
 	const owner = search_params.get('owner');
@@ -81,12 +83,14 @@ export const load: LayoutServerLoad = async ({
 	const default_files =
 		default_project_files[template] ?? default_project_files[saved_default_template];
 	let files: FileSystemTree = (default_files as DirectoryNode).directory;
-	let name = 'Hello World';
+	let name = 'Hello world';
+	let repl_category = '';
 
 	if (!repl || from_login) {
 		return {
 			repl: files,
 			repl_name: name,
+			repl_category,
 		};
 	}
 	let owner_id;
@@ -98,6 +102,7 @@ export const load: LayoutServerLoad = async ({
 		files = record.files as FileSystemTree;
 		name = record.name;
 		owner_id = record.user;
+		repl_category = record.category;
 	} catch (e) {
 		/* empty */
 	}
@@ -112,5 +117,6 @@ export const load: LayoutServerLoad = async ({
 		id: repl,
 		repl_name: name,
 		owner_id,
+		repl_category,
 	};
 };
