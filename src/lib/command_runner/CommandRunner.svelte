@@ -5,6 +5,7 @@
 	import { onDestroy, tick } from 'svelte';
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
 	import Back from '~icons/material-symbols/arrow-back-rounded';
+	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
 
 	export let commands = [] as Command[];
@@ -98,21 +99,21 @@
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['P']
+				keys: ['P'],
 			})
 		] = open_file_palette;
 
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['E']
+				keys: ['E'],
 			})
 		] = open_file_palette;
 
 		key_binds[
 			get_key_bind({
 				mod: ['$mod', 'Shift'],
-				keys: ['P']
+				keys: ['P'],
 			})
 		] = async (event) => {
 			event.preventDefault();
@@ -133,7 +134,7 @@
 
 		key_binds[
 			get_key_bind({
-				keys: ['ArrowDown']
+				keys: ['ArrowDown'],
 			})
 		] = (event) => {
 			if (dialog.open) {
@@ -144,7 +145,7 @@
 
 		key_binds[
 			get_key_bind({
-				keys: ['ArrowUp']
+				keys: ['ArrowUp'],
 			})
 		] = (event) => {
 			if (dialog.open) {
@@ -251,6 +252,11 @@
 						{command.title}
 						{#if command.subtitle}
 							<small>{command.subtitle}</small>
+						{/if}
+						{#if command.action_component}
+							<span class="action_arrow" title="Open">
+								<Forward />
+							</span>
 						{/if}
 						{#if key_bind_sequence}
 							<ul class="key_binds">
@@ -390,5 +396,9 @@
 		kbd {
 			display: none;
 		}
+	}
+
+	.action_arrow {
+		margin-inline-start: auto;
 	}
 </style>
