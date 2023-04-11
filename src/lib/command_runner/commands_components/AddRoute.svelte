@@ -1,15 +1,17 @@
 <script lang="ts">
+	import { get_file_icon } from '$lib/file_icons';
 	import { is_dir } from '$lib/file_system';
 	import { files, webcontainer } from '$lib/webcontainer';
 	import type { FileSystemTree } from '@webcontainer/api';
 	import { createEventDispatcher, tick } from 'svelte';
 	import TS from '~icons/vscode-icons/file-type-typescript-official';
+	import Back from '~icons/material-symbols/arrow-back-rounded';
 
 	const dispatch = createEventDispatcher();
+
 	let to_add = '/';
 	let old_to_add = null as null | string;
 	let input: HTMLInputElement;
-
 	let is_ts = false;
 
 	const creatable = [
@@ -19,11 +21,16 @@
 		'+layout.svelte',
 		'+layout',
 		'+layout.server',
-		'+error.svelte',
-		'+server'
+		'+server',
+		'+error.svelte'
 	];
 
-	let to_create = [] as string[];
+	let to_create = ['+page.svelte'] as string[];
+
+	let autocomplete =
+		is_dir($files.src) && is_dir($files.src.directory.routes)
+			? autocomplete_from_tree($files.src.directory.routes.directory)
+			: [];
 
 	function autocomplete_from_tree(tree: FileSystemTree, path = '/') {
 		let retval = [] as string[];
@@ -37,11 +44,6 @@
 		return retval;
 	}
 
-	let autocomplete =
-		is_dir($files.src) && is_dir($files.src.directory.routes)
-			? autocomplete_from_tree($files.src.directory.routes.directory)
-			: [];
-
 	$: {
 		tick().then(() => {
 			if (old_to_add && to_add.length <= old_to_add.length) return;
@@ -54,6 +56,19 @@
 		});
 	}
 </script>
+
+<div class="header">
+	<button
+		class="cancel"
+		title="Cancel route creation"
+		on:click={() => {
+			dispatch('cancel');
+		}}
+	>
+		<Back />
+	</button>
+	<h2>Create Route</h2>
+</div>
 
 <form
 	on:submit|preventDefault={async (e) => {
@@ -76,8 +91,11 @@
 		dispatch('completed');
 	}}
 >
+	<label for="route"> Route </label>
 	<!-- svelte-ignore a11y-autofocus -->
 	<input
+		type="text"
+		id="route"
 		autofocus
 		on:keydown={(e) => {
 			if (e.key === 'Tab' && input.selectionStart !== input.selectionEnd) {
@@ -95,61 +113,87 @@
 		}}
 		placeholder="insert route to create"
 	/>
+
 	<section>
-		<button on:click={() => (is_ts = !is_ts)} type="button" class="ts-button" class:is_ts>
-			<TS />
-		</button>
-		<div class="checkboxes">
+		<ul>
 			{#each creatable as create}
 				{@const label = create.endsWith('.svelte') ? create : `${create}${is_ts ? '.ts' : '.js'}`}
-				<label>
-					<input value={label} type="checkbox" bind:group={to_create} />
-					{label}
-				</label>
+				{@const icon = get_file_icon(label)}
+				<li>
+					<label>
+						<input value={label} type="checkbox" bind:group={to_create} />
+						<svelte:component this={icon} />
+						{label}
+					</label>
+				</li>
 			{/each}
-		</div>
+			<li>
+				<label>
+					<input type="checkbox" bind:checked={is_ts} />
+					<TS />
+					Use TypeScript
+				</label>
+			</li>
+		</ul>
 	</section>
-	<button class="create">Create route "{to_add}"</button>
+	<button class="confirm">Create route "{to_add}"</button>
 </form>
 
 <style>
-	form {
-		display: grid;
-		gap: 0.5rem;
+	.header {
+		padding: 2rem;
+		border-bottom: 1px solid var(--sk-back-4);
 	}
-	input {
-		background-color: var(--sk-back-2);
-		width: 100%;
-		color: var(--sk-text-1);
+
+	button.cancel {
+		border-radius: 0.5rem;
 		padding: 0.5rem;
-		border: 0;
+	}
+
+	form {
+		padding: 2rem;
+	}
+
+	ul {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		padding: 1rem;
+		align-content: start;
+		gap: 1rem;
+		list-style: none;
+		padding: 0;
+	}
+
+	li > label,
+	.header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	input[type='checkbox'] {
+		width: 1.75rem;
+		height: 1.75rem;
+	}
+
+	input[type='text'],
+	button.confirm {
+		width: 100%;
+		color: inherit;
 		border-radius: 0.5rem;
 	}
-	input::selection {
-		background-color: var(--sk-back-5);
+
+	input[type='text'] {
+		border: 1px solid var(--sk-back-5);
+		padding: 1rem 1.25rem;
 	}
-	section {
-		display: grid;
-		grid-template-columns: min-content 1fr;
-		gap: 1rem;
+
+	button.confirm {
+		background-color: var(--sk-back-3);
+		padding: 0.5rem 1rem;
 	}
-	.checkboxes {
-		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-	.ts-button {
-		opacity: 0.5;
-	}
-	.is_ts {
-		opacity: 1;
-	}
-	label {
-		display: flex;
-		gap: 0.5rem;
-	}
-	.create {
-		background-color: var(--sk-theme-1);
-		padding: 0.5rem;
+
+	button:hover {
+		background-color: var(--sk-back-4);
 	}
 </style>
