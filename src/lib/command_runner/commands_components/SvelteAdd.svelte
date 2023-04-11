@@ -6,38 +6,39 @@
 
 	const dispatch = createEventDispatcher();
 
-	const creatable = [
-		'3d',
-		'bootstrap',
-		'bulma',
-		'coffeescript',
-		'imagetools',
-		'mdsvex',
-		'postcss',
-		'scss',
-		'tailwindcss',
-		'tauri'
+	const addable = [
+		{ label: 'Svelte Cubed', icon: null, name: '3d' },
+		{ label: 'Bootstrap', icon: null, name: 'bootstrap' },
+		{ label: 'Bulma', icon: null, name: 'bulma' },
+		{ label: 'CoffeeScript', icon: null, name: 'coffeescript' },
+		{ label: 'Imagetools *', icon: null, name: 'imagetools' },
+		{ label: 'mdsvex', icon: null, name: 'mdsvex' },
+		{ label: 'PostCSS', icon: null, name: 'postcss' },
+		{ label: 'Routify *', icon: null, name: 'routify' },
+		{ label: 'SCSS', icon: null, name: 'scss' },
+		{ label: 'Tailwind CSS', icon: null, name: 'tailwindcss' },
+		{ label: 'Tauri *', icon: null, name: 'tauri' },
 	];
 
-	let to_create = [] as string[];
-	$: list = to_create.join(', ');
+	let to_add = [] as string[];
+	$: list = to_add.join(', ');
 </script>
 
 <form
 	on:submit|preventDefault={async (e) => {
-		const progress_toast = toast.push(`Adding ${to_create.join(', ')}...`, {
+		const progress_toast = toast.push(`Adding ${to_add.join(', ')}...`, {
 			initial: 0,
-			dismissable: false
+			dismissable: false,
 		});
 		webcontainer
-			.spawn('npx', ['svelte-add@latest', to_create.join('+'), '--install'])
+			.spawn('npx', ['svelte-add@latest', to_add.join('+'), '--install'])
 			.then(async (process) => {
 				dispatch('completed');
 				process.output.pipeTo(
 					new WritableStream({
 						write(chunk) {
 							terminal.write(chunk);
-						}
+						},
 					})
 				);
 				await process.exit;
@@ -48,22 +49,37 @@
 			});
 	}}
 >
-	<section class="checkboxes">
-		{#each creatable as create}
-			<label>
-				<input value={create} type="checkbox" bind:group={to_create} />
-				{create}
-			</label>
+	<p>
+		<a href="https://github.com/svelte-add/svelte-add">Svelte Add</a> is a community project to easily
+		add integrations and other functionality to Svelte apps.
+	</p>
+	<ul class="checkbox-grid">
+		{#each addable as integration}
+			<li>
+				<label>
+					<input value={integration.name} type="checkbox" bind:group={to_add} />
+					{integration.label}
+				</label>
+			</li>
 		{/each}
-	</section>
-	<button disabled={to_create.length === 0} class="create">Add "{list}" to your project</button>
+	</ul>
+	<small>* work in progress</small>
+	<button disabled={to_add.length === 0} class="confirm">
+		{#if to_add.length > 0}
+			Add "{list}" to your project
+		{:else}
+			Select some integrations above
+		{/if}
+	</button>
 </form>
 
 <style>
 	form {
 		display: grid;
 		gap: 0.5rem;
+		margin: 2rem;
 	}
+
 	input {
 		background-color: var(--sk-back-2);
 		width: 100%;
@@ -72,20 +88,17 @@
 		border: 0;
 		border-radius: 0.5rem;
 	}
+
 	input::selection {
 		background-color: var(--sk-back-5);
 	}
-	.checkboxes {
-		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
+
 	label {
 		display: flex;
 		gap: 0.5rem;
 	}
-	.create {
-		background-color: var(--sk-theme-1);
-		padding: 0.5rem;
+
+	small {
+		margin-inline-start: auto;
 	}
 </style>

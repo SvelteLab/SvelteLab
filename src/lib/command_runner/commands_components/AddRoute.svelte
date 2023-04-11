@@ -21,7 +21,7 @@
 		'+layout',
 		'+layout.server',
 		'+server',
-		'+error.svelte'
+		'+error.svelte',
 	];
 
 	let to_create = ['+page.svelte'] as string[];
@@ -101,7 +101,7 @@
 	/>
 
 	<section>
-		<ul>
+		<ul class="checkbox-grid">
 			{#each creatable as create}
 				{@const label = create.endsWith('.svelte') ? create : `${create}${is_ts ? '.ts' : '.js'}`}
 				{@const icon = get_file_icon(label)}
@@ -130,32 +130,10 @@
 		margin: 2rem;
 	}
 
-	ul {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		padding: 1rem;
-		align-content: start;
-		gap: 1rem;
-		list-style: none;
-		padding: 0;
-	}
-
-	li > label {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-	}
-
-	input[type='checkbox'] {
-		width: 1.75rem;
-		height: 1.75rem;
-	}
-
 	input[type='text'],
 	button.confirm {
 		width: 100%;
 		color: inherit;
-		border-radius: 0.5rem;
 	}
 
 	input[type='text'] {
