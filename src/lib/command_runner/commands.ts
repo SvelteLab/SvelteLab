@@ -27,10 +27,12 @@ import Issue from '~icons/material-symbols/error-circle-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
 import NPM from '~icons/material-symbols/install-desktop';
 import Keyboard from '~icons/material-symbols/keyboard';
+import FileBrowser from '~icons/material-symbols/menu-rounded';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Bookmark from '~icons/material-symbols/star-outline';
+import Terminal from '~icons/material-symbols/terminal-rounded';
 import Intro from '~icons/material-symbols/waving-hand-rounded';
 import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
@@ -38,11 +40,9 @@ import Credits from '~icons/mdi/license';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 import CreateRoute from './commands_components/CreateRoute.svelte';
 import InstallPackage from './commands_components/InstallPackage.svelte';
-import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
+import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import FileBrowser from '~icons/material-symbols/menu-rounded';
-import Terminal from '~icons/material-symbols/terminal-rounded';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -110,7 +110,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'format-current',
 		title: 'Format',
-		subtitle: 'prettier current file',
+		subtitle: 'format current file with prettier',
 		icon: Format,
 		action: prettier_action,
 		key_bind: {
@@ -121,7 +121,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		command: 'create-route',
-		title: 'Create route',
+		title: 'Create Route',
 		subtitle: 'create a new sveltekit route',
 		icon: Route,
 		action_component: CreateRoute,
@@ -129,7 +129,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		command: 'svelte-add',
-		title: 'Svelte add',
+		title: 'Svelte Add',
 		subtitle: 'quickly add a svelte integration',
 		icon: SvelteAddIcon,
 		action_component: SvelteAdd,
@@ -184,7 +184,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		command: 'npm-install-package',
-		title: 'Install package',
+		title: 'Install Package',
 		subtitle: 'install a package from npm',
 		icon: NPM,
 		action_component: InstallPackage,
@@ -219,7 +219,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		command: 'new-project',
-		title: 'New',
+		title: 'New Project',
 		subtitle: 'create a new blank project',
 		icon: New,
 		action() {
@@ -234,7 +234,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'new-project-template',
 		title: 'New with Template',
-		subtitle: 'create a new blank project with a starter template',
+		subtitle: 'create new project with a starter template',
 		icon: New,
 		action_component: NewWithTemplate,
 	});
