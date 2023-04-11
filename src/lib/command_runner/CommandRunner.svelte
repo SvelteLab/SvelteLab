@@ -2,7 +2,7 @@
 	import { get_file_icon } from '$lib/file_icons';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, tick } from 'svelte';
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
 	import { get_key_bind } from './shortcuts-utilities';
 
@@ -79,10 +79,12 @@
 		}
 
 		function open_command_runner_bind(event: KeyboardEvent) {
-			// TODO: replace with clear input action
+			event.preventDefault();
 			if (!dialog.open) {
-				event.preventDefault();
 				open_command_runner();
+			} else {
+				search_element.focus();
+				search_element.setSelectionRange(0, search.length);
 			}
 		}
 
@@ -105,13 +107,19 @@
 				mod: ['$mod', 'Shift'],
 				keys: ['P']
 			})
-		] = (event) => {
-			// TODO: replace with clear input action
+		] = async (event) => {
+			event.preventDefault();
 			if (!dialog.open) {
-				event.preventDefault();
 				// open command runner in command mode
 				search = '> ';
 				open_command_runner();
+			} else {
+				if (!search.startsWith('>')) {
+					search = '> ' + search;
+				}
+				await tick();
+				search_element.focus();
+				search_element.setSelectionRange(1, search.length);
 			}
 		};
 
