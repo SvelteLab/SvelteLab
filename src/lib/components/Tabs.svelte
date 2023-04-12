@@ -11,7 +11,7 @@
 
 	const base_icons = {
 		routes: Routes,
-		lib: Lib
+		lib: Lib,
 	} as Record<string, ComponentType<SvelteComponentTyped>>;
 
 	onDestroy(() => {

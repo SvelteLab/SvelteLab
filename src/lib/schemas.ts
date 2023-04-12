@@ -7,12 +7,12 @@ const uInt8Schema: z.ZodType<Uint8Array> = z.custom<Uint8Array>((val) => {
 
 export const fileSchema = z.object({
 	file: z.object({
-		contents: z.union([z.string(), uInt8Schema])
-	})
+		contents: z.union([z.string(), uInt8Schema]),
+	}),
 });
 
 export const directorySchema: z.ZodType<DirectoryNode> = z.object({
-	directory: z.lazy(() => fileSystemSchema)
+	directory: z.lazy(() => fileSystemSchema),
 });
 
 export const fileSystemSchema = z.record(z.union([fileSchema, directorySchema]));
@@ -22,5 +22,5 @@ export const replSchema = z.object({
 	id: z.string().optional(),
 	files: fileSystemSchema,
 	user: z.string(),
-	expand: z.record(z.string(), z.any()).optional()
+	expand: z.record(z.string(), z.any()).optional(),
 });

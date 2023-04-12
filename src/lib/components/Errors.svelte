@@ -30,7 +30,7 @@
 			id: '',
 			source: code,
 			options: {},
-			return_ast: true
+			return_ast: true,
 		});
 	}
 

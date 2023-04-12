@@ -13,12 +13,12 @@ const height = 630;
 const width = 1200;
 
 export const config = {
-	runtime: 'nodejs18.x'
+	runtime: 'nodejs18.x',
 };
 
 async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	const record = await pocketbase.collection('repls').getOne(id, {
-		expand: 'user'
+		expand: 'user',
 	});
 	return replSchema.parse(record);
 }
@@ -49,25 +49,25 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			{
 				name: 'JetBrains Mono',
 				data: Buffer.from(JetBrainsMono),
-				style: 'normal'
-			}
+				style: 'normal',
+			},
 		],
 		height,
-		width
+		width,
 	});
 
 	const resvg = new Resvg(svg, {
 		fitTo: {
 			mode: 'width',
-			value: width
-		}
+			value: width,
+		},
 	});
 
 	const image = resvg.render();
 
 	return new Response(image.asPng(), {
 		headers: {
-			'content-type': 'image/png'
-		}
+			'content-type': 'image/png',
+		},
 	});
 };

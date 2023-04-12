@@ -31,7 +31,7 @@
 		{ tag: tags.keyword, color: 'var(--sk-code-keyword)' },
 		{ tag: tags.string, color: 'var(--sk-code-string)' },
 		{ tag: tags.number, color: 'var(--sk-code-number)' },
-		{ tag: tags.tagName, color: 'var(--sk-code-tags)' }
+		{ tag: tags.tagName, color: 'var(--sk-code-tags)' },
 	]);
 
 	const theme = syntaxHighlighting(svelte_syntax_style);
@@ -45,7 +45,7 @@
 		ts: javascript({ typescript: true }),
 		css: css(),
 		json: json(),
-		md: markdown()
+		md: markdown(),
 	};
 
 	let code: string;
@@ -57,12 +57,12 @@
 			svelte_snippets,
 			linter(return_diagnostics),
 			abbreviationTracker(),
-			keymap.of([indentWithTab])
+			keymap.of([indentWithTab]),
 		];
 		if (config.vim) {
 			extensions.unshift(
 				vim({
-					status: true
+					status: true,
 				})
 			);
 		}
@@ -88,7 +88,7 @@
 
 	const warnings_and_errors = {
 		warnings: [] as Warning[],
-		error: null as SvelteError | null
+		error: null as SvelteError | null,
 	};
 
 	function return_diagnostics() {
@@ -99,7 +99,7 @@
 				from: (warning.start as any).character,
 				to: (warning.end as any).character,
 				severity: 'warning',
-				message: warning.message
+				message: warning.message,
 			});
 		}
 		if (warnings_and_errors.error) {
@@ -109,7 +109,7 @@
 					from: error.start.character,
 					to: error.end.character,
 					severity: 'error',
-					message: error.message
+					message: error.message,
 				});
 			}
 		}
@@ -139,53 +139,53 @@
 				height: '100%',
 				overflow: 'auto',
 				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)'
+				color: 'var(--sk-code-base)',
 			},
 			'*': {
 				'font-family': 'var(--sk-font-mono)',
-				'tab-size': 3
+				'tab-size': 3,
 			},
 			'.cm-gutters': {
-				border: 'none'
+				border: 'none',
 			},
 			'.cm-gutter': {
 				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)'
+				color: 'var(--sk-code-base)',
 			},
 			'.cm-line.cm-activeLine': {
-				'background-color': 'var(--sk-back-translucent)'
+				'background-color': 'var(--sk-back-translucent)',
 			},
 			'.cm-activeLineGutter': {
-				'background-color': 'var(--sk-back-3)'
+				'background-color': 'var(--sk-back-3)',
 			},
 			'.cm-focused.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-4) !important'
+				'background-color': 'var(--sk-back-4) !important',
 			},
 			'.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-5) !important'
+				'background-color': 'var(--sk-back-5) !important',
 			},
 			'.cm-cursor': {
-				'border-color': 'var(--sk-code-base)'
+				'border-color': 'var(--sk-code-base)',
 			},
 			'.cm-tooltip': {
 				border: 'none',
-				background: 'var(--sk-back-3)'
+				background: 'var(--sk-back-3)',
 			},
 			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
-				background: 'var(--sk-back-3)'
+				background: 'var(--sk-back-3)',
 			},
 			'.cm-tooltip-autocomplete ul li[aria-selected]': {
 				background: 'var(--sk-theme-1)',
-				color: 'var(--sk-text-1)'
+				color: 'var(--sk-text-1)',
 			},
 			'.cm-tooltip-lint': {
 				background: 'var(--sk-back-3)',
-				color: 'var(--sk-text-1)'
+				color: 'var(--sk-text-1)',
 			},
 			'.cm-panels': {
 				background: 'var(--sk-back-3)',
-				color: 'var(--sk-text-1)'
-			}
+				color: 'var(--sk-text-1)',
+			},
 		}}
 	/>
 	{#if current_lang === 'svelte'}

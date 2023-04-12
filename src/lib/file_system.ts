@@ -19,8 +19,8 @@ export function get_file_from_path(
 				//this means is a new file
 				subtree[path_part] = {
 					file: {
-						contents: ''
-					}
+						contents: '',
+					},
 				};
 				file = subtree[path_part];
 			}
@@ -51,7 +51,7 @@ export function get_subtree_from_path(
 			if (!file && create_if_not_exist) {
 				//this means is a new directory
 				subtree[path_part] = {
-					directory: {}
+					directory: {},
 				};
 				file = subtree[path_part];
 			}

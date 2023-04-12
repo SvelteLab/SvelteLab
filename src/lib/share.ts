@@ -8,7 +8,7 @@ export async function share_with_hash() {
 	await share({
 		text: `Take a look at my REPL - ${get(repl_name)}`,
 		title: 'Sveltelab',
-		url: share_url.toString()
+		url: share_url.toString(),
 	});
 }
 
@@ -18,7 +18,7 @@ export async function share_with_id() {
 	await share({
 		text: `Take a look at my REPL - ${get(repl_name)}`,
 		title: 'Sveltelab',
-		url: share_url.toString()
+		url: share_url.toString(),
 	});
 }
 

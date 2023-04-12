@@ -5,7 +5,7 @@ import {
 	WebContainer,
 	type DirEnt,
 	type FileSystemTree,
-	type WebContainerProcess
+	type WebContainerProcess,
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent } from 'lz-string';
 import { tick } from 'svelte';
@@ -24,7 +24,7 @@ const recursive_warning_proxy_traps: ProxyHandler<never> = {
 	},
 	apply() {
 		throw new Error('You have to init the webcontainer before using it.');
-	}
+	},
 };
 
 /**
@@ -43,7 +43,7 @@ const { subscribe, set } = writable({
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
-	is_jsh_listening: false
+	is_jsh_listening: false,
 });
 
 type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
@@ -56,7 +56,7 @@ async function merge_state(state: Partial<WebcontainerStoreType>) {
 	const previous_state = get({ subscribe });
 	set({
 		...previous_state,
-		...state
+		...state,
 	});
 }
 
@@ -89,7 +89,7 @@ const listening_for_fs_store = writable(false);
  * we can use this to check if we are already lstening to fs
  */
 export const listening_for_fs = {
-	subscribe: listening_for_fs_store.subscribe
+	subscribe: listening_for_fs_store.subscribe,
 };
 
 async function listen_for_files_changes() {
@@ -99,7 +99,7 @@ async function listen_for_files_changes() {
 		'chokidar-cli',
 		'*',
 		'**/*',
-		...to_ignore
+		...to_ignore,
 	]);
 	process.output.pipeTo(
 		new WritableStream({
@@ -124,7 +124,7 @@ async function listen_for_files_changes() {
 						}
 					}
 				}
-			}
+			},
 		})
 	);
 	process.exit.then(listen_for_files_changes);
@@ -137,7 +137,7 @@ async function listen_for_files_changes() {
 const files_store = writable<FileSystemTree>();
 
 export const files = {
-	subscribe: files_store.subscribe
+	subscribe: files_store.subscribe,
 };
 
 function add_file_in_store(
@@ -195,8 +195,8 @@ async function launch_jsh() {
 	const jsh_process = await webcontainer_instance.spawn('jsh', {
 		terminal: {
 			cols: terminal.cols,
-			rows: terminal.rows
-		}
+			rows: terminal.rows,
+		},
 	});
 	// we pipe the output of the process to a new writable stream that
 	// write to the terminal
@@ -209,7 +209,7 @@ async function launch_jsh() {
 				// in the queue
 				if (data.includes('❯') && !already_listening) {
 					merge_state({
-						is_jsh_listening: true
+						is_jsh_listening: true,
 					});
 					files_store.set(await get_tree_from_container());
 					const command = jsh_queue.values().next().value as { cmd: string; callback?: () => void };
@@ -224,20 +224,20 @@ async function launch_jsh() {
 					// a new command is probably being run so we set the store
 				} else if (data.includes('\r') && already_listening) {
 					merge_state({
-						is_jsh_listening: false
+						is_jsh_listening: false,
 					});
 					jsh_finish_queue.forEach((callback) => callback());
 					jsh_finish_queue.clear();
 				}
 				terminal.write(data);
-			}
+			},
 		})
 	);
 	// get the input writer and store it in the store
 	const shell_writer = jsh_process.input.getWriter();
 	merge_state({
 		running_process: jsh_process,
-		process_writer: shell_writer
+		process_writer: shell_writer,
 	});
 
 	// add listener on the terminal to pipe that to the actual process
@@ -251,7 +251,7 @@ async function launch_jsh() {
 	merge_state({
 		process_writer: null,
 		running_process: null,
-		is_jsh_listening: false
+		is_jsh_listening: false,
 	});
 	terminal.clear();
 	terminal_writer.dispose();
@@ -409,7 +409,7 @@ export const webcontainer = {
 	},
 	async add_folder(path: string) {
 		await webcontainer_instance.fs.mkdir(path, {
-			recursive: true
+			recursive: true,
 		});
 		get_subtree_from_path(path, get(files_store), true);
 		//trigger rerender
@@ -418,7 +418,7 @@ export const webcontainer = {
 	},
 	async delete_file(path: string) {
 		await webcontainer_instance.fs.rm(path, {
-			recursive: true
+			recursive: true,
 		});
 		try {
 			delete_file_from_store(files_store, path);
@@ -488,7 +488,7 @@ export const webcontainer = {
 		a.download = `${get(repl_name)}.zip`;
 		a.click();
 	},
-	get_tree_from_container
+	get_tree_from_container,
 };
 
 async function get_tree_from_container(): Promise<FileSystemTree> {
@@ -506,15 +506,15 @@ async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystem
 			const contents = decoder.decode(raw_data); // convert to POJO
 			tree[node.name] = {
 				file: {
-					contents
-				}
+					contents,
+				},
 			};
 		} else if (node.isDirectory() && !IGNORE_LIST.includes(node.name)) {
 			tree[node.name] = {
 				directory: await get_tree(
 					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
 					node_path + '/'
-				)
+				),
 			};
 		}
 	}

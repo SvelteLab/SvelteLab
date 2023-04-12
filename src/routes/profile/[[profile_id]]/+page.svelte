@@ -21,7 +21,7 @@
 	});
 
 	const search = queryParam('s', ssp.string(), {
-		pushHistory: false
+		pushHistory: false,
 	});
 	let loading = [] as string[];
 	$: repls = data.repls.filter((repl) =>
@@ -41,7 +41,7 @@
 		<!-- this will be useful when we will add delete -->
 		<article
 			animate:flip={{
-				duration: 250
+				duration: 250,
 			}}
 		>
 			<a data-sveltekit-preload-data="off" href="/{project.id}">
@@ -56,7 +56,7 @@
 						share?.({
 							text: `Take a look at my REPL`,
 							title: `SvelteLab - ${project.name}`,
-							url: `/${project.id}`
+							url: `/${project.id}`,
 						});
 					}}
 				>

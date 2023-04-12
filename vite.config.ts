@@ -14,7 +14,7 @@ function raw_fonts(ext: string[]) {
 				const buffer = fs.readFileSync(id);
 				return { code: `export default ${JSON.stringify(buffer)}`, map: null };
 			}
-		}
+		},
 	};
 }
 
@@ -34,7 +34,7 @@ function coep_plugin(): Plugin {
 				res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
 				next();
 			});
-		}
+		},
 	};
 }
 
@@ -46,20 +46,20 @@ export default defineConfig({
 			customCollections: {
 				'material-icon-theme': FileSystemIconLoader('./node_modules/material-icon-theme/icons'),
 				'r-icons': FileSystemIconLoader('./src/lib/icons/Rinconx64_r-icons'),
-				sveltelab: FileSystemIconLoader('./src/lib/icons/sveltelab')
-			}
+				sveltelab: FileSystemIconLoader('./src/lib/icons/sveltelab'),
+			},
 		}),
 		visualizer({
 			emitFile: true,
-			filename: 'stats.html'
+			filename: 'stats.html',
 		}),
 		raw_fonts(['.ttf']),
-		coep_plugin()
+		coep_plugin(),
 	],
 	define: {
-		'process.env.NODE_ENV': '"production"'
+		'process.env.NODE_ENV': '"production"',
 	},
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
-	}
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+	},
 });

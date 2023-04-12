@@ -11,7 +11,7 @@ export function deferred_promise() {
 	return {
 		resolve,
 		reject,
-		promise
+		promise,
 	};
 }
 
@@ -38,6 +38,6 @@ export function async_click(
 			node.removeEventListener('click', on_click);
 			on_click = generate_on_click(new_click_handler);
 			node.addEventListener('click', on_click);
-		}
+		},
 	};
 }

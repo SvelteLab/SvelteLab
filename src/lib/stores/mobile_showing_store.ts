@@ -13,5 +13,5 @@ export const mobile_showing = {
 	},
 	show_terminal() {
 		set('terminal');
-	}
+	},
 };

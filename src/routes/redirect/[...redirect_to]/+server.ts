@@ -12,13 +12,13 @@ export const GET: RequestHandler = async ({ locals, url, cookies, params: { redi
 		const { name, avatarUrl } = auth_data.meta;
 		await locals.pocketbase.collection('users').update(auth_data.record.id, {
 			name,
-			avatarUrl
+			avatarUrl,
 		});
 	}
 	return new Response(null, {
 		status: 302,
 		headers: {
-			location: `/${redirect_to}?login=true`
-		}
+			location: `/${redirect_to}?login=true`,
+		},
 	});
 };

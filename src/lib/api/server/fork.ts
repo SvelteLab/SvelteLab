@@ -8,7 +8,7 @@ export const fork: Action = async ({ request, fetch }) => {
 	const form_data = await request.formData();
 	const id = form_data.get('id');
 	const res = await fetch(`/fork/${id}`, {
-		method: 'POST'
+		method: 'POST',
 	});
 	if (res.ok) {
 		const created = await res.json();

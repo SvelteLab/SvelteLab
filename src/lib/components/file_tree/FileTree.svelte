@@ -20,7 +20,7 @@
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
 		path: null,
-		kind: null
+		kind: null,
 	};
 	export let root_adding_type: typeof is_adding_type.kind = null;
 

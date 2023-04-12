@@ -7,7 +7,7 @@ export function success(msg: string) {
 export function error(msg = 'Errors were made') {
 	toast.push(msg, {
 		theme: {
-			'--toastBarBackground': '#ff0000'
-		}
+			'--toastBarBackground': '#ff0000',
+		},
 	});
 }

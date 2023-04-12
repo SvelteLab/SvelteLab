@@ -11,13 +11,13 @@ const { subscribe, update, set } = persisted<LayoutStore>('layout_preferences', 
 	file_tree: 30,
 	terminal: 30,
 	show_config: true,
-	folders_first: true
+	folders_first: true,
 });
 
 function toggle_state(key: keyof LayoutStore) {
 	update((state) => ({
 		...state,
-		[key]: !state[key]
+		[key]: !state[key],
 	}));
 }
 
@@ -28,7 +28,7 @@ type LayoutKeysByType<T> = keyof {
 function toggle_number(key: LayoutKeysByType<number>) {
 	update((state) => ({
 		...state,
-		[key]: state[key] === 0 ? 30 : 0
+		[key]: state[key] === 0 ? 30 : 0,
 	}));
 }
 
@@ -43,5 +43,5 @@ export const layout_store = {
 	toggle_file_tree,
 	toggle_terminal,
 	toggle_config,
-	toggle_sort
+	toggle_sort,
 };

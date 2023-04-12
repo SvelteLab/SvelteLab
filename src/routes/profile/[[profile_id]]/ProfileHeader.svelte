@@ -58,7 +58,7 @@
 			await share({
 				text: 'Take a look at my SvelteLab profile',
 				title: `${profile.username} - SvelteLab`,
-				url: `/profile/${profile.id}`
+				url: `/profile/${profile.id}`,
 			});
 		}}
 		title="Share"

@@ -22,7 +22,7 @@ self.addEventListener('message', async (event) => {
 
 const common_options = {
 	dev: false,
-	css: true
+	css: true,
 };
 
 function get_character_from_pos(line, column, source) {
@@ -37,13 +37,15 @@ function get_character_from_pos(line, column, source) {
 function compile({ id, source, options, return_ast }) {
 	let trace_map;
 	try {
-		// this avoid running the regex unless 'lang=' is present to improve performance 
-		const matches = source.includes('lang=') && source.match(/<script\s+lang=(?:"ts"|'ts'|`ts`)>(?<code>[\s\S]*)<\/script>/m);
+		// this avoid running the regex unless 'lang=' is present to improve performance
+		const matches =
+			source.includes('lang=') &&
+			source.match(/<script\s+lang=(?:"ts"|'ts'|`ts`)>(?<code>[\s\S]*)<\/script>/m);
 		let new_source = source;
 		if (matches && matches.groups) {
 			const transpiled = transpile(matches.groups.code, {
 				target: 'es6',
-				preserveValueImports: true
+				preserveValueImports: true,
 			});
 			const magic_code = new MagicString(source);
 			const start = matches.index + matches[0].indexOf('>') + 1;
@@ -52,7 +54,7 @@ function compile({ id, source, options, return_ast }) {
 			new_source = magic_code.toString();
 			let source_map = magic_code.generateMap({
 				hires: true,
-				includeContent: true
+				includeContent: true,
 			});
 			trace_map = new TraceMap(source_map);
 		}
@@ -65,11 +67,11 @@ function compile({ id, source, options, return_ast }) {
 			if (trace_map) {
 				const new_start = originalPositionFor(trace_map, {
 					column: warning.start.column,
-					line: warning.start.line
+					line: warning.start.line,
 				});
 				const new_end = originalPositionFor(trace_map, {
 					column: warning.end.column,
-					line: warning.end.line
+					line: warning.end.line,
 				});
 				warning.start.column = new_start.column;
 				warning.start.line = new_start.line;
@@ -83,15 +85,15 @@ function compile({ id, source, options, return_ast }) {
 			id,
 			result: {
 				ast: return_ast ? ast : null,
-				warnings
-			}
+				warnings,
+			},
 		};
 	} catch (e) {
 		if (trace_map) {
 			if (e.start) {
 				const new_start = originalPositionFor(trace_map, {
 					column: e.start.column,
-					line: e.start.line
+					line: e.start.line,
 				});
 				e.start.column = new_start.column;
 				e.start.line = new_start.line;
@@ -100,7 +102,7 @@ function compile({ id, source, options, return_ast }) {
 			if (e.end) {
 				const new_end = originalPositionFor(trace_map, {
 					column: e.end.column,
-					line: e.end.line
+					line: e.end.line,
 				});
 				e.end.column = new_end.column;
 				e.end.line = new_end.line;
@@ -117,9 +119,9 @@ function compile({ id, source, options, return_ast }) {
 					start: e.start,
 					end: e.end,
 					pos: e.pos,
-					frame: e.frame
-				}
-			}
+					frame: e.frame,
+				},
+			},
 		};
 	}
 }

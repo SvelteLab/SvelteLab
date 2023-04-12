@@ -9,5 +9,5 @@ export const command_runner = {
 	},
 	close() {
 		set(false);
-	}
+	},
 };

@@ -28,7 +28,7 @@ export const load: LayoutServerLoad = async ({ params, locals, url, cookies }) =
 	if (!repl || from_login) {
 		return {
 			repl: files,
-			repl_name: name
+			repl_name: name,
 		};
 	}
 	let owner_id;
@@ -48,6 +48,6 @@ export const load: LayoutServerLoad = async ({ params, locals, url, cookies }) =
 		repl: files,
 		id: repl,
 		repl_name: name,
-		owner_id
+		owner_id,
 	};
 };

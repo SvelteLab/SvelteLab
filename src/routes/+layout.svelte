@@ -16,8 +16,8 @@
 <SvelteToast
 	options={{
 		theme: {
-			'--toastBarBackground': 'var(--sk-theme-1)'
-		}
+			'--toastBarBackground': 'var(--sk-theme-1)',
+		},
 	}}
 />
 

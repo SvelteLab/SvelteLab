@@ -52,7 +52,7 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/.*\.css$/, CSS],
 	[/.*\.json$/, JSON],
 	[/.*\.html$/, HTML],
-	[/.*/, File]
+	[/.*/, File],
 ]);
 
 export function get_file_icon(filename: string) {
@@ -72,7 +72,7 @@ const folder_icons = new Map<
 	[/static$/, { closed: FolderStatic, open: FolderStaticOpen }],
 	[/server$/, { closed: FolderServer, open: FolderServerOpen }],
 	[/routes$/, { closed: FolderRoutes, open: FolderRoutesOpen }],
-	[/.*/, { closed: Folder, open: FolderOpen }]
+	[/.*/, { closed: Folder, open: FolderOpen }],
 ]);
 export function get_folder_icon(filename: string, open?: boolean) {
 	for (const [regex, component] of folder_icons.entries()) {

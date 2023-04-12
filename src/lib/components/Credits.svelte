@@ -31,8 +31,8 @@
 			installedVersion: '0.1.0',
 			author: 'Rinconx64',
 			link: 'https://github.com/Rinconx64/r-icons',
-			licenseType: 'MIT'
-		}
+			licenseType: 'MIT',
+		},
 	];
 
 	let deps = [...deps_json, ...extra_deps].sort(compareDependencyByName) as Dependency[];

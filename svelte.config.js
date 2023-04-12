@@ -9,17 +9,17 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			runtime: 'edge'
-		})
+			runtime: 'edge',
+		}),
 	},
 	vitePlugin: {
 		experimental: {
 			inspector: {
 				holdMode: true,
-				toggleKeyCombo: 'control-shift'
-			}
-		}
-	}
+				toggleKeyCombo: 'control-shift',
+			},
+		},
+	},
 };
 
 export default config;

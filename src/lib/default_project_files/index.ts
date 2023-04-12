@@ -2,7 +2,7 @@ import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 
 const project = import.meta.glob('./**/!(package-lock.json)', {
 	as: 'raw',
-	eager: true
+	eager: true,
 });
 
 const project_files: FileSystemTree = {};
@@ -18,15 +18,15 @@ for (const file in project) {
 		if (is_directory) {
 			if (!subtree[part]) {
 				subtree[part] = {
-					directory: {}
+					directory: {},
 				};
 			}
 			subtree = (subtree[part] as DirectoryNode).directory;
 		} else {
 			subtree[part] = {
 				file: {
-					contents: project[file]
-				}
+					contents: project[file],
+				},
 			};
 		}
 	}

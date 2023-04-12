@@ -29,7 +29,7 @@
 				x2: start_x + length,
 				y1: (start_y + retval.length) * 3,
 				y2: (start_y + retval.length) * 3,
-				stroke: is_dir(dir[file]) ? folder_color : file_color
+				stroke: is_dir(dir[file]) ? folder_color : file_color,
 			});
 			const current_dir = dir[file];
 			if (is_dir(current_dir)) {

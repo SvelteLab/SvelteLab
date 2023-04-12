@@ -20,13 +20,13 @@ export async function save_repl() {
 	const res = await fetch('./save-repl', {
 		method: 'POST',
 		headers: {
-			'content-type': 'application/json'
+			'content-type': 'application/json',
 		},
 		body: JSON.stringify({
 			files,
 			id,
-			name
-		})
+			name,
+		}),
 	});
 	if (res.ok) {
 		success('Saved');

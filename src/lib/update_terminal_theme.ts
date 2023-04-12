@@ -8,7 +8,7 @@ export async function update_terminal_theme(theme: Theme, update_terminal = true
 	terminal.options.theme = {
 		...terminal.options.theme,
 		background: sk_code_bg,
-		foreground: sk_code_fg
+		foreground: sk_code_fg,
 	};
 }
 
@@ -21,14 +21,14 @@ const variables_mapping = new Map<Theme, { sk_code_bg: string; sk_code_fg: strin
 		'light',
 		{
 			sk_code_bg: '#f7fafd',
-			sk_code_fg: '#5f5c53'
-		}
+			sk_code_fg: '#5f5c53',
+		},
 	],
 	[
 		'dark',
 		{
 			sk_code_bg: '#1a1a1a',
-			sk_code_fg: '#c4c1bb'
-		}
-	]
+			sk_code_fg: '#c4c1bb',
+		},
+	],
 ]);

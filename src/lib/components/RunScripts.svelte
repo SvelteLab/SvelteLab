@@ -9,7 +9,7 @@
 	async function refresh_package_json() {
 		loading = true;
 		const [package_json] = await Promise.all([
-			webcontainer.read_package_json()
+			webcontainer.read_package_json(),
 			// new Promise((resolve) => setTimeout(resolve, 1000))
 		]);
 		scripts = Object.entries(package_json?.scripts || {}) as unknown as [string, string][];

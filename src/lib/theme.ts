@@ -77,13 +77,13 @@ export function get_theme(update_terminal = true) {
 	function set_theme_cookie(theme?: Theme) {
 		return fetch('/theme', {
 			method: 'POST',
-			body: JSON.stringify({ theme })
+			body: JSON.stringify({ theme }),
 		});
 	}
 
 	return {
 		subscribe: store.subscribe,
 		change_preference,
-		remove_preference
+		remove_preference,
 	};
 }

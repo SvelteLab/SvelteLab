@@ -9,7 +9,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	if (locals.user) {
 		return {
 			user: locals.user,
-			templates
+			templates,
 		};
 	}
 
@@ -21,12 +21,12 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 
 	cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
 		httpOnly: true,
-		path: '/'
+		path: '/',
 	});
 
 	return {
 		github_login,
 		REDIRECT_URI,
-		templates
+		templates,
 	};
 };

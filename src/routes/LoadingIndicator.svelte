@@ -35,7 +35,7 @@
 			destroy() {
 				clearTimeout(timeout);
 				percentage = 0;
-			}
+			},
 		};
 	}
 </script>

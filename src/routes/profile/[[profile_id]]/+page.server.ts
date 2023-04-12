@@ -22,10 +22,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		repls: locals.pocketbase
 			.collection('repls')
 			.getList(1, 50, {
-				filter: `user.id = "${user_id}"`
+				filter: `user.id = "${user_id}"`,
 			})
 			.then((repls) => repls.items.map((repl) => structuredClone(repl))),
-		profile
+		profile,
 	};
 };
 
@@ -40,5 +40,5 @@ export const actions = {
 		}
 		return { success: true };
 	},
-	fork
+	fork,
 } satisfies Actions;

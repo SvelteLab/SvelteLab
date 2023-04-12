@@ -5,5 +5,5 @@ export const actions: Actions = {
 	logout({ locals }) {
 		locals.pocketbase.authStore.clear();
 	},
-	fork
+	fork,
 };

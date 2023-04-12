@@ -8,14 +8,14 @@ const routes_og_map = new Map([
 	['default', (event: RequestEvent) => `${event.url.origin}/default_og.png`],
 	[
 		'/(repl)/[[repl]]',
-		(event: RequestEvent) => `${event.url.origin}/og?repl_id=${event.params.repl ?? ''}`
-	]
+		(event: RequestEvent) => `${event.url.origin}/og?repl_id=${event.params.repl ?? ''}`,
+	],
 ]);
 
 const handle_headers: Handle = async ({ event, resolve }) => {
 	event.setHeaders({
 		'Cross-Origin-Embedder-Policy': 'require-corp',
-		'Cross-Origin-Opener-Policy': 'same-origin'
+		'Cross-Origin-Opener-Policy': 'same-origin',
 	});
 	return resolve(event, {
 		transformPageChunk(input) {
@@ -27,7 +27,7 @@ const handle_headers: Handle = async ({ event, resolve }) => {
 				html = html.replace('%sveltelab.og%', og_function(event));
 			}
 			return html;
-		}
+		},
 	});
 };
 

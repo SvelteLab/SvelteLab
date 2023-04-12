@@ -5,7 +5,7 @@ export const terminal = new Terminal({
 	convertEol: true,
 	cursorBlink: true,
 	disableStdin: false,
-	fontFamily: 'var(--sk-font-mono)'
+	fontFamily: 'var(--sk-font-mono)',
 });
 export const fitAddon = new FitAddon();
 terminal.loadAddon(fitAddon);

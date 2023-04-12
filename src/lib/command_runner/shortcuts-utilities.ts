@@ -154,7 +154,7 @@ const keys = [
 	'[',
 	'\\',
 	']',
-	"'"
+	"'",
 ] as const;
 
 type Mods = (typeof mod)[number];

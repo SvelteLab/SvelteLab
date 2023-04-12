@@ -9,7 +9,7 @@ import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 const sw = self as unknown as ServiceWorkerGlobalScope;
 const precache_list = [...build, ...files, ...prerendered].map((s) => ({
 	url: s,
-	revision: version
+	revision: version,
 }));
 
 cleanupOutdatedCaches();

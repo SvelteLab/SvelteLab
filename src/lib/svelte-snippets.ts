@@ -13,7 +13,7 @@ export async function \${}(\${}) {
 			{
 				label: 'kitEndpoint',
 				detail: 'SvelteKit Endpoint',
-				boost: 70
+				boost: 70,
 			}
 		),
 		snippetCompletion(
@@ -24,7 +24,7 @@ export const actions = {
 			{
 				label: 'kitActions',
 				detail: 'SvelteKit Actions',
-				boost: 80
+				boost: 80,
 			}
 		),
 		snippetCompletion(
@@ -35,7 +35,7 @@ export async function load(\${}) {
 			{
 				label: 'kitLoad',
 				detail: 'SvelteKit Load',
-				boost: 90
+				boost: 90,
 			}
 		),
 		snippetCompletion(
@@ -46,10 +46,10 @@ export function match(param) {
 			{
 				label: 'kitParamMatcher',
 				detail: 'SvelteKit Param Matcher',
-				boost: -50
+				boost: -50,
 			}
-		)
-	]
+		),
+	],
 });
 
 export const svelte_snippets = svelteLanguage.data.of({
@@ -61,7 +61,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 			{
 				label: 's-if',
 				detail: 'if block',
-				boost: 90
+				boost: 90,
 			}
 		),
 		snippetCompletion(
@@ -71,7 +71,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 			{
 				label: 's-await',
 				detail: 'await block',
-				boost: 20
+				boost: 20,
 			}
 		),
 		snippetCompletion(
@@ -81,7 +81,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 			{
 				label: 's-await-then',
 				detail: 'await block without pending state',
-				boost: 10
+				boost: 10,
 			}
 		),
 		snippetCompletion(
@@ -91,7 +91,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 			{
 				label: 's-each',
 				detail: 'each block',
-				boost: 80
+				boost: 80,
 			}
 		),
 		snippetCompletion(
@@ -101,8 +101,8 @@ export const svelte_snippets = svelteLanguage.data.of({
 			{
 				label: 's-key',
 				detail: 'key block',
-				boost: 30
+				boost: 30,
 			}
-		)
-	]
+		),
+	],
 });

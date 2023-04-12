@@ -9,7 +9,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		to_save = replSchema.parse({ id, files, name, user: locals.user?.id });
 	} catch (e) {
 		return new Response('Parsing error', {
-			status: 500
+			status: 500,
 		});
 	}
 	const replCollection = locals.pocketbase.collection('repls');
@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			// id or user should not be updated
 			await replCollection.update(id.toString(), {
 				files: to_save.files,
-				name: to_save.name
+				name: to_save.name,
 			});
 		} else {
 			// delete to_save.id just to be sure
@@ -29,10 +29,10 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	} catch (e) {
 		console.log(e);
 		return new Response((e as Error).message, {
-			status: 500
+			status: 500,
 		});
 	}
 	return json({
-		id: created?.id
+		id: created?.id,
 	});
 };
