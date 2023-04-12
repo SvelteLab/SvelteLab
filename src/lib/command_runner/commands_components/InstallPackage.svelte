@@ -39,7 +39,7 @@
 	<label for="package-search"> npm Package Name </label>
 	<!-- svelte-ignore a11y-autofocus -->
 	<input
-		class="field"
+		class="action-field"
 		id="package-search"
 		autofocus
 		bind:value={search}

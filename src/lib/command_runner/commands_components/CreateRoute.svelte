@@ -81,7 +81,7 @@
 		Route
 		<!-- svelte-ignore a11y-autofocus -->
 		<input
-			class="field"
+			class="action-field"
 			type="text"
 			autofocus
 			on:keydown={(e) => {
@@ -103,7 +103,7 @@
 	</label>
 
 	<section>
-		<ul class="checkbox-grid">
+		<ul class="action-selection-grid">
 			{#each creatable_file as file_to_create}
 				{@const label = file_to_create.endsWith('.svelte')
 					? file_to_create
@@ -126,7 +126,7 @@
 			</li>
 		</ul>
 	</section>
-	<button disabled={files_to_create.length === 0} class="confirm">
+	<button disabled={files_to_create.length === 0} class="action-confirm">
 		{#if files_to_create.length > 0}
 			Create "{route}" with
 		{:else}
@@ -142,24 +142,7 @@
 		margin: 2rem;
 	}
 
-	input[type='text'],
-	button.confirm {
-		width: 100%;
-		color: inherit;
-	}
-
-	input[type='text'] {
-		border: 1px solid var(--sk-back-5);
-		padding: 1rem 1.25rem;
-	}
-
-	button.confirm {
-		background-color: var(--sk-back-3);
-		padding: 0.5rem 1rem;
-	}
-
 	button:hover {
 		background-color: var(--sk-back-4);
 	}
-
 </style>

@@ -25,7 +25,7 @@ kbd {
 	line-height: 1.5rem;
 }
 
-input.field {
+input.action-field {
 	width: 100%;
 	color: inherit;
 	border-radius: 0.5rem;
@@ -33,7 +33,7 @@ input.field {
 	padding: 1rem 1.25rem;
 }
 
-button.confirm {
+button.action-confirm {
 	background-color: var(--sk-back-3);
 	padding: 0.5rem 1rem;
 	border-radius: 0.5rem;
@@ -42,13 +42,12 @@ button.confirm {
 	border-radius: 0.5rem;
 }
 
-button.confirm:hover {
+button.action-confirm:hover {
 	background-color: var(--sk-back-4);
 }
 
-ul.checkbox-grid {
+ul.action-selection-grid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
 	padding: 1rem;
 	align-content: start;
 	gap: 1rem;
@@ -57,13 +56,19 @@ ul.checkbox-grid {
 	margin: 0;
 }
 
-ul.checkbox-grid > li > label {
+@media only screen and (min-width: 501px) {
+	ul.action-selection-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+ul.action-selection-grid > li > label {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 }
 
-ul.checkbox-grid > li > label > input[type='checkbox'] {
+ul.action-selection-grid > li > label > input[type='checkbox'] {
 	width: 1.75rem;
 	height: 1.75rem;
 }

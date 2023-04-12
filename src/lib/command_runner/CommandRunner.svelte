@@ -393,11 +393,7 @@
 		opacity: 0.5;
 	}
 
-	@media only screen and (max-width: 500px) {
-		ul.commands,
-		input {
-			border-radius: 0;
-		}
+	@media (hover: none) {
 		kbd {
 			display: none;
 		}

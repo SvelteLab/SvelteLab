@@ -21,6 +21,7 @@
 		</li>
 	{/each}
 </ul>
+
 <a
 	href="{PUBLIC_GITHUB_REPO}/issues/new"
 	target="_blank"

@@ -68,7 +68,7 @@
 		<a href="https://github.com/svelte-add/svelte-add">Svelte Add</a> is a community project to easily
 		add integrations and other functionality to Svelte apps.
 	</p>
-	<ul class="checkbox-grid">
+	<ul class="action-selection-grid">
 		{#each addable as integration}
 			<li>
 				<label>
@@ -80,7 +80,7 @@
 		{/each}
 	</ul>
 	<small>* work in progress</small>
-	<button disabled={integrations_to_add.length === 0} class="confirm">
+	<button disabled={integrations_to_add.length === 0} class="action-confirm">
 		{#if integrations_to_add.length > 0}
 			Add
 			{integrations_to_add_as_string}
