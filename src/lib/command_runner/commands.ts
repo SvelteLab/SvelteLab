@@ -255,10 +255,6 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action() {
 			get_theme().change_preference();
 		},
-		key_bind: {
-			mod: ['$mod', 'Shift'],
-			keys: ['0'],
-		},
 	});
 
 	commands_to_return.push({
