@@ -12,3 +12,66 @@
 .loader span {
 	font-size: 2rem;
 }
+
+kbd {
+	margin-left: auto;
+	font-family: var(--sk-font);
+	font-weight: 800;
+	text-transform: uppercase;
+	border: 1px solid var(--sk-back-5);
+	color: var(--sk-text-3);
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	line-height: 1.5rem;
+}
+
+input.action-field {
+	width: 100%;
+	color: inherit;
+	border-radius: 0.5rem;
+	border: 1px solid var(--sk-back-5);
+	padding: 1rem 1.25rem;
+}
+
+button.action-confirm,
+a.action-confirm {
+	background-color: var(--sk-back-3);
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	width: 100%;
+	color: inherit;
+	border-radius: 0.5rem;
+}
+
+button.action-confirm:hover,
+a.action-confirm:hover {
+	background-color: var(--sk-back-4);
+}
+
+ul.action-selection-grid {
+	display: grid;
+	padding: 1rem;
+	align-content: start;
+	gap: 1rem;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+@media only screen and (min-width: 501px) {
+	ul.action-selection-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+ul.action-selection-grid > li > label,
+ul.action-selection-grid > li > a {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+ul.action-selection-grid > li > label > input[type='checkbox'] {
+	width: 1.75rem;
+	height: 1.75rem;
+}

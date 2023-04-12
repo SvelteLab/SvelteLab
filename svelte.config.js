@@ -15,7 +15,8 @@ const config = {
 	vitePlugin: {
 		experimental: {
 			inspector: {
-				holdMode: true
+				holdMode: true,
+				toggleKeyCombo: 'control-shift'
 			}
 		}
 	}

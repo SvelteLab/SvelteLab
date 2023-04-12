@@ -27,19 +27,21 @@ import Issue from '~icons/material-symbols/error-circle-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
 import NPM from '~icons/material-symbols/install-desktop';
 import Keyboard from '~icons/material-symbols/keyboard';
+import FileBrowser from '~icons/material-symbols/menu-rounded';
 import Themes from '~icons/material-symbols/routine';
 import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Bookmark from '~icons/material-symbols/star-outline';
+import Terminal from '~icons/material-symbols/terminal-rounded';
 import Intro from '~icons/material-symbols/waving-hand-rounded';
 import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
-import AddRoute from './commands_components/AddRoute.svelte';
-import NpmInstall from './commands_components/NpmInstall.svelte';
-import SaveStartTemplate from './commands_components/SaveStartTemplate.svelte';
-import StartTemplate from './commands_components/StartTemplate.svelte';
+import CreateRoute from './commands_components/CreateRoute.svelte';
+import InstallPackage from './commands_components/InstallPackage.svelte';
+import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
+import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
@@ -66,7 +68,7 @@ async function prettier_action() {
 	const $current_tab = get(current_tab);
 	const progress_toast = toast.push(`Formatting ${$current_tab}...`, {
 		initial: 0,
-		dismissable: false
+		dismissable: false,
 	});
 	const process = await webcontainer.spawn(`prettier`, ['--write', $current_tab]);
 	const code = await process.exit;
@@ -102,35 +104,35 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: file.path,
 		action() {
 			open_file(file.path);
-		}
+		},
 	}));
 
 	commands_to_return.push({
 		command: 'format-current',
 		title: 'Format',
-		subtitle: 'prettier current file',
+		subtitle: 'format current file with prettier',
 		icon: Format,
 		action: prettier_action,
 		key_bind: {
 			mod: ['Shift', 'Alt'],
-			keys: ['F']
-		}
+			keys: ['F'],
+		},
 	});
 
 	commands_to_return.push({
 		command: 'create-route',
-		title: 'Create route',
+		title: 'Create Route',
 		subtitle: 'create a new sveltekit route',
 		icon: Route,
-		action_component: AddRoute
+		action_component: CreateRoute,
 	});
 
 	commands_to_return.push({
 		command: 'svelte-add',
-		title: 'Svelte add',
+		title: 'Svelte Add',
 		subtitle: 'quickly add a svelte integration',
 		icon: SvelteAddIcon,
-		action_component: SvelteAdd
+		action_component: SvelteAdd,
 	});
 
 	commands_to_return.push({
@@ -143,7 +145,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				if (!$page.data.owner_id || $page.data.user.id === $page.data.owner_id) {
 					const progress_toast = toast.push(`Saving...`, {
 						initial: 0,
-						dismissable: false
+						dismissable: false,
 					});
 					await save_repl();
 					toast.pop(progress_toast);
@@ -156,8 +158,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 		key_bind: {
 			mod: ['$mod'],
-			keys: ['S']
-		}
+			keys: ['S'],
+		},
 	});
 
 	if ($page.data.id) {
@@ -168,7 +170,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			icon: Fork,
 			action() {
 				run_callbacks('fork');
-			}
+			},
 		});
 	}
 
@@ -177,15 +179,15 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Vim Keybindings',
 		subtitle: 'toggle vim keybindings',
 		icon: Keyboard,
-		action: editor_config.toggle_vim
+		action: editor_config.toggle_vim,
 	});
 
 	commands_to_return.push({
 		command: 'npm-install-package',
-		title: 'Install package',
+		title: 'Install Package',
 		subtitle: 'install a package from npm',
 		icon: NPM,
-		action_component: NpmInstall
+		action_component: InstallPackage,
 	});
 
 	commands_to_return.push({
@@ -196,11 +198,11 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		async action() {
 			const progress_toast = toast.push(`Zipping up the filesystem...`, {
 				initial: 0,
-				dismissable: false
+				dismissable: false,
 			});
 			await webcontainer.save_as_zip();
 			toast.pop(progress_toast);
-		}
+		},
 	});
 
 	if ($page.data.user) {
@@ -211,13 +213,13 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			icon: Profile,
 			action() {
 				goto('/profile');
-			}
+			},
 		});
 	}
 
 	commands_to_return.push({
 		command: 'new-project',
-		title: 'New',
+		title: 'New Project',
 		subtitle: 'create a new blank project',
 		icon: New,
 		action() {
@@ -225,24 +227,24 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 		key_bind: {
 			mod: ['$mod', 'Shift'],
-			keys: ['C']
-		}
+			keys: ['C'],
+		},
 	});
 
 	commands_to_return.push({
 		command: 'new-project-template',
-		title: 'Open Template',
-		subtitle: 'create a new blank project with a starter template',
+		title: 'New with Template',
+		subtitle: 'create new project with a starter template',
 		icon: New,
-		action_component: StartTemplate
+		action_component: NewWithTemplate,
 	});
 
 	commands_to_return.push({
 		command: 'default-project-template',
-		title: 'Default Template',
-		subtitle: 'choose the template we will load as the default',
+		title: 'Set Default Template',
+		subtitle: 'choose the template that will load as the default',
 		icon: Bookmark,
-		action_component: SaveStartTemplate
+		action_component: SetDefaultTemplate,
 	});
 
 	commands_to_return.push({
@@ -253,30 +255,46 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action() {
 			get_theme().change_preference();
 		},
-		key_bind: {
-			mod: ['$mod'],
-			keys: ['0']
-		}
+	});
+
+	commands_to_return.push({
+		command: 'toggle-file-tree',
+		title: 'Toggle File Tree',
+		subtitle: 'toggle if file tree is shown',
+		icon: FileBrowser,
+		action() {
+			layout_store.toggle_file_tree();
+		},
 	});
 
 	commands_to_return.push({
 		command: 'toggle-config',
 		title: 'Toggle Config Files',
-		subtitle: 'toggle wether file tree starts from project root or src folder',
+		subtitle: 'toggle if file tree starts from project root or src folder',
 		icon: ConfigFiles,
 		action() {
 			layout_store.toggle_config();
-		}
+		},
 	});
 
 	commands_to_return.push({
 		command: 'toggle-sort',
 		title: 'Toggle Folder / File Sort Order',
-		subtitle: 'toggle wether files or folders show up first',
+		subtitle: 'toggle if files or folders show up first',
 		icon: Sorting,
 		action() {
 			layout_store.toggle_sort();
-		}
+		},
+	});
+
+	commands_to_return.push({
+		command: 'toggle-terminal',
+		title: 'Toggle Terminal',
+		subtitle: 'toggle if terminal is shown',
+		icon: Terminal,
+		action() {
+			layout_store.toggle_terminal();
+		},
 	});
 
 	if ($page.data.id) {
@@ -288,11 +306,11 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			async action() {
 				const progress_toast = toast.push(`Sharing...`, {
 					initial: 0,
-					dismissable: false
+					dismissable: false,
 				});
 				await share_with_id();
 				toast.pop(progress_toast);
-			}
+			},
 		});
 	}
 
@@ -304,11 +322,11 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		async action() {
 			const progress_toast = toast.push(`Sharing...`, {
 				initial: 0,
-				dismissable: false
+				dismissable: false,
 			});
 			await share_with_hash();
 			toast.pop(progress_toast);
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -318,7 +336,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Themes,
 		action() {
 			get_theme().remove_preference();
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -328,7 +346,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: GitHub,
 		action() {
 			window.open(`${PUBLIC_GITHUB_REPO}`, '_blank');
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -338,7 +356,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Issue,
 		action() {
 			window.open(`${PUBLIC_GITHUB_REPO}/issues/new/choose`, '_blank');
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -348,7 +366,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Discord,
 		action() {
 			window.open(PUBLIC_DISCORD_INVITE, '_blank');
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -358,7 +376,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Credits,
 		action() {
 			open_credits();
-		}
+		},
 	});
 
 	commands_to_return.push({
@@ -369,7 +387,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action() {
 			intro_hidden_forever.set(false);
 			is_intro_open.set(true);
-		}
+		},
 	});
 
 	return commands_to_return;
