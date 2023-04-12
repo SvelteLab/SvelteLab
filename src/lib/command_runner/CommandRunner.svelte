@@ -168,6 +168,11 @@
 
 <dialog
 	bind:this={dialog}
+	on:cancel={(e) => {
+		if (!current_action_command) return;
+		e.preventDefault();
+		current_action_command = null;
+	}}
 	on:close={() => {
 		search = '';
 		current_action_command = null;
