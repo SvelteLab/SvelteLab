@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { PUBLIC_GITHUB_REPO, PUBLIC_TEMPLATE_COOKIE_NAME } from '$env/static/public';
+	import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$env/static/public';
 	import { get_cookie, set_cookie } from '$lib/cookie';
 	import { createEventDispatcher } from 'svelte';
-	import GitHub from '~icons/mdi/github';
+	import { fix_title, template_icon_map } from './template_helpers';
 
 	const dispatcher = createEventDispatcher();
-
-	function capitalize(title: string) {
-		return `${title.charAt(0).toUpperCase()}${title.substring(1)}`;
-	}
-
-	function fix_title(title: string) {
-		return title.split('_').map(capitalize).join('+');
-	}
 
 	let selected = get_cookie(PUBLIC_TEMPLATE_COOKIE_NAME) || 'basic';
 </script>
@@ -24,38 +16,37 @@
 		dispatcher('completed');
 	}}
 >
-	<select id="default_template" bind:value={selected}>
+	<ul class="action-selection-grid">
 		{#each $page.data.templates ?? [] as template}
-			<option value={template}>{fix_title(template)}</option>
+			{@const icons = template_icon_map.get(template)}
+			<li>
+				<label>
+					<input type="radio" value={template} bind:group={selected} />
+					{#if icons}
+						{#if !Array.isArray(icons)}
+							<svelte:component this={icons} />
+						{:else}
+							{#each icons as icon}
+								<svelte:component this={icon} />
+							{/each}
+						{/if}
+					{/if}
+					{fix_title(template)}
+				</label>
+			</li>
 		{/each}
-	</select>
-	<button title="Save template">Save</button>
+	</ul>
+	<button class="action-confirm">
+		Save {fix_title(selected)} as default
+	</button>
 </form>
-<a
-	href="{PUBLIC_GITHUB_REPO}/issues/new"
-	target="_blank"
-	rel="noopener noreferrer"
-	title="Propose a new template"><GitHub /> Propose a new template</a
->
 
 <style>
 	form {
-		display: flex;
-		gap: 1rem;
-		list-style: none;
-		flex-wrap: wrap;
+		margin: 2rem;
 	}
-	select {
-		flex-grow: 1;
-		background-color: var(--sk-back-1);
-		color: var(--sk-text-1);
-		padding: 0.5rem;
-	}
-	a {
-		display: flex;
-		justify-content: center;
-		align-items: flex-start;
-		gap: 1ch;
-		margin-top: 1rem;
+
+	ul {
+		margin-bottom: 1rem;
 	}
 </style>

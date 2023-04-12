@@ -33,7 +33,8 @@ input.action-field {
 	padding: 1rem 1.25rem;
 }
 
-button.action-confirm {
+button.action-confirm,
+a.action-confirm {
 	background-color: var(--sk-back-3);
 	padding: 0.5rem 1rem;
 	border-radius: 0.5rem;
@@ -42,7 +43,8 @@ button.action-confirm {
 	border-radius: 0.5rem;
 }
 
-button.action-confirm:hover {
+button.action-confirm:hover,
+a.action-confirm:hover {
 	background-color: var(--sk-back-4);
 }
 
@@ -62,7 +64,8 @@ ul.action-selection-grid {
 	}
 }
 
-ul.action-selection-grid > li > label {
+ul.action-selection-grid > li > label,
+ul.action-selection-grid > li > a {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
