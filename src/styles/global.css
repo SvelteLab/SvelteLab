@@ -27,6 +27,10 @@
 	box-sizing: border-box;
 }
 
+::selection {
+	background-color: var(--sk-theme-1);
+}
+
 html,
 body {
 	color-scheme: dark light;
