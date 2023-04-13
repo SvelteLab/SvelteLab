@@ -307,6 +307,7 @@
 		position: relative;
 		padding: 0.5rem;
 		color: var(--sk-text-1);
+		flex-shrink: 0;
 	}
 
 	a :global(svg),
@@ -370,7 +371,6 @@
 	}
 	.login {
 		color: var(--sk-theme-1);
-		flex-shrink: 0;
 	}
 
 	@media only screen and (max-width: 500px) {
