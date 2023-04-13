@@ -72,15 +72,13 @@
 			<Terminal /> Terminal
 		</button>
 	{/if}
-	<div class="grow">
-		<button
-			on:click={() => {
-				command_runner.open('search-docs');
-			}}
-			title="Search sveltekit documentation"
-			class="search-docs"><SearchDocsIcon /> Search sveltekit documentation</button
-		>
-	</div>
+	<button
+		on:click={() => {
+			command_runner.open('search-docs');
+		}}
+		title="Search sveltekit documentation"
+		class="search-docs"><SearchDocsIcon /> Search SvelteKit Documentation...</button
+	>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -282,11 +280,10 @@
 		background: var(--shadow-gradient);
 	}
 
-	.grow {
-		flex-grow: 1;
-	}
-
 	.search-docs {
+		border-radius: 0.5rem;
+		margin: auto;
+		max-width: 42rem;
 		font-size: 1.1rem;
 		border: 1px solid var(--sk-back-5);
 		width: 100%;
@@ -365,6 +362,7 @@
 	}
 	.login {
 		color: var(--sk-theme-1);
+		flex-shrink: 0;
 	}
 
 	@media only screen and (max-width: 500px) {

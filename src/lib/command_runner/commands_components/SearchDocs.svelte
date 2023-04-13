@@ -2,7 +2,6 @@
 	import type { Tree } from '$lib/workers/search';
 	import { search_docs_worker } from '$lib/workers/search-docs';
 	import { onMount } from 'svelte';
-	import { tick } from 'svelte';
 	import SearchResults from './SearchResults.svelte';
 
 	let docs_query = '';
@@ -52,6 +51,11 @@
 		flex-grow: 1;
 		position: relative;
 		--max-width: 60rem;
+		margin: 2rem;
+	}
+
+	input {
+		margin-bottom: 1rem;
 	}
 
 	aside {
