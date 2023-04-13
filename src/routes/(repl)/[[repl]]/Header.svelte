@@ -314,6 +314,7 @@
 	.search {
 		flex-grow: 1;
 		position: relative;
+		--max-width: 60rem;
 	}
 
 	input {
@@ -322,6 +323,9 @@
 		color: var(--sk-text-1);
 		border: 1px solid var(--sk-back-5);
 		padding: 0.25rem;
+		max-width: var(--max-width);
+		display: block;
+		margin: auto;
 	}
 
 	input::placeholder {
@@ -336,6 +340,9 @@
 		overflow-y: auto;
 		width: 100%;
 		z-index: 100;
+		max-width: var(--max-width);
+		left: 50%;
+		transform: translateX(-50%);
 	}
 
 	a,
