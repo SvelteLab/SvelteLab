@@ -184,7 +184,6 @@ export const GET: RequestHandler = async () => {
 			if (!file.endsWith('.svelte')) {
 				suffix = is_ts ? '.ts' : '.js';
 			}
-			console.log('creating', prefix, file, suffix, get_creatable_file_content(file));
 			await webcontainer.add_file(prefix + file + suffix, get_creatable_file_content(file));
 		}
 		dispatch('completed');

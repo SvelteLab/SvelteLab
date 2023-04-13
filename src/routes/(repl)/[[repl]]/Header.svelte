@@ -64,7 +64,6 @@
 		search_docs_worker.addEventListener('message', ({ data }) => {
 			if (data.type === 'results') {
 				docs_search_results = data.payload.results;
-				console.log(docs_search_results);
 			} else if (data.type === 'ready') {
 				docs_search_ready = true;
 			}
