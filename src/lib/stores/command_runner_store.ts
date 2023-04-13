@@ -1,13 +1,22 @@
 import { writable } from 'svelte/store';
 
-const { subscribe, set } = writable(false);
+const { subscribe, set } = writable({
+	open: false,
+	command: '',
+});
 
 export const command_runner = {
 	subscribe,
-	open() {
-		set(true);
+	open(command = '') {
+		set({
+			open: true,
+			command,
+		});
 	},
 	close() {
-		set(false);
+		set({
+			open: false,
+			command: '',
+		});
 	},
 };

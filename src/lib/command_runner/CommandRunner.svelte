@@ -25,9 +25,16 @@
 		if (dialog === e.target) dialog.close();
 	};
 
-	function open_command_runner() {
+	function open_command_runner(command = '') {
 		dialog.showModal();
 		handle_window_click = close_dialog_on_out_click;
+		const command_action_candidate = commands.find((cmd) => cmd.command === command);
+		if (command_action_candidate) {
+			current_action_command = command_action_candidate;
+			search = '> ';
+		} else {
+			search = command;
+		}
 	}
 
 	$: key_bind_commands(commands);
@@ -44,8 +51,8 @@
 	$: marked_command = filtered_commands[0] as Command | null;
 
 	$: {
-		if ($command_runner) {
-			open_command_runner();
+		if ($command_runner.open) {
+			open_command_runner($command_runner.command);
 		}
 	}
 

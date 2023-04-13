@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
+	import { on_command } from '$lib/command_runner/commands';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Logo from '$lib/components/Logo.svelte';
@@ -28,7 +30,6 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import { on_command } from '$lib/command_runner/commands';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -71,7 +72,13 @@
 			<Terminal /> Terminal
 		</button>
 	{/if}
-	<div class="grow" />
+	<button
+		on:click={() => {
+			command_runner.open('search-docs');
+		}}
+		title="Search sveltekit documentation"
+		class="search-docs"><SearchDocsIcon /> Search SvelteKit Documentation...</button
+	>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -274,8 +281,15 @@
 		background: var(--shadow-gradient);
 	}
 
-	.grow {
-		flex-grow: 1;
+	.search-docs {
+		border-radius: 0.5rem;
+		margin: auto;
+		max-width: 42rem;
+		font-size: 1.1rem;
+		border: 1px solid var(--sk-back-5);
+		width: 100%;
+		justify-content: center;
+		opacity: 0.8;
 	}
 
 	a,
@@ -349,10 +363,17 @@
 	}
 	.login {
 		color: var(--sk-theme-1);
+		flex-shrink: 0;
 	}
 
 	@media only screen and (max-width: 500px) {
 		a span {
+			display: none;
+		}
+	}
+
+	@media only screen and (max-width: 900px) {
+		.search-docs {
 			display: none;
 		}
 	}
