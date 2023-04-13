@@ -41,7 +41,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	}
 </script>
 
-<aside>
+{#if query === ''}
+	<section class="no-results">Type something to see results...</section>
+{:else}
 	<ul>
 		{#each results as result (result.href)}
 			<li>
@@ -63,14 +65,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 					<svelte:self results={result.children} {query} on:select />
 				{/if}
 			</li>
+		{:else}
+			<li class="no-results">This query didn't produced results...</li>
 		{/each}
 	</ul>
-</aside>
+{/if}
 
 <style>
 	ul {
 		position: relative;
 		margin: 0;
+		height: 100%;
 	}
 
 	ul :global(ul) {
@@ -163,5 +168,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		outline: 2px solid var(--highlight-color);
 		/* border-top: 2px solid var(--highlight-color); */
 		border-radius: 1px;
+	}
+
+	.no-results {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		font-size: 2rem;
+		opacity: 0.7;
+		place-items: center;
 	}
 </style>

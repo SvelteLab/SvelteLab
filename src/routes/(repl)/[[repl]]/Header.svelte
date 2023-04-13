@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
+	import { on_command } from '$lib/command_runner/commands';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Logo from '$lib/components/Logo.svelte';
@@ -28,10 +30,6 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import { on_command } from '$lib/command_runner/commands';
-	import { search_docs_worker } from '$lib/workers/search-docs';
-	import type { Tree } from '$lib/workers/search';
-	import SearchResults from './SearchResults.svelte';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -41,33 +39,12 @@
 	let forking = false;
 	let fork_form: HTMLFormElement;
 	let open_menu = null as null | 'share' | 'profile';
-	let docs_query = '';
-	let docs_search_timeout: ReturnType<typeof setTimeout>;
-	let docs_search_results = [] as Tree[];
-	let docs_search_ready = false;
 
 	function toggle_menu(kind: typeof open_menu & {}) {
 		open_menu = open_menu === kind ? null : kind;
 	}
 
-	function search_docs(docs_query: string) {
-		clearTimeout(docs_search_timeout);
-		docs_search_timeout = setTimeout(() => {
-			search_docs_worker.postMessage({ type: 'query', payload: docs_query });
-		}, 500);
-	}
-
-	$: search_docs(docs_query);
-
 	onMount(() => {
-		search_docs_worker.postMessage({ type: 'init' });
-		search_docs_worker.addEventListener('message', ({ data }) => {
-			if (data.type === 'results') {
-				docs_search_results = data.payload.results;
-			} else if (data.type === 'ready') {
-				docs_search_ready = true;
-			}
-		});
 		return on_command('fork', () => {
 			fork_form.submit();
 		});
@@ -95,20 +72,15 @@
 			<Terminal /> Terminal
 		</button>
 	{/if}
-	<section class="search">
-		<input
-			placeholder="🔎 search sveltekit documentation..."
-			disabled={!docs_search_ready}
-			bind:value={docs_query}
-			on:focus={(e) => {
-				e.currentTarget.setSelectionRange(0, docs_query.length);
+	<div class="grow">
+		<button
+			on:click={() => {
+				command_runner.open('search-docs');
 			}}
-			type="search"
-		/>
-		<aside>
-			<SearchResults results={docs_search_results} query={docs_query} />
-		</aside>
-	</section>
+			title="Search sveltekit documentation"
+			class="search-docs"><SearchDocsIcon /> Search sveltekit documentation</button
+		>
+	</div>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -310,38 +282,16 @@
 		background: var(--shadow-gradient);
 	}
 
-	.search {
+	.grow {
 		flex-grow: 1;
-		position: relative;
-		--max-width: 60rem;
 	}
 
-	input {
-		width: 100%;
-		background-color: var(--sk-back-3);
-		color: var(--sk-text-1);
+	.search-docs {
+		font-size: 1.1rem;
 		border: 1px solid var(--sk-back-5);
-		padding: 0.25rem;
-		max-width: var(--max-width);
-		display: block;
-		margin: auto;
-	}
-
-	input::placeholder {
-		text-align: center;
-	}
-
-	aside {
-		position: absolute;
-		margin: 0;
-		max-height: 50vh;
-		background-color: var(--sk-back-3);
-		overflow-y: auto;
 		width: 100%;
-		z-index: 100;
-		max-width: var(--max-width);
-		left: 50%;
-		transform: translateX(-50%);
+		justify-content: center;
+		opacity: 0.8;
 	}
 
 	a,
@@ -423,8 +373,8 @@
 		}
 	}
 
-	@media only screen and (max-width: 800px) {
-		.search > * {
+	@media only screen and (max-width: 900px) {
+		.search-docs {
 			display: none;
 		}
 	}
