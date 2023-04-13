@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { SvelteError } from '$lib/types';
 	import { svelte_compiler } from '$lib/workers';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
@@ -33,6 +33,11 @@
 			return_ast: true,
 		});
 	}
+
+	onDestroy(() => {
+		warnings = [];
+		error = null;
+	});
 
 	$: parse(code);
 </script>

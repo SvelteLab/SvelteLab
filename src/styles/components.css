@@ -31,6 +31,7 @@ input.action-field {
 	border-radius: 0.5rem;
 	border: 1px solid var(--sk-back-5);
 	padding: 1rem 1.25rem;
+	background-color: var(--sk-back-3);
 }
 
 button.action-confirm,
@@ -64,14 +65,14 @@ ul.action-selection-grid {
 	}
 }
 
-ul.action-selection-grid > li > label,
-ul.action-selection-grid > li > a {
+ul.action-selection-grid>li>label,
+ul.action-selection-grid>li>a {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 }
 
-ul.action-selection-grid > li > label > input[type='checkbox'] {
+ul.action-selection-grid>li>label>input[type='checkbox'] {
 	width: 1.75rem;
 	height: 1.75rem;
 }

@@ -400,11 +400,11 @@ export const webcontainer = {
 	async spawn(command: string, args: string[]) {
 		return webcontainer_instance.spawn(command, args);
 	},
-	async add_file(path: string) {
-		await webcontainer_instance.fs.writeFile(path, '');
+	async add_file(path: string, content = '') {
+		await webcontainer_instance.fs.writeFile(path, content);
 		//if we are not already listening we can add the file in store ourself
 		if (!get(listening_for_fs_store)) {
-			add_file_in_store(files_store, path, '', true);
+			add_file_in_store(files_store, path, content, true);
 		}
 	},
 	async add_folder(path: string) {

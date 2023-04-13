@@ -13,16 +13,123 @@
 	let input: HTMLInputElement;
 	let is_ts = false;
 
-	const creatable_file = [
-		'+page.svelte',
-		'+page',
-		'+page.server',
-		'+layout.svelte',
-		'+layout',
-		'+layout.server',
-		'+server',
-		'+error.svelte',
-	];
+	const creatable_file = {
+		'+page.svelte': {
+			js:
+				`<script>
+	export let data: PageData;
+</scri` +
+				`pt>
+`,
+			ts:
+				`<script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+</scri` +
+				`pt>
+`,
+		},
+		'+page': {
+			js: `
+export const load = (async () => {
+	return {};
+});
+`,
+			ts: `import type { PageLoad } from './$types';
+
+export const load = (async () => {
+	return {};
+}) satisfies PageLoad;
+`,
+		},
+		'+page.server': {
+			js: `export const load = (async () => {
+	return {};
+});
+`,
+			ts: `import type { PageServerLoad } from './$types';
+
+export const load = (async () => {
+	return {};
+}) satisfies PageServerLoad;
+`,
+		},
+		'+layout.svelte': {
+			js:
+				`<script>
+	export let data;
+</scri` +
+				`pt>
+
+<slot />
+`,
+			ts:
+				`<script lang="ts">
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+</scri` +
+				`pt>
+
+<slot />
+`,
+		},
+		'+layout': {
+			js: `export const load = (async () => {
+	return {};
+});
+`,
+			ts: `import type { LayoutLoad } from './$types';
+
+export const load = (async () => {
+	return {};
+}) satisfies LayoutLoad;
+`,
+		},
+		'+layout.server': {
+			js: `export const load = (async () => {
+	return {};
+});
+`,
+			ts: `import type { LayoutServerLoad } from './$types';
+
+export const load = (async () => {
+	return {};
+}) satisfies LayoutServerLoad;
+`,
+		},
+		'+server': {
+			js: `export const GET = async () => {
+	return new Response();
+};
+`,
+			ts: `import type { RequestHandler } from './$types';
+
+export const GET: RequestHandler = async () => {
+	return new Response();
+};
+`,
+		},
+		'+error.svelte': {
+			js:
+				`<script>
+	import { page } from '$app/stores';
+</scri` +
+				`pt>
+
+<h1>{$page.status}: {$page.error?.message}</h1>
+`,
+			ts:
+				`<script lang="ts">
+	import { page } from '$app/stores';
+</scri` +
+				`pt>
+
+<h1>{$page.status}: {$page.error?.message}</h1>
+`,
+		},
+	};
 
 	let files_to_create = ['+page.svelte'] as string[];
 
@@ -30,6 +137,14 @@
 		is_dir($files.src) && is_dir($files.src.directory.routes)
 			? autocomplete_from_tree($files.src.directory.routes.directory)
 			: [];
+
+	function get_creatable_file_content(file: string) {
+		let content = '';
+		if (file in creatable_file) {
+			content = creatable_file[file as keyof typeof creatable_file][is_ts ? 'ts' : 'js'];
+		}
+		return content;
+	}
 
 	function autocomplete_from_tree(tree: FileSystemTree, path = '/') {
 		let return_value = [] as string[];
@@ -65,14 +180,12 @@
 			prefix = prefix + dir + '/';
 		}
 		for (let file of files_to_create) {
-			// we need to do this because of a small bug in svelte
-			// i think
-			if (is_ts) {
-				file = file.replace('.js', '.ts');
-			} else {
-				file = file.replace('.ts', '.js');
+			let suffix = '';
+			if (!file.endsWith('.svelte')) {
+				suffix = is_ts ? '.ts' : '.js';
 			}
-			await webcontainer.add_file(prefix + file);
+			console.log('creating', prefix, file, suffix, get_creatable_file_content(file));
+			await webcontainer.add_file(prefix + file + suffix, get_creatable_file_content(file));
 		}
 		dispatch('completed');
 	}}
@@ -104,14 +217,14 @@
 
 	<section>
 		<ul class="action-selection-grid">
-			{#each creatable_file as file_to_create}
+			{#each Object.keys(creatable_file) as file_to_create}
 				{@const label = file_to_create.endsWith('.svelte')
 					? file_to_create
 					: `${file_to_create}${is_ts ? '.ts' : '.js'}`}
 				{@const icon = get_file_icon(label)}
 				<li>
 					<label>
-						<input value={label} type="checkbox" bind:group={files_to_create} />
+						<input value={file_to_create} type="checkbox" bind:group={files_to_create} />
 						<svelte:component this={icon} />
 						{label}
 					</label>
@@ -128,9 +241,9 @@
 	</section>
 	<button disabled={files_to_create.length === 0} class="action-confirm">
 		{#if files_to_create.length > 0}
-			Create "{route}" with
+			Create "{route}" route
 		{:else}
-			Select some integrations above
+			Select some files
 		{/if}
 	</button>
 </form>
@@ -141,7 +254,6 @@
 		gap: 2rem;
 		margin: 2rem;
 	}
-
 	button:hover {
 		background-color: var(--sk-back-4);
 	}
