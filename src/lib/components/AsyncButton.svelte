@@ -50,6 +50,7 @@
 		padding: 0.5rem;
 		color: var(--sk-text-1);
 		position: relative;
+		flex-shrink: 0;
 	}
 
 	button :global(svg) {
