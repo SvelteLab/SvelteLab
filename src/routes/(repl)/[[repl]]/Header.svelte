@@ -72,13 +72,16 @@
 			<Terminal /> Terminal
 		</button>
 	{/if}
-	<button
-		on:click={() => {
-			command_runner.open('search-docs');
-		}}
-		title="Search sveltekit documentation"
-		class="search-docs"><SearchDocsIcon /> Search SvelteKit Documentation...</button
-	>
+	<div class="grow">
+		<button
+			class="search-docs"
+			on:click={() => {
+				command_runner.open('search-docs');
+			}}
+			title="Search sveltekit documentation"
+			><SearchDocsIcon /> Search SvelteKit Documentation...</button
+		>
+	</div>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -279,6 +282,10 @@
 		left: 0;
 		bottom: calc(-1 * var(--shadow-height));
 		background: var(--shadow-gradient);
+	}
+
+	.grow {
+		width: 100%;
 	}
 
 	.search-docs {
