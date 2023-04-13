@@ -36,7 +36,7 @@
 	<input
 		bind:this={search_input}
 		class="action-field"
-		placeholder="🔎 search sveltekit documentation..."
+		placeholder="Search SvelteKit Documentation..."
 		disabled={!docs_search_ready}
 		bind:value={docs_query}
 		type="search"
