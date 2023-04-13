@@ -147,7 +147,7 @@
 			on:click={async () => {
 				share_with_hash();
 			}}
-			title="Share Files (via Hash)"
+			title="Share Files Snapshot"
 		>
 			<Share />
 		</button>
@@ -164,21 +164,22 @@
 			<ul aria-hidden={open_menu !== 'share'}>
 				<li>
 					<button
-						title="Share Project (via id)"
+						title="Share Project"
 						on:click={() => {
 							share_with_id();
 							open_menu = null;
-						}}><Url /> Share Project (via id)</button
+						}}><Url /> Share Project</button
 					>
 				</li>
 				<li>
 					<button
-						title="Share Files (via Hash)"
+						title="Share Code Snapshot"
 						on:click={() => {
 							share_with_hash();
 							open_menu = null;
-						}}><Tag /> Share Files (via Hash)</button
-					>
+						}}
+						><Tag /> Share Code Snapshot
+					</button>
 				</li>
 			</ul>
 		</div>

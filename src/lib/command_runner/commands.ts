@@ -300,8 +300,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	if ($page.data.id) {
 		commands_to_return.push({
 			command: 'share-id',
-			title: 'Share Project (via id)',
-			subtitle: 'copy link that shares current project via id',
+			title: 'Share Project',
+			subtitle: 'copy link that shares current project via id, this keeps in sync when you update your project',
 			icon: Share,
 			async action() {
 				const progress_toast = toast.push(`Sharing...`, {
@@ -316,7 +316,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		command: 'share-hash',
-		title: 'Share Files (via Hash)',
+		title: 'Share Code Snapshot',
 		subtitle: 'copy link that shares current files via hash',
 		icon: Share,
 		async action() {
