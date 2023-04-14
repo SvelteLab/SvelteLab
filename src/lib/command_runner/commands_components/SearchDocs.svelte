@@ -1,34 +1,28 @@
 <script lang="ts">
 	import type { Tree } from '$lib/workers/search';
-	import { search_docs_worker } from '$lib/workers/search-docs';
+	import { get_search_docs } from '$lib/workers/search-docs';
 	import { onMount } from 'svelte';
 	import SearchResults from './SearchResults.svelte';
 
 	let docs_query = '';
 	let docs_search_results = [] as Tree[];
-	let docs_search_ready = false;
 
 	let search_input: HTMLInputElement;
 
-	$: search_docs(docs_query);
-
-	function search_docs(docs_query: string) {
-		search_docs_worker.postMessage({ type: 'query', payload: docs_query });
-	}
+	let search_docs: Awaited<ReturnType<typeof get_search_docs>>;
 
 	onMount(async () => {
-		search_docs_worker.postMessage({ type: 'init' });
-		search_docs_worker.addEventListener('message', ({ data }) => {
-			if (data.type === 'results') {
-				docs_search_results = data.payload.results;
-			} else if (data.type === 'ready') {
-				docs_search_ready = true;
-			}
-		});
+		search_docs = await get_search_docs();
 		setTimeout(() => {
 			search_input.focus();
 		}, 100);
 	});
+
+	async function do_the_search(docs_query: string) {
+		docs_search_results = (await search_docs?.(docs_query)) ?? [];
+	}
+
+	$: do_the_search(docs_query);
 </script>
 
 <section class="search">
@@ -37,7 +31,7 @@
 		bind:this={search_input}
 		class="action-field"
 		placeholder="Search SvelteKit Documentation..."
-		disabled={!docs_search_ready}
+		disabled={!search_docs}
 		bind:value={docs_query}
 		type="search"
 	/>
