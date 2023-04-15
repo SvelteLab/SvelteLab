@@ -19,6 +19,13 @@
 	--toastColor: var(--sk-text-1);
 
 	--sk-font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
+	--sk-code-component: hsl(168, 53%, 55%);
+}
+
+@media (prefers-color-scheme: light){
+	:root{
+		--sk-code-component: hsl(168, 53%, 35%);
+	}
 }
 
 *,
@@ -107,6 +114,7 @@ body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
 	--sk-code-number: hsl(120, 100%, 25%);
 	--sk-code-template-string: hsl(2, 80%, 47%);
 	--sk-code-tags: var(--code-function);
+	--sk-code-component: hsl(168, 53%, 55%);
 	--sk-code-important: var(--code-string);
 	--sk-code-diff-base: hsla(0, 0%, 100%, 0.4);
 	--sk-code-diff-inserted: hsl(120, 100%, 35%);
@@ -146,6 +154,7 @@ body .default-theme .splitpanes--horizontal > .splitpanes__splitter {
 	--sk-code-number: hsl(120, 100%, 25%);
 	--sk-code-template-string: hsl(2, 80%, 47%);
 	--sk-code-tags: var(--code-function);
+	--sk-code-component: hsl(168, 53%, 35%);
 	--sk-code-important: var(--code-string);
 	--sk-code-diff-base: hsla(0, 0%, 0%, 0.4);
 	--sk-code-diff-inserted: hsl(120, 100%, 25%);

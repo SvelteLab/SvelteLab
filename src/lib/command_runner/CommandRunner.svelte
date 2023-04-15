@@ -31,7 +31,9 @@
 		const command_action_candidate = commands.find((cmd) => cmd.command === command);
 		if (command_action_candidate) {
 			current_action_command = command_action_candidate;
-			search = '> ';
+			tick().then(() => {
+				search = '> ';
+			});
 		} else {
 			search = command;
 		}
@@ -127,8 +129,7 @@
 			current_action_command = null;
 			if (!dialog.open) {
 				// open command runner in command mode
-				search = '> ';
-				open_command_runner();
+				open_command_runner('> ');
 				return;
 			}
 			if (!search.startsWith('>')) {
