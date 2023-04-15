@@ -39,6 +39,19 @@ export async function load(\${}) {
 			}
 		),
 		snippetCompletion(
+			`/** @type {import('./$types').Handle */
+export async function handle({ event, resolve }) {
+	\${}
+	const response = await resolve(event);
+	return response;
+}`,
+			{
+				label: 'kitHandle',
+				detail: 'SvelteKit Handle',
+				boost: 40,
+			}
+		),
+		snippetCompletion(
 			`/** @type {import('./$types').ParamMatcher */
 export function match(param) {
 	return \${};
@@ -49,11 +62,43 @@ export function match(param) {
 				boost: -50,
 			}
 		),
+		snippetCompletion(
+			`export const snapshot = {
+		capture: () => {
+			\${}
+		},
+		restore: (value) => {
+			\${}
+		}
+	};`,
+			{
+				label: 's-snapshots',
+				detail: 'add code for the snapshot',
+				boost: 40,
+			}
+		),
 	],
 });
 
 export const svelte_snippets = svelteLanguage.data.of({
 	autocomplete: [
+		snippetCompletion(
+			`<script>
+	\${}
+</script>
+
+<!-- your markup here -->
+\${}
+
+<style>
+	\${}
+</style>`,
+			{
+				label: 's-start',
+				detail: 'starting point for a svelte component',
+				boost: 100,
+			}
+		),
 		snippetCompletion(
 			`{#if \${condition}}
 	\${}
@@ -62,6 +107,18 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-if',
 				detail: 'if block',
 				boost: 90,
+			}
+		),
+		snippetCompletion(
+			`{#if \${condition}}
+	\${}
+{:else}
+	\${}
+{/if}`,
+			{
+				label: 's-if-else',
+				detail: 'if else block',
+				boost: 85,
 			}
 		),
 		snippetCompletion(
@@ -92,6 +149,40 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-each',
 				detail: 'each block',
 				boost: 80,
+			}
+		),
+		snippetCompletion(
+			`{#each \${array} as \${item}}
+	\${}
+{:else}
+	\${void list...}
+{/each}`,
+			{
+				label: 's-each-else',
+				detail: 'each else block',
+				boost: 79,
+			}
+		),
+		snippetCompletion(
+			`{#each \${array} as \${item},(\${key})}
+	\${}
+{/each}`,
+			{
+				label: 's-each-key',
+				detail: 'each keyed block',
+				boost: 75,
+			}
+		),
+		snippetCompletion(
+			`<ul>
+{#each \${array} as \${item}(\${key})}
+	<li>\${}</li>
+{/each}
+</ul>`,
+			{
+				label: 's-each-ul',
+				detail: 'each keyed block with ul',
+				boost: 78,
 			}
 		),
 		snippetCompletion(
