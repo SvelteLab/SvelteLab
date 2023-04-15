@@ -36,7 +36,7 @@
 		"@lezer/lr": "^1.0.0",
 		"@replit/codemirror-lang-svelte": "^6.0.0",
 		"@replit/codemirror-vim": "^6.0.11",
-		"@sveltejs/site-kit": "^4.1.0",
+		"@sveltejs/site-kit": "^3.2.2",
 		"@vercel/analytics": "^0.1.11",
 		"@webcontainer/api": "^1.0.2",
 		"as-comps": "^0.0.27",
