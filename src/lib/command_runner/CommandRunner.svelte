@@ -41,7 +41,7 @@
 
 	$: key_bind_commands(commands);
 
-	$: mode = console.log(search) || (search.startsWith('>') ? 'command' : 'file');
+	$: mode = search.startsWith('>') ? 'command' : 'file';
 
 	$: filtered_commands = commands.filter((command) => {
 		console.log(mode);
