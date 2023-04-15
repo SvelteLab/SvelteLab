@@ -31,7 +31,9 @@
 		const command_action_candidate = commands.find((cmd) => cmd.command === command);
 		if (command_action_candidate) {
 			current_action_command = command_action_candidate;
-			search = '> ';
+			tick().then(() => {
+				search = '> ';
+			});
 		} else {
 			search = command;
 		}
@@ -39,9 +41,10 @@
 
 	$: key_bind_commands(commands);
 
-	$: mode = search.startsWith('>') ? 'command' : 'file';
+	$: mode = console.log(search) || (search.startsWith('>') ? 'command' : 'file');
 
 	$: filtered_commands = commands.filter((command) => {
+		console.log(mode);
 		if (mode === 'file') {
 			return command.title.toLowerCase().includes(search.trim().toLowerCase()) && !command.command;
 		}
@@ -127,8 +130,7 @@
 			current_action_command = null;
 			if (!dialog.open) {
 				// open command runner in command mode
-				search = '> ';
-				open_command_runner();
+				open_command_runner('> ');
 				return;
 			}
 			if (!search.startsWith('>')) {
