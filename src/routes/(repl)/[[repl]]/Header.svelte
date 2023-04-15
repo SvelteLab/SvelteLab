@@ -329,6 +329,7 @@
 	}
 	.drop-down-wrapper {
 		position: relative;
+		flex-shrink: 0;
 	}
 	.drop-down-wrapper::after {
 		content: '▾';
