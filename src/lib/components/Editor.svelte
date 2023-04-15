@@ -32,6 +32,7 @@
 		{ tag: tags.string, color: 'var(--sk-code-string)' },
 		{ tag: tags.number, color: 'var(--sk-code-number)' },
 		{ tag: tags.tagName, color: 'var(--sk-code-tags)' },
+		{ tag: tags.className, color: 'var(--sk-code-component)' },
 	]);
 
 	const theme = syntaxHighlighting(svelte_syntax_style);
