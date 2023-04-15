@@ -287,6 +287,10 @@
 	.grow {
 		width: 100%;
 	}
+	
+	form {
+		flex-shrink: 0;
+	}
 
 	.search-docs {
 		border-radius: 0.5rem;
