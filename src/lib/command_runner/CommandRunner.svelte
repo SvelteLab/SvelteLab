@@ -44,7 +44,6 @@
 	$: mode = search.startsWith('>') ? 'command' : 'file';
 
 	$: filtered_commands = commands.filter((command) => {
-		console.log(mode);
 		if (mode === 'file') {
 			return command.title.toLowerCase().includes(search.trim().toLowerCase()) && !command.command;
 		}
