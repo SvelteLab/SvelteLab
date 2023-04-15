@@ -14,7 +14,7 @@
 	import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
-	import { keymap, hoverTooltip } from '@codemirror/view';
+	import { keymap } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
@@ -25,9 +25,6 @@
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
 	import { editor_config } from '$lib/stores/editor_config_store';
-	import { get_search_docs } from '$lib/workers/search-docs';
-	import { onMount } from 'svelte';
-	import type { Tree } from '$lib/workers/search';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -53,63 +50,6 @@
 
 	let code: string;
 
-	let search_docs: Awaited<ReturnType<typeof get_search_docs>>;
-
-	onMount(async () => {
-		search_docs = await get_search_docs();
-	});
-
-	function get_latest(block: Tree): Tree[] {
-		if (block.children.length === 0) {
-			return [block];
-		}
-		return block.children.flatMap(get_latest) as Tree[];
-	}
-
-	const docs_on_hover = hoverTooltip(async (view, pos) => {
-		const range = view.state.selection;
-		const { from, to } = range.ranges[0];
-		const selected = view.state.sliceDoc(from, to);
-		if (!(pos > from && pos < to)) {
-			return null;
-		}
-		const results = await search_docs(selected);
-		const links = results.flatMap(get_latest);
-		return {
-			pos: from,
-			end: to,
-			above: true,
-			create() {
-				let dom = document.createElement('ul');
-				for (let link of links) {
-					const li = document.createElement('li');
-					const a = document.createElement('a');
-					Object.assign(li.style, {
-						display: 'flex',
-						flexDirection: 'column',
-						borderBottom: '1px solid var(--sk-back-5)',
-						padding: '.5rem',
-					});
-					a.setAttribute('href', `https://kit.svelte.dev${link.href}`);
-					a.setAttribute('target', '_blank');
-					a.setAttribute('rel', 'noopener noreferrer');
-					a.innerText = link.breadcrumbs.join(' > ');
-					const small = document.createElement('small');
-					small.innerText = link.node.content;
-					li.append(a);
-					li.append(small);
-					dom.append(li);
-				}
-				Object.assign(dom.style, {
-					maxHeight: '50vh',
-					overflowY: 'auto',
-					listStyle: 'none',
-				});
-				return { dom };
-			},
-		};
-	});
-
 	function get_extensions(config: typeof $editor_config) {
 		const extensions = [
 			basicSetup,
@@ -118,7 +58,6 @@
 			linter(return_diagnostics),
 			abbreviationTracker(),
 			keymap.of([indentWithTab]),
-			docs_on_hover,
 		];
 		if (config.vim) {
 			extensions.unshift(
