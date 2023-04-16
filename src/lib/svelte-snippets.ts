@@ -6,7 +6,7 @@ export const js_snippets = javascriptLanguage.data.of({
 	autocomplete: [
 		snippetCompletion(
 			`/** @type {import('./$types').RequestHandler} */
-export async function \${}(\${}) {
+export async function \${1|GET,POST,PATCH,PUT,DELETE,OPTIONS|}(\${}) {
 	\${}
 	return new Response();
 }`,
