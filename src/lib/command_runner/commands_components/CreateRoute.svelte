@@ -17,7 +17,7 @@
 		'+page.svelte': {
 			js:
 				`<script>
-	export let data: PageData;
+	export let data;
 </scri` +
 				`pt>
 `,
