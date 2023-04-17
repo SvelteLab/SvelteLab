@@ -287,7 +287,12 @@
 	{/each}
 </ul>
 
-<Dialog is_open={!!deleting_file}>
+<Dialog
+	is_open={!!deleting_file}
+	on:dismiss={() => {
+		deleting_file = null;
+	}}
+>
 	<svelte:fragment slot="dialog-title">
 		Delete "{deleting_file?.name}" ?
 	</svelte:fragment>

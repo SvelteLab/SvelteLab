@@ -16,6 +16,7 @@
 	autofocus={false}
 	isOpen={is_open}
 	includedTrigger={false}
+	on:dismiss
 >
 	<h2><slot name="dialog-title" /></h2>
 	<slot />
