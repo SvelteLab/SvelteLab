@@ -8,6 +8,8 @@ import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
 import type { RequestHandler } from './$types';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
+import { decode } from 'he';
+import { get_icon_code, load_emoji } from './tweemoji';
 
 const height = 630;
 const width = 1200;
@@ -43,7 +45,10 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result = (OG as any).render({ tree: files, name, id, img });
-	const element = toReactNode(`${result.html}<style>${result.css.code}</style>`);
+
+	const element = toReactNode(
+		`${decode(result.html, { isAttributeValue: true })}<style>${result.css.code}</style>`
+	);
 	const svg = await satori(element, {
 		fonts: [
 			{
@@ -54,6 +59,12 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 		],
 		height,
 		width,
+		async loadAdditionalAsset(code, segment) {
+			if (code === 'emoji' && segment) {
+				return `data:image/svg+xml;base64,` + btoa(await load_emoji(get_icon_code(segment)));
+			}
+			return '';
+		},
 	});
 
 	const resvg = new Resvg(svg, {
