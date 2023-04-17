@@ -27,8 +27,8 @@
 		const handle = () => {
 			if (percentage < 0.7) {
 				percentage += Math.random() * 0.3;
+				timeout = setTimeout(handle, Math.random() * 1000);
 			}
-			timeout = setTimeout(handle, Math.random() * 1000);
 		};
 		handle();
 		return {
