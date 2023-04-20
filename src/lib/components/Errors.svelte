@@ -61,9 +61,6 @@
 
 <style>
 	ul {
-		position: absolute;
-		inset: 0;
-		top: auto;
 		color: var(--sk-back-1);
 		font-size: var(--sk-text-xs);
 		margin: 0;

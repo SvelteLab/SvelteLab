@@ -70,6 +70,6 @@
 	:global(.editor-pane) {
 		position: relative;
 		display: grid;
-		grid-template-rows: min-content 1fr;
+		grid-template-rows: min-content 1fr min-content;
 	}
 </style>

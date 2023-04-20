@@ -200,8 +200,7 @@
 
 <style>
 	:global(.codemirror-wrapper) {
-		position: absolute;
-		inset: 0;
 		grid-row: 2;
+		overflow: auto;
 	}
 </style>
