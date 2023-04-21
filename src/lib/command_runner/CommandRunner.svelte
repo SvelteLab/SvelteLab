@@ -119,12 +119,7 @@
 			})
 		] = open_file_palette;
 
-		key_binds[
-			get_key_bind({
-				mod: ['$mod', 'Shift'],
-				keys: ['P'],
-			})
-		] = async (event) => {
+		async function open_command_palette(event: KeyboardEvent) {
 			event.preventDefault();
 			current_action_command = null;
 			if (!dialog.open) {
@@ -138,7 +133,21 @@
 			await tick();
 			input_element?.focus();
 			input_element?.setSelectionRange(1, search.length);
-		};
+		}
+
+		key_binds[
+			get_key_bind({
+				mod: ['$mod', 'Shift'],
+				keys: ['P'],
+			})
+		] = open_command_palette;
+
+		key_binds[
+			get_key_bind({
+				mod: ['$mod'],
+				keys: ['K'],
+			})
+		] = open_command_palette;
 
 		key_binds[
 			get_key_bind({
