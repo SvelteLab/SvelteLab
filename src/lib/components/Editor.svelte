@@ -145,7 +145,7 @@
 			'*': {
 				'font-family': 'var(--sk-font-mono)',
 				'tab-size': 3,
-				'font-size': 'var(--sk-editor-size)',
+				'font-size': 'var(--sk-editor-font-size)',
 			},
 			'.cm-gutters': {
 				border: 'none',

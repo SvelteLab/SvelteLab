@@ -18,7 +18,7 @@
 	--toastBackground: var(--sk-back-2);
 	--toastColor: var(--sk-text-1);
 
-	--sk-font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
+	--sk-font-mono: var(--sk-editor-font-family), 'JetBrains Mono', 'Fira Mono', monospace;
 	--sk-code-component: hsl(168, 53%, 55%);
 	font-variant-ligatures: var(--sk-font-variant-ligatures);
 }
