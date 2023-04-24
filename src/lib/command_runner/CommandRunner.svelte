@@ -41,7 +41,9 @@
 			});
 		} else {
 			if (typeof command === 'string') {
-				search = command;
+				tick().then(() => {
+					search = command;
+				});
 			}
 		}
 	}
