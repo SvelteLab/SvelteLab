@@ -30,6 +30,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
+	import { parseKeybinding } from 'tinykeys';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -39,6 +40,10 @@
 	let forking = false;
 	let fork_form: HTMLFormElement;
 	let open_menu = null as null | 'share' | 'profile';
+
+	const search_docs_keys = parseKeybinding('$mod+alt+K')
+		.flat(Infinity)
+		.map((key) => key.toString().replace('Control', 'Ctrl'));
 
 	function toggle_menu(kind: typeof open_menu & {}) {
 		open_menu = open_menu === kind ? null : kind;
@@ -79,8 +84,13 @@
 				command_runner.open('search-docs');
 			}}
 			title="Search sveltekit documentation"
-			><SearchDocsIcon /> Search SvelteKit Documentation...</button
-		>
+			><SearchDocsIcon /> Search SvelteKit Documentation...
+			<div>
+				{#each search_docs_keys as key}
+					<kbd>{key}</kbd>
+				{/each}
+			</div>
+		</button>
 	</div>
 	<button
 		on:click={(e) => {
@@ -287,7 +297,7 @@
 	.grow {
 		width: 100%;
 	}
-	
+
 	form {
 		flex-shrink: 0;
 	}
@@ -301,6 +311,16 @@
 		width: 100%;
 		justify-content: center;
 		opacity: 0.8;
+	}
+
+	.search-docs > div {
+		display: flex;
+		gap: 0.25rem;
+		margin-inline-start: auto;
+	}
+
+	kbd {
+		padding: 0.25rem 0.5rem;
 	}
 
 	a,

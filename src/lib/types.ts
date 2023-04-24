@@ -30,9 +30,9 @@ export type Command = {
 	subtitle?: string;
 	icon?: typeof SvelteComponent;
 	command?: string;
+	key_bind?: KeyBinds;
 } & CreateExclusiveUnion<
 	| {
-			key_bind?: KeyBinds;
 			action: () => void;
 	  }
 	| {

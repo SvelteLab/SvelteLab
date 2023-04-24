@@ -25,17 +25,24 @@
 		if (dialog === e.target) dialog.close();
 	};
 
-	function open_command_runner(command = '') {
-		dialog.showModal();
-		handle_window_click = close_dialog_on_out_click;
-		const command_action_candidate = commands.find((cmd) => cmd.command === command);
+	function open_command_runner(command: string | Command = '') {
+		if (!dialog.open) {
+			dialog.showModal();
+			handle_window_click = close_dialog_on_out_click;
+		}
+		let command_action_candidate = command as Command | undefined;
+		if (typeof command === 'string') {
+			command_action_candidate = commands.find((cmd) => cmd.command === command);
+		}
 		if (command_action_candidate) {
 			current_action_command = command_action_candidate;
 			tick().then(() => {
 				search = '> ';
 			});
 		} else {
-			search = command;
+			if (typeof command === 'string') {
+				search = command;
+			}
 		}
 	}
 
@@ -83,12 +90,22 @@
 		for (let command of commands) {
 			if (command.key_bind) {
 				key_binds[get_key_bind(command.key_bind)] = (event) => {
-					if (typeof command.action === 'function') {
+					const has_action = typeof command.action === 'function';
+					const has_action_component = !!command.action_component;
+					// if it has an action or an action component we prevent the default
+					if (!has_action && !has_action_component) {
 						event.preventDefault();
 						event.stopImmediatePropagation();
 						event.stopPropagation();
-						command.action();
 					}
+					// if it has an action we run the action
+					if (has_action) {
+						command.action!();
+						return;
+					}
+					// otherwise we open the command runner
+					// with the current command
+					open_command_runner(command);
 				};
 			}
 		}
@@ -248,7 +265,9 @@
 				{@const key_bind = command.key_bind
 					? parseKeybinding(get_key_bind(command.key_bind))
 					: null}
-				{@const key_bind_sequence = key_bind?.map((bind) => bind.flat(Infinity))}
+				{@const key_bind_sequence = key_bind?.map((bind) =>
+					bind.flat(Infinity).map((key) => key.toString().replace('Control', 'Ctrl'))
+				)}
 				{@const current = command === marked_command}
 				<li>
 					<!-- TODO: rework how action components work: replace palette instead of inline -->
@@ -275,24 +294,26 @@
 						{#if command.subtitle}
 							<small>{command.subtitle}</small>
 						{/if}
-						{#if command.action_component}
-							<span class="action-arrow" title="Open">
-								<Forward />
-							</span>
-						{/if}
-						{#if key_bind_sequence}
-							<ul class="key_binds">
-								{#each key_bind_sequence || [] as sequence}
-									<li>
-										{#each sequence as kbd}
-											<kbd>
-												{kbd}
-											</kbd>
-										{/each}
-									</li>
-								{/each}
-							</ul>
-						{/if}
+						<div class="actions">
+							{#if key_bind_sequence}
+								<ul class="key_binds">
+									{#each key_bind_sequence || [] as sequence}
+										<li>
+											{#each sequence as kbd}
+												<kbd>
+													{kbd}
+												</kbd>
+											{/each}
+										</li>
+									{/each}
+								</ul>
+							{/if}
+							{#if command.action_component}
+								<span class="action-arrow" title="Open">
+									<Forward />
+								</span>
+							{/if}
+						</div>
 					</button>
 				</li>
 			{/each}
@@ -358,8 +379,10 @@
 		gap: 1rem;
 	}
 
-	ul.key_binds {
+	.actions {
 		margin-inline-start: auto;
+		display: flex;
+		gap: 1rem;
 	}
 
 	ul.key_binds > li {

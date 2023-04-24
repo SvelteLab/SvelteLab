@@ -127,6 +127,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'create a new sveltekit route',
 		icon: Route,
 		action_component: CreateRoute,
+		key_bind: {
+			mod: ['$mod', 'Alt'],
+			keys: ['R'],
+		},
 	});
 
 	commands_to_return.push({
@@ -135,6 +139,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'search SvelteKit documentation',
 		icon: SearchDocsIcon,
 		action_component: SearchDocs,
+		key_bind: {
+			mod: ['$mod', 'Alt'],
+			keys: ['K'],
+		},
 	});
 
 	commands_to_return.push({
@@ -311,7 +319,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		commands_to_return.push({
 			command: 'share-id',
 			title: 'Share Project',
-			subtitle: 'copy link that shares current project via id, this keeps in sync when you update your project',
+			subtitle:
+				'copy link that shares current project via id, this keeps in sync when you update your project',
 			icon: Share,
 			async action() {
 				const progress_toast = toast.push(`Sharing...`, {
