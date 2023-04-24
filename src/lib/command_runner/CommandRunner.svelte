@@ -4,7 +4,6 @@
 	import type { Command } from '$lib/types';
 	import { onDestroy, tick } from 'svelte';
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
-	import Back from '~icons/material-symbols/arrow-back-rounded';
 	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
 
@@ -219,10 +218,6 @@
 	{#if current_action_command}
 		<section class="action-component">
 			<div class="header">
-				<svelte:component this={current_action_command.icon} />
-				<h2>
-					{current_action_command.title}
-				</h2>
 				<button
 					class="cancel"
 					title="Back to Command Palette"
@@ -230,8 +225,13 @@
 						current_action_command = null;
 					}}
 				>
-					<Back />
+					<kbd>ESC</kbd>
 				</button>
+				<div class="divider" />
+				<svelte:component this={current_action_command.icon} />
+				<h2>
+					{current_action_command.title}
+				</h2>
 			</div>
 			<svelte:component
 				this={current_action_command.action_component}
@@ -258,7 +258,7 @@
 					on:blur={() => {
 						marked_command = null;
 					}}
-					placeholder="🔍 Search for files, or type `>` for commands..."
+					placeholder={`🔍 Search files... (Type ">" for commands)`}
 				/>
 			</form>
 		</section>
@@ -422,9 +422,16 @@
 	}
 
 	button.cancel {
-		margin-inline-start: auto;
 		border-radius: 0.5rem;
-		padding: 0.5rem;
+		padding: 0.1rem;
+	}
+
+	.divider {
+		display: inline-block;
+		align-self: stretch;
+		width: 1px;
+		min-height: 1em;
+		background-color: var(--sk-back-4);
 	}
 
 	button:hover {
