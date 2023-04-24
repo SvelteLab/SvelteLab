@@ -6,6 +6,7 @@
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
 	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
+	import Back from '~icons/material-symbols/arrow-back-rounded';
 
 	export let commands = [] as Command[];
 
@@ -225,7 +226,7 @@
 						current_action_command = null;
 					}}
 				>
-					<kbd>ESC</kbd>
+					<Back />
 				</button>
 				<div class="divider" />
 				<svelte:component this={current_action_command.icon} />
@@ -423,7 +424,7 @@
 
 	button.cancel {
 		border-radius: 0.5rem;
-		padding: 0.1rem;
+		padding: 0.3rem;
 	}
 
 	.divider {
