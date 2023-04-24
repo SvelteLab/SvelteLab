@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import { editor_config } from '$lib/stores/editor_config_store';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
 	import type { SvelteError } from '$lib/types';
@@ -24,7 +25,6 @@
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
-	import { editor_config } from '$lib/stores/editor_config_store';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -145,6 +145,7 @@
 			'*': {
 				'font-family': 'var(--sk-font-mono)',
 				'tab-size': 3,
+				'font-size': 'var(--sk-editor-size)',
 			},
 			'.cm-gutters': {
 				border: 'none',

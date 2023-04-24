@@ -1,20 +1,10 @@
 <script>
-	import { browser, dev } from '$app/environment';
-	import font_preferences from '$lib/font_preferences';
-	import { inject } from '@vercel/analytics';
+	import { apply_font_preferences } from '$lib/font_preferences';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../styles/global.css';
 	import LoadingIndicator from './LoadingIndicator.svelte';
 
-	inject({ mode: dev ? 'development' : 'production' });
-
-	font_preferences.subscribe(({ ligatures }) => {
-		if (!browser) return;
-		document.documentElement.style.setProperty(
-			'--sk-font-variant-ligatures',
-			ligatures ? 'initial' : 'none'
-		);
-	});
+	apply_font_preferences();
 </script>
 
 <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
