@@ -122,6 +122,9 @@
 		gap: 0.5em;
 		width: max-content;
 	}
+	li[aria-selected='true'] button {
+		font-weight: 600;
+	}
 	li[aria-selected='true']::after {
 		content: '';
 		position: absolute;

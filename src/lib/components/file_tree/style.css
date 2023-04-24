@@ -88,7 +88,6 @@ li.open button {
 }
 
 li.open:not(.folder) {
-	color: var(--sk-theme-1);
 	position: relative;
 	border-bottom-color: var(--sk-theme-1);
 }
