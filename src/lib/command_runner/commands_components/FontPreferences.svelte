@@ -55,7 +55,7 @@
 	}
 
 	@media only screen and (max-width: 500px) {
-		form {
+		.grid {
 			grid-template-columns: 1fr;
 		}
 	}
