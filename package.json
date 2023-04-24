@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "vite build",
+		"build": "pnpm run partytown && vite build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dependency-report": "npx --yes license-report@latest --output=json > ./src/lib/dependency-report.json",
@@ -14,11 +14,15 @@
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"preview": "vite preview",
 		"test": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"partytown": "partytown copylib static/~partytown"
 	},
 	"dependencies": {
+		"@builder.io/partytown": "^0.8.0",
 		"@codemirror/autocomplete": "^6.0.0",
 		"@codemirror/commands": "^6.2.2",
+		"@codemirror/highlight": "^0.19.8",
+		"@codemirror/history": "^0.19.2",
 		"@codemirror/lang-css": "^6.0.1",
 		"@codemirror/lang-html": "^6.2.0",
 		"@codemirror/lang-javascript": "^6.1.1",
@@ -26,6 +30,7 @@
 		"@codemirror/lang-markdown": "^6.1.0",
 		"@codemirror/language": "^6.0.0",
 		"@codemirror/lint": "^6.2.0",
+		"@codemirror/search": "^6.3.0",
 		"@codemirror/state": "^6.0.0",
 		"@codemirror/view": "^6.0.0",
 		"@emmetio/codemirror6-plugin": "^0.2.0",
@@ -37,7 +42,6 @@
 		"@replit/codemirror-lang-svelte": "^6.0.0",
 		"@replit/codemirror-vim": "^6.0.11",
 		"@sveltejs/site-kit": "^3.2.2",
-		"@vercel/analytics": "^0.1.11",
 		"@webcontainer/api": "^1.0.2",
 		"as-comps": "^0.0.27",
 		"codemirror": "^6.0.1",

@@ -1,11 +1,7 @@
 <script>
-	import { dev } from '$app/environment';
-	import { inject } from '@vercel/analytics';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../styles/global.css';
 	import LoadingIndicator from './LoadingIndicator.svelte';
-
-	inject({ mode: dev ? 'development' : 'production' });
 </script>
 
 <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
