@@ -110,9 +110,9 @@
 	</button>
 	<button
 		on:click={() => {
-			command_runner.open();
+			command_runner.open('> ');
 		}}
-		title="Open Command Runner (CTRL+E)"
+		title="Open Command Runner (CTRL+K)"
 	>
 		<Cmd />
 	</button>
