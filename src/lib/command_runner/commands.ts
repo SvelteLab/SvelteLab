@@ -37,14 +37,16 @@ import Intro from '~icons/material-symbols/waving-hand-rounded';
 import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
+import Font from '~icons/material-symbols/font-download-outline-rounded';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 import CreateRoute from './commands_components/CreateRoute.svelte';
+import FontPreferences from './commands_components/FontPreferences.svelte';
 import InstallPackage from './commands_components/InstallPackage.svelte';
 import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
+import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import SearchDocs from './commands_components/SearchDocs.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -356,6 +358,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action() {
 			get_theme().remove_preference();
 		},
+	});
+
+	commands_to_return.push({
+		command: 'font-preferences',
+		title: 'Font Preference',
+		subtitle: 'set font preference',
+		action_component: FontPreferences,
+		icon: Font,
 	});
 
 	commands_to_return.push({

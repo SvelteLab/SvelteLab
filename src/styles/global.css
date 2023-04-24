@@ -20,10 +20,11 @@
 
 	--sk-font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 	--sk-code-component: hsl(168, 53%, 55%);
+	font-variant-ligatures: var(--sk-font-variant-ligatures);
 }
 
-@media (prefers-color-scheme: light){
-	:root{
+@media (prefers-color-scheme: light) {
+	:root {
 		--sk-code-component: hsl(168, 53%, 35%);
 	}
 }
