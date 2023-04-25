@@ -54,7 +54,7 @@
 		grid-template-columns: repeat(3, 1fr);
 	}
 
-	@media only screen and (max-width: 500px) {
+	@media only screen and (max-width: 770px) {
 		.grid {
 			grid-template-columns: 1fr;
 		}
@@ -82,10 +82,5 @@
 	input[type='checkbox'] {
 		width: 2rem;
 		height: 2rem;
-	}
-
-	.editor-size {
-		display: grid;
-		grid-template-columns: max-content 1fr;
 	}
 </style>
