@@ -14,9 +14,10 @@
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import Edit from '~icons/material-symbols/edit';
+	import Upload from '~icons/material-symbols/upload';
 	import AddFile from './AddFile.svelte';
 	import Dialog from '../Dialog.svelte';
-	import { drop } from '$lib/drop';
+	import { drop, handle_files } from '$lib/drop';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -75,7 +76,7 @@
 
 	let deleting_file = null as null | { kind: 'folder' | 'file'; name: string };
 
-	const drop_options = (path = base_path) => ({
+	const files_options = (path = base_path) => ({
 		success(file_name: string, file_content: ArrayBuffer) {
 			handle_add(`${path}${file_name}`, 'file', file_content, false);
 		},
@@ -85,13 +86,33 @@
 			}
 		},
 	});
+
+	function file_input_change(path: string) {
+		return (e: Event) => {
+			const files = [...((e.currentTarget as HTMLInputElement)?.files ?? [])];
+			handle_files(files, files_options(path));
+		};
+	}
+
+	function get_upload_handler(path = base_path) {
+		return () => {
+			const file_input = document.createElement('input');
+			file_input.type = 'file';
+			file_input.multiple = true;
+			file_input.addEventListener('change', file_input_change(path));
+			file_input.click();
+		};
+	}
 </script>
 
-<ul use:drop={drop_options()}>
+<ul use:drop={files_options()}>
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<input aria-label="REPL name" bind:value={$repl_name} />
 			<div class="hover-group">
+				<button title="Upload File" on:click={get_upload_handler()}>
+					<Upload />
+				</button>
 				<button
 					title="New File"
 					on:click={() => {
@@ -150,7 +171,7 @@
 		{@const expanded = $expanded_paths.has(path)}
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
-			<li use:drop={drop_options(path + '/')} class="folder" class:open={expanded}>
+			<li use:drop={files_options(path + '/')} class="folder" class:open={expanded}>
 				{#if renaming_path === path}
 					<AddFile
 						type="folder"
@@ -187,6 +208,9 @@
 						<svelte:component this={icon} />{node_name}
 					</button>
 					<div class="hover-group">
+						<button title="Upload File" on:click={get_upload_handler(path + '/')}>
+							<Upload />
+						</button>
 						<button
 							title="Edit"
 							on:click={() => {

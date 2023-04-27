@@ -1,5 +1,28 @@
 const SIZE_LIMIT = 1024 * 1024; //1MB;
 
+export async function handle_files(files: (File | null)[], options: DropOptions) {
+	for (const file of files) {
+		if (file) {
+			if (file.size > SIZE_LIMIT) {
+				if (typeof options.error === 'function') {
+					options.error('The size limit for assets is 1mb');
+				}
+				return;
+			}
+			try {
+				const file_content = await read_file(file);
+				if (typeof options.success === 'function') {
+					options.success(file.name, file_content);
+				}
+			} catch (e) {
+				if (typeof options.error === 'function') {
+					options.error("Can't upload this asset");
+				}
+			}
+		}
+	}
+}
+
 async function read_file(file: File) {
 	const fr = new FileReader();
 	let resolve: (value: ArrayBuffer) => void;
@@ -50,27 +73,8 @@ export function drop(node: HTMLElement, options: DropOptions) {
 		const files =
 			(e.dataTransfer?.items
 				? [...e.dataTransfer.items].map((file) => file.getAsFile())
-				: e.dataTransfer?.files) ?? [];
-		for (const file of files) {
-			if (file) {
-				if (file.size > SIZE_LIMIT) {
-					if (typeof stored_options.error === 'function') {
-						stored_options.error('The size limit for assets is 1mb');
-					}
-					return;
-				}
-				try {
-					const file_content = await read_file(file);
-					if (typeof stored_options.success === 'function') {
-						stored_options.success(file.name, file_content);
-					}
-				} catch (e) {
-					if (typeof stored_options.error === 'function') {
-						stored_options.error("Can't upload this asset");
-					}
-				}
-			}
-		}
+				: [...(e.dataTransfer?.files ?? [])]) ?? [];
+		handle_files(files, stored_options);
 	}
 	node.addEventListener('drop', drop_listener);
 	return {
