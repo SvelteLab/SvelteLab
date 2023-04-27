@@ -18,13 +18,6 @@ export async function save_repl() {
 	}
 	const files = await webcontainer.get_tree_from_container(false);
 	is_repl_saving.set(true);
-	console.log(
-		stringify({
-			files,
-			id,
-			name,
-		})
-	);
 	const res = await fetch('./save-repl', {
 		method: 'POST',
 		headers: {
@@ -49,7 +42,6 @@ export async function save_repl() {
 			repl_id.set(created.id);
 		}
 	} else {
-		console.log(res.text());
 		error("Can't save the project");
 	}
 	is_repl_saving.set(false);

@@ -50,7 +50,7 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/^postcss\.(js|cjs|mjs)$/, PostCSS],
 	[/.*\.postcss$/, PostCSS],
 	[/.*\.(js|cjs|mjs)$/, JS],
-	[/.*\.(jpe?g|png|gif|bmp)$/, Images],
+	[/.*\.(jpe?g|png|gif|bmp|svg|webp)$/, Images],
 	[/.*\.css$/, CSS],
 	[/.*\.json$/, JSON],
 	[/.*\.html$/, HTML],
