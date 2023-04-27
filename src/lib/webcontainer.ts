@@ -283,6 +283,8 @@ function does_file_exist(files: FileSystemTree, path: `./${string}`) {
 
 async function read_file(path: string): Promise<string>;
 async function read_file(path: string, as_string: false): Promise<Uint8Array>;
+async function read_file(path: string, as_string: true): Promise<string>;
+async function read_file(path: string, as_string: boolean): Promise<Uint8Array | string>;
 async function read_file(path: string, as_string = true) {
 	try {
 		if (as_string) {

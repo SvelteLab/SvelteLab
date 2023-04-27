@@ -76,19 +76,19 @@
 
 	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
-		if (!is_image) {
-			webcontainer.read_file(current_tab).then((file) => {
-				code = file;
+		if (is_image) {
+			webcontainer.read_file(current_tab, false).then((file) => {
+				image_bytes = file;
 			});
 			return;
 		}
-		webcontainer.read_file(current_tab, false).then((file) => {
-			image_bytes = file;
+		webcontainer.read_file(current_tab).then((file) => {
+			code = file;
 		});
 	}
 
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
-	$: is_image = ['png', 'bmp', 'jpg', 'jpeg', 'gif'].includes(current_lang);
+	$: is_image = ['png', 'bmp', 'jpg', 'jpeg', 'gif', 'webp'].includes(current_lang);
 	$: lang = langs[current_lang];
 	$: read_current_tab($current_tab, is_image);
 
