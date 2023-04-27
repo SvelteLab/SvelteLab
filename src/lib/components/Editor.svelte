@@ -25,6 +25,7 @@
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
 	import Tabs from './Tabs.svelte';
+	import ImageFromBytes from './ImageFromBytes.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -50,6 +51,7 @@
 	};
 
 	let code: string;
+	let image_bytes: Uint8Array;
 
 	function get_extensions(config: typeof $editor_config) {
 		const extensions = [
@@ -72,19 +74,26 @@
 
 	$: extensions = get_extensions($editor_config);
 
-	function read_current_tab(current_tab: string) {
+	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
-		webcontainer.read_file(current_tab).then((file) => {
-			code = file;
+		if (!is_image) {
+			webcontainer.read_file(current_tab).then((file) => {
+				code = file;
+			});
+			return;
+		}
+		webcontainer.read_file(current_tab, false).then((file) => {
+			image_bytes = file;
 		});
 	}
 
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
+	$: is_image = ['png', 'bmp', 'jpg', 'jpeg', 'gif'].includes(current_lang);
 	$: lang = langs[current_lang];
-	$: read_current_tab($current_tab);
+	$: read_current_tab($current_tab, is_image);
 
 	on_command('format-current', () => {
-		read_current_tab($current_tab);
+		read_current_tab($current_tab, is_image);
 	});
 
 	const warnings_and_errors = {
@@ -122,80 +131,84 @@
 	<VoidEditor />
 {:else}
 	<Tabs />
-	<CodeMirror
-		{lang}
-		{theme}
-		basic={false}
-		useTab={false}
-		tabSize={3}
-		value={code ?? ''}
-		{extensions}
-		on:change={(e) => {
-			webcontainer.update_file($current_tab, e.detail);
-			code = e.detail;
-		}}
-		styles={{
-			'&': {
-				width: '100%',
-				height: '100%',
-				overflow: 'auto',
-				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)',
-			},
-			'*': {
-				'font-family': 'var(--sk-font-mono)',
-				'tab-size': 3,
-				'font-size': 'var(--sk-editor-font-size)',
-			},
-			'.cm-gutters': {
-				border: 'none',
-			},
-			'.cm-gutter': {
-				'background-color': 'var(--sk-back-1)',
-				color: 'var(--sk-code-base)',
-			},
-			'.cm-line.cm-activeLine': {
-				'background-color': 'var(--sk-back-translucent)',
-			},
-			'.cm-activeLineGutter': {
-				'background-color': 'var(--sk-back-3)',
-			},
-			'.cm-focused.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-4) !important',
-			},
-			'.cm-selectionBackground': {
-				'background-color': 'var(--sk-back-5) !important',
-			},
-			'.cm-cursor': {
-				'border-color': 'var(--sk-code-base)',
-			},
-			'.cm-tooltip': {
-				border: 'none',
-				background: 'var(--sk-back-3)',
-			},
-			'.cm-tooltip.cm-tooltip-autocomplete > ul': {
-				background: 'var(--sk-back-3)',
-			},
-			'.cm-tooltip-autocomplete ul li[aria-selected]': {
-				background: 'var(--sk-theme-1)',
-				color: 'var(--sk-text-1)',
-			},
-			'.cm-tooltip-lint': {
-				background: 'var(--sk-back-3)',
-				color: 'var(--sk-text-1)',
-			},
-			'.cm-panels': {
-				background: 'var(--sk-back-3)',
-				color: 'var(--sk-text-1)',
-			},
-		}}
-	/>
-	{#if current_lang === 'svelte'}
-		<Errors
-			{code}
-			bind:warnings={warnings_and_errors.warnings}
-			bind:error={warnings_and_errors.error}
+	{#if is_image}
+		<ImageFromBytes {image_bytes} type={current_lang} />
+	{:else}
+		<CodeMirror
+			{lang}
+			{theme}
+			basic={false}
+			useTab={false}
+			tabSize={3}
+			value={code ?? ''}
+			{extensions}
+			on:change={(e) => {
+				webcontainer.update_file($current_tab, e.detail);
+				code = e.detail;
+			}}
+			styles={{
+				'&': {
+					width: '100%',
+					height: '100%',
+					overflow: 'auto',
+					'background-color': 'var(--sk-back-1)',
+					color: 'var(--sk-code-base)',
+				},
+				'*': {
+					'font-family': 'var(--sk-font-mono)',
+					'tab-size': 3,
+					'font-size': 'var(--sk-editor-font-size)',
+				},
+				'.cm-gutters': {
+					border: 'none',
+				},
+				'.cm-gutter': {
+					'background-color': 'var(--sk-back-1)',
+					color: 'var(--sk-code-base)',
+				},
+				'.cm-line.cm-activeLine': {
+					'background-color': 'var(--sk-back-translucent)',
+				},
+				'.cm-activeLineGutter': {
+					'background-color': 'var(--sk-back-3)',
+				},
+				'.cm-focused.cm-selectionBackground': {
+					'background-color': 'var(--sk-back-4) !important',
+				},
+				'.cm-selectionBackground': {
+					'background-color': 'var(--sk-back-5) !important',
+				},
+				'.cm-cursor': {
+					'border-color': 'var(--sk-code-base)',
+				},
+				'.cm-tooltip': {
+					border: 'none',
+					background: 'var(--sk-back-3)',
+				},
+				'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+					background: 'var(--sk-back-3)',
+				},
+				'.cm-tooltip-autocomplete ul li[aria-selected]': {
+					background: 'var(--sk-theme-1)',
+					color: 'var(--sk-text-1)',
+				},
+				'.cm-tooltip-lint': {
+					background: 'var(--sk-back-3)',
+					color: 'var(--sk-text-1)',
+				},
+				'.cm-panels': {
+					background: 'var(--sk-back-3)',
+					color: 'var(--sk-text-1)',
+				},
+			}}
 		/>
+		{#if current_lang === 'svelte'}
+			<Errors
+				{code}
+				bind:warnings={warnings_and_errors.warnings}
+				bind:error={warnings_and_errors.error}
+			/>
+		{/if}
 	{/if}
 {/if}
 

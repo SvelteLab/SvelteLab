@@ -16,6 +16,7 @@
 	import Edit from '~icons/material-symbols/edit';
 	import AddFile from './AddFile.svelte';
 	import Dialog from '../Dialog.svelte';
+	import { drop } from '$lib/drop';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -26,7 +27,12 @@
 
 	let renaming_path = null as string | null;
 
-	async function handle_add(path_name: string, type: typeof is_adding_type.kind) {
+	async function handle_add(
+		path_name: string,
+		type: typeof is_adding_type.kind,
+		content = new ArrayBuffer(0),
+		should_open = true
+	) {
 		const path = path_name.split('/');
 		const name = path.pop();
 		let prefix = './';
@@ -36,8 +42,10 @@
 			prefix = prefix + dir + '/';
 		}
 		if (type === 'file') {
-			await webcontainer.add_file(prefix + name);
-			open_file(prefix + name);
+			await webcontainer.add_file(prefix + name, new Uint8Array(content));
+			if (should_open) {
+				open_file(prefix + name);
+			}
 		} else if (type === 'folder') {
 			await webcontainer.add_folder(prefix + name);
 		}
@@ -66,9 +74,20 @@
 	});
 
 	let deleting_file = null as null | { kind: 'folder' | 'file'; name: string };
+
+	const drop_options = (path = base_path) => ({
+		success(file_name: string, file_content: ArrayBuffer) {
+			handle_add(`${path}${file_name}`, 'file', file_content, false);
+		},
+		error(message: unknown) {
+			if (typeof message === 'string') {
+				error(message);
+			}
+		},
+	});
 </script>
 
-<ul>
+<ul use:drop={drop_options()}>
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<input aria-label="REPL name" bind:value={$repl_name} />
@@ -131,7 +150,7 @@
 		{@const expanded = $expanded_paths.has(path)}
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
-			<li class="folder" class:open={expanded}>
+			<li use:drop={drop_options(path + '/')} class="folder" class:open={expanded}>
 				{#if renaming_path === path}
 					<AddFile
 						type="folder"

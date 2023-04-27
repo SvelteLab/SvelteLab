@@ -1,17 +1,37 @@
-import type { DirectoryNode } from '@webcontainer/api';
 import { z } from 'zod';
+import { UINT8KIND } from './components/parsers';
 
-const uInt8Schema: z.ZodType<Uint8Array> = z.custom<Uint8Array>((val) => {
-	return val instanceof Uint8Array;
+type ParsedFile = {
+	file: {
+		contents:
+			| {
+					kind: typeof UINT8KIND;
+					buffer: number[];
+			  }
+			| string;
+	};
+};
+
+type ParsedDirectory = {
+	directory: ParsedFileSystem;
+};
+
+type ParsedFileSystem = {
+	[key: string]: ParsedDirectory | ParsedFile;
+};
+
+const parsed_uint8_schema = z.object({
+	kind: z.literal(UINT8KIND),
+	buffer: z.array(z.number()),
 });
 
 export const fileSchema = z.object({
 	file: z.object({
-		contents: z.union([z.string(), uInt8Schema]),
+		contents: z.union([z.string(), parsed_uint8_schema]),
 	}),
 });
 
-export const directorySchema: z.ZodType<DirectoryNode> = z.object({
+export const directorySchema: z.ZodType<ParsedDirectory> = z.object({
 	directory: z.lazy(() => fileSystemSchema),
 });
 

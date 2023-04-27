@@ -12,6 +12,7 @@ import FolderSrcOpen from '~icons/material-icon-theme/folder-src-open';
 import File from '~icons/material-symbols/description-rounded';
 import FolderOpen from '~icons/material-symbols/folder-open-rounded';
 import Folder from '~icons/material-symbols/folder-rounded';
+import Images from '~icons/material-symbols/imagesmode';
 import JSON from '~icons/mdi/code-json';
 import LayoutScript from '~icons/r-icons/script_layout';
 import LayoutServer from '~icons/r-icons/script_layout_server';
@@ -49,6 +50,7 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/^postcss\.(js|cjs|mjs)$/, PostCSS],
 	[/.*\.postcss$/, PostCSS],
 	[/.*\.(js|cjs|mjs)$/, JS],
+	[/.*\.(jpe?g|png|gif|bmp)$/, Images],
 	[/.*\.css$/, CSS],
 	[/.*\.json$/, JSON],
 	[/.*\.html$/, HTML],

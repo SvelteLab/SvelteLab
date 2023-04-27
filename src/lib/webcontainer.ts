@@ -13,6 +13,7 @@ import { get, writable, type Writable } from 'svelte/store';
 import { is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { deferred_promise } from './utils';
+import { stringify } from './components/parsers';
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -280,6 +281,24 @@ function does_file_exist(files: FileSystemTree, path: `./${string}`) {
 	return !!subtree[file];
 }
 
+async function read_file(path: string): Promise<string>;
+async function read_file(path: string, as_string: false): Promise<Uint8Array>;
+async function read_file(path: string, as_string = true) {
+	try {
+		if (as_string) {
+			return webcontainer_instance.fs.readFile(path, 'utf8');
+		}
+		return webcontainer_instance.fs.readFile(path);
+	} catch (e) {
+		// use store instead
+		let contents = get_file_from_path(path, get(files_store)).contents;
+		if (typeof contents !== 'string') {
+			contents = decoder.decode(contents);
+		}
+		return contents;
+	}
+}
+
 /**
  * Ther actual webcontainer store with useful methods
  */
@@ -400,11 +419,11 @@ export const webcontainer = {
 	async spawn(command: string, args: string[]) {
 		return webcontainer_instance.spawn(command, args);
 	},
-	async add_file(path: string, content = '') {
+	async add_file(path: string, content: string | Uint8Array) {
 		await webcontainer_instance.fs.writeFile(path, content);
 		//if we are not already listening we can add the file in store ourself
 		if (!get(listening_for_fs_store)) {
-			add_file_in_store(files_store, path, content, true);
+			add_file_in_store(files_store, path, '', true);
 		}
 	},
 	async add_folder(path: string) {
@@ -426,18 +445,7 @@ export const webcontainer = {
 			/* empty */
 		}
 	},
-	async read_file(path: string) {
-		try {
-			return webcontainer_instance.fs.readFile(path, 'utf8');
-		} catch (e) {
-			// use store instead
-			let contents = get_file_from_path(path, get(files_store)).contents;
-			if (typeof contents !== 'string') {
-				contents = decoder.decode(contents);
-			}
-			return contents;
-		}
-	},
+	read_file,
 	async read_package_json() {
 		try {
 			const file = await this.read_file('./package.json');
@@ -447,13 +455,13 @@ export const webcontainer = {
 		}
 	},
 	async get_share_url() {
-		const container_tree = await get_tree_from_container();
+		const container_tree = await get_tree_from_container(false);
 		// we delete package-lock because it's not needed
 		// and it bloat the url
 		delete container_tree['package-lock.json'];
 		const url = new URL(window.location.href);
 		url.pathname = '';
-		const encoded = compressToEncodedURIComponent(JSON.stringify(container_tree));
+		const encoded = compressToEncodedURIComponent(stringify(container_tree));
 		const url_search_params = new URLSearchParams();
 		url_search_params.set('code', encoded);
 		url.hash = url_search_params.toString();
@@ -491,19 +499,26 @@ export const webcontainer = {
 	get_tree_from_container,
 };
 
-async function get_tree_from_container(): Promise<FileSystemTree> {
+async function get_tree_from_container(as_string = true): Promise<FileSystemTree> {
 	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
-	return get_tree(root, '/');
+	return get_tree(root, '/', as_string);
 }
 
 const decoder = new TextDecoder();
-async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystemTree> {
+async function get_tree(
+	dir: DirEnt<string>[],
+	path: string,
+	as_string: boolean
+): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
 		const node_path = path + node.name;
 		if (node.isFile()) {
 			const raw_data = await webcontainer_instance.fs.readFile(node_path);
-			const contents = decoder.decode(raw_data); // convert to POJO
+			let contents: string | Uint8Array = raw_data;
+			if (as_string) {
+				contents = decoder.decode(raw_data); // convert to POJO
+			}
 			tree[node.name] = {
 				file: {
 					contents,
@@ -513,7 +528,8 @@ async function get_tree(dir: DirEnt<string>[], path: string): Promise<FileSystem
 			tree[node.name] = {
 				directory: await get_tree(
 					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
-					node_path + '/'
+					node_path + '/',
+					as_string
 				),
 			};
 		}

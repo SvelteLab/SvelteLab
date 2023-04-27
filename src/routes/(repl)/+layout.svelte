@@ -10,6 +10,7 @@
 	import { decompressFromEncodedURIComponent } from 'lz-string';
 	import type { LayoutData } from './$types';
 	import Dialog from '$lib/components/Dialog.svelte';
+	import { parse } from '$lib/components/parsers';
 
 	export let data: LayoutData;
 
@@ -29,7 +30,7 @@
 		const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
 		if (stored_project !== null) {
 			try {
-				const project = JSON.parse(stored_project);
+				const project = parse(stored_project);
 				await webcontainer.set_file_system(project);
 			} catch (e) {
 				/* empty */
@@ -44,7 +45,7 @@
 				if (code) {
 					const project = decompressFromEncodedURIComponent(code);
 					try {
-						const to_mount = JSON.parse(project);
+						const to_mount = parse(project);
 						await webcontainer.set_file_system(to_mount);
 					} catch (e) {
 						/* empty */

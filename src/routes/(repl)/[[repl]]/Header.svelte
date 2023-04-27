@@ -31,6 +31,7 @@
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import { parseKeybinding } from 'tinykeys';
+	import { stringify } from '$lib/components/parsers';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -245,7 +246,7 @@
 					// of session because Firefox Mobile it's being weird)
 					window.localStorage.setItem(
 						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
-						JSON.stringify(await webcontainer.get_tree_from_container())
+						stringify(await webcontainer.get_tree_from_container(true))
 					);
 				} catch (e) {
 					if (
