@@ -34,7 +34,10 @@ export const load: LayoutServerLoad = async ({ params, locals, url, cookies }) =
 	let owner_id;
 	try {
 		const record = await get_repl_from_id(repl, locals.pocketbase);
-		files = record.files;
+		// i don't like this but the required parsing introduces a lot of types
+		// shit and i feel like it would be a pain to mantain...we have to
+		// leave a bit of typesafety here for a safe management
+		files = record.files as FileSystemTree;
 		name = record.name;
 		owner_id = record.user;
 	} catch (e) {
@@ -45,7 +48,9 @@ export const load: LayoutServerLoad = async ({ params, locals, url, cookies }) =
 		throw redirect(300, '/');
 	}
 	return {
-		repl: files,
+		// we can use normal JSON.stringify here because it comes
+		// from pocketbase and it's already stringified on save
+		repl: JSON.stringify(files),
 		id: repl,
 		repl_name: name,
 		owner_id,

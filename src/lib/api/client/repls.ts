@@ -2,6 +2,7 @@ import { error, success } from '$lib/toast';
 import { webcontainer } from '$lib/webcontainer';
 import { get } from 'svelte/store';
 import { repl_id, repl_name, is_repl_saving, is_repl_to_save } from '$lib/stores/repl_id_store';
+import { stringify } from '$lib/components/parsers';
 
 /**
  * This function does what it takes to save the repl, it set the state
@@ -15,14 +16,21 @@ export async function save_repl() {
 		error('The minimum name lenght is 2');
 		return;
 	}
-	const files = await webcontainer.get_tree_from_container();
+	const files = await webcontainer.get_tree_from_container(false);
 	is_repl_saving.set(true);
+	console.log(
+		stringify({
+			files,
+			id,
+			name,
+		})
+	);
 	const res = await fetch('./save-repl', {
 		method: 'POST',
 		headers: {
 			'content-type': 'application/json',
 		},
-		body: JSON.stringify({
+		body: stringify({
 			files,
 			id,
 			name,
@@ -41,6 +49,7 @@ export async function save_repl() {
 			repl_id.set(created.id);
 		}
 	} else {
+		console.log(res.text());
 		error("Can't save the project");
 	}
 	is_repl_saving.set(false);
