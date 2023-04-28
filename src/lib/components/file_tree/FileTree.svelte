@@ -99,7 +99,7 @@
 			const file_input = document.createElement('input');
 			file_input.type = 'file';
 			file_input.multiple = true;
-			file_input.addEventListener('change', file_input_change(path));
+			file_input.addEventListener('change', file_input_change(path), { once: true });
 			file_input.click();
 		};
 	}
