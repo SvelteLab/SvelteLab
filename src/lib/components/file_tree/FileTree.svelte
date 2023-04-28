@@ -137,6 +137,10 @@
 						type="folder"
 						name={node_name}
 						on:add={async ({ detail: name }) => {
+							if (node_name === name) {
+								renaming_path = null;
+								return;
+							}
 							const current_path = node_name.split('/');
 							current_path.pop();
 							const new_path = `${base_path}${current_path.join('/')}${name}`;
