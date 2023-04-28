@@ -240,6 +240,10 @@
 						type="file"
 						name={node_name}
 						on:add={async ({ detail: name }) => {
+							if (name === node_name) {
+								renaming_path = null;
+								return;
+							}
 							const current_path = node_name.split('/');
 							current_path.pop();
 							const new_path = `${base_path}${current_path.join('/')}${name}`;
