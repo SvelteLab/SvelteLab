@@ -124,5 +124,6 @@
 		display: grid;
 		place-items: center;
 		backdrop-filter: blur(10px);
+		z-index: 100;
 	}
 </style>
