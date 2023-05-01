@@ -95,7 +95,7 @@
 					const has_action = typeof command.action === 'function';
 					const has_action_component = !!command.action_component;
 					// if it has an action or an action component we prevent the default
-					if (!has_action && !has_action_component) {
+					if (has_action || has_action_component) {
 						event.preventDefault();
 						event.stopImmediatePropagation();
 						event.stopPropagation();
