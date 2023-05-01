@@ -23,32 +23,46 @@
 
 	let url_to_navigate_to = null as null | string;
 
+	let loading_github_repo = false;
+
 	afterNavigate(async () => {
 		if (fix_for_double_after) return;
 		fix_for_double_after = true;
-		// try to get the project from local storage and then delete it
-		const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
-		if (stored_project !== null) {
-			try {
-				const project = parse(stored_project);
-				await webcontainer.set_file_system(project);
-			} catch (e) {
-				/* empty */
-			}
-			window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+		// if there's a data.promises.github_repo this means we
+		// are loading a github repo as project
+		if (data.promises?.github_repo) {
+			loading_github_repo = true;
+			webcontainer.set_file_system(
+				await data.promises.github_repo.then((github_content) => {
+					loading_github_repo = false;
+					return github_content;
+				})
+			);
 		} else {
-			// check if there's the hash
-			const hash = window.location.hash.substring(1);
-			if (hash) {
-				const url_search_params = new URLSearchParams(hash);
-				const code = url_search_params.get('code');
-				if (code) {
-					const project = decompressFromEncodedURIComponent(code);
-					try {
-						const to_mount = parse(project);
-						await webcontainer.set_file_system(to_mount);
-					} catch (e) {
-						/* empty */
+			// try to get the project from local storage and then delete it
+			const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+			if (stored_project !== null) {
+				try {
+					const project = parse(stored_project);
+					await webcontainer.set_file_system(project);
+				} catch (e) {
+					/* empty */
+				}
+				window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
+			} else {
+				// check if there's the hash
+				const hash = window.location.hash.substring(1);
+				if (hash) {
+					const url_search_params = new URLSearchParams(hash);
+					const code = url_search_params.get('code');
+					if (code) {
+						const project = decompressFromEncodedURIComponent(code);
+						try {
+							const to_mount = parse(project);
+							await webcontainer.set_file_system(to_mount);
+						} catch (e) {
+							/* empty */
+						}
 					}
 				}
 			}
@@ -99,3 +113,16 @@
 		<a style:margin-top="1rem" style:color="var(--sk-text-1)" href={url_to_navigate_to}>Yes</a>
 	</svelte:fragment>
 </Dialog>
+{#if loading_github_repo}
+	<div class="overlay">We are loading your github repo...</div>
+{/if}
+
+<style>
+	.overlay {
+		position: fixed;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		backdrop-filter: blur(10px);
+	}
+</style>
