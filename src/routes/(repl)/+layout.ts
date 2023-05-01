@@ -3,10 +3,10 @@ import type { FileSystemTree } from '@webcontainer/api';
 import type { LayoutLoad, LayoutServerData } from './$types';
 
 type FixData<T extends object> = {
-	[Key in keyof T]: Key extends 'repl' ? FileSystemTree : T[Key];
+	[Key in keyof T]: Key extends 'repl' ? FileSystemTree | undefined : T[Key];
 };
 
-function get_correct_repl(repl: string | FileSystemTree) {
+function get_correct_repl(repl: string | FileSystemTree | undefined) {
 	if (typeof repl === 'string') {
 		// we can cast here because we already parse with zod in the
 		// server function, we use the custom parse function to transform

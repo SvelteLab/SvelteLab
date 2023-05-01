@@ -5,6 +5,7 @@ import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
 import type { LayoutServerLoad } from './$types';
 import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$env/static/public';
+import { GITHUB_TOKEN } from '$env/static/private';
 
 export const ssr = false;
 
@@ -13,17 +14,72 @@ async function get_repl_from_id(id: string, pocketbase: PoketBase) {
 	return replSchema.parse(record);
 }
 
-export const load: LayoutServerLoad = async ({ params, locals, url, cookies }) => {
+async function fetch_github_repo(base_url: string, is_dir = true) {
+	const res = await fetch(base_url, {
+		headers: {
+			Authorization: `Bearer ${GITHUB_TOKEN}`,
+		},
+	});
+	if (res.headers.get('x-ratelimit-remaining') === '0') {
+		throw new Error('Rate limit reached, try again in a while');
+	}
+	const contents = await res.json();
+	if (!is_dir) {
+		return contents.content;
+	}
+	const retval: FileSystemTree = {} as FileSystemTree;
+	for (const files of contents) {
+		if (files.type === 'dir') {
+			retval[files.name] = {
+				directory: await fetch_github_repo(files.url),
+			};
+		} else if (files.type === 'file') {
+			retval[files.name] = {
+				file: {
+					contents: atob(await fetch_github_repo(files.url, false)),
+				},
+			};
+		}
+	}
+	return retval;
+}
+
+export const load: LayoutServerLoad = async ({
+	params,
+	locals,
+	url: { searchParams },
+	cookies,
+}) => {
 	const { repl } = params;
+	const owner = searchParams.get('owner');
+	const repo = searchParams.get('repo');
+	const branch = searchParams.get('branch');
+	const path = searchParams.get('path');
+	let name = 'Hello world';
+
+	// if there's an owner and a repo and there isn't a repl id we
+	// are trying to load files from github
+	if (owner && repo && !repl) {
+		const url = `https://api.github.com/repos/${owner}/${repo}/contents${path ? `/${path}` : ''}${
+			branch ? `?ref=${branch}` : ''
+		}`;
+		const github_repo = fetch_github_repo(url);
+		return {
+			repl_name: name,
+			promises: {
+				github_repo,
+			},
+		};
+	}
+
 	// if there's a ?login query param we are back from the login and we can try load files
 	// from the local storage so don't bother getting them from pocketbase
-	const from_login = url.searchParams.get('login') !== null;
+	const from_login = searchParams.get('login') !== null;
 	const saved_default_template = cookies.get(PUBLIC_TEMPLATE_COOKIE_NAME) ?? 'basic';
-	const template = url.searchParams.get('t') ?? saved_default_template;
+	const template = searchParams.get('t') ?? saved_default_template;
 	const default_files =
 		default_project_files[template] ?? default_project_files[saved_default_template];
 	let files: FileSystemTree = (default_files as DirectoryNode).directory;
-	let name = 'Hello world';
 
 	if (!repl || from_login) {
 		return {
