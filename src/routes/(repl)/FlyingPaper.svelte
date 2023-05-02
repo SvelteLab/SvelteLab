@@ -17,7 +17,7 @@
 
 	@keyframes move {
 		from {
-			transform: perspective(1000px) translateX(430px) translateY(0) rotateY(0) rotateX(0)
+			transform: perspective(1000px) translateX(0) translateY(0) rotateY(0.5turn) rotateX(1.5turn)
 				scale(0.1);
 		}
 		50% {
@@ -25,7 +25,7 @@
 				rotateX(0.5turn) scale(1);
 		}
 		to {
-			transform: perspective(1000px) translateX(0) translateY(0) rotateY(0.5turn) rotateX(1.5turn)
+			transform: perspective(1000px) translateX(430px) translateY(0) rotateY(0) rotateX(0)
 				scale(0.1);
 		}
 	}

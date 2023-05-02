@@ -7,9 +7,9 @@
 
 <div class="overlay">
 	<div class="loading">
-		<Logo width="20%" />
-		<FlyingPaper />
 		<GitHub />
+		<FlyingPaper />
+		<Logo width="20%" />
 	</div>
 	<p>{get_random_cloning_message()}</p>
 </div>
