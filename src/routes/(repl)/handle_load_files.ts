@@ -3,6 +3,7 @@ import { webcontainer } from '$lib/webcontainer';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import type { LayoutData } from './$types';
 import { parse } from '$lib/components/parsers';
+import { error } from '$lib/toast';
 
 export async function handle_load_files(
 	data: LayoutData,
@@ -23,10 +24,14 @@ export async function handle_load_files(
 	if (data.promises?.github_repo) {
 		set_loading_github_repo(true);
 		webcontainer.set_file_system(
-			await data.promises.github_repo.then((github_content) => {
-				set_loading_github_repo(false);
-				return github_content;
-			})
+			await data.promises.github_repo
+				.then((github_content) => {
+					set_loading_github_repo(false);
+					return github_content;
+				})
+				.catch(() => {
+					error('There was a problem during the cloning of you repo, try again');
+				})
 		);
 	} else if (stored_project !== null) {
 		// if there's a stored_project we parse if and than delete it

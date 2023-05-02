@@ -7,6 +7,7 @@
 	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { webcontainer } from '$lib/webcontainer';
 	import type { LayoutData } from './$types';
+	import GithubLoading from './GithubLoading.svelte';
 	import { handle_load_files } from './handle_load_files';
 
 	export let data: LayoutData;
@@ -74,16 +75,5 @@
 	</svelte:fragment>
 </Dialog>
 {#if loading_github_repo}
-	<div class="overlay">We are loading your github repo...</div>
+	<GithubLoading />
 {/if}
-
-<style>
-	.overlay {
-		position: fixed;
-		inset: 0;
-		display: grid;
-		place-items: center;
-		backdrop-filter: blur(10px);
-		z-index: 100;
-	}
-</style>
