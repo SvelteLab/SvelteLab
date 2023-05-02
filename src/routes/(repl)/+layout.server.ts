@@ -51,21 +51,21 @@ export const load: LayoutServerLoad = async ({
 	cookies,
 }) => {
 	const { repl } = params;
+	const provider = searchParams.get('provider');
 	const owner = searchParams.get('owner');
 	const repo = searchParams.get('repo');
 	const branch = searchParams.get('branch');
 	const path = searchParams.get('path');
-	let name = 'Hello world';
 
 	// if there's an owner and a repo and there isn't a repl id we
 	// are trying to load files from github
-	if (owner && repo && !repl) {
+	if (owner && repo && !repl && provider === 'github') {
 		const url = `https://api.github.com/repos/${owner}/${repo}/contents${path ? `/${path}` : ''}${
 			branch ? `?ref=${branch}` : ''
 		}`;
 		const github_repo = fetch_github_repo(url);
 		return {
-			repl_name: name,
+			repl_name: repo,
 			promises: {
 				github_repo,
 			},
@@ -80,6 +80,7 @@ export const load: LayoutServerLoad = async ({
 	const default_files =
 		default_project_files[template] ?? default_project_files[saved_default_template];
 	let files: FileSystemTree = (default_files as DirectoryNode).directory;
+	let name = 'Hello world';
 
 	if (!repl || from_login) {
 		return {
