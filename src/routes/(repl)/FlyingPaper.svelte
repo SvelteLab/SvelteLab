@@ -11,6 +11,7 @@
 		transform-box: fill-box;
 		transform-origin: center;
 		stroke: black;
+		stroke-width: 3px;
 		fill: white;
 		backface-visibility: visible;
 	}

@@ -1,3 +1,9 @@
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+
+	let open_menu = writable<null | string>(null);
+</script>
+
 <script lang="ts">
 	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
@@ -15,9 +21,11 @@
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import Edit from '~icons/material-symbols/edit';
 	import Upload from '~icons/material-symbols/upload';
+	import MoreVert from '~icons/material-symbols/more-vert';
 	import AddFile from './AddFile.svelte';
 	import Dialog from '../Dialog.svelte';
 	import { drop, handle_files } from '$lib/drop';
+	import DropdownMenu from '../DropdownMenu.svelte';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -27,6 +35,14 @@
 	export let root_adding_type: typeof is_adding_type.kind = null;
 
 	let renaming_path = null as string | null;
+
+	function toggle_menu(path: string) {
+		if ($open_menu === path) {
+			$open_menu = null;
+			return;
+		}
+		$open_menu = path;
+	}
 
 	async function handle_add(
 		path_name: string,
@@ -105,7 +121,7 @@
 	}
 </script>
 
-<ul use:drop={files_options()}>
+<ul class="file-tree" use:drop={files_options()}>
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<input aria-label="REPL name" bind:value={$repl_name} />
@@ -207,44 +223,84 @@
 					>
 						<svelte:component this={icon} />{node_name}
 					</button>
-					<div class="hover-group">
-						<button title="Upload File" on:click={get_upload_handler(path + '/')}>
-							<Upload />
-						</button>
-						<button
-							title="Edit"
-							on:click={() => {
-								renaming_path = path;
-							}}
-						>
-							<Edit />
-						</button>
-						<button
-							title="New File"
-							on:click={() => {
-								is_adding_type = { path, kind: 'file' };
-								expand_path(path);
-							}}
-						>
-							<Plus />
-						</button>
-						<button
-							title="New Folder"
-							on:click={() => {
-								is_adding_type = { path, kind: 'folder' };
-								expand_path(path);
-							}}
-						>
-							<FolderAdd />
-						</button>
-						<button
-							title="Delete folder"
-							on:click={() => {
-								deleting_file = { kind: 'folder', name: node_name };
-							}}
-						>
-							<Delete />
-						</button>
+					<div
+						class="hover-group"
+						on:mouseleave={() => {
+							// on mobile we don't want to do this ot
+							// it will create problems
+							const hover = matchMedia('(hover: none)');
+							if (hover.matches) return;
+							$open_menu = null;
+						}}
+					>
+						<DropdownMenu open={$open_menu === path}>
+							<button
+								on:click={() => {
+									toggle_menu(path);
+								}}
+								title="Open Commands"><MoreVert /></button
+							>
+							<!--
+								svelte-ignore a11y-click-events-have-key-events
+								this is just here to capture everything from the 
+								buttons so no need for keys events
+							-->
+							<ul
+								on:click|capture={() => {
+									toggle_menu(path);
+								}}
+								class="menu"
+								slot="menu"
+							>
+								<li>
+									<button title="Upload File" on:click={get_upload_handler(path + '/')}>
+										Upload <Upload />
+									</button>
+								</li>
+								<li>
+									<button
+										title="Edit"
+										on:click={() => {
+											renaming_path = path;
+										}}
+									>
+										Rename <Edit />
+									</button>
+								</li>
+								<li>
+									<button
+										title="New File"
+										on:click={() => {
+											is_adding_type = { path, kind: 'file' };
+											expand_path(path);
+										}}
+									>
+										New File <Plus />
+									</button>
+								</li>
+								<li>
+									<button
+										title="New Folder"
+										on:click={() => {
+											is_adding_type = { path, kind: 'folder' };
+											expand_path(path);
+										}}
+									>
+										New Folder <FolderAdd />
+									</button>
+								</li>
+								<li>
+									<button
+										title="Delete folder"
+										on:click={() => {
+											deleting_file = { kind: 'folder', name: node_name };
+										}}
+									>
+										Delete <Delete />
+									</button>
+								</li>
+							</ul>
+						</DropdownMenu>
 					</div>
 				{/if}
 			</li>
