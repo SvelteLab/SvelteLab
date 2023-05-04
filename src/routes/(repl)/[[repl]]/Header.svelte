@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
@@ -8,7 +7,9 @@
 	import { on_command } from '$lib/command_runner/commands';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
 	import Logo from '$lib/components/Logo.svelte';
+	import { stringify } from '$lib/components/parsers';
 	import { share_with_hash, share_with_id } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
@@ -17,6 +18,7 @@
 	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
+	import { parseKeybinding } from 'tinykeys';
 	import Profile from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
@@ -30,9 +32,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import { parseKeybinding } from 'tinykeys';
-	import { stringify } from '$lib/components/parsers';
-	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
+	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -46,10 +46,6 @@
 	const search_docs_keys = parseKeybinding('$mod+alt+K')
 		.flat(Infinity)
 		.map((key) => key.toString().replace('Control', 'Ctrl'));
-
-	function toggle_menu(kind: typeof open_menu & {}) {
-		open_menu = open_menu === kind ? null : kind;
-	}
 
 	onMount(() => {
 		return on_command('fork', () => {
@@ -174,16 +170,11 @@
 			<Share />
 		</button>
 	{:else}
-		<DropdownMenu indicator open={open_menu === 'share'}>
-			<button
-				on:click={async () => {
-					toggle_menu('share');
-				}}
-				title="Share"
-			>
+		<DropdownMenu indicator>
+			<svelte:fragment slot="trigger">
 				<Share />
-			</button>
-			<ul slot="menu">
+			</svelte:fragment>
+			<ul>
 				<li>
 					<button
 						title="Share Project"
@@ -208,22 +199,17 @@
 	{/if}
 	{#if user}
 		<!-- Profile or login -->
-		<DropdownMenu indicator open={open_menu === 'profile'}>
-			<button
-				on:click={() => {
-					toggle_menu('profile');
-				}}
-			>
+		<DropdownMenu indicator>
+			<svelte:fragment slot="trigger">
 				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
-			</button>
-			<ul slot="menu">
+			</svelte:fragment>
+			<ul>
 				<li>
 					<a href="/profile" title="Profile"><Profile /> Your profile</a>
 				</li>
 				<li>
 					<form
 						use:enhance={() => {
-							open_menu = null;
 							return () => {
 								//on logout we invalidate authed:user which reload the page
 								invalidate('authed:user');
