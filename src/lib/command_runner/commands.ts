@@ -119,7 +119,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action: prettier_action,
 		key_bind: {
 			mod: ['Shift', 'Alt'],
-			keys: ['F'],
+			keys: ['KeyF'],
 		},
 	});
 
@@ -131,7 +131,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: CreateRoute,
 		key_bind: {
 			mod: ['$mod', 'Alt'],
-			keys: ['R'],
+			keys: ['KeyR'],
 		},
 	});
 
@@ -143,7 +143,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: SearchDocs,
 		key_bind: {
 			mod: ['$mod', 'Alt'],
-			keys: ['K'],
+			keys: ['KeyK'],
 		},
 	});
 
@@ -178,7 +178,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 		key_bind: {
 			mod: ['$mod'],
-			keys: ['S'],
+			keys: ['KeyS'],
 		},
 	});
 
@@ -247,7 +247,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 		key_bind: {
 			mod: ['$mod', 'Shift'],
-			keys: ['C'],
+			keys: ['KeyC'],
 		},
 	});
 
