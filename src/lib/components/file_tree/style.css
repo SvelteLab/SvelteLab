@@ -157,18 +157,3 @@ button[aria-pressed='true']::after {
 	bottom: 0;
 	top: calc(100% - 3px);
 }
-
-.menu {
-	background-color: var(--sk-back-2);
-	border-radius: 0.5rem;
-	border-top-right-radius: 0;
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-.menu button {
-	justify-content: space-between;
-	font-weight: 400 !important;
-	gap: 1.5rem;
-}

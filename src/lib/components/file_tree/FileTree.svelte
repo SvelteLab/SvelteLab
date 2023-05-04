@@ -23,6 +23,7 @@
 	import Upload from '~icons/material-symbols/upload';
 	import Dialog from '../Dialog.svelte';
 	import DropdownMenu from '../DropdownMenu.svelte';
+	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
@@ -215,55 +216,44 @@
 					</button>
 					<div class="hover-group" class:force={$open_menus[path]}>
 						<DropdownMenu bind:open={$open_menus[path]}>
-							<ul class="menu">
-								<li>
-									<button title="Upload File" on:click={get_upload_handler(path + '/')}>
-										Upload <Upload />
-									</button>
-								</li>
-								<li>
-									<button
-										title="Edit"
-										on:click={() => {
-											renaming_path = path;
-										}}
-									>
-										Rename <Edit />
-									</button>
-								</li>
-								<li>
-									<button
-										title="New File"
-										on:click={() => {
-											is_adding_type = { path, kind: 'file' };
-											expand_path(path);
-										}}
-									>
-										New File <Plus />
-									</button>
-								</li>
-								<li>
-									<button
-										title="New Folder"
-										on:click={() => {
-											is_adding_type = { path, kind: 'folder' };
-											expand_path(path);
-										}}
-									>
-										New Folder <FolderAdd />
-									</button>
-								</li>
-								<li>
-									<button
-										title="Delete folder"
-										on:click={() => {
-											deleting_file = { kind: 'folder', name: node_name };
-										}}
-									>
-										Delete <Delete />
-									</button>
-								</li>
-							</ul>
+							<MenuItem on:click={get_upload_handler(path + '/')}>
+								<Upload />
+								Upload
+							</MenuItem>
+							<MenuItem
+								on:click={() => {
+									renaming_path = path;
+								}}
+							>
+								<Edit />
+								Rename
+							</MenuItem>
+							<MenuItem
+								on:click={() => {
+									is_adding_type = { path, kind: 'file' };
+									expand_path(path);
+								}}
+							>
+								<Plus />
+								New File
+							</MenuItem>
+							<MenuItem
+								on:click={() => {
+									is_adding_type = { path, kind: 'folder' };
+									expand_path(path);
+								}}
+							>
+								<FolderAdd />
+								New Folder
+							</MenuItem>
+							<MenuItem
+								on:click={() => {
+									deleting_file = { kind: 'folder', name: node_name };
+								}}
+							>
+								<Delete />
+								Delete
+							</MenuItem>
 						</DropdownMenu>
 					</div>
 				{/if}

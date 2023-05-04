@@ -9,6 +9,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
 	import Logo from '$lib/components/Logo.svelte';
+	import MenuItem from '$lib/components/MenuItem.svelte';
 	import { stringify } from '$lib/components/parsers';
 	import { share_with_hash, share_with_id } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
@@ -41,7 +42,6 @@
 	export let mobile = false;
 	let forking = false;
 	let fork_form: HTMLFormElement;
-	let open_menu = null as null | 'share' | 'profile';
 
 	const search_docs_keys = parseKeybinding('$mod+alt+K')
 		.flat(Infinity)
@@ -174,27 +174,19 @@
 			<svelte:fragment slot="trigger">
 				<Share />
 			</svelte:fragment>
-			<ul>
-				<li>
-					<button
-						title="Share Project"
-						on:click={() => {
-							share_with_id();
-							open_menu = null;
-						}}><Url /> Share Project</button
-					>
-				</li>
-				<li>
-					<button
-						title="Share Code Snapshot"
-						on:click={() => {
-							share_with_hash();
-							open_menu = null;
-						}}
-						><Tag /> Share Code Snapshot
-					</button>
-				</li>
-			</ul>
+			<MenuItem
+				on:click={() => {
+					share_with_id();
+				}}
+			>
+				<Url /> Share Project
+			</MenuItem>
+			<MenuItem
+				on:click={() => {
+					share_with_hash();
+				}}
+				><Tag /> Share Code Snapshot
+			</MenuItem>
 		</DropdownMenu>
 	{/if}
 	{#if user}
@@ -203,27 +195,21 @@
 			<svelte:fragment slot="trigger">
 				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 			</svelte:fragment>
-			<ul>
-				<li>
-					<a href="/profile" title="Profile"><Profile /> Your profile</a>
-				</li>
-				<li>
-					<form
-						use:enhance={() => {
-							return () => {
-								//on logout we invalidate authed:user which reload the page
-								invalidate('authed:user');
-							};
-						}}
-						method="POST"
-						action="?/logout"
-					>
-						<button title="Sign out">
-							<SignOut /> Log out
-						</button>
-					</form>
-				</li>
-			</ul>
+			<MenuItem href="/profile"><Profile /> Your profile</MenuItem>
+			<form
+				use:enhance={() => {
+					return () => {
+						//on logout we invalidate authed:user which reload the page
+						invalidate('authed:user');
+					};
+				}}
+				method="POST"
+				action="?/logout"
+			>
+				<MenuItem>
+					<SignOut /> Log out
+				</MenuItem>
+			</form>
 		</DropdownMenu>
 	{:else}
 		<a
@@ -335,34 +321,7 @@
 		bottom: 0;
 		top: calc(100% - 3px);
 	}
-	ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
-		z-index: 10;
-		border-bottom-left-radius: 0.5em;
-		border-bottom-right-radius: 0.5em;
-	}
-	ul > :last-child {
-		border-bottom-left-radius: 0.5em;
-		border-bottom-right-radius: 0.5em;
-		overflow: hidden;
-	}
-	li :is(button, a) {
-		background-color: var(--sk-back-1);
-		display: flex;
-		gap: 1rem;
-		width: 100%;
-		padding: 0.75rem;
-		white-space: nowrap;
-		font-size: 1.6rem;
-		isolation: isolate;
-	}
-	li :is(button, a):focus-visible {
-		/* this is to always show the outline on top */
-		z-index: 20;
-	}
+
 	.login {
 		color: var(--sk-theme-1);
 	}
