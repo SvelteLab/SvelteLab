@@ -223,16 +223,7 @@
 					>
 						<svelte:component this={icon} />{node_name}
 					</button>
-					<div
-						class="hover-group"
-						on:mouseleave={() => {
-							// on mobile we don't want to do this ot
-							// it will create problems
-							const hover = matchMedia('(hover: none)');
-							if (hover.matches) return;
-							$open_menu = null;
-						}}
-					>
+					<div class="hover-group" class:force={$open_menu === path}>
 						<DropdownMenu open={$open_menu === path}>
 							<button
 								on:click={() => {
