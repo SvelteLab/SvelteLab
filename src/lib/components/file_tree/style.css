@@ -76,7 +76,8 @@ li .hover-group {
 	display: none;
 }
 
-li:hover .hover-group {
+li:hover .hover-group,
+.hover-group.force {
 	display: flex;
 }
 
@@ -159,7 +160,7 @@ button[aria-pressed='true']::after {
 
 .menu {
 	background-color: var(--sk-back-2);
-	border-radius: .5rem;
+	border-radius: 0.5rem;
 	border-top-right-radius: 0;
 	margin: 0;
 	padding: 0;

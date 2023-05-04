@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { clickOutside } from 'as-comps';
+
 	export let open: boolean;
 	export let indicator = false;
 </script>
 
-<div class:indicator>
+<div class:indicator use:clickOutside={{ enabled: open, func: () => (open = false) }}>
 	<slot />
 	<div aria-hidden={!open} class:open id="wrap">
 		<slot name="menu" />
