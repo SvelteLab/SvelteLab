@@ -32,6 +32,7 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import { parseKeybinding } from 'tinykeys';
 	import { stringify } from '$lib/components/parsers';
+	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -173,7 +174,7 @@
 			<Share />
 		</button>
 	{:else}
-		<div class="drop-down-wrapper">
+		<DropdownMenu indicator open={open_menu === 'share'}>
 			<button
 				on:click={async () => {
 					toggle_menu('share');
@@ -182,7 +183,7 @@
 			>
 				<Share />
 			</button>
-			<ul aria-hidden={open_menu !== 'share'}>
+			<ul slot="menu">
 				<li>
 					<button
 						title="Share Project"
@@ -203,11 +204,11 @@
 					</button>
 				</li>
 			</ul>
-		</div>
+		</DropdownMenu>
 	{/if}
 	{#if user}
 		<!-- Profile or login -->
-		<div class="drop-down-wrapper">
+		<DropdownMenu indicator open={open_menu === 'profile'}>
 			<button
 				on:click={() => {
 					toggle_menu('profile');
@@ -215,7 +216,7 @@
 			>
 				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 			</button>
-			<ul aria-hidden={open_menu !== 'profile'}>
+			<ul slot="menu">
 				<li>
 					<a href="/profile" title="Profile"><Profile /> Your profile</a>
 				</li>
@@ -237,7 +238,7 @@
 					</form>
 				</li>
 			</ul>
-		</div>
+		</DropdownMenu>
 	{:else}
 		<a
 			use:async_click={async (e) => {
@@ -295,12 +296,12 @@
 		background: var(--shadow-gradient);
 	}
 
-	.grow {
-		width: 100%;
+	header > :global(:not(.grow)) {
+		flex-shrink: 0;
 	}
 
-	form {
-		flex-shrink: 0;
+	.grow {
+		width: 100%;
 	}
 
 	.search-docs {
@@ -332,7 +333,6 @@
 		position: relative;
 		padding: 0.5rem;
 		color: var(--sk-text-1);
-		flex-shrink: 0;
 	}
 
 	a :global(svg),
@@ -349,28 +349,10 @@
 		bottom: 0;
 		top: calc(100% - 3px);
 	}
-	ul[aria-hidden='true'] {
-		display: none;
-	}
-	.drop-down-wrapper {
-		position: relative;
-		flex-shrink: 0;
-	}
-	.drop-down-wrapper::after {
-		content: '▾';
-		position: absolute;
-		bottom: -0.5rem;
-		right: -0.5rem;
-		font-family: monospace;
-		font-size: 1rem;
-	}
 	ul {
-		position: absolute;
 		list-style: none;
-		top: calc(100% + var(--padding-y));
 		padding: 0;
 		margin: 0;
-		right: 0;
 		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 20%), 0 2px 4px -2px rgb(0 0 0 / 20%);
 		z-index: 10;
 		border-bottom-left-radius: 0.5em;
