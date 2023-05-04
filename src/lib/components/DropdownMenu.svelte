@@ -1,24 +1,39 @@
+<script lang="ts" context="module">
+	export const DROPDOWN_CONTEXT = Symbol();
+</script>
+
 <script lang="ts">
 	import { clickOutside } from 'as-comps';
+	import { setContext } from 'svelte';
 	import MoreVert from '~icons/material-symbols/more-vert';
 
 	export let open = false;
 	export let indicator = false;
+
+	function close_menu() {
+		open = false;
+	}
+
+	setContext(DROPDOWN_CONTEXT, { close_menu });
 </script>
 
-<div class:indicator use:clickOutside={{ enabled: open, func: () => (open = false) }}>
+<section class:indicator use:clickOutside={{ enabled: open, func: close_menu }}>
 	<button title="Open Menu" on:click={() => (open = !open)}>
 		<slot name="trigger">
 			<MoreVert />
 		</slot>
 	</button>
 	<div aria-hidden={!open} class:open class="wrap">
-		<slot />
+		<ul>
+			<slot />
+		</ul>
 	</div>
-</div>
+</section>
 
 <style>
-	div {
+	section {
+		display: flex;
+		align-items: center;
 		position: relative;
 	}
 	.indicator::after {
@@ -31,8 +46,8 @@
 	}
 	.wrap {
 		position: absolute;
-		top: 50%;
-		right: 50%;
+		top: 100%;
+		right: 0%;
 		display: grid;
 		grid-template-rows: minmax(0, var(--open, 0fr));
 		overflow: hidden;
@@ -42,6 +57,8 @@
 		border: 1px solid transparent;
 		z-index: 999;
 		pointer-events: none;
+		border-bottom-left-radius: 0.5em;
+		border-bottom-right-radius: 0.5em;
 	}
 	.open {
 		--open: 1fr;
@@ -57,5 +74,14 @@
 		justify-content: space-between;
 		font-weight: 400 !important;
 		gap: 1.5rem;
+	}
+
+	ul {
+		margin: 0;
+	}
+	ul > :last-child {
+		border-bottom-left-radius: 0.5em;
+		border-bottom-right-radius: 0.5em;
+		overflow: hidden;
 	}
 </style>
