@@ -1,14 +1,14 @@
 <script lang="ts" context="module">
 	import { writable } from 'svelte/store';
-
-	let open_menu = writable<null | string>(null);
+	let open_menus = writable<Record<string, boolean>>({});
 </script>
 
 <script lang="ts">
+	import { drop, handle_files } from '$lib/drop';
 	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
-	import { expanded_paths, expand_path, toggle_path } from '$lib/stores/expanded_paths';
+	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
@@ -21,11 +21,9 @@
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import Edit from '~icons/material-symbols/edit';
 	import Upload from '~icons/material-symbols/upload';
-	import MoreVert from '~icons/material-symbols/more-vert';
-	import AddFile from './AddFile.svelte';
 	import Dialog from '../Dialog.svelte';
-	import { drop, handle_files } from '$lib/drop';
 	import DropdownMenu from '../DropdownMenu.svelte';
+	import AddFile from './AddFile.svelte';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -35,14 +33,6 @@
 	export let root_adding_type: typeof is_adding_type.kind = null;
 
 	let renaming_path = null as string | null;
-
-	function toggle_menu(path: string) {
-		if ($open_menu === path) {
-			$open_menu = null;
-			return;
-		}
-		$open_menu = path;
-	}
 
 	async function handle_add(
 		path_name: string,
@@ -223,26 +213,9 @@
 					>
 						<svelte:component this={icon} />{node_name}
 					</button>
-					<div class="hover-group" class:force={$open_menu === path}>
-						<DropdownMenu open={$open_menu === path}>
-							<button
-								on:click={() => {
-									toggle_menu(path);
-								}}
-								title="Open Commands"><MoreVert /></button
-							>
-							<!--
-								svelte-ignore a11y-click-events-have-key-events
-								this is just here to capture everything from the 
-								buttons so no need for keys events
-							-->
-							<ul
-								on:click|capture={() => {
-									toggle_menu(path);
-								}}
-								class="menu"
-								slot="menu"
-							>
+					<div class="hover-group" class:force={$open_menus[path]}>
+						<DropdownMenu bind:open={$open_menus[path]}>
+							<ul class="menu">
 								<li>
 									<button title="Upload File" on:click={get_upload_handler(path + '/')}>
 										Upload <Upload />
