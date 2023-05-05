@@ -297,8 +297,8 @@
 		padding: 0.25rem 0.5rem;
 	}
 
-	a,
-	button {
+	header :global(a),
+	header :global(button) {
 		gap: 1rem;
 		display: flex;
 		align-items: center;
