@@ -307,8 +307,8 @@
 		color: var(--sk-text-1);
 	}
 
-	a :global(svg),
-	button :global(svg) {
+	header :global(a) :global(svg),
+	header :global(button) :global(svg) {
 		font-size: 1.25em;
 	}
 

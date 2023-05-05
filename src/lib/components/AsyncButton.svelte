@@ -53,10 +53,6 @@
 		flex-shrink: 0;
 	}
 
-	button :global(svg) {
-		font-size: 1.25em;
-	}
-
 	.badged::after {
 		content: '';
 		position: absolute;
