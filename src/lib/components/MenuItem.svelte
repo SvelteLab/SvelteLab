@@ -31,10 +31,16 @@
 		width: 100%;
 		padding: 0.5rem 1rem;
 		gap: 1rem;
-		background-color: var(--sk-back-1);
+		background-color: var(--sk-back-2);
 		color: var(--sk-text-1);
+		outline-offset: -0.25rem;
 	}
+
 	.item:hover {
 		background-color: var(--sk-back-3);
+	}
+
+	.item:active {
+		color: var(--sk-theme-1);
 	}
 </style>
