@@ -8,7 +8,7 @@
 	const { close_menu } = getContext<{ close_menu: () => {} }>(DROPDOWN_CONTEXT);
 </script>
 
-<li>
+<li role="menuitem">
 	<svelte:element
 		this={href ? 'a' : 'button'}
 		{href}

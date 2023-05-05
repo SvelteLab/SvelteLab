@@ -3,12 +3,17 @@
 </script>
 
 <script lang="ts">
+	import { v4 as uuidv4 } from 'uuid';
+
 	import { clickOutside } from 'as-comps';
 	import { setContext } from 'svelte';
 	import MoreVert from '~icons/material-symbols/more-vert';
 
 	export let open = false;
 	export let indicator = false;
+
+	const menu_id = uuidv4();
+	const trigger_id = uuidv4();
 
 	function close_menu() {
 		open = false;
@@ -17,14 +22,22 @@
 	setContext(DROPDOWN_CONTEXT, { close_menu });
 </script>
 
-<section class:indicator use:clickOutside={{ enabled: open, func: close_menu }}>
-	<button title="Open Menu" on:click={() => (open = !open)}>
-		<slot name="trigger">
-			<MoreVert />
-		</slot>
-	</button>
+<button
+	class:indicator
+	title="Open Menu"
+	id={trigger_id}
+	on:click={() => (open = !open)}
+	aria-haspopup="true"
+	aria-expanded={open}
+	aria-controls={menu_id}
+>
+	<slot name="trigger">
+		<MoreVert />
+	</slot>
+</button>
+<section use:clickOutside={{ enabled: open, func: close_menu }}>
 	<div aria-hidden={!open} class:open class="wrap">
-		<ul>
+		<ul id={menu_id} role="menu" aria-labelledby={trigger_id}>
 			<slot />
 		</ul>
 	</div>
@@ -32,9 +45,7 @@
 
 <style>
 	section {
-		display: flex;
-		align-items: center;
-		position: relative;
+		display: contents;
 	}
 	.indicator::after {
 		content: '▾';
