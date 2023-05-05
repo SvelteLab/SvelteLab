@@ -95,4 +95,8 @@
 		border-bottom-right-radius: 0.5em;
 		overflow: hidden;
 	}
+	/* to avoid keyboard focus into the ul */
+	.wrap:not(.open)>ul{
+		display: none;
+	}
 </style>
