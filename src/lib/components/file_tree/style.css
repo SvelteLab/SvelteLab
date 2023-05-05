@@ -122,11 +122,13 @@ button {
 button :global(svg),
 form :global(svg) {
 	min-width: 18px;
+	flex-shrink: 0;
 }
 
 form {
 	display: flex;
-	gap: 0.5rem;
+	align-items: center;
+	gap: 0.75rem;
 }
 
 input {
