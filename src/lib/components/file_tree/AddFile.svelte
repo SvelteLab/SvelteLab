@@ -6,6 +6,7 @@
 
 	export let type: 'folder' | 'file';
 	export let name = '';
+	export let expanded = false;
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -17,7 +18,9 @@
 		dispatch('add', name.toString());
 	}}
 >
-	<svelte:component this={type === 'folder' ? get_folder_icon(name) : get_file_icon(name)} />
+	<svelte:component
+		this={type === 'folder' ? get_folder_icon(name, expanded) : get_file_icon(name)}
+	/>
 	<!-- svelte-ignore a11y-autofocus -->
 	<input bind:value={name} autofocus />
 	<button title="Create file"><Check /></button>

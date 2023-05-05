@@ -181,6 +181,7 @@
 			<li use:drop={files_options(path + '/')} class="folder" class:open={expanded}>
 				{#if renaming_path === path}
 					<AddFile
+						{expanded}
 						type="folder"
 						name={node_name}
 						on:add={async ({ detail: name }) => {
