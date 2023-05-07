@@ -23,9 +23,9 @@
 	</button>
 	<section>
 		<div class="box">
-			<h1>
-				<Logo width="5rem" /> SvelteLab
-			</h1>
+			<h2>
+				<Logo width="5rem" /> SvelteLab Credits
+			</h2>
 			<p class="tagline"><i>supercharged</i> REPL for Svelte</p>
 			<p>instantly spin up a SvelteKit project and share it with the world</p>
 		</div>

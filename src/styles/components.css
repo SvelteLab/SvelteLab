@@ -1,3 +1,13 @@
+.screen-reader-only:not(:focus):not(:active) {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
 .loader {
 	height: 100%;
 	display: flex;
@@ -65,14 +75,14 @@ ul.action-selection-grid {
 	}
 }
 
-ul.action-selection-grid>li>label,
-ul.action-selection-grid>li>a {
+ul.action-selection-grid > li > label,
+ul.action-selection-grid > li > a {
 	display: flex;
 	align-items: center;
 	gap: 1rem;
 }
 
-ul.action-selection-grid>li>label>input[type='checkbox'] {
+ul.action-selection-grid > li > label > input[type='checkbox'] {
 	width: 1.75rem;
 	height: 1.75rem;
 }

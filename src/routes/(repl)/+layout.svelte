@@ -51,6 +51,8 @@
 	});
 </script>
 
+<h2 class="screen-reader-only">{repl_name}</h2>
+
 <slot />
 
 <CommandRunner commands={$commands} />

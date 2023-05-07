@@ -29,7 +29,7 @@
 	<a href="/" title="New REPL">
 		<Logo />
 	</a>
-	<h1>{profile?.username ?? 'nobody'} profile</h1>
+	<h2>{profile?.username ?? 'nobody'} profile</h2>
 	<div class="grow" />
 
 	<button
