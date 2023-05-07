@@ -14,12 +14,7 @@ const config = {
 		}),
 	},
 	vitePlugin: {
-		experimental: {
-			inspector: {
-				holdMode: true,
-				toggleKeyCombo: 'control-shift',
-			},
-		},
+		inspector: true,
 	},
 };
 

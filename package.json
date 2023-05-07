@@ -66,7 +66,7 @@
 		"@resvg/resvg-js": "^2.4.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-vercel": "^2.4.3",
-		"@sveltejs/kit": "^1.16.1",
+		"@sveltejs/kit": "^1.16.2",
 		"@types/he": "^1.2.0",
 		"@types/marked": "^4.0.8",
 		"@types/uuid": "^9.0.1",
