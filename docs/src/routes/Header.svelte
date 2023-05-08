@@ -1,11 +1,11 @@
 <script lang="ts">
 	import LogoLong from '$lib/components/LogoLong.svelte';
-	import GitHub from 'virtual:icons/mdi/github';
+	import GitHub from '$lib/components/Github.svelte';
 </script>
 
 <header>
 	<a href="https://sveltelab.dev" class="logo"><LogoLong /></a>
-	<a href="https://github.com/sveltelab/sveltelab"><GitHub font-size="1.2em" /></a>
+	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
 </header>
 
 <style>
