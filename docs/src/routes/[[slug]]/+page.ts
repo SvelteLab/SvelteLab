@@ -2,6 +2,11 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import type { SvelteComponentTyped, ComponentType } from 'svelte';
 
+export function entries() {
+	// we just need the first slug, the rest will be crawled
+	return [{ slug: '' }];
+}
+
 export const load = (async ({ params: { slug = 'getting-started' } }) => {
 	let page;
 	try {

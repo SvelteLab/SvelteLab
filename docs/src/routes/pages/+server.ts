@@ -5,8 +5,10 @@ type ComponentModule = {
 	metadata?: Record<string, string>;
 };
 
+export const prerender = true;
+
 function assert_component(maybe_component: unknown): asserts maybe_component is ComponentModule {
-	if (!(maybe_component instanceof Object)) throw new Error('Not an object');
+	if (!(typeof maybe_component === 'object')) throw new Error('Not an object');
 }
 
 export const GET: RequestHandler = async () => {

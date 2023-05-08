@@ -15,7 +15,8 @@
 		"preview": "vite preview",
 		"test": "playwright test",
 		"test:unit": "vitest",
-		"partytown": "partytown copylib static/~partytown"
+		"partytown": "partytown copylib static/~partytown",
+		"skip-build": "node ./skip-build/index.js"
 	},
 	"dependencies": {
 		"@builder.io/partytown": "^0.8.0",

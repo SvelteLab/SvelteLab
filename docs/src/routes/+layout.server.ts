@@ -1,5 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 
+export const prerender = true;
+
 function assert_pages(
 	pages: unknown
 ): asserts pages is { link: string; metadata?: Record<string, string> }[] {
