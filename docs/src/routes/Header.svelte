@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LogoLong from '$lib/components/LogoLong.svelte';
-	import GitHub from '~icons/mdi/github';
+	import GitHub from 'virtual:icons/mdi/github';
 </script>
 
 <header>
