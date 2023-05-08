@@ -5,3 +5,5 @@ title: What is Sveltelab?
 # What is SvelteLab?
 
 SvelteLab is a supercharged REPL for sveltekit!
+
+This should not trigger a redeploy of sveltelab
