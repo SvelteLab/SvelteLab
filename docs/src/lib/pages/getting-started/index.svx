@@ -2,3 +2,17 @@
 title: Getting started
 ---
 # Getting started
+
+Welcome to the SvelteLab documentation website.
+
+```ts
+const x=true;
+
+function how_are_you(){
+	return "fine thanks";
+}
+```
+
+Let's write some long post see it scroll
+
+![](https://unsplash.it/500)

@@ -7,7 +7,7 @@ export function entries() {
 	return [{ slug: '' }];
 }
 
-export const load = (async ({ params: { slug = 'getting-started' } }) => {
+export const load = (async ({ params: { slug = 'getting-started' }, parent }) => {
 	let page;
 	try {
 		page = (await import(`../../lib/pages/${slug}/index.svx`))
@@ -15,5 +15,6 @@ export const load = (async ({ params: { slug = 'getting-started' } }) => {
 	} catch (e) {
 		throw error(404);
 	}
-	return { page };
+	const page_info = (await parent()).pages.find((page) => page.link === slug);
+	return { page, page_info };
 }) satisfies PageLoad;
