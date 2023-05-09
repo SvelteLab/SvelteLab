@@ -32,6 +32,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/site-kit": "^3.2.2",
+		"as-comps": "^0.0.27",
 		"unplugin-icons": "^0.16.1"
 	}
 }

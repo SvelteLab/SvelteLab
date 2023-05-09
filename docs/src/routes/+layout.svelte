@@ -1,10 +1,16 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import '../styles/global.css';
 	import type { LayoutData } from './$types';
 	import Header from './Header.svelte';
+	import { clickOutside } from 'as-comps';
 
 	export let data: LayoutData;
 	let open = false;
+
+	afterNavigate(() => {
+		open = false;
+	});
 </script>
 
 <main class:open>
@@ -13,7 +19,14 @@
 			open = !open;
 		}}
 	/>
-	<nav>
+	<nav
+		use:clickOutside={{
+			enabled: open,
+			func() {
+				open = false;
+			}
+		}}
+	>
 		<ul>
 			{#each data.pages as page (page.link)}
 				<li><a href={page.link}>{page.metadata?.title ?? page.link}</a></li>
@@ -66,6 +79,15 @@
 		}
 		.open {
 			--open: 80%;
+		}
+		a {
+			opacity: 0;
+			transition: opacity 50ms;
+			transition-delay: 0;
+		}
+		.open a {
+			opacity: 1;
+			transition-delay: 50ms;
 		}
 	}
 </style>

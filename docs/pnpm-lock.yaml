@@ -7,6 +7,7 @@ specifiers:
   '@sveltejs/site-kit': ^3.2.2
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  as-comps: ^0.0.27
   eslint: ^8.28.0
   eslint-config-prettier: ^8.5.0
   eslint-plugin-svelte: ^2.26.0
@@ -22,6 +23,7 @@ specifiers:
 
 dependencies:
   '@sveltejs/site-kit': 3.4.0_p6oxu4yimvuo4hd4adld4oc3ee
+  as-comps: 0.0.27
   unplugin-icons: 0.16.1
 
 devDependencies:
@@ -614,6 +616,12 @@ packages:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
     dev: true
+
+  /as-comps/0.0.27:
+    resolution: {integrity: sha512-uvLVPPn+B5nNQ33AblPx34CA/HzJeaBBRqyoBc/Sv0Jetm1YHy4ER8KRyQQQFGr4ucvF319Fzkov2ZiwjCKlLw==}
+    dependencies:
+      uuid: 8.3.2
+    dev: false
 
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1819,6 +1827,11 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
+
+  /uuid/8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+    dev: false
 
   /vfile-message/2.0.4:
     resolution: {integrity: sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==}
