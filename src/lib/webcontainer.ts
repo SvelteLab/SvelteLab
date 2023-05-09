@@ -477,7 +477,7 @@ export const webcontainer = {
 		// lazy load the library loading since it's not a common usage
 		const JSZip = (await import('jszip')).default;
 		const zip = new JSZip();
-		const current_tree = await get_tree_from_container();
+		const current_tree = await get_tree_from_container(false);
 		const traverse = (tree: FileSystemTree, path: string) => {
 			const files_and_folders = Object.keys(tree);
 			for (const file of files_and_folders) {
