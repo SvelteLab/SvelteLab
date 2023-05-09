@@ -15,12 +15,16 @@ export const GET: RequestHandler = async () => {
 	const pages_components = await import.meta.glob('$lib/pages/**/index.svx', {
 		eager: true
 	});
-	const pages = Object.entries(pages_components).map(([page, component]) => {
-		assert_component(component);
-		return {
-			link: page.split('/').at(-2),
-			metadata: component.metadata
-		};
-	});
+	const pages = Object.entries(pages_components)
+		.map(([page, component]) => {
+			assert_component(component);
+			return {
+				link: page.split('/').at(-2),
+				metadata: component.metadata
+			};
+		})
+		.sort((pageA, pageB) => {
+			return parseInt(pageA.metadata?.order ?? '0') - parseInt(pageB.metadata?.order ?? '0');
+		});
 	return json(pages);
 };

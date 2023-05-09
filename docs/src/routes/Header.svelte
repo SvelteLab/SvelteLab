@@ -1,9 +1,19 @@
 <script lang="ts">
 	import LogoLong from '$lib/components/LogoLong.svelte';
 	import GitHub from '$lib/components/Github.svelte';
+	import Hamburger from '~icons/mdi/menu';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatcher = createEventDispatcher();
 </script>
 
 <header>
+	<button
+		on:click={() => {
+			dispatcher('open');
+		}}
+		class="open-menu"><Hamburger /></button
+	>
 	<a href="https://sveltelab.dev" class="logo"><LogoLong /></a>
 	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
 </header>
@@ -41,5 +51,14 @@
 	}
 	.logo {
 		margin-right: auto;
+	}
+	.open-menu {
+		display: none;
+	}
+
+	@media (max-width: 700px) {
+		.open-menu {
+			display: inline;
+		}
 	}
 </style>

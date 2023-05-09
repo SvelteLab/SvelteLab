@@ -166,3 +166,7 @@ body {
 	border-radius: var(--sb-size);
 	border: 2px solid var(--sk-back-1);
 }
+
+img {
+	max-width: 100%;
+}

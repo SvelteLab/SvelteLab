@@ -4,10 +4,15 @@
 	import Header from './Header.svelte';
 
 	export let data: LayoutData;
+	let open = false;
 </script>
 
-<main>
-	<Header />
+<main class:open>
+	<Header
+		on:open={() => {
+			open = !open;
+		}}
+	/>
 	<nav>
 		<ul>
 			{#each data.pages as page (page.link)}
@@ -22,11 +27,14 @@
 
 <style>
 	main {
+		--open: 20%;
 		display: grid;
-		grid-template-areas: 'header header header' 'nav content content';
-		grid-template-columns: 20% auto auto;
+		grid-template-areas: 'header header' 'nav content';
+		grid-template-columns: var(--open) 100%;
 		grid-template-rows: min-content 1fr;
 		height: 100%;
+		transition: grid-template-columns 250ms;
+		overflow: hidden;
 	}
 	main :global(header) {
 		grid-area: header;
@@ -34,17 +42,30 @@
 	nav {
 		grid-area: nav;
 		background-color: var(--sk-back-1);
-		padding: 1rem;
 		overflow: auto;
+		position: relative;
 	}
 	ul {
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
+	a {
+		border-bottom: 1px solid var(--sk-back-4);
+		padding: 1rem;
+		display: block;
+	}
 	section {
 		grid-area: content;
 		padding: 1rem;
 		overflow: auto;
+	}
+	@media (max-width: 700px) {
+		main {
+			--open: 0%;
+		}
+		.open {
+			--open: 80%;
+		}
 	}
 </style>
