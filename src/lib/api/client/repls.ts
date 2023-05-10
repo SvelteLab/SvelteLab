@@ -38,7 +38,7 @@ export async function save_repl() {
 	if (res.ok) {
 		success('Saved');
 		is_repl_to_save.set(false);
-		file_status.resetAllFileStatus();
+		file_status.reset_all_file_status();
 		const created = await res.json();
 		if (created.id && !id) {
 			// if there wasn't an id means it's the first time

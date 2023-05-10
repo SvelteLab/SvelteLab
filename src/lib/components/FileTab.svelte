@@ -3,7 +3,7 @@
 	export let path = '';
 	export let file_name = '';
 
-	let isEdited = file_status.isFileEdited(path);
+	let is_edited = file_status.is_file_edited(path);
 </script>
 
-{file_name}{#if $isEdited}*{/if}
+{file_name}{#if $is_edited}*{/if}
