@@ -6,25 +6,25 @@ import childProcess from 'child_process';
 const ABORT_BUILD_CODE = 0;
 const CONTINUE_BUILD_CODE = 1;
 
-const continueBuild = () => process.exit(CONTINUE_BUILD_CODE);
-const abortBuild = () => process.exit(ABORT_BUILD_CODE);
+const continue_build = () => process.exit(CONTINUE_BUILD_CODE);
+const abort_build = () => process.exit(ABORT_BUILD_CODE);
 
-const stepCheck = () => {
+const step_check = () => {
 	// get all file names changed in last commit
-	const fileNameList = childProcess
+	const file_name_list = childProcess
 		.execSync('git diff --name-only HEAD~1')
 		.toString()
 		.trim()
 		.split('\n');
 
 	// check if every file is in the docs folder
-	const shouldBuild = !fileNameList.every((file) => file.startsWith(`docs/`));
+	const should_build = !file_name_list.every((file) => file.startsWith(`docs/`));
 
-	if (shouldBuild) {
-		return continueBuild();
+	if (should_build) {
+		return continue_build();
 	}
 
-	return abortBuild();
+	return abort_build();
 };
 
-stepCheck();
+step_check();

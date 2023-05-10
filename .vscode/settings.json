@@ -1,3 +1,8 @@
 {
-	"cSpell.words": ["tinykeys"]
+	"cSpell.words": ["tinykeys"],
+	"eslint.validate": [
+		"typescript",
+		"svelte",
+		"javascript"
+	]
 }

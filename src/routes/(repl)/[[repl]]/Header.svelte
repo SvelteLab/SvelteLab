@@ -213,7 +213,7 @@
 		</DropdownMenu>
 	{:else}
 		<a
-			use:async_click={async (e) => {
+			use:async_click={async () => {
 				try {
 					// save current project to local storage (we have to use local instead
 					// of session because Firefox Mobile it's being weird)

@@ -475,6 +475,7 @@ export const webcontainer = {
 	},
 	async save_as_zip() {
 		// lazy load the library loading since it's not a common usage
+		// eslint-disable-next-line @typescript-eslint/naming-convention
 		const JSZip = (await import('jszip')).default;
 		const zip = new JSZip();
 		const current_tree = await get_tree_from_container(false);

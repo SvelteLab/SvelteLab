@@ -8,7 +8,9 @@
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponentTyped>;
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Editor: ComponentType<SvelteComponentTyped>;
 
 	function handle_pane() {
@@ -22,19 +24,19 @@
 
 	let update_height: () => void;
 
-	const minSize = 5;
+	const min_size = 5;
 </script>
 
 <div class="grid">
 	<Header />
 	<main id="main">
 		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-			<Pane {minSize}>
+			<Pane minSize={min_size}>
 				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-					<Pane bind:size={$layout_store.file_tree}><FileActions {minSize} /></Pane>
-					<Pane {minSize}>
+					<Pane bind:size={$layout_store.file_tree}><FileActions {min_size} /></Pane>
+					<Pane minSize={min_size}>
 						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-							<Pane {minSize} class="editor-pane">
+							<Pane minSize={min_size} class="editor-pane">
 								<svelte:component this={Editor} />
 							</Pane>
 							<Pane bind:size={$layout_store.terminal}>
@@ -44,13 +46,13 @@
 					</Pane>
 				</Splitpanes>
 			</Pane>
-			<Pane size={42} {minSize}>
+			<Pane size={42} minSize={min_size}>
 				<Splitpanes horizontal>
-					<Pane {minSize}>
+					<Pane minSize={min_size}>
 						<Iframe />
 					</Pane>
 					{#if $is_intro_open}
-						<Pane {minSize}>
+						<Pane minSize={min_size}>
 							<Intro />
 						</Pane>
 					{/if}

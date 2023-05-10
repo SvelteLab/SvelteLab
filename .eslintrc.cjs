@@ -17,4 +17,14 @@ module.exports = {
 		es2017: true,
 		node: true,
 	},
+	rules: {
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				selector: ['variableLike'],
+				format: ['snake_case', 'UPPER_CASE'],
+				leadingUnderscore: 'allow',
+			},
+		],
+	},
 };
