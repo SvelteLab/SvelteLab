@@ -10,7 +10,7 @@ import {
 import { compressToEncodedURIComponent } from 'lz-string';
 import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
-import { is_repl_to_save, repl_name } from './stores/repl_id_store';
+import { is_repl_to_save, repl_name, file_status } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { deferred_promise } from './utils';
 import { stringify } from './components/parsers';
@@ -381,6 +381,7 @@ export const webcontainer = {
 		const update = () => {
 			webcontainer_instance.fs.writeFile(path, content);
 			is_repl_to_save.set(true);
+			file_status.setFileEditedStatus(path, true);
 		};
 		if (webcontainer_instance instanceof WebContainer) {
 			update();
