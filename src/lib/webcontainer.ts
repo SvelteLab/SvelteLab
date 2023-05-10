@@ -381,7 +381,7 @@ export const webcontainer = {
 		const update = () => {
 			webcontainer_instance.fs.writeFile(path, content);
 			is_repl_to_save.set(true);
-			file_status.setFileEditedStatus(path, true);
+			file_status.set_file_edited_status(path, true);
 		};
 		if (webcontainer_instance instanceof WebContainer) {
 			update();

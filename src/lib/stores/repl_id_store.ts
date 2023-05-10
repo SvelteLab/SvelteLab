@@ -4,23 +4,23 @@ export const is_repl_saving = writable(false);
 export const is_repl_to_save = writable(false);
 import { writable, derived } from 'svelte/store';
 
-function createFileStatusStore() {
+function create_file_status_store() {
 	const file_status = writable<Record<string, boolean>>({});
 
-	const setFileEditedStatus = (path: string, status: boolean) => {
-		file_status.update((fileStatus) => ({
-			...fileStatus,
+	const set_file_edited_status = (path: string, status: boolean) => {
+		file_status.update((file_status) => ({
+			...file_status,
 			[path]: status,
 		}));
 	};
 
-	const resetAllFileStatus = () => {
+	const reset_all_file_status = () => {
 		file_status.set({});
 	};
 
-	const isFileEdited = (path: string) => {
-		return derived(file_status, ($fileStatus) => {
-			return $fileStatus[path] || false;
+	const is_file_edited = (path: string) => {
+		return derived(file_status, ($file_status) => {
+			return $file_status[path] || false;
 		});
 	};
 
@@ -28,10 +28,10 @@ function createFileStatusStore() {
 		subscribe: file_status.subscribe,
 		set: file_status.set,
 		update: file_status.update,
-		setFileEditedStatus,
-		resetAllFileStatus,
-		isFileEdited,
+		set_file_edited_status,
+		reset_all_file_status,
+		is_file_edited,
 	};
 }
 
-export const file_status = createFileStatusStore();
+export const file_status = create_file_status_store();
