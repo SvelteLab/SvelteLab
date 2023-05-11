@@ -122,6 +122,14 @@ export const svelte_snippets = svelteLanguage.data.of({
 			}
 		),
 		snippetCompletion(
+			`<pre>{JSON.stringify(\${data}, null, 2)}</pre>`,
+			{
+				label: 's-dump',
+				detail: 'dump a variable nicely formatted',
+				boost: 83,
+			}
+		),
+		snippetCompletion(
 			`{#await \${promise}}
 	\${}
 {/await}`,
