@@ -24,7 +24,7 @@
 	<section>
 		<div class="box">
 			<h2>
-				<Logo width="5rem" /> SvelteLab
+				<Logo /> SvelteLab
 			</h2>
 			<p class="tagline"><i>supercharged</i> REPL for Svelte</p>
 			<p>instantly spin up a SvelteKit project and share it with the world</p>
