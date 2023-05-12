@@ -9,7 +9,7 @@
 	<div class="loading">
 		<GitHub />
 		<FlyingPaper />
-		<Logo width="20%" />
+		<Logo />
 	</div>
 	<p>{get_random_cloning_message()}</p>
 </div>

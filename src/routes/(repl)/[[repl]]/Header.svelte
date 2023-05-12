@@ -34,7 +34,7 @@
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
-
+	import AddNew from '~icons/material-symbols/add-circle-rounded';
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
@@ -52,11 +52,23 @@
 			fork_form.submit();
 		});
 	});
+
+	let a_hover = false;
 </script>
 
 <header>
-	<a href="/" title="New REPL">
-		<Logo />
+	<a
+		href="/"
+		title="New REPL"
+		class="logo"
+		on:mouseenter={() => (a_hover = true)}
+		on:mouseleave={() => (a_hover = false)}
+	>
+		{#if !a_hover}
+			<Logo />
+		{:else}
+			<AddNew />
+		{/if}
 	</a>
 	{#if !mobile}
 		<button
@@ -281,10 +293,16 @@
 		margin: auto;
 		max-width: 42rem;
 		font-size: 1.1rem;
+		color: var(--sk-text-2);
 		border: 1px solid var(--sk-back-5);
 		width: 100%;
 		justify-content: center;
 		opacity: 0.8;
+	}
+
+	.search-docs:hover {
+		border-color: var(--sk-theme-1);
+		color: var(--sk-text-1);
 	}
 
 	.search-docs > div {
@@ -299,12 +317,17 @@
 
 	header :global(a),
 	header :global(button) {
-		gap: 1rem;
+		gap: 0.5rem;
 		display: flex;
 		align-items: center;
 		position: relative;
 		padding: 0.5rem;
 		color: var(--sk-text-1);
+	}
+
+	header :global(a):hover,
+	header :global(button):hover {
+		color: var(--sk-theme-1);
 	}
 
 	header :global(a) :global(svg),
@@ -322,8 +345,22 @@
 		top: calc(100% - 3px);
 	}
 
+	.logo {
+		scale: 1.5;
+	}
+
 	.login {
+		padding: 0.5rem 1rem 0.5rem 1rem;
+		border-block-start-color: transparent;
+		border-inline-color: transparent;
 		color: var(--sk-theme-1);
+		
+		border-radius: 0.5rem;
+	}
+
+	.login:hover {
+		background-color: var(--sk-theme-1);
+		color: #fff;
 	}
 
 	@media only screen and (max-width: 500px) {

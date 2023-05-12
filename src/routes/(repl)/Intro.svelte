@@ -24,7 +24,7 @@
 	<section>
 		<div class="box">
 			<h2>
-				<Logo width="5rem" /> SvelteLab Credits
+				<Logo /> SvelteLab
 			</h2>
 			<p class="tagline"><i>supercharged</i> REPL for Svelte</p>
 			<p>instantly spin up a SvelteKit project and share it with the world</p>
@@ -61,7 +61,7 @@
 		background-color: var(--sk-back-3);
 		border-radius: 2rem;
 	}
-	h1 {
+	h2 {
 		display: flex;
 		justify-content: center;
 		align-items: center;

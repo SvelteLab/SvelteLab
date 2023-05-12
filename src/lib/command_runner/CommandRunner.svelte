@@ -304,7 +304,7 @@
 										<li>
 											{#each sequence as kbd}
 												<kbd>
-													{kbd}
+													{kbd.startsWith('Key') ? kbd.slice(3) : kbd}
 												</kbd>
 											{/each}
 										</li>
