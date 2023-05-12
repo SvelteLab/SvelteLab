@@ -47,7 +47,7 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-
+import WrapText from '~icons/material-symbols/wrap-text-rounded'
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {
@@ -200,6 +200,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'toggle vim keybindings',
 		icon: Keyboard,
 		action: editor_config.toggle_vim,
+	});
+
+	commands_to_return.push({
+		command: 'line-wrap-code-editor',
+		title: 'Wrap Code',
+		subtitle: 'toggle line wrap for code editor',
+		icon: Keyboard,
+		action: editor_config.toggle_code_wrap,
 	});
 
 	commands_to_return.push({

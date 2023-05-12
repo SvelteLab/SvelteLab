@@ -15,7 +15,7 @@
 	import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
-	import { keymap } from '@codemirror/view';
+	import { EditorView, keymap } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { svelte } from '@replit/codemirror-lang-svelte';
@@ -24,8 +24,8 @@
 	import CodeMirror from 'svelte-codemirror-editor';
 	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
-	import Tabs from './Tabs.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
+	import Tabs from './Tabs.svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -68,6 +68,9 @@
 					status: true,
 				})
 			);
+		}
+		if (config.code_wrap) {
+			extensions.unshift(EditorView.lineWrapping);
 		}
 		return extensions;
 	}
