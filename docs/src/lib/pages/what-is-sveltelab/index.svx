@@ -1,8 +1,30 @@
 ---
-title: What is Sveltelab?
+title: What is SvelteLab?
 order: 200
 ---
-
+<script>
+	import butwhy from "./butwhy.gif";
+</script>
 # What is SvelteLab?
 
-SvelteLab is a supercharged REPL for sveltekit!
+Let's start from the basics: what is SvelteLab? In simple terms is a Supercharged REPL from Svelte **AND** SvelteKit.
+
+We use the [webcontainers api](https://developer.stackblitz.com/platform/api/webcontainer-api) from [stackblitz](https://stackblitz.com) to run Node **inside your browser!**
+
+## Why SvelteLab?
+
+You might ask: sure but why?
+
+![but why?]({butwhy})
+
+Glad you asked, let me explain: one thing that defined the success of svelte as a framework was it's wonderful [REPL](https://svelte.dev/repl): with it you can have the whole power of svelte directly in your browser and being lightweight it is just perfect to quickly prototype something and rapidly share it with the world.
+
+Things changed a bit when SvelteKit entered the game: SvelteKit brought to the scene a lot of innovation and new features that are specific to it
+
+- Navigation: kit takes care of the navigation and sometimes we want to act exactly during the navigation.
+- Custom hooks: our beloved meta-framework provide us with a set of hooks like `beforeNavigate` and `afterNavigate`
+- Custom stores: stores are another sweetness provided by SvelteKit. They let you access the `$page` information, the `$navigating` information etc.
+- Load functions: sometimes the action is before the page get's even rendered...load functions allows the developer to get the data they need to render the page.
+- Easy Typescript support: with SvelteKit is super-easy to add TypeScript and let's be honest...[who's not using TS these days](https://news.ycombinator.com/item?id=35891259)?
+
+Those are just a few of countless things that you can't unfortunately do inside the OG svelte REPL.

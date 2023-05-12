@@ -1,6 +1,7 @@
 <script lang="ts">
 	import LogoLong from '$lib/components/LogoLong.svelte';
 	import GitHub from '~icons/mdi/github';
+	import Discord from '~icons/mdi/discord';
 	import Hamburger from '~icons/mdi/menu';
 	import { createEventDispatcher } from 'svelte';
 
@@ -16,6 +17,7 @@
 	>
 	<a href="https://sveltelab.dev" class="logo"><LogoLong /></a>
 	<a href="https://github.com/sveltelab/sveltelab"><GitHub font-size="1.2em" /></a>
+	<a href="https://discord.gg/avJNXb8Myp"><Discord font-size="1.2em" /></a>
 </header>
 
 <style>

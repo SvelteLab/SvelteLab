@@ -2,18 +2,31 @@
 title: Getting started
 order: 100
 ---
+
+<script>
+	import Github from "~icons/mdi/github";
+	import Twitter from "~icons/mdi/twitter";
+	import Svelte from "~icons/logos/svelte-icon";
+</script>
 # Getting started
 
-Welcome to the SvelteLab documentation website.
+Welcome to the SvelteLab documentation website. Here's you'll learn what is SvelteLab, the list of features that we provide and some neaty little trick to use it at it's best.
 
-```ts
-const x=true;
+Before we begin feel free to head over on our <Github /> [Github](https://github.com/sveltelab/sveltelab) and [open an issue](https://github.com/sveltelab/sveltelab/issues/new) for suggestions and bugs or feel free to [join our discord](https://discord.gg/avJNXb8Myp) to discuss with us.
 
-function how_are_you(){
-	return "fine thanks";
-}
-```
+Speaking of which: who exactly are **us**?
 
-Let's write some long post see it scroll
+- <Twitter /> <a href="https://twitter.com/PaoloRicciuti">@PaoloRicciuti</a>
+- <Twitter /> <a href="https://twitter.com/SarcevicAntonio">@SarcevicAntonio</a>
 
-![](https://unsplash.it/500)
+We are both <Svelte />velte lovers and we crave to bring something useful for the wonderful Svelte ecosystem.
+
+If you want a superquick introduction to SvelteLab you can watch our presentation to the SvelteSummit Spring 2023
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0bog8-Ay7CU?start=1102" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+<style>
+	:global(svg){
+		vertical-align: top;
+	}
+</style>
