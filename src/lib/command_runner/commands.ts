@@ -206,7 +206,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		command: 'line-wrap-code-editor',
 		title: 'Wrap Code',
 		subtitle: 'toggle line wrap for code editor',
-		icon: Keyboard,
+		icon: WrapText,
 		action: editor_config.toggle_code_wrap,
 	});
 
