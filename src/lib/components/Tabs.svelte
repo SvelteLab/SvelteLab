@@ -16,7 +16,7 @@
 	import Close from '~icons/material-symbols/close-rounded';
 	import Folder from '~icons/material-symbols/folder';
 	import Lib from '~icons/material-symbols/local-library';
-	import FileTab from '$lib/components/FileTab.svelte';
+	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
 
 	const base_icons = {
 		routes: Routes,
@@ -63,7 +63,7 @@
 					}}
 				>
 					<svelte:component this={get_file_icon(file_name || '')} />
-					<FileTab {path} {file_name} />
+					{file_name}<FileStatusIndicator {path} />
 					{#if route}
 						<small>
 							{#if main_folder}
