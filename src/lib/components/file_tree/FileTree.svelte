@@ -118,44 +118,45 @@
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<input aria-label="REPL name" bind:value={$repl_name} />
-			<div class="hover-group">
-				<button title="Upload File" on:click={get_upload_handler()}>
-					<Upload />
-				</button>
-				<button
-					title="New File"
-					on:click={() => {
-						root_adding_type = 'file';
-					}}
-				>
-					<Plus />
-				</button>
-				<button
-					title="New Folder"
-					on:click={() => {
-						root_adding_type = 'folder';
-					}}
-				>
-					<FolderAdd />
-				</button>
-				<button
-					aria-pressed={$layout_store.folders_first}
-					on:click={() => {
-						layout_store.toggle_sort();
-					}}
-					title="Toggle Folder / File Sort Order"
-				>
-					<Sorting />
-				</button>
-				<button
-					aria-pressed={$layout_store.show_config}
-					on:click={() => {
-						layout_store.toggle_config();
-					}}
-					title="Toggle Config Files"
-				>
-					<ConfigFiles />
-				</button>
+			<div class="hover-group" class:force={$open_menus[$base_path_store]}>
+				<DropdownMenu bind:open={$open_menus[$base_path_store]}>
+					<MenuItem on:click={get_upload_handler()}>
+						<Upload />
+						Upload File
+					</MenuItem>
+					<MenuItem
+						on:click={() => {
+							root_adding_type = 'file';
+						}}
+					>
+						<Plus />
+						New File
+					</MenuItem>
+					<MenuItem
+						on:click={() => {
+							root_adding_type = 'folder';
+						}}
+					>
+						<FolderAdd />
+						New Folder
+					</MenuItem>
+					<MenuItem
+						on:click={() => {
+							layout_store.toggle_sort();
+						}}
+					>
+						<Sorting />
+						Sort {$layout_store.folders_first ? 'Files' : 'Folder'} First
+					</MenuItem>
+					<MenuItem
+						on:click={() => {
+							layout_store.toggle_config();
+						}}
+					>
+						<ConfigFiles />
+						Show from <code>{$layout_store.show_config ? '/src' : '/'}</code>
+					</MenuItem>
+				</DropdownMenu>
 			</div>
 		</li>
 		{#if root_adding_type}

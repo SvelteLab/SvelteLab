@@ -1,11 +1,20 @@
 <script lang="ts">
 	import { createEventDispatcher, getContext } from 'svelte';
+	import type { HTMLButtonAttributes } from 'svelte/elements';
 	import { DROPDOWN_CONTEXT } from './DropdownMenu.svelte';
 
+	interface $$Props extends HTMLButtonAttributes {
+		href?: string;
+	}
 	export let href: string | undefined = undefined;
 
 	const dispatch = createEventDispatcher();
-	const { close_menu } = getContext<{ close_menu: () => {} }>(DROPDOWN_CONTEXT);
+	const { close_menu } = getContext<{ close_menu: () => void }>(DROPDOWN_CONTEXT);
+
+	function handle_click(e: MouseEvent) {
+		close_menu();
+		dispatch('click', e);
+	}
 </script>
 
 <li role="menuitem">
@@ -13,10 +22,8 @@
 		this={href ? 'a' : 'button'}
 		{href}
 		class="item"
-		on:click={(e) => {
-			close_menu();
-			dispatch('click', e);
-		}}
+		{...$$restProps}
+		on:click={handle_click}
 	>
 		<slot />
 	</svelte:element>
