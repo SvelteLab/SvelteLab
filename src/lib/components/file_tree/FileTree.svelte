@@ -25,6 +25,8 @@
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
+	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
+	import { file_status } from '$lib/stores/repl_id_store';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -322,7 +324,7 @@
 					<button class="node" on:click={() => open_file(path)}>
 						<svelte:component this={icon} />
 						<span>
-							{node_name}
+							{node_name}<FileStatusIndicator {path} />
 						</span>
 					</button>
 					<div class="hover-group">
