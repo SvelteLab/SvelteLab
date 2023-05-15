@@ -39,6 +39,7 @@ body {
 	font-family: var(--sk-font);
 	background-color: var(--sk-back-4);
 	accent-color: var(--sk-theme-1);
+	scroll-behavior: smooth;
 }
 
 /* override site-kit */

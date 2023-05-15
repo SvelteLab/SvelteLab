@@ -4,7 +4,7 @@ export const prerender = true;
 
 function assert_pages(
 	pages: unknown
-): asserts pages is { link: string; metadata?: Record<string, string> }[] {
+): asserts pages is { link: string; metadata?: Record<string, any> }[] {
 	if (!Array.isArray(pages)) throw new Error('Pages is not an array');
 	for (const page of pages) {
 		if (!(page instanceof Object)) throw new Error(`Page ${page} is not an object`);

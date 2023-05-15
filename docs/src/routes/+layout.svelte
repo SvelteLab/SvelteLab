@@ -30,6 +30,11 @@
 		<ul>
 			{#each data.pages as page (page.link)}
 				<li><a href={page.link}>{page.metadata?.title ?? page.link}</a></li>
+				<ul>
+					{#each page.metadata?.headings?.slice(1) ?? [] as heading}
+						<li><a href="{page.link}{heading.url}">{heading.title}</a></li>
+					{/each}
+				</ul>
 			{/each}
 		</ul>
 	</nav>
@@ -43,7 +48,7 @@
 		--open: 20%;
 		display: grid;
 		grid-template-areas: 'header header' 'nav content';
-		grid-template-columns: var(--open) 100%;
+		grid-template-columns: var(--open) 1fr;
 		grid-template-rows: min-content 1fr;
 		height: 100%;
 		transition: grid-template-columns 250ms;
@@ -63,6 +68,12 @@
 		padding: 0;
 		list-style: none;
 	}
+	ul > ul {
+		margin: 1rem;
+	}
+	ul > ul > li {
+		background-color: var(--sk-back-2);
+	}
 	a {
 		border-bottom: 1px solid var(--sk-back-4);
 		padding: 1rem;
@@ -76,6 +87,7 @@
 	@media (max-width: 700px) {
 		main {
 			--open: 0%;
+			grid-template-columns: var(--open) 100%;
 		}
 		.open {
 			--open: 80%;
