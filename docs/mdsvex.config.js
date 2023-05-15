@@ -1,7 +1,6 @@
 import { defineMDSveXConfig as defineConfig } from 'mdsvex';
 import slug from 'remark-slug';
 import autolink from 'remark-autolink-headings';
-import toc from 'remark-toc';
 
 function get_headings() {
 	let visit;

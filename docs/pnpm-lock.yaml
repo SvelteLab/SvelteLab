@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@iconify-json/logos': ^1.1.29
   '@iconify-json/mdi': ^1.1.50
   '@sveltejs/adapter-static': ^2.0.2
   '@sveltejs/kit': ^1.5.0
@@ -27,6 +28,7 @@ specifiers:
   vite: ^4.3.0
 
 dependencies:
+  '@iconify-json/logos': 1.1.29
   '@sveltejs/site-kit': 3.4.0_p6oxu4yimvuo4hd4adld4oc3ee
   as-comps: 0.0.27
   mdast-util-to-string: 3.2.0
@@ -299,6 +301,12 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@iconify-json/logos/1.1.29:
+    resolution: {integrity: sha512-hrk7YumrGPAToLwJ7uVQ6Yv1s/S8ChutCAsY5oLZQ4kwndjhrPu9TXAPkfNV5z8fVidb34g7ioSaL9qHGB662A==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
 
   /@iconify-json/mdi/1.1.50:
     resolution: {integrity: sha512-SgbT5w5eHCdOG74ZWPz7HlTGk6VsifIJhNi6lAsxj/5Nlqt6Cz4LlQmSa9eecU9p075Jub2aAx/o7YI+GCahRQ==}
