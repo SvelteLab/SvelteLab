@@ -37,20 +37,20 @@ body {
 	padding: 0;
 	height: 100%;
 	font-family: var(--sk-font);
-	background-color: var(--sk-back-4);
+	background-color: var(--sk-back-1);
 	accent-color: var(--sk-theme-1);
 	scroll-behavior: smooth;
 }
 
 /* override site-kit */
-:is(button, a)>svg {
+:is(button, a) > svg {
 	display: block;
 	height: initial !important;
 	width: initial !important;
 	stroke: initial !important;
 }
 
-:is(button, a)>img {
+:is(button, a) > img {
 	display: block;
 }
 
@@ -170,4 +170,23 @@ body {
 
 img {
 	max-width: 100%;
+}
+
+p,
+ul,
+ol {
+	margin: revert;
+	padding: revert;
+}
+
+kbd {
+	margin-left: auto;
+	font-family: var(--sk-font);
+	font-weight: 800;
+	text-transform: uppercase;
+	border: 1px solid var(--sk-back-5);
+	color: var(--sk-text-3);
+	padding: 0.5rem 1rem;
+	border-radius: 0.5rem;
+	line-height: 1.5rem;
 }

@@ -8,9 +8,10 @@ order: 100
 	import Twitter from "~icons/mdi/twitter";
 	import Svelte from "~icons/logos/svelte-icon";
 </script>
+
 ## Getting started
 
-Welcome to the SvelteLab documentation website. Here's you'll learn what is SvelteLab, the list of features that we provide and some neaty little trick to use it at it's best.
+Welcome to the SvelteLab documentation website. Here you'll learn all about what [SvelteLab](https://www.sveltelab.dev/) is, the features is has and some neat little tricks to use it at it's best.
 
 Before we begin feel free to head over on our <Github /> [Github](https://github.com/sveltelab/sveltelab) and [open an issue](https://github.com/sveltelab/sveltelab/issues/new) for suggestions and bugs or feel free to [join our discord](https://discord.gg/avJNXb8Myp) to discuss with us.
 

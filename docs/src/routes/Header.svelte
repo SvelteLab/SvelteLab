@@ -52,6 +52,11 @@
 	a {
 		color: var(--sk-text-1);
 	}
+
+	a:hover {
+		color: var(--sk-theme-1);
+	}
+
 	.logo {
 		margin-right: auto;
 	}
