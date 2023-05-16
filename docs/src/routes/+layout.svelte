@@ -1,16 +1,19 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { clickOutside } from 'as-comps';
 	import '../styles/global.css';
 	import type { LayoutData } from './$types';
 	import Header from './Header.svelte';
-	import { clickOutside } from 'as-comps';
 
 	export let data: LayoutData;
 	let open = false;
 
-	afterNavigate(() => {
+	$: {
+		$page.url;
+		// reset the menu when page change
+		// (using this insteas of aftyerNavigate to also trigger on hash change)
 		open = false;
-	});
+	}
 </script>
 
 <main class:open>
