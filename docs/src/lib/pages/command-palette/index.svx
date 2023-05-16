@@ -1,0 +1,128 @@
+---
+title: Command Palette
+order: 300
+---
+
+## Command Palette
+
+To keep the UI clean and simple, SvelteLab has most goodies hidden inside the Command Palette.
+
+To open it, use shortcut <kbd>CMD</kbd>(or <kbd>CTRL</kbd>)+<kbd>K</kbd>. You can also use <kbd>CMD</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>.
+
+## File Palette
+
+You can also use the File Palette to search for files. Use the shortcut <kbd>CMD</kbd>+<kbd>P</kbd> or you can remove the `>` from inside the Command Palette input.
+
+## Commands
+
+### Format
+
+Format current open file with prettier. This command spawns a prettier process inside the WebContainer, so it will respect your prettier configuration.
+
+### Create Route
+
+Create a new SvelteKit route. Opens a pane with form for route path and files to be generated. Every filetype relevant to the SvelteKit router can be generated. Optionally they can also be created as TypeScript files. Generated files contain appropriate boilerplate.
+
+### Search Docs
+
+Search SvelteKit documentation, just like the official site!
+
+### Svelte Add
+
+Quickly add a Svelte integration. Opens a pane with form for different integrations. Plugs directly into [Svelte Add](https://github.com/svelte-add/svelte-add) to provide the ability to quickly add PostCSS, SCSS, Tailwind CSS, Bootstrap, Bulma, Imagetools, mdsvex or CoffeeScript to existing SvelteLab Apps.
+
+### Save
+
+Save the current project. When authenticated, you can save the current project to your profile. You can visit your profile to see all the saved projects.
+
+### Fork
+
+Fork the current project. When authenticated, you can clone the current project and save it to your profile.
+
+### Vim Keybindings
+
+Toggle the use of vim keybindings for the editor.
+
+### Wrap Code
+
+Toggle line wrap for code editor.
+
+### Install Package
+
+Opens a pane to search and install packages from npm.
+
+### Export
+
+Download the current project as a .zip file.
+
+### Profile
+
+Browse your saved projects.
+
+### New Project
+
+Create a new blank project.
+
+### New with Template
+
+Create new project with a starter template. Choose from Basic, Library, mdsvex, Tailwind, TypeScript or TypeScript + Tailwind
+
+### Set Default Template
+
+Choose the template that will load as the default for new projects. Same selection as [New with Template](#new-with-template)
+
+### Switch Theme
+
+Switch between light and dark theme. Overrides system preference.
+
+### Toggle File Tree
+
+Toggle if the file tree is shown or hidden.
+
+### Toggle Config Files
+
+Toggle if file tree starts from project root `/` or `/src` folder to hide config clutter.
+
+### Toggle Folder / File Sort Order
+
+Toggle if files or folders show up first in the file tree.
+
+### Toggle Terminal
+
+Toggle if terminal is shown.
+
+### Share Project
+
+Copy link that shares current project via id. This keeps in sync when you update your project. Learn more under [Sharing and Saving](sharing-and-saving).
+
+### Share Code Snapshot
+
+Copy link that shares current files via hash. This won't reflect changes when you update your project. Learn more under [Sharing and Saving](sharing-and-saving).
+
+### Remove Theme Preference
+
+Use OS theme preference.
+
+### Font Preference
+
+Opens a panel with controls for font size, font family and the usage of ligatures.
+
+### Open GitHub
+
+Open the SvelteLab GitHub Repo.
+
+### Submit Issue
+
+Open a new issue for SvelteLab.
+
+### Join Discord
+
+Join our Discord server and say hello! 👋
+
+### Credits
+
+Show Open Source dependency credits. Thanks for making SvelteLab possible! 💝
+
+### Show Intro
+
+Show the SvelteLab Intro again and remove hidden forever preference.

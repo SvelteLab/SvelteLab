@@ -126,7 +126,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'create-route',
 		title: 'Create Route',
-		subtitle: 'create a new sveltekit route',
+		subtitle: 'create a new SvelteKit route',
 		icon: Route,
 		action_component: CreateRoute,
 		key_bind: {
@@ -213,7 +213,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'npm-install-package',
 		title: 'Install Package',
-		subtitle: 'install a package from npm',
+		subtitle: 'search and install packages from npm',
 		icon: NPM,
 		action_component: InstallPackage,
 	});
@@ -270,7 +270,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		command: 'default-project-template',
 		title: 'Set Default Template',
-		subtitle: 'choose the template that will load as the default',
+		subtitle: 'choose the template for new projects',
 		icon: Bookmark,
 		action_component: SetDefaultTemplate,
 	});

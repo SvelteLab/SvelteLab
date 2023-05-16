@@ -1,0 +1,20 @@
+---
+title: Sharing and Saving
+order: 400
+---
+
+# Sharing and Saving Projects
+
+...
+
+## Share Code Snapshot
+
+Using this method, a snapshot of the current file tree gets compressed into a very long URL that will open a new SvelteLab App with that snapshot.
+The contents of this link will not change when you update and save your project.
+New unsaved projects can only be shared via code snapshot.
+
+## Share Project
+
+Saved projects can be shared via Project ID. The contents of this link will stay in sync with any updates you save to your project.
+
+...

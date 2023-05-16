@@ -1,8 +1,7 @@
 {
 	"cSpell.words": ["tinykeys"],
-	"eslint.validate": [
-		"typescript",
-		"svelte",
-		"javascript"
-	]
+	"eslint.validate": ["typescript", "svelte", "javascript"],
+	"files.associations": {
+		"*.svx": "markdown"
+	}
 }
