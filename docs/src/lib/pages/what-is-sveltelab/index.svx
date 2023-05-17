@@ -5,7 +5,7 @@ order: 200
 <script>
 	import butwhy from "./butwhy.gif";
 </script>
-## What is SvelteLab?
+# What is SvelteLab?
 
 Let's start from the basics: what is SvelteLab? In simple terms is a Supercharged REPL from Svelte **AND** SvelteKit.
 

@@ -3,7 +3,7 @@ title: Command Palette
 order: 300
 ---
 
-## Command Palette
+# Command Palette
 
 To keep the UI clean and simple, SvelteLab has most goodies hidden inside the Command Palette.
 
