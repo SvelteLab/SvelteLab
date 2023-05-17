@@ -7,7 +7,7 @@ order: 500
 
 To use HTML Forms and SvelteKit Form Actions inside WebContainers (like we are using in SvelteLab), you will need to disable SvelteKit's build in protection against cross-site request forgery (CSRF) attacks. Read more about it in the [SvelteKit Docs](https://kit.svelte.dev/docs/configuration#csrf).
 
-You should probably never turn this setting of for production, but if you want to experiment with Forms inside WebContainers, disabling is currently the easiest workaround.
+You should probably **never turn this setting off for production**, but if you want to experiment with Forms inside WebContainers, disabling is currently the easiest workaround.
 
 ## Turn off SvelteKit CSRF Protection
 
