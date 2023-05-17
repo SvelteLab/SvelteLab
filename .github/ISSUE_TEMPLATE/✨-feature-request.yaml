@@ -1,4 +1,4 @@
-name: "\U00002728 Feature Request"
+name: '\U00002728 Feature Request'
 description: Suggest an idea for the app
 title: '✨ '
 labels: enhancement
@@ -18,7 +18,7 @@ body:
   - type: textarea
     id: solution
     attributes:
-      label: Describe the solution you'd like
+      label: Describe the solution you\'d like
       description: Try to provide a description of the solution you would like to see implemented
       placeholder: I would like to see...
     validations:
@@ -26,9 +26,9 @@ body:
   - type: textarea
     id: alternatives
     attributes:
-      label: Describe alternatives you've considered
-      description: If you've considered some alternatives please tell us
-      placeholder: I've tried to do...
+      label: Describe alternatives you\'ve considered
+      description: If you\'ve considered some alternatives please tell us
+      placeholder: I\'ve tried to do...
     validations:
       required: false
   - type: textarea
