@@ -1,0 +1,42 @@
+name: "\U0001F41B Bug report"
+about: Create a bug report to help improve the app
+title: "\U0001F41B "
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time to submit an issue
+  - type: textarea
+    id: bug
+    attributes:
+      label: Describe the bug
+      description: Describe the bug you have experienced, the more details the better
+      placeholder: While i was doing...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Try to provide a step by step descrition of how to reproduce the bug
+      placeholder: Step 1. 
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+      placeholder: I expect that when...
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots
+      description: Please upload some screenshot to let us better understand what the problem is
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Stick here everything that could help us
