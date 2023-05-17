@@ -1,0 +1,41 @@
+name: "\U00002728 Feature Request"
+description: Suggest an idea for the app
+title: '✨ '
+labels: enhancement
+assignees: ''
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to propose a new idea
+  - type: textarea
+    id: problem
+    attributes:
+      label: Describe the problem
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: I always get frustrated when...
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: Try to provide a description of the solution you would like to see implemented
+      placeholder: I would like to see...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: If you've considered some alternatives please tell us
+      placeholder: I've tried to do...
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Stick here everything that could help us decide
+    validations:
+      required: false
