@@ -2,7 +2,6 @@ name: "\U00002728 Feature Request"
 description: Suggest an idea for the app
 title: '✨ '
 labels: enhancement
-assignees: ''
 body:
   - type: markdown
     attributes:
