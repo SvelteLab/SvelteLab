@@ -21,9 +21,11 @@ import New from '~icons/material-symbols/add-rounded';
 import Route from '~icons/material-symbols/alt-route-rounded';
 import Format from '~icons/material-symbols/cleaning-services';
 import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
+import Docs from '~icons/material-symbols/docs';
 import Download from '~icons/material-symbols/download-rounded';
 import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 import Issue from '~icons/material-symbols/error-circle-rounded';
+import Font from '~icons/material-symbols/font-download-outline-rounded';
 import Fork from '~icons/material-symbols/fork-right-rounded';
 import NPM from '~icons/material-symbols/install-desktop';
 import Keyboard from '~icons/material-symbols/keyboard';
@@ -34,10 +36,10 @@ import Share from '~icons/material-symbols/share';
 import Bookmark from '~icons/material-symbols/star-outline';
 import Terminal from '~icons/material-symbols/terminal-rounded';
 import Intro from '~icons/material-symbols/waving-hand-rounded';
+import WrapText from '~icons/material-symbols/wrap-text-rounded';
 import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
-import Font from '~icons/material-symbols/font-download-outline-rounded';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 import CreateRoute from './commands_components/CreateRoute.svelte';
@@ -47,7 +49,6 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import WrapText from '~icons/material-symbols/wrap-text-rounded'
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {
@@ -136,8 +137,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
-		command: 'search-docs',
-		title: 'Search Docs',
+		command: 'search-kit-docs',
+		title: 'Search Kit Docs',
 		subtitle: 'search SvelteKit documentation',
 		icon: SearchDocsIcon,
 		action_component: SearchDocs,
@@ -359,12 +360,12 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
-		command: 'remove-theme-preference',
-		title: 'Remove Theme Preference',
-		subtitle: 'use OS preference',
-		icon: Themes,
+		command: 'open-sveltelab-docs',
+		title: 'Open SvelteLab Docs',
+		subtitle: 'open docs.SvelteLab.dev for Documentation',
+		icon: Docs,
 		action() {
-			get_theme().remove_preference();
+			window.open(`https://docs.sveltelab.dev/`, '_blank');
 		},
 	});
 
@@ -374,6 +375,16 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		subtitle: 'set font preference',
 		action_component: FontPreferences,
 		icon: Font,
+	});
+
+	commands_to_return.push({
+		command: 'remove-theme-preference',
+		title: 'Remove Theme Preference',
+		subtitle: 'use OS preference',
+		icon: Themes,
+		action() {
+			get_theme().remove_preference();
+		},
 	});
 
 	commands_to_return.push({
