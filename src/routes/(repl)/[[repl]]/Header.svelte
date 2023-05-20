@@ -91,7 +91,7 @@
 		<button
 			class="search-docs"
 			on:click={() => {
-				command_runner.open('search-docs');
+				command_runner.open('search-kit-docs');
 			}}
 			title="Search sveltekit documentation"
 			><SearchDocsIcon /> Search SvelteKit Documentation...
