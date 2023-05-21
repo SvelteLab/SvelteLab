@@ -27,6 +27,7 @@
 	padding: 0.5em;
 	padding-inline-start: 1em;
 	min-height: 5.2rem;
+	grid-template-columns: max-content auto;
 }
 
 label {
@@ -57,7 +58,7 @@ input:focus {
 }
 
 li {
-	display: flex;
+	display: grid;
 	align-items: stretch;
 	gap: 0.5em;
 	color: var(--sk-text-1);
