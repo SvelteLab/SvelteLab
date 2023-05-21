@@ -26,6 +26,30 @@
 	margin-inline-start: -1rem;
 	padding: 0.5em;
 	padding-inline-start: 1em;
+	min-height: 5.2rem;
+}
+
+label {
+	display: contents;
+}
+
+.root label, .root input {
+	font-size: var(--sk-text-l);	
+}
+
+input {
+	border: none;
+	color: var(--sk-text-2);
+	flex-grow: 1;
+	font: inherit;
+	width: 100%;
+	background-color: transparent;
+}
+
+input:focus {
+	background-color: var(--sk-back-2);
+	outline: 1px solid var(--sk-theme-1);
+	z-index: 999;
 }
 
 .root .hover-group {
@@ -33,7 +57,7 @@
 }
 
 li {
-	display: grid;
+	display: flex;
 	align-items: stretch;
 	gap: 0.5em;
 	color: var(--sk-text-1);
@@ -132,20 +156,6 @@ form {
 	gap: 0.75rem;
 }
 
-input {
-	border: none;
-	color: var(--sk-text-2);
-	flex-grow: 1;
-	font: inherit;
-	height: 100%;
-	width: 100%;
-	background-color: transparent;
-}
-
-input:focus {
-	background-color: var(--sk-back-2);
-	outline: 1px solid var(--sk-theme-1);
-}
 
 .hover-group button {
 	padding: 0.3em;
