@@ -51,6 +51,10 @@ input:focus {
 	background-color: var(--sk-back-2);
 	outline: 1px solid var(--sk-theme-1);
 	z-index: 999;
+	position: fixed;
+	left: 5.1rem;
+	font-family: var(--sk-font-mono);
+	max-width: var(--ch-count);
 }
 
 .root .hover-group {

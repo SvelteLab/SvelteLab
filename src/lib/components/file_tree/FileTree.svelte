@@ -121,7 +121,7 @@
 				<Label></Label>
 				<span class="screen-reader-only">Project Name</span>
 			</label>
-			<input id="project_name" bind:value={$repl_name} />
+			<input style:--ch-count={$repl_name.length+'ch'} id="project_name" bind:value={$repl_name} />
 			<div class="hover-group" class:force={$open_menus[$base_path_store]}>
 				<DropdownMenu bind:open={$open_menus[$base_path_store]}>
 					<MenuItem on:click={get_upload_handler()}>
