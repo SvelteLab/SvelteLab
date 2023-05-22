@@ -45,6 +45,9 @@ input {
 	font: inherit;
 	width: 100%;
 	background-color: transparent;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 input:focus {
@@ -54,7 +57,8 @@ input:focus {
 	position: fixed;
 	left: 5.1rem;
 	font-family: var(--sk-font-mono);
-	max-width: var(--ch-count);
+	width: var(--ch-count);
+	max-width: calc(100vw - 6rem);
 }
 
 .root .hover-group {
