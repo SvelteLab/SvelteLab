@@ -87,6 +87,10 @@
 		gap: 1.5rem;
 	}
 
+	button:hover {
+		color: var(--sk-text-1);
+	}
+
 	ul {
 		margin: 0;
 	}
