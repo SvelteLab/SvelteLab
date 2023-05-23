@@ -26,6 +26,53 @@
 	margin-inline-start: -1rem;
 	padding: 0.5em;
 	padding-inline-start: 1em;
+	min-height: 5.2rem;
+	grid-template-columns: max-content auto;
+}
+
+label {
+	display: contents;
+}
+
+.root label,
+.root input {
+	font-size: var(--sk-text-l);
+}
+
+input {
+	border: none;
+	border-bottom: 0.1rem solid var(--sk-back-5);
+	margin-block-end: -0.1rem; /* fixes ui shifting on focus caused by border */
+	color: var(--sk-text-2);
+	flex-grow: 1;
+	font: inherit;
+	width: 100%;
+	background-color: transparent;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+input:hover {
+	border-color: var(--sk-text-3);
+}
+
+input:focus {
+	background-color: var(--sk-back-2);
+	border: none;
+	font-family: var(--sk-font-mono);
+	border-radius: 0.5rem;
+	outline: 1px solid var(--sk-theme-1);
+	z-index: 999;
+	position: fixed;
+	inset-inline-start: 4.5rem;
+	inset-block-start: 5.3rem;
+	min-width: 6rem;
+	--padding: 0.5rem;
+	width: calc(var(--ch-count) + calc(var(--padding) * 2));
+	max-width: calc(100vw - 6rem);
+	padding: var(--padding);
+	font-size: 2.2rem;
 }
 
 .root .hover-group {
@@ -130,21 +177,6 @@ form {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
-}
-
-input {
-	border: none;
-	color: var(--sk-text-2);
-	flex-grow: 1;
-	font: inherit;
-	height: 100%;
-	width: 100%;
-	background-color: transparent;
-}
-
-input:focus {
-	background-color: var(--sk-back-2);
-	outline: 1px solid var(--sk-theme-1);
 }
 
 .hover-group button {

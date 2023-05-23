@@ -42,7 +42,8 @@
 			dialogOutOptions={{ x: -500 }}
 			autofocus={false}
 			--as-dialog-padding="0"
-			--as-dialog-top="calc(50% + 3.8rem)"
+			--as-dialog-top="calc(50% + 3.3rem)"
+			--as-dialog-overflow="visible"
 			--as-dialog-left="0"
 			--as-dialog-right="auto"
 			--as-dialog-transform="translateY(-50%)"

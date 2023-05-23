@@ -26,7 +26,7 @@
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
 	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
-	import { file_status } from '$lib/stores/repl_id_store';
+	import Label from '~icons/material-symbols/label'
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -117,7 +117,11 @@
 <ul class="file-tree" use:drop={files_options()}>
 	{#if base_path === $base_path_store}
 		<li class="root">
-			<input aria-label="REPL name" bind:value={$repl_name} />
+			<label for="project_name">
+				<Label></Label>
+				<span class="screen-reader-only">Project Name</span>
+			</label>
+			<input style:--ch-count={$repl_name.length+'ch'} id="project_name" bind:value={$repl_name} />
 			<div class="hover-group" class:force={$open_menus[$base_path_store]}>
 				<DropdownMenu bind:open={$open_menus[$base_path_store]}>
 					<MenuItem on:click={get_upload_handler()}>
