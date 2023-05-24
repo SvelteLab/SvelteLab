@@ -23,6 +23,6 @@ One thing that helped the adoption of Svelte was it's wonderful [REPL](https://s
 
 However, it does not run SvelteKit. Kit is a web app framework based on Svelte. It features bundling configuration, routing, SSR, CSR, TypeScript and more and is the officially supported method for creating Svelte apps and libraries of any kind.
 
-With SvelteLab, we are using the WebContainer API to run NodeJS and SvelteKit inside your browser, to provide the benefits of SvelteKit with the convenience of the REPL plus some _supercharging_ features like a command palette, code formatting and vim keybindings.
+With SvelteLab, we are using the WebContainer API to run NodeJS and SvelteKit inside your browser, to provide the benefits of SvelteKit with the convenience of the REPL, plus some _supercharged_ features like a command palette, code formatting and vim keybindings.
 
-SvelteLab does not aim to compete with Stackblitz, VSCode or other more fully featured browser based IDE setups, since we focus on creating and sharing smaller SvelteKit projects. Since SvelteLab is focused on SvelteKit, it can integrate tighter into the ecosystem, featuring a couple of Templates with popular Technologies, instant SvelteKit Docs search, quick SvelteKit route file creation, and Svelte Add integrations.
+SvelteLab does not aim to compete with StackBlitz, VSCode or other more fully featured browser based IDE setups, since we focus on creating and sharing smaller SvelteKit projects. Since SvelteLab is focused on SvelteKit, it can integrate tighter into the ecosystem, featuring a couple of Templates with popular Technologies, instant SvelteKit Docs search, quick SvelteKit route file creation, and Svelte Add integrations.
