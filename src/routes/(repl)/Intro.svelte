@@ -7,6 +7,7 @@
 	import README from '../../../README.md?raw';
 	import GitHub from '~icons/mdi/github';
 	import Discord from '~icons/simple-icons/discord';
+	import Docs from '~icons/material-symbols/docs';
 
 	const intro = marked(README.split('---')[1]);
 </script>
@@ -30,6 +31,9 @@
 			<p>instantly spin up a SvelteKit project and share it with the world</p>
 		</div>
 		<div style="display:flex; gap: 3rem; justify-content: center">
+			<a href="https://docs.sveltelab.dev/" title="Docs">
+				<Docs style="font-size: 3rem;" />
+			</a>
 			<a href="https://github.com/sveltelab/sveltelab" title="GitHub">
 				<GitHub style="font-size: 3rem;" />
 			</a>

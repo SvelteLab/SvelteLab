@@ -7,7 +7,7 @@ export function entries() {
 	return [{ slug: '' }];
 }
 
-export const load = (async ({ params: { slug = 'getting-started' }, parent }) => {
+export const load = (async ({ params: { slug = 'welcome' }, parent }) => {
 	let page;
 	try {
 		page = (await import(`../../lib/pages/${slug}/index.svx`))

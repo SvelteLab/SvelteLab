@@ -6,6 +6,6 @@
 </script>
 
 <svelte:head>
-	<title>{metadata.title}</title>
+	<title>{metadata.title} – SvelteLab Docs</title>
 </svelte:head>
 <svelte:component this={data.page} />
