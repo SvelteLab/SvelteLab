@@ -4,6 +4,7 @@
 	import Discord from '~icons/mdi/discord';
 	import Hamburger from '~icons/mdi/menu';
 	import { createEventDispatcher } from 'svelte';
+	import Docs from '~icons/material-symbols/docs';
 
 	const dispatcher = createEventDispatcher();
 </script>
@@ -15,7 +16,7 @@
 		}}
 		class="open-menu"><Hamburger font-size="1.2em" /></button
 	>
-	<a href="/" class="logo"><Logo /> SvelteLab Docs</a>
+	<a href="/" class="logo"><Logo /><Docs /> SvelteLab Docs</a>
 	<a href="https://github.com/sveltelab/sveltelab"><GitHub font-size="1.2em" /></a>
 	<a href="https://discord.gg/avJNXb8Myp"><Discord font-size="1.2em" /></a>
 </header>
@@ -49,6 +50,7 @@
 		bottom: calc(-1 * var(--shadow-height));
 		background: var(--shadow-gradient);
 	}
+
 	a {
 		color: var(--sk-text-1);
 	}
@@ -59,10 +61,15 @@
 
 	.logo {
 		display: flex;
-		gap: 1rem;
+		gap: 0.25rem;
 		align-items: center;
 		margin-right: auto;
 	}
+
+	.logo :global(svg) {
+		color: var(--sk-theme-1);
+	}
+
 	.open-menu {
 		display: none;
 	}
