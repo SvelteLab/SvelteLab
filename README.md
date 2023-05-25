@@ -61,3 +61,5 @@ cp .env.sample .env
 pnpm i
 pnpm dev
 ```
+
+Just adding this to prove i spoke with Kev
