@@ -14,11 +14,11 @@
 		on:click={() => {
 			dispatcher('open');
 		}}
-		class="open-menu"><Hamburger font-size="1.2em" /></button
+		class="open-menu"><Hamburger /></button
 	>
 	<a href="/" class="logo"><Logo /><Docs /> SvelteLab Docs</a>
-	<a href="https://github.com/sveltelab/sveltelab"><GitHub font-size="1.2em" /></a>
-	<a href="https://discord.gg/avJNXb8Myp"><Discord font-size="1.2em" /></a>
+	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
+	<a href="https://discord.gg/avJNXb8Myp"><Discord /></a>
 </header>
 
 <style>
@@ -39,6 +39,7 @@
 			transparent 100%
 		);
 		max-width: 100vw;
+		font-size: 2.5rem;
 	}
 
 	header:after {
