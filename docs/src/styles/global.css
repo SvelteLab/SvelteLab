@@ -207,3 +207,19 @@ pre {
 svg {
 	vertical-align: sub;
 }
+
+article h1 {
+	font-size: var(--sk-text-xl);
+}
+
+.autolink-header {
+	color: var(--sk-back-5);
+	font-size: 0.8em;
+	padding-inline-end: 0.2em;
+	margin-inline-start: -1em;
+	vertical-align: baseline;
+}
+
+.autolink-header:hover {
+	color: var(--sk-theme-1);
+}
