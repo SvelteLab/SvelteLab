@@ -5,10 +5,6 @@ order: 800
 
 # Frequently Asked Questions
 
-## Are my projects secure?
-
-No. SvelteLab is not meant to be used as an IDE for building real-world applications, but rather for sharing Svelte experiments. **Do not** use it to store private API keys or or other secrets, as all content will be saved or shared as plain text.
-
 ## How do I setup TypeScript?
 
 You can use the command palette to create a new Project with the TypeScript template! Press <kbd>Ctrl / CMD</kbd> + <kbd>K</kbd>, search for "template", select "New with Template" and select "TypeScript".
@@ -18,6 +14,18 @@ You can also setup TypeScript to be your default Template for new Projects in th
 ## Where can I enable Vim Keybindings?
 
 You can use the command palette to enable Vim Keybindings! Press <kbd>Ctrl / CMD</kbd> + <kbd>K</kbd>, search for "Vim" and select "Vim Keybindings".
+
+## Can I export or download the code?
+
+You can use the command palette to export and download the code as a .zip file! Press <kbd>Ctrl / CMD</kbd> + <kbd>K</kbd>, search for "export" and select "Export".
+
+## Can I open the dev server preview in a separate tab or window?
+
+Yes you can by clicking the icon titled "Open in new Tab" in the top right corner of the dev server preview iframe navigation bar.
+
+## Are my projects secure?
+
+No. SvelteLab is not meant to be used as an IDE for building real-world applications, but rather for sharing Svelte experiments. **Do not** use it to store private API keys or or other secrets, as all content will be saved or shared as plain text.
 
 ## Why not just use StackBlitz or similar?
 
