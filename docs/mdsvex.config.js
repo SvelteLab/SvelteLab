@@ -1,6 +1,6 @@
 import { defineMDSveXConfig as defineConfig } from 'mdsvex';
-import slug from 'rehype-slug';
-import autolink from 'rehype-autolink-headings';
+import slug from 'remark-slug';
+import autolink from 'remark-autolink-headings';
 
 function get_headings() {
 	let visit;
@@ -32,12 +32,12 @@ const config = defineConfig({
 		dashes: 'oldschool'
 	},
 
-	rehypePlugins: [
+	remarkPlugins: [
 		slug,
 		[
 			autolink,
 			{
-				properties: {
+				linkProperties: {
 					class: 'autolink-header'
 				},
 				content: [

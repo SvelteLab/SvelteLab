@@ -42,9 +42,9 @@
 				{#if current}
 					<ul>
 						{#each doc.metadata?.headings?.slice(1) ?? [] as heading}
-							{#if heading.level < 3}
-								<li><a href="{doc.link}{heading.url}">{heading.title}</a></li>
-							{/if}
+							<li style:margin-inline-start="{heading.level - 2}em">
+								<a href="{doc.link}{heading.url}">{heading.title}</a>
+							</li>
 						{/each}
 					</ul>
 				{/if}
