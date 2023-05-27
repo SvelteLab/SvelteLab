@@ -2,27 +2,22 @@
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { editor_config } from '$lib/stores/editor_config_store';
+	import { diagnostic_store } from '$lib/stores/editor_errors_store';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
-	import type { SvelteError } from '$lib/types';
+	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { indentWithTab } from '@codemirror/commands';
-	import { css } from '@codemirror/lang-css';
-	import { html } from '@codemirror/lang-html';
 	import { javascript } from '@codemirror/lang-javascript';
-	import { json } from '@codemirror/lang-json';
-	import { markdown } from '@codemirror/lang-markdown';
-	import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
+	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
 	import { EditorView, keymap } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
-	import { svelte } from '@replit/codemirror-lang-svelte';
+	import { codemirror, withCodemirrorInstance } from '@neocodemirror/svelte';
 	import { vim } from '@replit/codemirror-vim';
 	import { basicSetup } from 'codemirror';
-	import CodeMirror from 'svelte-codemirror-editor';
-	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
@@ -38,16 +33,16 @@
 
 	const theme = syntaxHighlighting(svelte_syntax_style);
 
-	const langs: Record<string, ReturnType<typeof svelte>> = {
-		svelte: svelte(),
-		html: html(),
-		js: javascript(),
-		cjs: javascript(),
-		mjs: javascript(),
-		ts: javascript({ typescript: true }),
-		css: css(),
-		json: json(),
-		md: markdown(),
+	const langs: Record<string, () => Promise<LanguageSupport>> = {
+		svelte: () => import('@replit/codemirror-lang-svelte').then((lang) => lang.svelte()),
+		html: () => import('@codemirror/lang-html').then((lang) => lang.html()),
+		js: async () => javascript(),
+		cjs: async () => javascript(),
+		mjs: async () => javascript(),
+		ts: async () => javascript({ typescript: true }),
+		css: () => import('@codemirror/lang-css').then((lang) => lang.css()),
+		json: () => import('@codemirror/lang-json').then((lang) => lang.json()),
+		md: () => import('@codemirror/lang-markdown').then((lang) => lang.markdown()),
 	};
 
 	let code: string;
@@ -91,43 +86,32 @@
 	}
 
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
+	$: lang = current_lang in langs ? current_lang : undefined;
 	$: is_image = ['png', 'bmp', 'jpg', 'jpeg', 'gif', 'webp'].includes(current_lang);
-	$: lang = langs[current_lang];
 	$: read_current_tab($current_tab, is_image);
 
 	on_command('format-current', () => {
 		read_current_tab($current_tab, is_image);
 	});
 
-	const warnings_and_errors = {
-		warnings: [] as Warning[],
-		error: null as SvelteError | null,
-	};
-
-	function return_diagnostics() {
-		const diagnostcs: Diagnostic[] = [];
-		for (let warning of warnings_and_errors.warnings) {
-			if (!(warning.start as any)?.character || !(warning.end as any)?.character) continue;
-			diagnostcs.push({
-				from: (warning.start as any).character,
-				to: (warning.end as any).character,
-				severity: 'warning',
-				message: warning.message,
+	async function return_diagnostics() {
+		const diagnostics: Diagnostic[] = [];
+		const svelte_diagnostics = (await diagnostic_store.get_diagnostic($current_tab)) ?? [];
+		for (let diagnostic of svelte_diagnostics) {
+			diagnostics.push({
+				from: get_character_from_pos(diagnostic.start.line, diagnostic.start.character, code),
+				to: get_character_from_pos(diagnostic.end.line, diagnostic.end.character, code),
+				message: diagnostic.message,
+				severity: diagnostic.type,
+				source: diagnostic.source,
 			});
 		}
-		if (warnings_and_errors.error) {
-			const { error } = warnings_and_errors;
-			if (error.start?.character && error.end?.character) {
-				diagnostcs.push({
-					from: error.start.character,
-					to: error.end.character,
-					severity: 'error',
-					message: error.message,
-				});
-			}
-		}
-		return diagnostcs;
+		return diagnostics;
 	}
+
+	let cursor_pos = 0;
+
+	const codemirror_instance = withCodemirrorInstance();
 </script>
 
 {#if !$current_tab}
@@ -137,80 +121,82 @@
 	{#if is_image}
 		<ImageFromBytes {image_bytes} type={current_lang} />
 	{:else}
-		<CodeMirror
-			{lang}
-			{theme}
-			basic={false}
-			useTab={false}
-			tabSize={3}
-			value={code ?? ''}
-			{extensions}
-			on:change={(e) => {
-				webcontainer.update_file($current_tab, e.detail);
-				code = e.detail;
-			}}
-			styles={{
-				'&': {
-					width: '100%',
-					height: '100%',
-					overflow: 'auto',
-					'background-color': 'var(--sk-back-1)',
-					color: 'var(--sk-code-base)',
+		<div
+			class="codemirror-wrapper"
+			use:codemirror={{
+				lang,
+				langMap: langs,
+				theme,
+				tabSize: 3,
+				useTabs: true,
+				value: code,
+				extensions,
+				setup: 'minimal',
+				cursorPos: cursor_pos,
+				instanceStore: codemirror_instance,
+				onTextChange(new_code) {
+					webcontainer.update_file($current_tab, new_code);
+					code = new_code;
 				},
-				'*': {
-					'font-family': 'var(--sk-font-mono)',
-					'tab-size': 3,
-					'font-size': 'var(--sk-editor-font-size)',
-				},
-				'.cm-gutters': {
-					border: 'none',
-				},
-				'.cm-gutter': {
-					'background-color': 'var(--sk-back-1)',
-					color: 'var(--sk-code-base)',
-				},
-				'.cm-line.cm-activeLine': {
-					'background-color': 'var(--sk-back-translucent)',
-				},
-				'.cm-activeLineGutter': {
-					'background-color': 'var(--sk-back-3)',
-				},
-				'.cm-focused.cm-selectionBackground': {
-					'background-color': 'var(--sk-back-4) !important',
-				},
-				'.cm-selectionBackground': {
-					'background-color': 'var(--sk-back-5) !important',
-				},
-				'.cm-cursor': {
-					'border-color': 'var(--sk-code-base)',
-				},
-				'.cm-tooltip': {
-					border: 'none',
-					background: 'var(--sk-back-3)',
-				},
-				'.cm-tooltip.cm-tooltip-autocomplete > ul': {
-					background: 'var(--sk-back-3)',
-				},
-				'.cm-tooltip-autocomplete ul li[aria-selected]': {
-					background: 'var(--sk-theme-1)',
-					color: 'var(--sk-text-1)',
-				},
-				'.cm-tooltip-lint': {
-					background: 'var(--sk-back-3)',
-					color: 'var(--sk-text-1)',
-				},
-				'.cm-panels': {
-					background: 'var(--sk-back-3)',
-					color: 'var(--sk-text-1)',
+				styles: {
+					'&': {
+						width: '100%',
+						height: '100%',
+						overflow: 'auto',
+						backgroundColor: 'var(--sk-back-1)',
+						color: 'var(--sk-code-base)',
+					},
+					'*': {
+						fontFamily: 'var(--sk-font-mono)',
+						tabSize: 3,
+						fontSize: 'var(--sk-editor-font-size)',
+					},
+					'.cm-gutters': {
+						border: 'none',
+					},
+					'.cm-gutter': {
+						backgroundColor: 'var(--sk-back-1)',
+						color: 'var(--sk-code-base)',
+					},
+					'.cm-line.cm-activeLine': {
+						backgroundColor: 'var(--sk-back-translucent)',
+					},
+					'.cm-activeLineGutter': {
+						backgroundColor: 'var(--sk-back-3)',
+					},
+					'.cm-focused.cm-selectionBackground': {
+						backgroundColor: 'var(--sk-back-4) !important',
+					},
+					'.cm-selectionBackground': {
+						backgroundColor: 'var(--sk-back-5) !important',
+					},
+					'.cm-cursor': {
+						borderColor: 'var(--sk-code-base)',
+					},
+					'.cm-tooltip': {
+						border: 'none',
+						background: 'var(--sk-back-3)',
+					},
+					'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+						background: 'var(--sk-back-3)',
+					},
+					'.cm-tooltip-autocomplete ul li[aria-selected]': {
+						background: 'var(--sk-theme-1)',
+						color: 'var(--sk-text-1)',
+					},
+					'.cm-tooltip-lint': {
+						background: 'var(--sk-back-3)',
+						color: 'var(--sk-text-1)',
+					},
+					'.cm-panels': {
+						background: 'var(--sk-back-3)',
+						color: 'var(--sk-text-1)',
+					},
 				},
 			}}
 		/>
 		{#if current_lang === 'svelte'}
-			<Errors
-				{code}
-				bind:warnings={warnings_and_errors.warnings}
-				bind:error={warnings_and_errors.error}
-			/>
+			<Errors />
 		{/if}
 	{/if}
 {/if}

@@ -41,3 +41,12 @@ export function async_click(
 		},
 	};
 }
+
+export function get_character_from_pos(line: number, column: number, source: string) {
+	const lines = source.split('\n');
+	let sum = column;
+	for (let i = 0; i < line - 1; i++) {
+		sum += (lines.shift()?.length ?? 0) + 1;
+	}
+	return sum;
+}

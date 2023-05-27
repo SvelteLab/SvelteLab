@@ -23,6 +23,7 @@ specifiers:
   '@lezer/highlight': ^1.1.4
   '@lezer/javascript': ^1.4.3
   '@lezer/lr': ^1.3.4
+  '@neocodemirror/svelte': ^0.0.10
   '@playwright/test': ^1.33.0
   '@replit/codemirror-lang-svelte': ^6.0.0
   '@replit/codemirror-vim': ^6.0.14
@@ -98,6 +99,7 @@ dependencies:
   '@lezer/highlight': 1.1.4
   '@lezer/javascript': 1.4.3
   '@lezer/lr': 1.3.4
+  '@neocodemirror/svelte': 0.0.10_dddsawv476zxn25blgzmkdajua
   '@replit/codemirror-lang-svelte': 6.0.0_4nr5yc7oveo27kwhxyvyjbohbu
   '@replit/codemirror-vim': 6.0.14_xmlrl3fuy7hx55xikzyuc76hlu
   '@sveltejs/site-kit': 3.2.2
@@ -773,6 +775,28 @@ packages:
       - encoding
       - supports-color
     dev: true
+
+  /@neocodemirror/svelte/0.0.10_dddsawv476zxn25blgzmkdajua:
+    resolution: {integrity: sha512-uTH33iwPw1wJKo8pMc+EPidLG7IIh3EF8DpHBKg22BCAfkqJQ9WDeroaGYpb1dJG+6mhQIGmiBgdzs/cIoZwFg==}
+    peerDependencies:
+      '@codemirror/autocomplete': ^6.7.1
+      '@codemirror/commands': ^6.2.4
+      '@codemirror/language': ^6.7.0
+      '@codemirror/lint': ^6.2.1
+      '@codemirror/search': ^6.4.0
+      '@codemirror/state': ^6.2.0
+      '@codemirror/view': ^6.12.0
+    dependencies:
+      '@codemirror/autocomplete': 6.6.1_tirdllc2g4cblqad3kqe5ady3a
+      '@codemirror/commands': 6.2.4
+      '@codemirror/language': 6.6.0
+      '@codemirror/lint': 6.2.1
+      '@codemirror/search': 6.4.0
+      '@codemirror/state': 6.2.0
+      '@codemirror/view': 6.11.0
+      csstype: 3.1.2
+      nanostores: 0.8.1
+    dev: false
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1626,6 +1650,10 @@ packages:
       css-color-keywords: 1.0.0
       postcss-value-parser: 4.2.0
     dev: true
+
+  /csstype/3.1.2:
+    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
+    dev: false
 
   /date-time/3.1.0:
     resolution: {integrity: sha512-uqCUKXE5q1PNBXjPqvwhwJf9SwMoAHBgWJ6DcrnS5o+W2JOiIILl0JEdVD8SGujrNS02GGxgwAg2PN2zONgtjg==}
@@ -2484,6 +2512,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
     dev: true
+
+  /nanostores/0.8.1:
+    resolution: {integrity: sha512-1ZCfQtII2XeFDrtqXL2cdQ/diGrLxzRB3YMyQjn8m7GSGQrJfGST2iuqMpWnS/ZlifhtjgR/SX0Jy6Uij6lRLA==}
+    engines: {node: ^16.0.0 || >=18.0.0}
+    dev: false
 
   /natural-compare-lite/1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}
