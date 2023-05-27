@@ -1,59 +1,24 @@
 <script lang="ts">
-	import type { SvelteError } from '$lib/types';
-	import { svelte_compiler } from '$lib/workers';
-	import { onDestroy, onMount } from 'svelte';
+	import { diagnostic_store } from '$lib/stores/editor_errors_store';
+	import { current_tab } from '$lib/tabs';
 	import { slide } from 'svelte/transition';
-	import type { Warning } from 'svelte/types/compiler/interfaces';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';
 	import WarningIcon from '~icons/material-symbols/warning-outline-rounded';
 
-	export let code = '';
-	export let warnings = [] as Warning[];
-	export let error: SvelteError | null = null;
-
-	onMount(() => {
-		const handler = (e: any) => {
-			warnings = e.data?.result?.warnings ?? [];
-			error = e.data?.result?.error;
-		};
-		svelte_compiler.addEventListener('message', handler);
-		return () => {
-			svelte_compiler.removeEventListener('message', handler);
-		};
-	});
-
-	function parse(code: string) {
-		warnings = [];
-		error = null;
-		svelte_compiler.postMessage({
-			type: 'compile',
-			id: '',
-			source: code,
-			options: {},
-			return_ast: true,
-		});
-	}
-
-	onDestroy(() => {
-		warnings = [];
-		error = null;
-	});
-
-	$: parse(code);
+	$: diagnostics = $diagnostic_store.get($current_tab) ?? [];
 </script>
 
 <ul>
-	{#if error}
-		<li class="error" transition:slide={{ delay: 250, duration: 250 }}>
-			<ErrorIcon />{error.message} at {error.start?.line}:{error.start?.column}
-		</li>
-	{/if}
-
-	{#each warnings as warning}
-		<li class="warning" transition:slide={{ delay: 250, duration: 250 }}>
-			<WarningIcon />{warning.message}
-			{#if warning.start}
-				at {warning.start?.line}:{warning.start?.column}
+	{#each [...diagnostics] as diagnostic}
+		<li class={diagnostic.type} transition:slide={{ delay: 250, duration: 250 }}>
+			{#if diagnostic.type === 'warning'}
+				<WarningIcon />
+			{:else}
+				<ErrorIcon />
+			{/if}
+			{diagnostic.message}
+			{#if diagnostic.start}
+				at {diagnostic.start?.line}:{diagnostic.start?.character}
 			{/if}
 		</li>
 	{/each}
@@ -68,10 +33,10 @@
 	}
 	li {
 		padding: 0.3em;
-		display: flex;
+		display: grid;
+		grid-template-columns: max-content 1fr;
 		align-items: center;
 		gap: 0.5em;
-		padding: 0.5em;
 		border-top: 1px solid var(--sk-back-4);
 	}
 	li :global(svg) {

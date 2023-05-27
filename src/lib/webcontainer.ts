@@ -10,10 +10,11 @@ import {
 import { compressToEncodedURIComponent } from 'lz-string';
 import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
-import { is_repl_to_save, repl_name, file_status } from './stores/repl_id_store';
+import { stringify } from './components/parsers';
+import { assert_diagnostic, diagnostic_store } from './stores/editor_errors_store';
+import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { deferred_promise } from './utils';
-import { stringify } from './components/parsers';
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -223,12 +224,21 @@ async function launch_jsh() {
 					}
 					// if data includes \r and jsh it's already listening
 					// a new command is probably being run so we set the store
-				} else if (data.includes('\r') && already_listening) {
+				} else if (data.includes('❯') && already_listening) {
+					//TODO: figure out how to properly do this
 					merge_state({
 						is_jsh_listening: false,
 					});
 					jsh_finish_queue.forEach((callback) => callback());
 					jsh_finish_queue.clear();
+					const command = jsh_queue.values().next().value as { cmd: string; callback?: () => void };
+					if (command) {
+						run_command(command.cmd);
+						if (command.callback) {
+							jsh_finish_queue.add(command.callback);
+						}
+						jsh_queue.delete(command);
+					}
 				}
 				terminal.write(data);
 			},
@@ -265,6 +275,50 @@ async function launch_jsh() {
 		jsh_queue.clear();
 		jsh_finish_queue.clear();
 	}
+}
+
+function parse_svelte_check(chunk: string) {
+	const result = chunk.trim().match(/^\d+\s(?<diagnostic>.*)$/);
+	if (result && result.groups) {
+		try {
+			const diagnostic = JSON.parse(result.groups.diagnostic);
+			diagnostic.type = diagnostic?.type?.toLowerCase();
+			assert_diagnostic(diagnostic);
+			diagnostic.filename = `./${diagnostic?.filename}`;
+			diagnostic.start.line++;
+			diagnostic.end.line++;
+			return diagnostic;
+		} catch (e) {
+			/* empty */
+		}
+	}
+}
+
+async function run_svelte_check() {
+	const process = await webcontainer_instance.spawn('npx', [
+		'svelte-check',
+		'--watch',
+		'--output',
+		'machine-verbose',
+	]);
+	diagnostic_store.set_is_running(true);
+	process.output.pipeTo(
+		new WritableStream({
+			write(chunk) {
+				if (chunk.toLowerCase().includes('completed')) {
+					diagnostic_store.resolve();
+				}
+				const result = parse_svelte_check(chunk);
+				if (result) {
+					diagnostic_store.push_diagnositc(result);
+				}
+			},
+		})
+	);
+	process.exit.then(() => {
+		diagnostic_store.set_is_running(false);
+		run_svelte_check();
+	});
 }
 
 function does_file_exist(files: FileSystemTree, path: `./${string}`) {
@@ -380,6 +434,7 @@ export const webcontainer = {
 	update_file(path: string, content: string) {
 		const update = () => {
 			webcontainer_instance.fs.writeFile(path, content);
+			diagnostic_store.prepare_for_new_check();
 			is_repl_to_save.set(true);
 			file_status.set_file_edited_status(path, true);
 		};
@@ -403,6 +458,7 @@ export const webcontainer = {
 		}
 		await run_command('npm install --verbose');
 		listen_for_files_changes();
+		run_svelte_check();
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"
@@ -424,6 +480,7 @@ export const webcontainer = {
 	},
 	async add_file(path: string, content: string | Uint8Array) {
 		await webcontainer_instance.fs.writeFile(path, content);
+		diagnostic_store.prepare_for_new_check();
 		//if we are not already listening we can add the file in store ourself
 		if (!get(listening_for_fs_store)) {
 			add_file_in_store(files_store, path, '', true);
