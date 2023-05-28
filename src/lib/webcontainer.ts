@@ -11,10 +11,15 @@ import { compressToEncodedURIComponent } from 'lz-string';
 import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
 import { stringify } from './components/parsers';
-import { assert_diagnostic, diagnostic_store } from './stores/editor_errors_store';
+import {
+	assert_diagnostic,
+	diagnostic_store,
+	is_sveltecheck_running,
+} from './stores/editor_errors_store';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
-import { deferred_promise } from './utils';
+import { deferred_promise, version_compare } from './utils';
+import { actionable } from './toast';
 
 /**
  * Used to throw an useful error if you try to access any function befor initing
@@ -116,6 +121,7 @@ async function listen_for_files_changes() {
 						route: string;
 					};
 					const path = `./${route}`;
+					diagnostic_store.prepare_for_new_check();
 					if (command === 'add') {
 						add_file_in_store(files_store, path, '', true);
 					} else if (command === 'unlink') {
@@ -277,6 +283,9 @@ async function launch_jsh() {
 }
 
 function parse_svelte_check(chunk: string) {
+	// the current log is a timestamp followed by the actual log
+	// this regex simply match against multiple numbers and extract the
+	// rest of the line in a group called diagnostic
 	const result = chunk.trim().match(/^\d+\s(?<diagnostic>.*)$/);
 	if (result && result.groups) {
 		try {
@@ -293,7 +302,82 @@ function parse_svelte_check(chunk: string) {
 	}
 }
 
+async function spawn_process_and_show_output(cmd: string) {
+	const [main_command, ...args] = cmd.split(' ');
+	const process = await webcontainer_instance.spawn(main_command, args);
+	process.output.pipeTo(
+		new WritableStream({
+			write(chunk) {
+				terminal.write(chunk);
+			},
+		})
+	);
+	return process;
+}
+
 async function run_svelte_check() {
+	if (is_sveltecheck_running) return;
+	const check_version_process = await webcontainer_instance.spawn('npm', ['list']);
+	let available = false;
+	let npm_list_output = '';
+	check_version_process.output.pipeTo(
+		new WritableStream({
+			write(chunk) {
+				npm_list_output += chunk;
+			},
+		})
+	);
+	await check_version_process.exit;
+	// check if svelte-check is present in `npm list` and extrapolate
+	// the version
+	const svelte_check_match = npm_list_output.match(
+		/svelte-check@(?<major>\d+).(?<minor>\d+).(?<patch>\d+)/
+	);
+	if (svelte_check_match && svelte_check_match.groups) {
+		// svelte-check is present, we check if it's the correct version
+		const { major, minor, patch } = svelte_check_match.groups;
+		if (version_compare('3.4.3', `${+major}.${+minor}.${+patch}`) === 1) {
+			// if it's an older version we set available to false
+			// ad we prompt the user to update
+			available = false;
+			actionable(
+				'Your version of svelte-check is older than the required 3.4.3...would you like to update?',
+				async () => {
+					const update_svelte_check_process = await spawn_process_and_show_output(
+						'npm install svelte-check@latest'
+					);
+					const result = await update_svelte_check_process.exit;
+					if (result === 0) {
+						run_svelte_check();
+					}
+				},
+				'Update'
+			);
+		}
+		available = true;
+	} else {
+		// no svelte-check found, we set available to false and show an actionable
+		// toast asking them to install it
+		available = false;
+		actionable(
+			'No svelte-check found...would you like to install it?',
+			async () => {
+				// if they decide to install we proceed to install and if the installation
+				// is successful we run svelte-check again
+				const install_svelte_check_process = await spawn_process_and_show_output(
+					'npm install svelte-check@latest'
+				);
+				const result = await install_svelte_check_process.exit;
+				if (result === 0) {
+					run_svelte_check();
+				}
+			},
+			'Install'
+		);
+	}
+
+	if (!available) return;
+
 	const process = await webcontainer_instance.spawn('npx', [
 		'svelte-check',
 		'--watch',
@@ -379,6 +463,9 @@ export const webcontainer = {
 		}
 		webcontainer_instance = await WebContainer.boot();
 		webcontainer_instance.on('server-ready', (port, url) => {
+			// we run svelte-check after the server is ready
+			// to avoid not having the updated types from the sveltekit dev server
+			run_svelte_check();
 			merge_state({ webcontainer_url: url });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
@@ -411,7 +498,7 @@ export const webcontainer = {
 		launch_jsh();
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
-		await webcontainer.run_dev_server();
+		webcontainer.run_dev_server();
 	},
 	/**
 	 * Register a callback for the webcontainer boots.
@@ -457,7 +544,6 @@ export const webcontainer = {
 		}
 		await run_command('npm install --verbose');
 		listen_for_files_changes();
-		run_svelte_check();
 	},
 	/**
 	 * Run the dev server and register a callback on "server-ready"

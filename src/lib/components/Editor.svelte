@@ -123,6 +123,12 @@
 	{:else}
 		<div
 			class="codemirror-wrapper"
+			on:codemirror:textChange={({ detail: new_code }) => {
+				// puruvj suggested using this event instead
+				// of the object one
+				webcontainer.update_file($current_tab, new_code);
+				code = new_code;
+			}}
 			use:codemirror={{
 				lang,
 				langMap: langs,
@@ -134,10 +140,6 @@
 				setup: 'minimal',
 				cursorPos: cursor_pos,
 				instanceStore: codemirror_instance,
-				onTextChange(new_code) {
-					webcontainer.update_file($current_tab, new_code);
-					code = new_code;
-				},
 				styles: {
 					'&': {
 						width: '100%',
@@ -196,7 +198,12 @@
 			}}
 		/>
 		{#if current_lang === 'svelte'}
-			<Errors />
+			<Errors
+				on:click_on_diagnostic={({ detail: diagnostic }) => {
+					cursor_pos = get_character_from_pos(diagnostic.end.line, diagnostic.end.character, code);
+					$codemirror_instance.view?.focus();
+				}}
+			/>
 		{/if}
 	{/if}
 {/if}
