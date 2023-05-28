@@ -91,7 +91,6 @@
 	ul > ul {
 		background-color: var(--sk-back-2);
 		border-inline-start: 0.5rem solid var(--sk-theme-1);
-		border-block-end: 0.2rem solid var(--sk-theme-1);
 	}
 
 	a {
