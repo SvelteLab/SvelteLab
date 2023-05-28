@@ -62,7 +62,7 @@ const { subscribe, update } = writable(new Map<string, Set<Diagnostic>>());
 
 const diagnostic_resolves = new Map<string, (result: Set<Diagnostic>) => void>();
 
-let is_sveltecheck_running = false;
+export let is_sveltecheck_running = false;
 
 let resolved = false;
 
@@ -95,7 +95,6 @@ export const diagnostic_store = {
 		is_sveltecheck_running = is_running;
 	},
 	async get_diagnostic(path: string) {
-		console.log(path, get({ subscribe }));
 		// if sveltecheck is not running just return an empty array
 		if (!is_sveltecheck_running) return [];
 		// if the promise was already resolved the map will be empty
