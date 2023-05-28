@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { clickOutside } from 'as-comps';
 	import '../styles/global.css';
@@ -14,6 +15,10 @@
 		// (using this insteas of aftyerNavigate to also trigger on hash change)
 		open = false;
 	}
+
+	afterNavigate(() => {
+		document.querySelector('main')?.scrollTo(0, 0);
+	});
 </script>
 
 <div class="container" class:open>
@@ -37,9 +42,9 @@
 				{#if current}
 					<ul>
 						{#each doc.metadata?.headings?.slice(1) ?? [] as heading}
-							{#if heading.level < 3}
-								<li><a href="{doc.link}{heading.url}">{heading.title}</a></li>
-							{/if}
+							<li style:margin-inline-start="{heading.level - 2}em">
+								<a href="{doc.link}{heading.url}">{heading.title}</a>
+							</li>
 						{/each}
 					</ul>
 				{/if}

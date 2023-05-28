@@ -1,0 +1,10 @@
+---
+title: Templates
+order: 600
+---
+
+# Templates
+
+To speed up creation of new Projects, SvelteLab offers a couple of SvelteKit Templates with popular additional technologies. Using the [command palette](/command-palette), you can create a new project from the Basic, Library, mdsvex, Tailwind, TypeScript or TypeScript + Tailwind Templates.
+
+You can also set one of the above as your **default Templates**, so any new Project always starts of with these integrations.

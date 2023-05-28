@@ -35,6 +35,8 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
 	import AddNew from '~icons/material-symbols/add-circle-rounded';
+	import Docs from '~icons/material-symbols/docs';
+
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
@@ -76,7 +78,7 @@
 			on:click={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree !== 0}
 		>
-			<FileBrowser /> Files
+			<FileBrowser />
 		</button>
 
 		<button
@@ -84,7 +86,7 @@
 			on:click={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal !== 0}
 		>
-			<Terminal /> Terminal
+			<Terminal />
 		</button>
 	{/if}
 	<div class="grow">
@@ -118,6 +120,9 @@
 			<Moon />
 		{/if}
 	</button>
+	<a href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
+		<Docs />
+	</a>
 	<button
 		on:click={() => {
 			command_runner.open('> ');
@@ -354,7 +359,7 @@
 		border-block-start-color: transparent;
 		border-inline-color: transparent;
 		color: var(--sk-theme-1);
-		
+
 		border-radius: 0.5rem;
 	}
 

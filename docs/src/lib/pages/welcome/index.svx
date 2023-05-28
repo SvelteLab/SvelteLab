@@ -1,0 +1,25 @@
+---
+title: Welcome
+order: 100
+---
+
+<script>
+	import Github from "~icons/mdi/github";
+	import Twitter from "~icons/mdi/twitter";
+	import Svelte from "~icons/logos/svelte-icon";
+</script>
+
+# 👋 Welcome
+
+Welcome to the SvelteLab Docs. Here you can learn more about [SvelteLab](https://www.sveltelab.dev/) and it's features.
+
+<video controls src="/sveltelab-launch-teaser.mp4"/>
+
+If you want a super quick introduction to SvelteLab you can watch our presentation from the [Svelte Summit Spring 2023](https://www.youtube.com/watch?v=0bog8-Ay7CU&t=1102s). We also gave a slightly expanded talk at [Svelte Society - London May 2023](https://youtu.be/VkVyP1TgH64?t=3212).
+
+Feel free to head over to our [GitHub Repo](https://github.com/sveltelab/sveltelab) and [join our Discord](https://discord.gg/avJNXb8Myp).
+
+SvelteLab is maintained by:
+
+- <Twitter /> <a href="https://twitter.com/PaoloRicciuti">@PaoloRicciuti</a>
+- <Twitter /> <a href="https://twitter.com/SarcevicAntonio">@SarcevicAntonio</a>

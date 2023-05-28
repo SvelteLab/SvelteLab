@@ -32,8 +32,26 @@ const config = defineConfig({
 		dashes: 'oldschool'
 	},
 
-	remarkPlugins: [slug, autolink, get_headings],
-	rehypePlugins: []
+	remarkPlugins: [
+		slug,
+		[
+			autolink,
+			{
+				linkProperties: {
+					class: 'autolink-header'
+				},
+				content: [
+					{
+						type: 'element',
+						tagName: 'span',
+						properties: {},
+						children: [{ type: 'text', value: '#' }]
+					}
+				]
+			}
+		],
+		get_headings
+	]
 });
 
 export default config;

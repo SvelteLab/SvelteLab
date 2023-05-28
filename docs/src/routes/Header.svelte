@@ -1,9 +1,10 @@
 <script lang="ts">
-	import LogoLong from '$lib/components/LogoLong.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import GitHub from '~icons/mdi/github';
 	import Discord from '~icons/mdi/discord';
 	import Hamburger from '~icons/mdi/menu';
 	import { createEventDispatcher } from 'svelte';
+	import Docs from '~icons/material-symbols/docs';
 
 	const dispatcher = createEventDispatcher();
 </script>
@@ -13,11 +14,11 @@
 		on:click={() => {
 			dispatcher('open');
 		}}
-		class="open-menu"><Hamburger font-size="1.2em" /></button
+		class="open-menu"><Hamburger /></button
 	>
-	<a href="https://sveltelab.dev" class="logo"><LogoLong /></a>
-	<a href="https://github.com/sveltelab/sveltelab"><GitHub font-size="1.2em" /></a>
-	<a href="https://discord.gg/avJNXb8Myp"><Discord font-size="1.2em" /></a>
+	<a href="/" class="logo"><Logo /><Docs /> SvelteLab Docs</a>
+	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
+	<a href="https://discord.gg/avJNXb8Myp"><Discord /></a>
 </header>
 
 <style>
@@ -38,6 +39,7 @@
 			transparent 100%
 		);
 		max-width: 100vw;
+		font-size: 2.5rem;
 	}
 
 	header:after {
@@ -49,6 +51,7 @@
 		bottom: calc(-1 * var(--shadow-height));
 		background: var(--shadow-gradient);
 	}
+
 	a {
 		color: var(--sk-text-1);
 	}
@@ -58,8 +61,16 @@
 	}
 
 	.logo {
+		display: flex;
+		gap: 0.25rem;
+		align-items: center;
 		margin-right: auto;
 	}
+
+	.logo :global(svg) {
+		color: var(--sk-theme-1);
+	}
+
 	.open-menu {
 		display: none;
 	}
