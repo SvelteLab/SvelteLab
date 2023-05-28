@@ -16,7 +16,11 @@
 		}}
 		class="open-menu"><Hamburger /></button
 	>
-	<a href="/" class="logo"><Logo /><Docs /> SvelteLab Docs</a>
+	<a href="/" class="logo">
+		<Docs />
+		<Logo />
+		SvelteLab Docs
+	</a>
 	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
 	<a href="https://discord.gg/avJNXb8Myp"><Discord /></a>
 </header>
@@ -39,7 +43,7 @@
 			transparent 100%
 		);
 		max-width: 100vw;
-		font-size: 2.5rem;
+		font-size: 2rem;
 	}
 
 	header:after {
@@ -62,7 +66,7 @@
 
 	.logo {
 		display: flex;
-		gap: 0.25rem;
+		gap: 0.5rem;
 		align-items: center;
 		margin-right: auto;
 	}

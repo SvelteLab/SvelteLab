@@ -186,6 +186,18 @@ ol {
 	padding: revert;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	scroll-margin-top: 2em;
+	margin-block-start: 2em;
+	padding-block-end: 0.25em;
+	border-block-end: 0.1rem solid var(--sk-back-4);
+}
+
 kbd {
 	margin-left: auto;
 	font-family: var(--sk-font);
@@ -222,4 +234,10 @@ article h1 {
 
 .autolink-header:hover {
 	color: var(--sk-theme-1);
+}
+
+@media (max-width: 1000px) {
+	.autolink-header {
+		margin-inline-start: unset;
+	}
 }
