@@ -225,10 +225,6 @@ async function launch_jsh() {
 					// if data includes \r and jsh it's already listening
 					// a new command is probably being run so we set the store
 				} else if (data.includes('❯') && already_listening) {
-					//TODO: figure out how to properly do this
-					merge_state({
-						is_jsh_listening: false,
-					});
 					jsh_finish_queue.forEach((callback) => callback());
 					jsh_finish_queue.clear();
 					const command = jsh_queue.values().next().value as { cmd: string; callback?: () => void };
@@ -239,6 +235,9 @@ async function launch_jsh() {
 						}
 						jsh_queue.delete(command);
 					}
+					merge_state({
+						is_jsh_listening: !command,
+					});
 				}
 				terminal.write(data);
 			},
