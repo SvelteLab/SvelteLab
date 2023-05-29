@@ -105,6 +105,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	// ADD OPENING FILES TO COMMANDS
 	const files = get_files_from_tree($files);
 	const commands_to_return: Command[] = files.map((file) => ({
+		category: 'File',
 		title: `${file.file}`,
 		subtitle: file.path,
 		action() {
@@ -113,6 +114,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}));
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'format-current',
 		title: 'Format',
 		subtitle: 'format current file with prettier',
@@ -125,6 +127,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'create-route',
 		title: 'Create Route',
 		subtitle: 'create a new SvelteKit route',
@@ -137,6 +140,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'search-kit-docs',
 		title: 'Search Kit Docs',
 		subtitle: 'search SvelteKit documentation',
@@ -149,14 +153,17 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'svelte-add',
 		title: 'Svelte Add',
 		subtitle: 'quickly add a svelte integration',
+		seo: 'PostCSS SCSS Tailwind CSS Bootstrap Bulma Imagetools mdsvex CoffeeScript',
 		icon: SvelteAddIcon,
 		action_component: SvelteAdd,
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'save',
 		title: 'Save',
 		subtitle: 'save the current project',
@@ -185,6 +192,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	if ($page.data.id) {
 		commands_to_return.push({
+			category: 'Project',
 			command: 'fork',
 			title: 'Fork',
 			subtitle: 'fork the current project',
@@ -196,6 +204,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'vim-keybindings',
 		title: 'Vim Keybindings',
 		subtitle: 'toggle vim keybindings',
@@ -204,6 +213,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'line-wrap-code-editor',
 		title: 'Wrap Code',
 		subtitle: 'toggle line wrap for code editor',
@@ -212,6 +222,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'npm-install-package',
 		title: 'Install Package',
 		subtitle: 'search and install packages from npm',
@@ -220,6 +231,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'export-download-zip',
 		title: 'Export',
 		subtitle: 'download current project as .zip',
@@ -236,6 +248,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	if ($page.data.user) {
 		commands_to_return.push({
+			category: 'SvelteLab',
 			command: 'profile',
 			title: 'Profile',
 			subtitle: 'browse your saved projects',
@@ -247,6 +260,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'new-project',
 		title: 'New Project',
 		subtitle: 'create a new blank project',
@@ -261,22 +275,27 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'new-project-template',
 		title: 'New with Template',
 		subtitle: 'create new project with a starter template',
+		seo: 'Basic Library mdsvex Tailwind TypeScript',
 		icon: New,
 		action_component: NewWithTemplate,
 	});
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'default-project-template',
 		title: 'Set Default Template',
 		subtitle: 'choose the template for new projects',
+		seo: 'Basic Library mdsvex Tailwind TypeScript',
 		icon: Bookmark,
 		action_component: SetDefaultTemplate,
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'switch-theme',
 		title: 'Switch Theme',
 		subtitle: 'toggle light or dark theme',
@@ -287,6 +306,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'toggle-file-tree',
 		title: 'Toggle File Tree',
 		subtitle: 'toggle if file tree is shown',
@@ -297,6 +317,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
+
 		command: 'toggle-config',
 		title: 'Toggle Config Files',
 		subtitle: 'toggle if file tree starts from project root or src folder',
@@ -307,6 +329,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'toggle-sort',
 		title: 'Toggle Folder / File Sort Order',
 		subtitle: 'toggle if files or folders show up first',
@@ -317,6 +340,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'toggle-terminal',
 		title: 'Toggle Terminal',
 		subtitle: 'toggle if terminal is shown',
@@ -328,6 +352,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	if ($page.data.id) {
 		commands_to_return.push({
+			category: 'Project',
 			command: 'share-id',
 			title: 'Share Project',
 			subtitle:
@@ -345,6 +370,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}
 
 	commands_to_return.push({
+		category: 'Project',
 		command: 'share-hash',
 		title: 'Share Code Snapshot',
 		subtitle: 'copy link that shares current files via hash',
@@ -360,6 +386,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'open-sveltelab-docs',
 		title: 'Open SvelteLab Docs',
 		subtitle: 'open docs.SvelteLab.dev for Documentation',
@@ -370,6 +397,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'font-preferences',
 		title: 'Font Preference',
 		subtitle: 'set font preference',
@@ -378,6 +406,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'Preferences',
 		command: 'remove-theme-preference',
 		title: 'Remove Theme Preference',
 		subtitle: 'use OS preference',
@@ -388,6 +417,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'open-sveltelab-github',
 		title: 'Open GitHub',
 		subtitle: 'open SvelteLab GitHub Repo',
@@ -398,6 +428,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'submit-issue',
 		title: 'Submit Issue',
 		subtitle: 'open new Issue for SvelteLab',
@@ -408,6 +439,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'join-discord',
 		title: 'Join Discord',
 		subtitle: 'Join our Discord server',
@@ -418,6 +450,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'credits',
 		title: 'Credits',
 		subtitle: 'Show Open Source dependency credits',
@@ -428,6 +461,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	commands_to_return.push({
+		category: 'SvelteLab',
 		command: 'show-intro',
 		title: 'Show Intro',
 		subtitle: 'Show Intro again and remove hidden forever preference',

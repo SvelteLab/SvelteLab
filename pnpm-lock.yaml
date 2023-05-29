@@ -45,6 +45,7 @@ specifiers:
   eslint-config-prettier: ^8.8.0
   eslint-plugin-svelte3: ^4.0.0
   flexsearch: ^0.7.31
+  fzf: ^0.5.2
   he: ^1.2.0
   jszip: ^3.10.1
   lz-string: ^1.5.0
@@ -106,6 +107,7 @@ dependencies:
   as-comps: 0.0.27
   codemirror: 6.0.1_@lezer+common@1.0.2
   flexsearch: 0.7.31
+  fzf: 0.5.2
   he: 1.2.0
   jszip: 3.10.1
   lz-string: 1.5.0
@@ -2036,6 +2038,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /fzf/0.5.2:
+    resolution: {integrity: sha512-Tt4kuxLXFKHy8KT40zwsUPUkg1CrsgY25FxA2U/j/0WgEDCk3ddc/zLTCCcbSHX9FcKtLuVaDGtGE/STWC+j3Q==}
+    dev: false
 
   /gauge/3.0.2:
     resolution: {integrity: sha512-+5J6MS/5XksCuXq++uFRsnUd7Ovu1XenbeuIuNRJxYWjgQbPuFhT14lAvsWfqfAmnwluf1OwMjz39HjfLPci0Q==}

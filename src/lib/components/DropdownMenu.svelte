@@ -3,10 +3,9 @@
 </script>
 
 <script lang="ts">
-	import { v4 as uuidv4 } from 'uuid';
-
-	import { clickOutside } from 'as-comps';
+	import { click_outside } from '$lib/click_outside';
 	import { setContext } from 'svelte';
+	import { v4 as uuidv4 } from 'uuid';
 	import MoreVert from '~icons/material-symbols/more-vert';
 
 	export let open = false;
@@ -35,7 +34,7 @@
 		<MoreVert />
 	</slot>
 </button>
-<section use:clickOutside={{ enabled: open, func: close_menu }}>
+<section use:click_outside={{ enabled: open, func: close_menu }}>
 	<div aria-hidden={!open} class:open class="wrap">
 		<ul id={menu_id} role="menu" aria-labelledby={trigger_id}>
 			<slot />
@@ -57,9 +56,8 @@
 	}
 	.wrap {
 		position: absolute;
-		top: 100%;
-		right: 0%;
 		display: grid;
+		top: 100%;
 		grid-template-rows: minmax(0, var(--open, 0fr));
 		overflow: hidden;
 		transition: grid-template-rows 250ms;
@@ -100,7 +98,7 @@
 		overflow: hidden;
 	}
 	/* to avoid keyboard focus into the ul */
-	.wrap:not(.open)>ul{
+	.wrap:not(.open) > ul {
 		display: none;
 	}
 </style>
