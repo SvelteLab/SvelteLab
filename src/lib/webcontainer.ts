@@ -344,7 +344,7 @@ async function run_svelte_check() {
 				'Your version of svelte-check is older than the required 3.4.3...would you like to update?',
 				async () => {
 					const update_svelte_check_process = await spawn_process_and_show_output(
-						'npm install svelte-check@latest'
+						'npm install svelte-check@latest -D'
 					);
 					const result = await update_svelte_check_process.exit;
 					if (result === 0) {
@@ -365,7 +365,7 @@ async function run_svelte_check() {
 				// if they decide to install we proceed to install and if the installation
 				// is successful we run svelte-check again
 				const install_svelte_check_process = await spawn_process_and_show_output(
-					'npm install svelte-check@latest'
+					'npm install svelte-check@latest -D'
 				);
 				const result = await install_svelte_check_process.exit;
 				if (result === 0) {
