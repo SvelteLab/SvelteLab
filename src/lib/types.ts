@@ -26,11 +26,13 @@ type CreateExclusiveUnion<T, U = T> = T extends any
 	: never;
 
 export type Command = {
+	category: 'SvelteLab' | 'Project' | 'Preferences' | 'File';
 	title: string;
 	subtitle?: string;
 	icon?: typeof SvelteComponent;
 	command?: string;
 	key_bind?: KeyBinds;
+	seo?: string;
 } & CreateExclusiveUnion<
 	| {
 			action: () => void;

@@ -4,9 +4,10 @@
 	import type { Command } from '$lib/types';
 	import { onDestroy, tick } from 'svelte';
 	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
+	import Back from '~icons/material-symbols/arrow-back-rounded';
 	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
-	import Back from '~icons/material-symbols/arrow-back-rounded';
+	import { fuzzy_search_command } from './fuzzy_search';
 
 	export let commands = [] as Command[];
 
@@ -52,12 +53,16 @@
 
 	$: mode = search.startsWith('>') ? 'command' : 'file';
 
-	$: filtered_commands = commands.filter((command) => {
-		if (mode === 'file') {
-			return command.title.toLowerCase().includes(search.trim().toLowerCase()) && !command.command;
-		}
-		return command.command?.includes(search.substring(1).trim().split(' ')[0]);
-	});
+	$: filtered_commands =
+		mode === 'file'
+			? commands.filter(
+					(c) =>
+						c.category === 'File' && c.title.toLowerCase().includes(search.trim().toLowerCase())
+			  )
+			: fuzzy_search_command(
+					commands.filter((c) => c.category !== 'File'),
+					search.substring(1).trim().split(' ')[0]
+			  );
 
 	$: marked_command = filtered_commands[0] as Command | null;
 
@@ -273,7 +278,6 @@
 				)}
 				{@const current = command === marked_command}
 				<li>
-					<!-- TODO: rework how action components work: replace palette instead of inline -->
 					<button
 						class:current
 						aria-current={current}
@@ -394,8 +398,12 @@
 		gap: 0.25rem;
 	}
 
-	.current {
+	button:hover {
 		background-color: var(--sk-back-4);
+	}
+
+	button.current {
+		background-color: var(--sk-back-3);
 	}
 
 	.commands button {
@@ -433,10 +441,6 @@
 		width: 1px;
 		min-height: 1em;
 		background-color: var(--sk-back-4);
-	}
-
-	button:hover {
-		background-color: var(--sk-back-3);
 	}
 
 	small {

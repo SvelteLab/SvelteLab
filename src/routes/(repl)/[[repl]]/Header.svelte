@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
-	import { on_command } from '$lib/command_runner/commands';
+	import { commands, on_command } from '$lib/command_runner/commands';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
@@ -21,7 +21,9 @@
 	import { onMount } from 'svelte';
 	import { parseKeybinding } from 'tinykeys';
 	import Profile from '~icons/material-symbols/account-circle';
+	import AddNew from '~icons/material-symbols/add-circle-rounded';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
+	import Docs from '~icons/material-symbols/docs';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
 	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import Sun from '~icons/material-symbols/light-mode';
@@ -34,8 +36,7 @@
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
-	import AddNew from '~icons/material-symbols/add-circle-rounded';
-	import Docs from '~icons/material-symbols/docs';
+	import MenuBar from './MenuBar.svelte';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
@@ -72,6 +73,7 @@
 			<AddNew />
 		{/if}
 	</a>
+	<MenuBar commands={$commands} />
 	{#if !mobile}
 		<button
 			title="Toggle File Browser"
