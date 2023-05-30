@@ -14,7 +14,7 @@
 	--as-dialog-padding={padding}
 	noCloseButton
 	autofocus={false}
-	isOpen={is_open}
+	bind:isOpen={is_open}
 	includedTrigger={false}
 	on:dismiss
 >
