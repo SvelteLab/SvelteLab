@@ -1,5 +1,5 @@
 export const repl_id = writable<string | undefined>();
-export const repl_name = writable<string>('Hello world');
+export const repl_name = writable<string>('Hello World');
 export const is_repl_saving = writable(false);
 export const is_repl_to_save = writable(false);
 import { writable, derived } from 'svelte/store';
