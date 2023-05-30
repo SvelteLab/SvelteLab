@@ -320,8 +320,8 @@
 		color: var(--sk-text-1);
 	}
 
-	header :global(a):hover,
-	header :global(button):hover {
+	header > :global(a):hover,
+	header > :global(button):hover {
 		color: var(--sk-theme-1);
 	}
 
@@ -345,12 +345,7 @@
 	}
 
 	.login {
-		padding: 0.5rem 1rem 0.5rem 1rem;
-		border-block-start-color: transparent;
-		border-inline-color: transparent;
 		color: var(--sk-theme-1);
-
-		border-radius: 0.5rem;
 	}
 
 	.login:hover {
@@ -378,9 +373,16 @@
 
 	.menu-bar {
 		display: flex;
+		gap: 1rem;
 	}
 
-	.menu-bar :global(button:hover) {
+	.login,
+	.menu-bar > :global(button) {
+		border-radius: 0.5rem;
+		padding: 0.5rem 1rem;
+	}
+
+	.menu-bar > :global(button:hover) {
 		background-color: var(--sk-theme-1);
 		color: white;
 	}
