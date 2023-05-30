@@ -353,27 +353,9 @@
 		color: #fff;
 	}
 
-	@media only screen and (max-width: 1000px) {
-		.login span {
-			display: none;
-		}
-	}
-
-	@media only screen and (max-width: 880px) {
-		.search-docs {
-			display: none;
-		}
-	}
-
-	@media only screen and (max-width: 750px) and (min-width: 500px) {
-		.supplemental {
-			display: none;
-		}
-	}
-
 	.menu-bar {
 		display: flex;
-		gap: 1rem;
+		gap: 0.5rem;
 	}
 
 	.login,
@@ -385,6 +367,24 @@
 	.menu-bar > :global(button:hover) {
 		background-color: var(--sk-theme-1);
 		color: white;
+	}
+
+	@media only screen and (max-width: 1030px) {
+		.login span {
+			display: none;
+		}
+	}
+
+	@media only screen and (max-width: 940px) {
+		.search-docs {
+			display: none;
+		}
+	}
+
+	@media only screen and (max-width: 800px) and (min-width: 500px) {
+		.supplemental {
+			display: none;
+		}
 	}
 
 	@media only screen and (max-width: 500px) {
