@@ -1,7 +1,28 @@
 {
-	"cSpell.words": ["tinykeys"],
+	"cSpell.words": [
+		"Autocompletable",
+		"dismissable",
+		"emmetio",
+		"initing",
+		"keymap",
+		"mdsvex",
+		"prettyifing",
+		"replit",
+		"repls",
+		"sveltelab",
+		"tailwindcss",
+		"tinykeys",
+		"webcontainer"
+	],
 	"eslint.validate": ["typescript", "svelte", "javascript"],
 	"files.associations": {
 		"*.svx": "markdown"
-	}
+	},
+	"cSpell.ignoreWords": [
+		"lezer",
+		"neocodemirror",
+		"publint",
+		"puruvj",
+		"zerodevx"
+	]
 }

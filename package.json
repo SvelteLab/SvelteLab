@@ -54,7 +54,6 @@
 		"magic-string": "^0.30.0",
 		"material-icon-theme": "^4.27.0",
 		"pocketbase": "^0.14.4",
-		"svelte-codemirror-editor": "^1.1.0",
 		"svelte-splitpanes": "^0.7.13",
 		"tinykeys": "^1.4.0",
 		"uuid": "^9.0.0",
