@@ -114,6 +114,28 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	}));
 
 	commands_to_return.push({
+		category: 'Preferences',
+		command: 'toggle-file-tree',
+		title: 'Toggle File Tree',
+		subtitle: 'toggle if file tree is shown',
+		icon: FileBrowser,
+		action() {
+			layout_store.toggle_file_tree();
+		},
+	});
+
+	commands_to_return.push({
+		category: 'Preferences',
+		command: 'toggle-terminal',
+		title: 'Toggle Terminal',
+		subtitle: 'toggle if terminal is shown',
+		icon: Terminal,
+		action() {
+			layout_store.toggle_terminal();
+		},
+	});
+
+	commands_to_return.push({
 		category: 'Project',
 		command: 'format-current',
 		title: 'Format',
@@ -307,17 +329,6 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		category: 'Preferences',
-		command: 'toggle-file-tree',
-		title: 'Toggle File Tree',
-		subtitle: 'toggle if file tree is shown',
-		icon: FileBrowser,
-		action() {
-			layout_store.toggle_file_tree();
-		},
-	});
-
-	commands_to_return.push({
-		category: 'Preferences',
 
 		command: 'toggle-config',
 		title: 'Toggle Config Files',
@@ -336,17 +347,6 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Sorting,
 		action() {
 			layout_store.toggle_sort();
-		},
-	});
-
-	commands_to_return.push({
-		category: 'Preferences',
-		command: 'toggle-terminal',
-		title: 'Toggle Terminal',
-		subtitle: 'toggle if terminal is shown',
-		icon: Terminal,
-		action() {
-			layout_store.toggle_terminal();
 		},
 	});
 
