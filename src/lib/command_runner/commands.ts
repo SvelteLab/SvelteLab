@@ -41,7 +41,7 @@ import Discord from '~icons/mdi/discord';
 import GitHub from '~icons/mdi/github';
 import Credits from '~icons/mdi/license';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
-import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
+import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 import CreateRoute from './commands_components/CreateRoute.svelte';
 import FontPreferences from './commands_components/FontPreferences.svelte';
 import InstallPackage from './commands_components/InstallPackage.svelte';
