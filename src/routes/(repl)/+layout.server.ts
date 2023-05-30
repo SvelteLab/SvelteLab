@@ -80,7 +80,7 @@ export const load: LayoutServerLoad = async ({
 	const default_files =
 		default_project_files[template] ?? default_project_files[saved_default_template];
 	let files: FileSystemTree = (default_files as DirectoryNode).directory;
-	let name = 'Hello world';
+	let name = 'Hello World';
 
 	if (!repl || from_login) {
 		return {

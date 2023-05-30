@@ -51,6 +51,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{$repl_name} - SvelteLab</title>
+</svelte:head>
+
 <h2 class="screen-reader-only">{repl_name}</h2>
 
 <slot />
