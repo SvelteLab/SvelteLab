@@ -35,7 +35,7 @@
 	import Share from '~icons/material-symbols/share';
 	import Tag from '~icons/material-symbols/tag-rounded';
 	import Terminal from '~icons/material-symbols/terminal-rounded';
-	import SearchDocsIcon from '~icons/sveltelab/svelte-lib';
+	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
 
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
@@ -45,10 +45,6 @@
 	export let mobile = false;
 	let forking = false;
 	let fork_form: HTMLFormElement;
-
-	const search_docs_keys = parseKeybinding('$mod+alt+K')
-		.flat(Infinity)
-		.map((key) => key.toString().replace('Control', 'Ctrl'));
 
 	onMount(() => {
 		return on_command('fork', () => {
@@ -74,6 +70,16 @@
 		{/if}
 	</a>
 	<MenuBar commands={$commands} />
+	<div class="grow">
+		<button
+			class="search-docs"
+			on:click={() => {
+				command_runner.open('search-kit-docs');
+			}}
+			title="Search sveltekit documentation"
+			><SearchDocsIcon /> Search SvelteKit Docs...
+		</button>
+	</div>
 	{#if !mobile}
 		<button
 			title="Toggle File Browser"
@@ -91,21 +97,6 @@
 			<Terminal />
 		</button>
 	{/if}
-	<div class="grow">
-		<button
-			class="search-docs"
-			on:click={() => {
-				command_runner.open('search-kit-docs');
-			}}
-			title="Search sveltekit documentation"
-			><SearchDocsIcon /> Search SvelteKit Documentation...
-			<div>
-				{#each search_docs_keys as key}
-					<kbd>{key}</kbd>
-				{/each}
-			</div>
-		</button>
-	</div>
 	<button
 		on:click={(e) => {
 			if (e.shiftKey) {
@@ -260,7 +251,7 @@
 
 <style>
 	header {
-		--padding-y: 0.5em;
+		--padding-y: 0.25em;
 		padding: var(--padding-y) 1em;
 		display: flex;
 		gap: 1em;
@@ -296,30 +287,21 @@
 	}
 
 	.search-docs {
-		border-radius: 0.5rem;
+		border-radius: 99999rem;
 		margin: auto;
-		max-width: 42rem;
+		max-width: 24rem;
 		font-size: 1.1rem;
 		color: var(--sk-text-2);
 		border: 1px solid var(--sk-back-5);
 		width: 100%;
 		justify-content: center;
 		opacity: 0.8;
+		padding-block: 0.3rem;
 	}
 
 	.search-docs:hover {
 		border-color: var(--sk-theme-1);
 		color: var(--sk-text-1);
-	}
-
-	.search-docs > div {
-		display: flex;
-		gap: 0.25rem;
-		margin-inline-start: auto;
-	}
-
-	kbd {
-		padding: 0.25rem 0.5rem;
 	}
 
 	header :global(a),
