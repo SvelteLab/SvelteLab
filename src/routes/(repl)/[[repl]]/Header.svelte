@@ -69,7 +69,9 @@
 			<AddNew />
 		{/if}
 	</a>
-	<MenuBar commands={$commands} />
+	<div class="menu-bar">
+		<MenuBar commands={$commands} />
+	</div>
 	<div class="grow">
 		<button
 			class="search-docs"
@@ -82,6 +84,7 @@
 	</div>
 	{#if !mobile}
 		<button
+			class="supplemental"
 			title="Toggle File Browser"
 			on:click={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree !== 0}
@@ -90,6 +93,7 @@
 		</button>
 
 		<button
+			class="supplemental"
 			title="Toggle Terminal"
 			on:click={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal !== 0}
@@ -98,6 +102,7 @@
 		</button>
 	{/if}
 	<button
+		class="supplemental"
 		on:click={(e) => {
 			if (e.shiftKey) {
 				theme.remove_preference();
@@ -113,10 +118,11 @@
 			<Moon />
 		{/if}
 	</button>
-	<a href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
+	<a class="supplemental" href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
 		<Docs />
 	</a>
 	<button
+		class="supplemental"
 		on:click={() => {
 			command_runner.open('> ');
 		}}
@@ -352,14 +358,35 @@
 		color: #fff;
 	}
 
-	@media only screen and (max-width: 500px) {
-		a span {
+	@media only screen and (max-width: 1000px) {
+		.login span {
 			display: none;
 		}
 	}
 
-	@media only screen and (max-width: 900px) {
+	@media only screen and (max-width: 880px) {
 		.search-docs {
+			display: none;
+		}
+	}
+
+	@media only screen and (max-width: 750px) and (min-width: 500px) {
+		.supplemental {
+			display: none;
+		}
+	}
+
+	.menu-bar {
+		display: flex;
+	}
+
+	.menu-bar :global(button:hover) {
+		background-color: var(--sk-theme-1);
+		color: white;
+	}
+
+	@media only screen and (max-width: 500px) {
+		.menu-bar {
 			display: none;
 		}
 	}

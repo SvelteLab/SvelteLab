@@ -26,34 +26,22 @@
 	const CATEGORIES: Command['category'][] = ['SvelteLab', 'Project', 'Preferences'];
 </script>
 
-<div class="menubar">
-	{#each CATEGORIES as category}
-		<DropdownMenu>
-			<svelte:fragment slot="trigger">{category}</svelte:fragment>
-			{#each commands_per_category[category] as command}
-				<MenuItem
-					on:click={() => {
-						if (typeof command.action === 'function') {
-							command.action();
-						} else if (command.action_component) {
-							command_runner.open(command.command);
-						}
-					}}
-				>
-					<svelte:component this={command.icon} />
-					{command.title}
-				</MenuItem>
-			{/each}
-		</DropdownMenu>
-	{/each}
-</div>
-
-<style>
-	.menubar {
-		display: flex;
-	}
-	.menubar :global(button:hover) {
-		background-color: var(--sk-theme-1);
-		color: white;
-	}
-</style>
+{#each CATEGORIES as category}
+	<DropdownMenu>
+		<svelte:fragment slot="trigger">{category}</svelte:fragment>
+		{#each commands_per_category[category] as command}
+			<MenuItem
+				on:click={() => {
+					if (typeof command.action === 'function') {
+						command.action();
+					} else if (command.action_component) {
+						command_runner.open(command.command);
+					}
+				}}
+			>
+				<svelte:component this={command.icon} />
+				{command.title}
+			</MenuItem>
+		{/each}
+	</DropdownMenu>
+{/each}

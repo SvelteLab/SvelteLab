@@ -42,7 +42,7 @@
 			dialogOutOptions={{ x: -500 }}
 			autofocus={false}
 			--as-dialog-padding="0"
-			--as-dialog-top="calc(50% + 3.3rem)"
+			--as-dialog-top="calc(50% + 2.6rem)"
 			--as-dialog-overflow="visible"
 			--as-dialog-left="0"
 			--as-dialog-right="auto"
@@ -53,7 +53,7 @@
 			--as-dialog-height="100%"
 			--as-dialog-max-height="calc(100% - 2em)"
 		>
-			<FileActions />
+			<FileActions mobile />
 		</RawDialog>
 		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
 			<svelte:component this={Editor} />
