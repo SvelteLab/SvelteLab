@@ -4,6 +4,7 @@
 
 <script lang="ts">
 	import { click_outside } from '$lib/click_outside';
+	import { computePosition, shift } from '@floating-ui/dom';
 	import { setContext } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import MoreVert from '~icons/material-symbols/more-vert';
@@ -19,9 +20,24 @@
 	}
 
 	setContext(DROPDOWN_CONTEXT, { close_menu });
+
+	let button: HTMLButtonElement;
+	let tooltip: HTMLDivElement;
+
+	$: open &&
+		computePosition(button, tooltip, {
+			placement: "bottom-start",
+			middleware: [shift()],
+		}).then(({ x, y }) => {
+			Object.assign(tooltip.style, {
+				left: `${x}px`,
+				top: `${y}px`,
+			});
+		});
 </script>
 
 <button
+	bind:this={button}
 	class:indicator
 	title="Open Menu"
 	id={trigger_id}
@@ -35,7 +51,7 @@
 	</slot>
 </button>
 <section use:click_outside={{ enabled: open, func: close_menu }}>
-	<div aria-hidden={!open} class:open class="wrap">
+	<div aria-hidden={!open} class:open class="wrap" bind:this={tooltip}>
 		<ul id={menu_id} role="menu" aria-labelledby={trigger_id}>
 			<slot />
 		</ul>
@@ -57,7 +73,7 @@
 	.wrap {
 		position: absolute;
 		display: grid;
-		top: 100%;
+		width: max-content;
 		grid-template-rows: minmax(0, var(--open, 0fr));
 		overflow: hidden;
 		transition: grid-template-rows 250ms;
