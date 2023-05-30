@@ -2,6 +2,7 @@
 	import { Dialog } from 'as-comps';
 	export let is_open = false;
 	export let padding = '3rem';
+	export let noCloseButton = true;
 </script>
 
 <Dialog
@@ -12,7 +13,9 @@
 	--as-dialog-border-radius=".5rem"
 	--as-dialog-background="var(--sk-back-2)"
 	--as-dialog-padding={padding}
-	noCloseButton
+	--as-dialog--close-btn-color="var(--sk-text-3)"
+	--as-dialog--close-btn-border="0.1rem solid var(--sk-text-3)"
+	{noCloseButton}
 	autofocus={false}
 	bind:isOpen={is_open}
 	includedTrigger={false}

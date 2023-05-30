@@ -45,7 +45,7 @@
 	}
 </script>
 
-<Dialog bind:is_open={$show_credits}>
+<Dialog bind:is_open={$show_credits} noCloseButton={false}>
 	<h2>
 		<Logo />
 		SvelteLab Credits
