@@ -22,7 +22,7 @@ import { deferred_promise, version_compare } from './utils';
 import { actionable } from './toast';
 
 /**
- * Used to throw an useful error if you try to access any function befor initing
+ * Used to throw an useful error if you try to access any function before initing
  * the web container.
  */
 const recursive_warning_proxy_traps: ProxyHandler<never> = {
@@ -93,7 +93,7 @@ function run_command(cmd: string) {
 const listening_for_fs_store = writable(false);
 
 /**
- * we can use this to check if we are already lstening to fs
+ * we can use this to check if we are already listening to fs
  */
 export const listening_for_fs = {
 	subscribe: listening_for_fs_store.subscribe,
@@ -228,8 +228,9 @@ async function launch_jsh() {
 						}
 						jsh_queue.delete(command);
 					}
-					// if data includes \r and jsh it's already listening
-					// a new command is probably being run so we set the store
+					// if data includes ❯ and jsh it's already listening it finished a command
+					// so we can get the next one and run it if there's one. If there's no we set
+					// is_jsh_listening to true
 				} else if (data.includes('❯') && already_listening) {
 					jsh_finish_queue.forEach((callback) => callback());
 					jsh_finish_queue.clear();
@@ -341,7 +342,7 @@ async function run_svelte_check() {
 			// ad we prompt the user to update
 			available = false;
 			actionable(
-				'Your version of svelte-check is older than the required 3.4.3...would you like to update?',
+				'Your version of svelte-check is older than the required 3.4.3 to run the diagnostics...would you like to update?',
 				async () => {
 					const update_svelte_check_process = await spawn_process_and_show_output(
 						'npm install svelte-check@latest -D'
@@ -360,7 +361,7 @@ async function run_svelte_check() {
 		// toast asking them to install it
 		available = false;
 		actionable(
-			'No svelte-check found...would you like to install it?',
+			'We use svelte-check to provide diagnostics and we found no svelte-check...would you like to install it?',
 			async () => {
 				// if they decide to install we proceed to install and if the installation
 				// is successful we run svelte-check again
@@ -439,7 +440,7 @@ async function read_file(path: string, as_string = true) {
 }
 
 /**
- * Ther actual webcontainer store with useful methods
+ * The actual webcontainer store with useful methods
  */
 export const webcontainer = {
 	subscribe,

@@ -108,9 +108,6 @@
 		}
 		return diagnostics;
 	}
-
-	let cursor_pos = 0;
-
 	const codemirror_instance = withCodemirrorInstance();
 </script>
 
@@ -138,7 +135,6 @@
 				value: code,
 				extensions,
 				setup: 'minimal',
-				cursorPos: cursor_pos,
 				instanceStore: codemirror_instance,
 				styles: {
 					'&': {
@@ -200,8 +196,18 @@
 		{#if current_lang === 'svelte'}
 			<Errors
 				on:click_on_diagnostic={({ detail: diagnostic }) => {
-					cursor_pos = get_character_from_pos(diagnostic.end.line, diagnostic.end.character, code);
+					const new_pos = get_character_from_pos(
+						diagnostic.end.line,
+						diagnostic.end.character,
+						code
+					);
 					$codemirror_instance.view?.focus();
+					$codemirror_instance.view?.dispatch({
+						selection: {
+							anchor: new_pos,
+							head: new_pos,
+						},
+					});
 				}}
 			/>
 		{/if}
