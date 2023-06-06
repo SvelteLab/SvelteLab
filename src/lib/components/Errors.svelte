@@ -39,6 +39,8 @@
 		font-size: var(--sk-text-xs);
 		margin: 0;
 		padding: 0;
+		max-height: 20rem;
+		overflow-y: auto;
 	}
 	li {
 		border-top: 1px solid var(--sk-back-4);
