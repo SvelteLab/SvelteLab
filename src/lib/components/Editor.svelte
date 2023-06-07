@@ -12,11 +12,11 @@
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
+	import type { Extension } from '@codemirror/state';
 	import { EditorView, keymap } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { codemirror, withCodemirrorInstance } from '@neocodemirror/svelte';
-	import { vim } from '@replit/codemirror-vim';
 	import { basicSetup } from 'codemirror';
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
@@ -48,7 +48,9 @@
 	let code: string;
 	let image_bytes: Uint8Array;
 
-	function get_extensions(config: typeof $editor_config) {
+	let vim: (options: { status?: boolean }) => Extension;
+
+	async function get_extensions(config: typeof $editor_config) {
 		const extensions = [
 			basicSetup,
 			js_snippets,
@@ -58,6 +60,9 @@
 			keymap.of([indentWithTab]),
 		];
 		if (config.vim) {
+			if (!vim) {
+				vim = await import('@replit/codemirror-vim').then((vim_import) => vim_import.vim);
+			}
 			extensions.unshift(
 				vim({
 					status: true,
@@ -69,8 +74,10 @@
 		}
 		return extensions;
 	}
-
-	$: extensions = get_extensions($editor_config);
+	let extensions: Extension[];
+	$: get_extensions($editor_config).then((resolved_extensions) => {
+		extensions = resolved_extensions;
+	});
 
 	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
