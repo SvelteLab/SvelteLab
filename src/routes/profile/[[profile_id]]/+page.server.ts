@@ -34,8 +34,9 @@ export const actions = {
 		const form_data = await request.formData();
 		const id = form_data.get('id');
 		try {
-			locals.pocketbase.collection('repls').delete(id?.toString() ?? '');
+			await locals.pocketbase.collection('repls').delete(id?.toString() ?? '');
 		} catch (e) {
+			console.log(e);
 			return fail(500);
 		}
 		return { success: true };
