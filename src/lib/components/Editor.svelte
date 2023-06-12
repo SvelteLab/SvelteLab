@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
-	import { editor_config } from '$lib/stores/editor_config_store';
+	import { editor_config, editor_preferences } from '$lib/stores/editor_config_store';
 	import { diagnostic_store } from '$lib/stores/editor_errors_store';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
@@ -21,7 +21,6 @@
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
-	import editor_preferences from '$lib/editor_preferences';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -50,8 +49,6 @@
 	let image_bytes: Uint8Array;
 
 	let vim: (options: { status?: boolean }) => Extension;
-
-	$: console.log($editor_preferences);
 
 	async function get_extensions(config: typeof $editor_config) {
 		const extensions = [
