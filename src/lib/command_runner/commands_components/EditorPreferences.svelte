@@ -1,9 +1,10 @@
 <script lang="ts">
+	import editor_preferences, { set_default_editor_preferences } from '$lib/editor_preferences';
 	import font_preferences, { set_default_font_preferences } from '$lib/font_preferences';
 </script>
 
 <form>
-	<h3>Editor</h3>
+	<h3>Font</h3>
 	<div class="grid">
 		<label>
 			Size
@@ -38,6 +39,24 @@
 	</div>
 
 	<button on:click={set_default_font_preferences} type="button" class="action-confirm">
+		Restore to defaults
+	</button>
+	<h3>Editor</h3>
+	<div class="grid">
+		<label>
+			Delay function
+			<select bind:value={$editor_preferences.delay_function}>
+				<option value="throttle">Throttle</option>
+				<option value="debounce">Debounce</option>
+			</select>
+		</label>
+		<label>
+			Delay duration
+			<input class="action-field" type="number" bind:value={$editor_preferences.delay_duration} />
+		</label>
+	</div>
+
+	<button on:click={set_default_editor_preferences} type="button" class="action-confirm">
 		Restore to defaults
 	</button>
 </form>
