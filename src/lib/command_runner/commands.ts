@@ -43,7 +43,7 @@ import Credits from '~icons/mdi/license';
 import SvelteAddIcon from '~icons/sveltelab/svelte-add';
 import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 import CreateRoute from './commands_components/CreateRoute.svelte';
-import FontPreferences from './commands_components/FontPreferences.svelte';
+import EditorPreferences from './commands_components/EditorPreferences.svelte';
 import InstallPackage from './commands_components/InstallPackage.svelte';
 import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
@@ -398,10 +398,10 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 
 	commands_to_return.push({
 		category: 'Preferences',
-		command: 'font-preferences',
-		title: 'Font Preference',
-		subtitle: 'set font preference',
-		action_component: FontPreferences,
+		command: 'editor-preferences',
+		title: 'Editor Preference',
+		subtitle: 'set editor preferences',
+		action_component: EditorPreferences,
 		icon: Font,
 	});
 
