@@ -124,7 +124,7 @@
 		background: var(--shadow-gradient);
 	}
 
-	h1 {
+	h2 {
 		font-size: 1.6rem;
 		white-space: nowrap;
 		text-overflow: ellipsis;

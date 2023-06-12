@@ -19,7 +19,6 @@
 	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import { parseKeybinding } from 'tinykeys';
 	import Profile from '~icons/material-symbols/account-circle';
 	import AddNew from '~icons/material-symbols/add-circle-rounded';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
@@ -136,7 +135,7 @@
 		<!-- Fork button -->
 		{#if $repl_id}
 			<AsyncButton
-				click={async (e) => {
+				click={async () => {
 					if (window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
 						await save_repl(true);
 					}
