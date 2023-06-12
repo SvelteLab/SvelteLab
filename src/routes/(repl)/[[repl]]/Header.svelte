@@ -70,7 +70,7 @@
 			<AddNew />
 		{/if}
 	</a>
-	<div class="menu-bar">
+	<div class="no-mobile menu-bar">
 		<MenuBar commands={$commands} />
 	</div>
 	<div class="grow">
@@ -119,7 +119,7 @@
 			<Moon />
 		{/if}
 	</button>
-	<a class="supplemental" href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
+	<a class="no-mobile" href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
 		<Docs />
 	</a>
 	<button
@@ -374,8 +374,11 @@
 	}
 
 	@media only screen and (max-width: 500px) {
-		.menu-bar {
+		.no-mobile {
 			display: none;
+		}
+		header {
+			gap: 0.75rem;
 		}
 	}
 </style>
