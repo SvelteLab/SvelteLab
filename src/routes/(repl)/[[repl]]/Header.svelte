@@ -44,11 +44,12 @@
 	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
 	export let mobile = false;
 	let forking = false;
-	let fork_form: HTMLFormElement;
 
 	onMount(() => {
-		return on_command('fork', () => {
-			fork_form.submit();
+		return on_command('fork', async () => {
+			forking = true;
+			await save_repl(true);
+			forking = false;
 		});
 	});
 
@@ -134,32 +135,17 @@
 	{#if user}
 		<!-- Fork button -->
 		{#if $repl_id}
-			<form
-				bind:this={fork_form}
-				use:enhance={() => {
-					forking = true;
-					return ({ update }) => {
-						forking = false;
-						update();
-					};
+			<AsyncButton
+				click={async (e) => {
+					if (window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
+						await save_repl(true);
+					}
 				}}
-				method="POST"
-				action="?/fork"
+				title="Fork Project"
+				loading={forking}
 			>
-				<input type="hidden" value={$repl_id} name="id" />
-				<AsyncButton
-					click={(e) => {
-						if (!window.confirm(`Are you sure you want to fork "${$repl_name}"`)) {
-							e.stopPropagation();
-							e.preventDefault();
-						}
-					}}
-					title="Fork Project"
-					loading={forking}
-				>
-					<Fork />
-				</AsyncButton>
-			</form>
+				<Fork />
+			</AsyncButton>
 		{/if}
 		<!-- Save button -->
 		{#if !owner_id || user.id === owner_id}
