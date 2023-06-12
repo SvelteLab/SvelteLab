@@ -400,7 +400,8 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		category: 'Preferences',
 		command: 'editor-preferences',
 		title: 'Editor Preference',
-		subtitle: 'set editor preferences',
+		seo: 'font editor settings',
+		subtitle: 'set editor and font preferences',
 		action_component: EditorPreferences,
 		icon: Font,
 	});
