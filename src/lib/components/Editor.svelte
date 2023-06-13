@@ -7,19 +7,19 @@
 	import { current_tab } from '$lib/tabs';
 	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
-	import { indentWithTab } from '@codemirror/commands';
 	import { javascript } from '@codemirror/lang-javascript';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
 	import type { Extension } from '@codemirror/state';
-	import { EditorView, keymap } from '@codemirror/view';
+	import { EditorView } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { codemirror, withCodemirrorInstance } from '@neocodemirror/svelte';
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
+	import { svelte } from '@replit/codemirror-lang-svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -33,12 +33,12 @@
 	const theme = syntaxHighlighting(svelte_syntax_style);
 
 	const langs: Record<string, () => Promise<LanguageSupport>> = {
-		svelte: () => import('@replit/codemirror-lang-svelte').then((lang) => lang.svelte()),
+		svelte: async () => svelte(),
 		html: () => import('@codemirror/lang-html').then((lang) => lang.html()),
-		js: async () => javascript(),
-		cjs: async () => javascript(),
-		mjs: async () => javascript(),
-		ts: async () => javascript({ typescript: true }),
+		js: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
+		cjs: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
+		mjs: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
+		ts: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
 		css: () => import('@codemirror/lang-css').then((lang) => lang.css()),
 		json: () => import('@codemirror/lang-json').then((lang) => lang.json()),
 		md: () => import('@codemirror/lang-markdown').then((lang) => lang.markdown()),
@@ -55,7 +55,6 @@
 			svelte_snippets,
 			linter(return_diagnostics),
 			abbreviationTracker(),
-			keymap.of([indentWithTab]),
 		];
 		if (config.vim) {
 			if (!vim) {
