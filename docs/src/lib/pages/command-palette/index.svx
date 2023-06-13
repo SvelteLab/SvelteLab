@@ -103,9 +103,9 @@ Copy link that shares current files via hash. This won't reflect changes when yo
 
 Use OS theme preference.
 
-### Font Preference
+### Editor Preference
 
-Opens a panel with controls for font size, font family and the usage of ligatures.
+Opens a panel with controls for font size, font family and the usage of ligatures. It also allows you to customize the delay function (throttle or debounce) and the delay duration.
 
 ### Open GitHub
 
