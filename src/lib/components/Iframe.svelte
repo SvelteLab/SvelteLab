@@ -10,8 +10,6 @@
 
 	const theme = get_theme();
 
-	$: console.log($theme);
-
 	async function handleUrlChange(e: SubmitEvent) {
 		webcontainer.set_iframe_path(''); // refresh even if nothing changed
 		const url = new FormData(e.target as HTMLFormElement).get('url')?.toString() || '/';
