@@ -1,11 +1,9 @@
 <script lang="ts">
-	import Logo from '$lib/components/Logo.svelte';
+	import DocsLogo from '$lib/components/DocsLogo.svelte';
 	import GitHub from '~icons/mdi/github';
 	import Discord from '~icons/mdi/discord';
 	import Hamburger from '~icons/mdi/menu';
 	import { createEventDispatcher } from 'svelte';
-	import Docs from '~icons/material-symbols/docs';
-
 	const dispatcher = createEventDispatcher();
 </script>
 
@@ -17,8 +15,7 @@
 		class="open-menu"><Hamburger /></button
 	>
 	<a href="/" class="logo">
-		<Docs />
-		<Logo />
+		<DocsLogo />
 		SvelteLab Docs
 	</a>
 	<a href="https://github.com/sveltelab/sveltelab"><GitHub /></a>
