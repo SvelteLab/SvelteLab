@@ -17,7 +17,6 @@
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { codemirror, withCodemirrorInstance } from '@neocodemirror/svelte';
-	import { basicSetup } from 'codemirror';
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
@@ -52,7 +51,6 @@
 
 	async function get_extensions(config: typeof $editor_config) {
 		const extensions = [
-			basicSetup,
 			js_snippets,
 			svelte_snippets,
 			linter(return_diagnostics),
@@ -141,7 +139,7 @@
 				useTabs: true,
 				value: code,
 				extensions,
-				setup: 'minimal',
+				setup: 'basic',
 				instanceStore: codemirror_instance,
 				styles: {
 					'&': {
