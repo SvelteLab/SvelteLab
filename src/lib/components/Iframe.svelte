@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import { tick } from 'svelte';
 	import InstallDeps from '~icons/line-md/downloading-loop';
@@ -6,6 +7,10 @@
 	import Error from '~icons/material-symbols/chat-error-rounded';
 	import OpenInNew from '~icons/material-symbols/open-in-new';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
+
+	const theme = get_theme();
+
+	$: console.log($theme);
 
 	async function handleUrlChange(e: SubmitEvent) {
 		webcontainer.set_iframe_path(''); // refresh even if nothing changed
@@ -52,12 +57,14 @@
 				<OpenInNew />
 			</a>
 		</form>
-		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
+		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path + $theme.current}
 			<iframe
 				title="content"
-				src={$webcontainer.webcontainer_url.startsWith('.')
+				src={($webcontainer.webcontainer_url.startsWith('.')
 					? $webcontainer.webcontainer_url
-					: $webcontainer.webcontainer_url + $webcontainer.iframe_path}
+					: $webcontainer.webcontainer_url + $webcontainer.iframe_path) +
+					'?theme=' +
+					$theme.current}
 			/>
 		{/key}
 	{:else}

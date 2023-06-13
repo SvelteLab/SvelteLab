@@ -6,6 +6,8 @@ import { update_terminal_theme } from './update_terminal_theme';
 
 export type Theme = 'light' | 'dark';
 
+const store = writable<{ current: Theme; next: Theme }>();
+
 /**
  * We need this wrapper function to get the update_terminal variable. If we don't
  * do getting the store from a page without the terminal would either fail or
@@ -15,7 +17,7 @@ export type Theme = 'light' | 'dark';
  * @returns A promise with the store.
  */
 export function get_theme(update_terminal = true) {
-	const store = writable<{ current: Theme; next: Theme }>(initial_state());
+	store.set(initial_state());
 
 	function initial_state() {
 		const user_preference = get_cookie(PUBLIC_THEME_COOKIE_NAME) as Theme | undefined;
