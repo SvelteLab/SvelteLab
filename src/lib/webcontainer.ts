@@ -103,6 +103,7 @@ async function listen_for_files_changes() {
 	listening_for_fs_store.set(false);
 	const to_ignore = IGNORE_LIST.flatMap((IGNORE) => ['-i', `"${IGNORE}"`]);
 	const process = await webcontainer_instance.spawn('npx', [
+		'-y',
 		'chokidar-cli',
 		'*',
 		'**/*',
@@ -380,6 +381,7 @@ async function run_svelte_check() {
 	if (!available) return;
 
 	const process = await webcontainer_instance.spawn('npx', [
+		'-y',
 		'svelte-check',
 		'--watch',
 		'--output',

@@ -3,17 +3,14 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { createEventDispatcher } from 'svelte';
-	import Routify from '~icons/material-symbols/alt-route-rounded';
 	import Imagetools from '~icons/material-symbols/imagesmode';
 	import Bulma from '~icons/mdi/bulma';
 	import Sass from '~icons/mdi/sass';
 	import Tailwind from '~icons/mdi/tailwind';
-	import Cubed from '~icons/ph/cube-bold';
 	import Bootstrap from '~icons/ri/bootstrap-fill';
 	import Coffeescript from '~icons/simple-icons/coffeescript';
 	import Markdown from '~icons/simple-icons/markdown';
 	import PostCSS from '~icons/simple-icons/postcss';
-	import Tauri from '~icons/simple-icons/tauri';
 
 	const dispatch = createEventDispatcher();
 
@@ -36,13 +33,14 @@
 </script>
 
 <form
-	on:submit|preventDefault={async (e) => {
+	on:submit|preventDefault={async () => {
 		const progress_toast = toast.push(`Adding ${integrations_to_add_as_string}...`, {
 			initial: 0,
 			dismissable: false,
 		});
 		webcontainer
 			.spawn('npx', [
+				'-y',
 				'svelte-add@latest',
 				integrations_to_add.map((i) => i.name).join('+'),
 				'--install',
