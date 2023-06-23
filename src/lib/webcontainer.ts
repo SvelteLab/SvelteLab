@@ -545,7 +545,7 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		await run_command('npm install --verbose');
+		await run_command('npm install');
 		listen_for_files_changes();
 	},
 	/**
