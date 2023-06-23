@@ -1,20 +1,21 @@
 {
-	"name": "project",
+	"name": "basic-sveltelab-project",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
 		"dev": "vite dev",
+		"format": "prettier --plugin-search-dir . --write .",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/kit": "^1.5.0",
+		"@sveltejs/kit": "^1.20.4",
 		"prettier": "^2.8.0",
-		"prettier-plugin-svelte": "^2.8.1",
-		"svelte": "^3.54.0",
+		"prettier-plugin-svelte": "^2.10.1",
+		"svelte": "^4.0.0",
 		"svelte-check": "^3.4.3",
-		"vite": "^4.1.4"
+		"vite": "^4.3.6"
 	}
 }
