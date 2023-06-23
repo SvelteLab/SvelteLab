@@ -30,15 +30,18 @@
 			<p class="tagline"><i>supercharged</i> REPL for Svelte</p>
 			<p>instantly spin up a SvelteKit project and share it with the world</p>
 		</div>
-		<div style="display:flex; gap: 3rem; justify-content: center">
+		<div class="links">
 			<a href="https://docs.sveltelab.dev/" title="Docs">
 				<Docs style="font-size: 3rem;" />
+				Docs
 			</a>
 			<a href="https://github.com/sveltelab/sveltelab" title="GitHub">
 				<GitHub style="font-size: 3rem;" />
+				Repository
 			</a>
 			<a href="https://discord.gg/FbnT6wujQx" title="Discord">
 				<Discord style="font-size: 3rem;" />
+				Chat
 			</a>
 		</div>
 		{@html intro}
@@ -75,6 +78,18 @@
 	}
 	.tagline {
 		font-size: 2.6rem;
+	}
+
+	.links {
+		display: flex;
+		gap: 4rem;
+		justify-content: center;
+	}
+
+	.links a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
 	aside :global(p),
