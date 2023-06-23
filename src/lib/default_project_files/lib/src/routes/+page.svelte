@@ -1,6 +1,6 @@
 <script>
-	import Counter from '$lib/Counter.svelte';
-	import './global.css';
+	import { Counter } from '$lib';
+
 	export let data;
 </script>
 
@@ -8,6 +8,6 @@
 	Hello {data.name}!
 </h1>
 
-<p>Head over to the lib folder to start crafting!</p>
-
 <Counter />
+
+<p>Head over to the <code>src/lib</code> folder to start crafting!</p>
