@@ -46,6 +46,7 @@ const file_icons = new Map<RegExp, typeof File>([
 	[/svelte\.config\.(ts|js)$/, Svelte],
 	[/\.prettierrc$/, Prettier],
 	[/.*\.svelte$/, Svelte],
+	[/.*\.svx$/, Svelte],
 	[/.*\.ts$/, TS],
 	[/^postcss\.(js|cjs|mjs)$/, PostCSS],
 	[/.*\.postcss$/, PostCSS],

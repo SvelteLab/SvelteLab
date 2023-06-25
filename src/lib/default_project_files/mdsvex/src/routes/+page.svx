@@ -1,0 +1,11 @@
+<script>
+	import Penguin from '$lib/Penguin.svelte';
+
+	export let data;
+</script>
+
+<Penguin walk={true} />
+
+# {data.name}!
+
+svelte in markdown

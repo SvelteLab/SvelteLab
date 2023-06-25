@@ -34,6 +34,7 @@
 
 	const langs: Record<string, () => Promise<LanguageSupport>> = {
 		svelte: async () => svelte(),
+		svx: async () => svelte(),
 		html: () => import('@codemirror/lang-html').then((lang) => lang.html()),
 		js: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
 		cjs: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
