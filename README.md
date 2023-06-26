@@ -36,8 +36,8 @@
 
 # Development
 
-```
-cp .env.sample .env
-pnpm i
-pnpm dev
-```
+1. download fitting pocketbase binary and place in root
+1. `cp .env.sample .env`
+1. `pnpm i`
+1. `./pocketbase serve`
+1. `pnpm dev`

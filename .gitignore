@@ -11,3 +11,5 @@ vite.config.ts.timestamp-*
 .vercel
 src/lib/dependency-report.json
 static/~partytown/
+pocketbase
+pb_data
