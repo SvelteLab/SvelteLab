@@ -29,6 +29,9 @@
 	);
 </script>
 
+<svelte:head>
+	<title>{data.user?.username || 'Profile'} - SvelteLab</title>
+</svelte:head>
 <ProfileHeader />
 <main>
 	<input
