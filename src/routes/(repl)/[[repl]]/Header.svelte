@@ -16,10 +16,8 @@
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
-	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import Profile from '~icons/material-symbols/account-circle';
 	import AddNew from '~icons/material-symbols/add-circle-rounded';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
 	import Docs from '~icons/material-symbols/docs';
@@ -27,7 +25,6 @@
 	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	import Sun from '~icons/material-symbols/light-mode';
 	import Url from '~icons/material-symbols/link';
-	import Login from '~icons/material-symbols/login-rounded';
 	import SignOut from '~icons/material-symbols/logout-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';
 	import Save from '~icons/material-symbols/save';
@@ -36,7 +33,7 @@
 	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
-
+	import { ICON } from '$lib/icons';
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
@@ -53,6 +50,24 @@
 	});
 
 	let a_hover = false;
+
+	const save_repl_then_navigate = async ({ detail: e }: { detail: MouseEvent }) => {
+		e.preventDefault();
+		try {
+			// save current project to local storage (we have to use local instead
+			// of session because Firefox Mobile it's being weird)
+			window.localStorage.setItem(
+				PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
+				stringify(await webcontainer.get_tree_from_container(true))
+			);
+		} catch (e) {
+			if (!window.confirm('You will lose progress on this project...do you want to continue?')) {
+				// this will prevent the actual navigation
+				throw new Error('');
+			}
+		}
+		window.location.assign((e.target as HTMLAnchorElement).href);
+	};
 </script>
 
 <header>
@@ -194,9 +209,13 @@
 		<!-- Profile or login -->
 		<DropdownMenu indicator>
 			<svelte:fragment slot="trigger">
-				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+				{#if user.avatarUrl}
+					<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+				{:else}
+					<ICON.Profile />
+				{/if}
 			</svelte:fragment>
-			<MenuItem href="/profile"><Profile /> Your profile</MenuItem>
+			<MenuItem href="/profile"><ICON.Profile /> Your profile</MenuItem>
 			<form
 				use:enhance={() => {
 					return () => {
@@ -213,30 +232,23 @@
 			</form>
 		</DropdownMenu>
 	{:else}
-		<a
-			use:async_click={async () => {
-				try {
-					// save current project to local storage (we have to use local instead
-					// of session because Firefox Mobile it's being weird)
-					window.localStorage.setItem(
-						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
-						stringify(await webcontainer.get_tree_from_container(true))
-					);
-				} catch (e) {
-					if (
-						!window.confirm('You will lose progress on this project...do you want to continue?')
-					) {
-						// this will prevent the actual navigation
-						throw new Error('');
-					}
-				}
-			}}
-			class="login"
-			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
-			title="Login with GitHub"
-		>
-			<Login /> <span>Login with GitHub</span>
-		</a>
+		<DropdownMenu indicator>
+			<svelte:fragment slot="trigger">
+				<ICON.Login />
+			</svelte:fragment>
+			{#if github_login}
+				<MenuItem
+					on:click={save_repl_then_navigate}
+					href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
+				>
+					<ICON.Github /> Login with GitHub
+				</MenuItem>
+			{/if}
+			<MenuItem href="/login" on:click={save_repl_then_navigate}>
+				<ICON.Login />
+				Login with Password
+			</MenuItem>
+		</DropdownMenu>
 	{/if}
 </header>
 
@@ -354,9 +366,17 @@
 		color: white;
 	}
 
+	.login .only-sm {
+		display: none;
+	}
+
 	@media only screen and (max-width: 1030px) {
-		.login span {
+		.login .only-lg {
 			display: none;
+		}
+
+		.login .only-sm {
+			display: revert;
 		}
 	}
 
