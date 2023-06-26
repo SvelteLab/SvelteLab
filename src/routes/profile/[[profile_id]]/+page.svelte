@@ -29,6 +29,10 @@
 	);
 </script>
 
+<svelte:head>
+	<title>Profile - SvelteLab</title>
+</svelte:head>
+
 <ProfileHeader />
 <main>
 	<input
