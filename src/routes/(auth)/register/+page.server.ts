@@ -1,10 +1,12 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const actions = {
 	default: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData());
+		console.log(data);
 
 		try {
+			await locals.pocketbase.collection('users').create(data);
 			await locals.pocketbase
 				.collection('users')
 				.authWithPassword(data.email.toString(), data.password.toString());
@@ -15,4 +17,4 @@ export const actions = {
 
 		throw redirect(303, '/');
 	},
-};
+} satisfies Actions;

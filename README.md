@@ -40,4 +40,5 @@
 1. `cp .env.sample .env`
 1. `pnpm i`
 1. `./pocketbase serve`
+1. go to http://127.0.0.1:8090/_/ and setup your PocketBase Admin
 1. `pnpm dev`

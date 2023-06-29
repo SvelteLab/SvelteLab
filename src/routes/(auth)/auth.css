@@ -8,7 +8,6 @@ form {
 	background-color: var(--sk-back-2);
 	padding: 3rem;
 	margin-top: 4rem;
-	border-top: 0.3rem solid var(--sk-theme-1);
 }
 
 input {
@@ -31,29 +30,27 @@ button {
 	position: relative;
 	border-radius: 0.5rem;
 	padding: 1rem;
+	color: inherit;
+	border: 0.1rem solid var(--sk-theme-1);
 }
 
-button {
-	border: 0.3rem solid var(--sk-theme-1);
-}
-
+a:hover,
 button:hover {
 	background-color: var(--sk-theme-1);
 	color: #fff;
 }
 
-a {
-	text-align: end;
+a:hover {
+	text-decoration: underline;
 }
 
 hr {
 	border-color: var(--sk-back-5);
 	border-style: solid;
-	border-radius: 999rem
+	border-radius: 999rem;
 }
 
 section[data-error] {
-	border: 0.5rem solid var(--sk-code-diff-removed);
+	border: 0.2rem solid var(--sk-code-diff-removed);
 	padding: 1rem;
-	font-size: 1.3em;
 }

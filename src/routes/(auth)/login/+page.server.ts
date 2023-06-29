@@ -1,12 +1,17 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { z } from 'zod';
+
+const login_schema = z.object({
+	email: z.string(),
+	password: z.string(),
+});
 
 export const actions = {
 	default: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData());
-		console.log(data);
 
 		try {
-			await locals.pocketbase.collection('users').create(request.formData);
+			login_schema.parse(data);
 			await locals.pocketbase
 				.collection('users')
 				.authWithPassword(data.email.toString(), data.password.toString());
@@ -17,4 +22,4 @@ export const actions = {
 
 		throw redirect(303, '/');
 	},
-};
+} satisfies Actions;

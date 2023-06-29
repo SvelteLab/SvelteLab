@@ -1,11 +1,13 @@
 <script>
+	import { page } from '$app/stores';
 	import { ICON } from '$lib/icons';
 
+	export let data;
 	export let form;
 </script>
 
 <form method="POST">
-	<h1>Register</h1>
+	<h2>Register</h2>
 	<label>
 		Email*
 		<input type="email" name="email" required />
@@ -33,9 +35,14 @@
 		Register
 	</button>
 	<hr />
+	{#if data.github_login}
+		<a href={`${data.github_login?.authUrl}${data.REDIRECT_URI}${$page.url.pathname}`}>
+			<ICON.Github /> Login with GitHub
+		</a>
+	{/if}
 	<a href="/login">
 		<ICON.Login />
-		go to login
+		Login
 	</a>
 </form>
 
