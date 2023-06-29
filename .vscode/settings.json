@@ -25,5 +25,10 @@
 		"puruvj",
 		"zerodevx"
 	],
-	"npm.exclude": ["**/src/lib/**/*"]
+	"npm.exclude": [
+		"**/src/lib/**/*"
+	],
+	"githubPullRequests.ignoredPullRequestBranches": [
+		"master"
+	]
 }
