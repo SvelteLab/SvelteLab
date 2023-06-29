@@ -18,19 +18,6 @@
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import AddNew from '~icons/material-symbols/add-circle-rounded';
-	import Moon from '~icons/material-symbols/dark-mode-rounded';
-	import Docs from '~icons/material-symbols/docs';
-	import Fork from '~icons/material-symbols/fork-right-rounded';
-	import Cmd from '~icons/material-symbols/keyboard-command-key';
-	import Sun from '~icons/material-symbols/light-mode';
-	import Url from '~icons/material-symbols/link';
-	import SignOut from '~icons/material-symbols/logout-rounded';
-	import FileBrowser from '~icons/material-symbols/menu-rounded';
-	import Save from '~icons/material-symbols/save';
-	import Share from '~icons/material-symbols/share';
-	import Tag from '~icons/material-symbols/tag-rounded';
-	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
 	import { ICON } from '$lib/icons';
@@ -81,7 +68,7 @@
 		{#if !a_hover}
 			<Logo />
 		{:else}
-			<AddNew />
+			<ICON.AddNew />
 		{/if}
 	</a>
 	<div class="no-mobile menu-bar">
@@ -104,7 +91,7 @@
 			on:click={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree !== 0}
 		>
-			<FileBrowser />
+			<ICON.FileBrowser />
 		</button>
 
 		<button
@@ -113,7 +100,7 @@
 			on:click={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal !== 0}
 		>
-			<Terminal />
+			<ICON.Terminal />
 		</button>
 	{/if}
 	<button
@@ -128,13 +115,13 @@
 		title="Change theme. Shift+Click to delete preference"
 	>
 		{#if $theme.next === 'light'}
-			<Sun />
+			<ICON.LightMode />
 		{:else}
-			<Moon />
+			<ICON.DarkMode />
 		{/if}
 	</button>
 	<a class="no-mobile" href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
-		<Docs />
+		<ICON.Docs />
 	</a>
 	<button
 		class="supplemental"
@@ -143,7 +130,7 @@
 		}}
 		title="Open Command Runner (CTRL+K)"
 	>
-		<Cmd />
+		<ICON.Cmd />
 	</button>
 
 	{#if user}
@@ -158,7 +145,7 @@
 				title="Fork Project"
 				loading={forking}
 			>
-				<Fork />
+				<ICON.Fork />
 			</AsyncButton>
 		{/if}
 		<!-- Save button -->
@@ -171,7 +158,7 @@
 				title="Save Changes"
 				loading={$is_repl_saving}
 			>
-				<Save />
+				<ICON.Save />
 			</AsyncButton>
 		{/if}
 	{/if}
@@ -183,25 +170,25 @@
 			}}
 			title="Share Files Snapshot"
 		>
-			<Share />
+			<ICON.Share />
 		</button>
 	{:else}
 		<DropdownMenu indicator>
 			<svelte:fragment slot="trigger">
-				<Share />
+				<ICON.Share />
 			</svelte:fragment>
 			<MenuItem
 				on:click={() => {
 					share_with_id();
 				}}
 			>
-				<Url /> Share Project
+				<ICON.Url /> Share Project
 			</MenuItem>
 			<MenuItem
 				on:click={() => {
 					share_with_hash();
 				}}
-				><Tag /> Share Code Snapshot
+				><ICON.Hash /> Share Code Snapshot
 			</MenuItem>
 		</DropdownMenu>
 	{/if}
@@ -227,7 +214,7 @@
 				action="?/logout"
 			>
 				<MenuItem>
-					<SignOut /> Log out
+					<ICON.SignOut /> Log out
 				</MenuItem>
 			</form>
 		</DropdownMenu>
@@ -341,21 +328,11 @@
 		scale: 1.5;
 	}
 
-	.login {
-		color: var(--sk-theme-1);
-	}
-
-	.login:hover {
-		background-color: var(--sk-theme-1);
-		color: #fff;
-	}
-
 	.menu-bar {
 		display: flex;
 		gap: 0.5rem;
 	}
 
-	.login,
 	.menu-bar > :global(button) {
 		border-radius: 0.5rem;
 		padding: 0.5rem 1rem;
@@ -364,20 +341,6 @@
 	.menu-bar > :global(button:hover) {
 		background-color: var(--sk-theme-1);
 		color: white;
-	}
-
-	.login .only-sm {
-		display: none;
-	}
-
-	@media only screen and (max-width: 1030px) {
-		.login .only-lg {
-			display: none;
-		}
-
-		.login .only-sm {
-			display: revert;
-		}
 	}
 
 	@media only screen and (max-width: 940px) {
