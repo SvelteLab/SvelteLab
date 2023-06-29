@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { ICON } from '$lib/icons';
+	import { error } from '@sveltejs/kit';
 
 	export let data;
 	export let form;
@@ -26,8 +27,7 @@
 	</label>
 	{#if form?.error}
 		<section data-error>
-			There was an authentication error.<br />
-			Did the passwords match?
+			{form.error}
 		</section>
 	{/if}
 	<button>

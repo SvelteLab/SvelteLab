@@ -1,12 +1,18 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { z } from 'zod';
+import { ClientResponseError } from 'pocketbase';
+import { ZodError, z } from 'zod';
 
-const register_schema = z.object({
-	email: z.string(),
-	password: z.string(),
-	passwordConfirm: z.string(),
-	name: z.string().optional(),
-});
+const register_schema = z
+	.object({
+		email: z.string(),
+		password: z.string().min(8),
+		passwordConfirm: z.string(),
+		name: z.string().optional(),
+	})
+	.refine((data) => data.password === data.passwordConfirm, {
+		message: "Passwords don't match",
+		path: ['passwordConfirm'], // path of error
+	});
 
 export const actions = {
 	default: async ({ request, locals }) => {
@@ -19,8 +25,17 @@ export const actions = {
 				.collection('users')
 				.authWithPassword(data.email.toString(), data.password.toString());
 		} catch (error) {
-			console.log(error);
-			return fail(400, { error: JSON.stringify(error) });
+			if (error instanceof ZodError) {
+				return fail(400, {
+					error: error.issues
+						.map((i) => i.message.replace('String', i.path.at(-1) + '' || 'String'))
+						.join('. '),
+				});
+			}
+			if (error instanceof ClientResponseError) {
+				return fail(400, { error: 'Email already taken.' });
+			}
+			return fail(400, { error: 'Something unexpected happen. Sorry :/' });
 		}
 
 		throw redirect(303, '/');
