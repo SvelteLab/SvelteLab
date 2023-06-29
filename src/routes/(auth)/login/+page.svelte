@@ -18,8 +18,8 @@
 	</label>
 	{#if form?.error}
 		<section data-error>
-			There was an authentication error.<br />
-			Did you use the correct email and password?
+			Error: <br />
+			{form.error}
 		</section>
 	{/if}
 	<button>

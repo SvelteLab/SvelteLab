@@ -27,6 +27,7 @@
 	</label>
 	{#if form?.error}
 		<section data-error>
+			Error: <br />
 			{form.error}
 		</section>
 	{/if}

@@ -1,5 +1,6 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { z } from 'zod';
+import { ClientResponseError } from 'pocketbase';
+import { ZodError, z } from 'zod';
 
 const login_schema = z.object({
 	email: z.string(),
@@ -16,8 +17,17 @@ export const actions = {
 				.collection('users')
 				.authWithPassword(data.email.toString(), data.password.toString());
 		} catch (error) {
-			console.log(error);
-			return fail(400, { error: JSON.stringify(error) });
+			if (error instanceof ZodError) {
+				return fail(400, {
+					error: error.issues
+						.map((i) => i.message.replace('String', i.path.at(-1) + '' || 'String'))
+						.join('. '),
+				});
+			}
+			if (error instanceof ClientResponseError) {
+				return fail(400, { error: 'Did you use the correct email and password?.' });
+			}
+			return fail(400, { error: 'Something unexpected happen. Sorry :/' });
 		}
 
 		throw redirect(303, '/');
