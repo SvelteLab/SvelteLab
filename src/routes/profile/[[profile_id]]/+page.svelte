@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import TreeMap from '$lib/components/TreeMap.svelte';
+	import type { ShareFn } from '$lib/share';
+	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
 	import Pending from '~icons/eos-icons/loading';
@@ -9,8 +11,8 @@
 	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
-	import { onMount } from 'svelte';
-	import type { ShareFn } from '$lib/share';
+	import NoneFound from '~icons/material-symbols/sad-tab-outline-rounded';
+	import RelativeTime from '@yaireo/relative-time';
 
 	export let data: PageData;
 
@@ -23,10 +25,14 @@
 	const search = queryParam('s', ssp.string(), {
 		pushHistory: false,
 	});
+
 	let loading = [] as string[];
+
 	$: repls = data.repls.filter((repl) =>
 		repl.name.toLowerCase().includes($search?.toLowerCase() ?? '')
 	);
+
+	const relative_time = new RelativeTime();
 </script>
 
 <svelte:head>
@@ -41,6 +47,8 @@
 		type="search"
 	/>
 	{#each repls as project (project.id)}
+		{@const created = relative_time.from(new Date(project.created))}
+		{@const updated = relative_time.from(new Date(project.updated))}
 		<!-- this will be useful when we will add delete -->
 		<article
 			animate:flip={{
@@ -51,7 +59,11 @@
 				<p>
 					{project.name}
 				</p>
-				<small>/{project.id}</small>
+				<small title={project.created}>created {created}</small>
+				{#if created != updated}
+					<small title={project.updated}>updated {updated}</small>
+				{/if}
+				<code>/{project.id}</code>
 			</a>
 			<div class="buttons">
 				<button
@@ -130,6 +142,11 @@
 				</div>
 			{/if}
 		</article>
+	{:else}
+		<div class="loader">
+			<NoneFound />
+			<span>No projects found</span>
+		</div>
 	{/each}
 </main>
 
@@ -195,15 +212,18 @@
 	p {
 		margin: 0;
 		font-size: 2rem;
+		word-break: break-all;
 	}
 	small {
-		background: var(--sk-back-3);
-		padding: 0.75rem;
-		border-radius: 0.5rem;
+		color: var(--sk-text-2);
+		display: block;
+		margin-block: 0.5em;
 	}
+
 	form {
 		line-height: 0;
 	}
+
 	.loading {
 		position: absolute;
 		inset: 0;
