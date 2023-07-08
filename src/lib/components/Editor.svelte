@@ -7,19 +7,18 @@
 	import { current_tab } from '$lib/tabs';
 	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
-	import { javascript } from '@codemirror/lang-javascript';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-	import type { Diagnostic } from '@codemirror/lint';
+	import type { Diagnostic, LintSource } from '@codemirror/lint';
 	import { linter } from '@codemirror/lint';
 	import type { Extension } from '@codemirror/state';
 	import { EditorView } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
 	import { codemirror, withCodemirrorInstance } from '@neocodemirror/svelte';
+	import { svelte } from '@replit/codemirror-lang-svelte';
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
-	import { svelte } from '@replit/codemirror-lang-svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -51,12 +50,7 @@
 	let vim: (options: { status?: boolean }) => Extension;
 
 	async function get_extensions(config: typeof $editor_config) {
-		const extensions = [
-			js_snippets,
-			svelte_snippets,
-			linter(return_diagnostics),
-			abbreviationTracker(),
-		];
+		const extensions = [js_snippets, svelte_snippets, abbreviationTracker()];
 		if (config.vim) {
 			if (!vim) {
 				vim = await import('@replit/codemirror-vim').then((vim_import) => vim_import.vim);
@@ -113,6 +107,7 @@
 		}
 		return diagnostics;
 	}
+
 	const codemirror_instance = withCodemirrorInstance();
 </script>
 
@@ -145,6 +140,7 @@
 					duration: $editor_preferences.delay_duration ?? 300,
 					kind: $editor_preferences.delay_function ?? 'throttle',
 				},
+				lint: return_diagnostics,
 				styles: {
 					'&': {
 						width: '100%',
