@@ -52,7 +52,7 @@ jobs:
         run: pnpm run pocketbase &
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install chromium --with-deps
 
       - name: Run Playwright tests
         run: pnpm run test
