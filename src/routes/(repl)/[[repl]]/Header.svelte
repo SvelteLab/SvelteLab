@@ -16,27 +16,11 @@
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
 	import { get_theme } from '$lib/theme';
-	import { async_click } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
-	import Profile from '~icons/material-symbols/account-circle';
-	import AddNew from '~icons/material-symbols/add-circle-rounded';
-	import Moon from '~icons/material-symbols/dark-mode-rounded';
-	import Docs from '~icons/material-symbols/docs';
-	import Fork from '~icons/material-symbols/fork-right-rounded';
-	import Cmd from '~icons/material-symbols/keyboard-command-key';
-	import Sun from '~icons/material-symbols/light-mode';
-	import Url from '~icons/material-symbols/link';
-	import Login from '~icons/material-symbols/login-rounded';
-	import SignOut from '~icons/material-symbols/logout-rounded';
-	import FileBrowser from '~icons/material-symbols/menu-rounded';
-	import Save from '~icons/material-symbols/save';
-	import Share from '~icons/material-symbols/share';
-	import Tag from '~icons/material-symbols/tag-rounded';
-	import Terminal from '~icons/material-symbols/terminal-rounded';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
-
+	import { ICON } from '$lib/icons';
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
@@ -53,6 +37,24 @@
 	});
 
 	let a_hover = false;
+
+	const save_repl_then_navigate = async ({ detail: e }: { detail: MouseEvent }) => {
+		e.preventDefault();
+		try {
+			// save current project to local storage (we have to use local instead
+			// of session because Firefox Mobile it's being weird)
+			window.localStorage.setItem(
+				PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
+				stringify(await webcontainer.get_tree_from_container(true))
+			);
+		} catch (e) {
+			if (!window.confirm('You will lose progress on this project...do you want to continue?')) {
+				// this will prevent the actual navigation
+				throw new Error('');
+			}
+		}
+		window.location.assign((e.target as HTMLAnchorElement).href);
+	};
 </script>
 
 <header>
@@ -66,7 +68,7 @@
 		{#if !a_hover}
 			<Logo />
 		{:else}
-			<AddNew />
+			<ICON.AddNew />
 		{/if}
 	</a>
 	<div class="no-mobile menu-bar">
@@ -89,7 +91,7 @@
 			on:click={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree !== 0}
 		>
-			<FileBrowser />
+			<ICON.FileBrowser />
 		</button>
 
 		<button
@@ -98,7 +100,7 @@
 			on:click={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal !== 0}
 		>
-			<Terminal />
+			<ICON.Terminal />
 		</button>
 	{/if}
 	<button
@@ -113,13 +115,13 @@
 		title="Change theme. Shift+Click to delete preference"
 	>
 		{#if $theme.next === 'light'}
-			<Sun />
+			<ICON.LightMode />
 		{:else}
-			<Moon />
+			<ICON.DarkMode />
 		{/if}
 	</button>
 	<a class="no-mobile" href="http://docs.sveltelab.dev/" target="_blank" title="SvelteLab Docs">
-		<Docs />
+		<ICON.Docs />
 	</a>
 	<button
 		class="supplemental"
@@ -128,7 +130,7 @@
 		}}
 		title="Open Command Runner (CTRL+K)"
 	>
-		<Cmd />
+		<ICON.Cmd />
 	</button>
 
 	{#if user}
@@ -143,7 +145,7 @@
 				title="Fork Project"
 				loading={forking}
 			>
-				<Fork />
+				<ICON.Fork />
 			</AsyncButton>
 		{/if}
 		<!-- Save button -->
@@ -156,7 +158,7 @@
 				title="Save Changes"
 				loading={$is_repl_saving}
 			>
-				<Save />
+				<ICON.Save />
 			</AsyncButton>
 		{/if}
 	{/if}
@@ -168,25 +170,25 @@
 			}}
 			title="Share Files Snapshot"
 		>
-			<Share />
+			<ICON.Share />
 		</button>
 	{:else}
 		<DropdownMenu indicator>
 			<svelte:fragment slot="trigger">
-				<Share />
+				<ICON.Share />
 			</svelte:fragment>
 			<MenuItem
 				on:click={() => {
 					share_with_id();
 				}}
 			>
-				<Url /> Share Project
+				<ICON.Url /> Share Project
 			</MenuItem>
 			<MenuItem
 				on:click={() => {
 					share_with_hash();
 				}}
-				><Tag /> Share Code Snapshot
+				><ICON.Hash /> Share Code Snapshot
 			</MenuItem>
 		</DropdownMenu>
 	{/if}
@@ -194,9 +196,13 @@
 		<!-- Profile or login -->
 		<DropdownMenu indicator>
 			<svelte:fragment slot="trigger">
-				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+				{#if user.avatarUrl}
+					<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+				{:else}
+					<ICON.Profile />
+				{/if}
 			</svelte:fragment>
-			<MenuItem href="/profile"><Profile /> Your profile</MenuItem>
+			<MenuItem href="/profile"><ICON.Profile /> Your profile</MenuItem>
 			<form
 				use:enhance={() => {
 					return () => {
@@ -208,35 +214,28 @@
 				action="?/logout"
 			>
 				<MenuItem>
-					<SignOut /> Log out
+					<ICON.SignOut /> Log out
 				</MenuItem>
 			</form>
 		</DropdownMenu>
 	{:else}
-		<a
-			use:async_click={async () => {
-				try {
-					// save current project to local storage (we have to use local instead
-					// of session because Firefox Mobile it's being weird)
-					window.localStorage.setItem(
-						PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
-						stringify(await webcontainer.get_tree_from_container(true))
-					);
-				} catch (e) {
-					if (
-						!window.confirm('You will lose progress on this project...do you want to continue?')
-					) {
-						// this will prevent the actual navigation
-						throw new Error('');
-					}
-				}
-			}}
-			class="login"
-			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
-			title="Login with GitHub"
-		>
-			<Login /> <span>Login with GitHub</span>
-		</a>
+		<DropdownMenu indicator>
+			<svelte:fragment slot="trigger">
+				<ICON.Login />
+			</svelte:fragment>
+			{#if github_login}
+				<MenuItem
+					on:click={save_repl_then_navigate}
+					href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
+				>
+					<ICON.Github /> Login with GitHub
+				</MenuItem>
+			{/if}
+			<MenuItem href="/login" on:click={save_repl_then_navigate}>
+				<ICON.Login />
+				Login with Password
+			</MenuItem>
+		</DropdownMenu>
 	{/if}
 </header>
 
@@ -329,21 +328,11 @@
 		scale: 1.5;
 	}
 
-	.login {
-		color: var(--sk-theme-1);
-	}
-
-	.login:hover {
-		background-color: var(--sk-theme-1);
-		color: #fff;
-	}
-
 	.menu-bar {
 		display: flex;
 		gap: 0.5rem;
 	}
 
-	.login,
 	.menu-bar > :global(button) {
 		border-radius: 0.5rem;
 		padding: 0.5rem 1rem;
@@ -352,12 +341,6 @@
 	.menu-bar > :global(button:hover) {
 		background-color: var(--sk-theme-1);
 		color: white;
-	}
-
-	@media only screen and (max-width: 1030px) {
-		.login span {
-			display: none;
-		}
 	}
 
 	@media only screen and (max-width: 940px) {

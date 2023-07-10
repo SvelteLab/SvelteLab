@@ -17,12 +17,13 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	// in a cookie
 	const auth_methods = await locals.pocketbase.collection('users').listAuthMethods();
 	const github_login = auth_methods.authProviders.find((p) => p.name === 'github');
-	if (!github_login) throw Error('No authProvider with name "github" in pocketbase auth_methods');
 
-	cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
-		httpOnly: true,
-		path: '/',
-	});
+	if (github_login) {
+		cookies.set(GITHUB_VERIFIER_COOKIE_NAME, github_login.codeVerifier, {
+			httpOnly: true,
+			path: '/',
+		});
+	}
 
 	return {
 		github_login,
