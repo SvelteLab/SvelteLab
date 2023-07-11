@@ -18,8 +18,8 @@ import {
 } from './stores/editor_errors_store';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
-import { deferred_promise, version_compare } from './utils';
 import { actionable } from './toast';
+import { deferred_promise, version_compare } from './utils';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -128,6 +128,8 @@ async function listen_for_files_changes() {
 					} else if (command === 'unlink') {
 						try {
 							delete_file_from_store(files_store, path);
+
+							// codemirror_instance.get().documents.delete(path);
 						} catch (e) {
 							/* empty */
 						}
