@@ -40,7 +40,7 @@
 		"@lezer/highlight": "^1.1.4",
 		"@lezer/javascript": "^1.4.3",
 		"@lezer/lr": "^1.3.4",
-		"@neocodemirror/svelte": "^0.0.15",
+		"@neocodemirror/svelte": "^0.0.16",
 		"@replit/codemirror-lang-svelte": "^6.0.0",
 		"@replit/codemirror-vim": "^6.0.14",
 		"@sveltejs/site-kit": "^3.2.2",

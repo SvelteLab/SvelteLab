@@ -8,8 +8,7 @@
 	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-	import type { Diagnostic, LintSource } from '@codemirror/lint';
-	import { linter } from '@codemirror/lint';
+	import type { Diagnostic } from '@codemirror/lint';
 	import type { Extension } from '@codemirror/state';
 	import { EditorView } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
@@ -46,6 +45,8 @@
 
 	let code: string;
 	let image_bytes: Uint8Array;
+
+	let cursor: number | null = null;
 
 	let vim: (options: { status?: boolean }) => Extension;
 
@@ -108,7 +109,7 @@
 		return diagnostics;
 	}
 
-	const codemirror_instance = withCodemirrorInstance();
+	export const codemirror_instance = withCodemirrorInstance();
 </script>
 
 {#if !$current_tab}
@@ -133,7 +134,9 @@
 				tabSize: 3,
 				useTabs: true,
 				value: code,
+				documentId: $current_tab,
 				extensions,
+				cursorPos: cursor,
 				setup: 'basic',
 				instanceStore: codemirror_instance,
 				onChangeBehavior: {
@@ -206,13 +209,9 @@
 						diagnostic.end.character,
 						code
 					);
+
 					$codemirror_instance.view?.focus();
-					$codemirror_instance.view?.dispatch({
-						selection: {
-							anchor: new_pos,
-							head: new_pos,
-						},
-					});
+					cursor = new_pos;
 				}}
 			/>
 		{/if}

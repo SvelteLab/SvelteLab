@@ -56,6 +56,9 @@ export default defineConfig({
 		raw_fonts(['.ttf']),
 		coep_plugin(),
 	],
+	resolve: {
+		dedupe: ['@codemirror/state'],
+	},
 	define: {
 		'process.env.NODE_ENV': '"production"',
 	},

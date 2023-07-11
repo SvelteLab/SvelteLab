@@ -66,8 +66,8 @@ dependencies:
     specifier: ^1.3.4
     version: 1.3.4
   '@neocodemirror/svelte':
-    specifier: ^0.0.15
-    version: 0.0.15(@codemirror/autocomplete@6.8.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)
+    specifier: ^0.0.16
+    version: 0.0.16(@codemirror/autocomplete@6.8.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)
   '@replit/codemirror-lang-svelte':
     specifier: ^6.0.0
     version: 6.0.0(@codemirror/autocomplete@6.8.1)(@codemirror/lang-css@6.2.0)(@codemirror/lang-html@6.4.5)(@codemirror/lang-javascript@6.1.9)(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)(@lezer/common@1.0.2)(@lezer/highlight@1.1.4)(@lezer/javascript@1.4.3)(@lezer/lr@1.3.4)
@@ -868,16 +868,16 @@ packages:
       - supports-color
     dev: true
 
-  /@neocodemirror/svelte@0.0.15(@codemirror/autocomplete@6.8.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1):
-    resolution: {integrity: sha512-MCux+QCR40CboJu/TFwnqK7gYQ3fvtvHX8F/mk85DRH7vMoG3VDjJhqneAITX5IzohWKeP36hzcV+oHC2LYJqA==}
+  /@neocodemirror/svelte@0.0.16(@codemirror/autocomplete@6.8.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.8.0)(@codemirror/lint@6.4.0)(@codemirror/search@6.5.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1):
+    resolution: {integrity: sha512-JLD5glCKFPFsQFylS7ALa7D0+1ws14j/6VLYeUsJ1pyrEzKYxlE+zce0hxl5aJds+PutIAAwv/89YCKANbpoag==}
     peerDependencies:
-      '@codemirror/autocomplete': ^6.7.1
+      '@codemirror/autocomplete': ^6.8.1
       '@codemirror/commands': ^6.2.4
-      '@codemirror/language': ^6.7.0
-      '@codemirror/lint': ^6.2.1
-      '@codemirror/search': ^6.4.0
-      '@codemirror/state': ^6.2.0
-      '@codemirror/view': ^6.12.0
+      '@codemirror/language': ^6.8.0
+      '@codemirror/lint': ^6.4.0
+      '@codemirror/search': ^6.5.0
+      '@codemirror/state': ^6.2.1
+      '@codemirror/view': ^6.14.0
     dependencies:
       '@codemirror/autocomplete': 6.8.1(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)(@lezer/common@1.0.2)
       '@codemirror/commands': 6.2.4
@@ -887,7 +887,7 @@ packages:
       '@codemirror/state': 6.2.1
       '@codemirror/view': 6.14.1
       csstype: 3.1.2
-      nanostores: 0.8.1
+      nanostores: 0.9.3
     dev: false
 
   /@nodelib/fs.scandir@2.1.5:
@@ -2604,9 +2604,9 @@ packages:
     hasBin: true
     dev: true
 
-  /nanostores@0.8.1:
-    resolution: {integrity: sha512-1ZCfQtII2XeFDrtqXL2cdQ/diGrLxzRB3YMyQjn8m7GSGQrJfGST2iuqMpWnS/ZlifhtjgR/SX0Jy6Uij6lRLA==}
-    engines: {node: ^16.0.0 || >=18.0.0}
+  /nanostores@0.9.3:
+    resolution: {integrity: sha512-KobZjcVyNndNrb5DAjfs0WG0lRcZu5Q1BOrfTOxokFLi25zFrWPjg+joXC6kuDqNfSt9fQwppyjUBkRPtsL+8w==}
+    engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
     dev: false
 
   /natural-compare-lite@1.4.0:
