@@ -71,3 +71,21 @@ export function version_compare(version_a: Version, version_b: Version) {
 	if (patch_a < patch_b) return -1;
 	return 0;
 }
+
+/**
+ * This class allows to quickly create a Map of Set with the added benefit of creating
+ * the set when it's not defined so get always return a set
+ */
+export class MapOfSet<K, V extends Set<TSet>, TSet = unknown> extends Map<K, V> {
+	constructor(iterable?: Iterable<readonly [K, V]> | undefined | null) {
+		super(iterable);
+	}
+
+	get(key: K) {
+		if (!this.has(key)) {
+			this.set(key, new Set() as V);
+		}
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		return super.get(key)!;
+	}
+}
