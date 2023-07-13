@@ -19,7 +19,7 @@ import {
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { actionable } from './toast';
-import { deferred_promise, version_compare } from './utils';
+import { MapOfSet, deferred_promise, version_compare } from './utils';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -99,6 +99,12 @@ export const listening_for_fs = {
 	subscribe: listening_for_fs_store.subscribe,
 };
 
+type FSChangedCallback = (path: string) => void;
+
+type FSChangedEvent = 'creation' | 'deletion';
+
+const fs_changes_callbacks = new MapOfSet<FSChangedEvent, Set<FSChangedCallback>>();
+
 async function listen_for_files_changes() {
 	listening_for_fs_store.set(false);
 	const to_ignore = IGNORE_LIST.flatMap((IGNORE) => ['-i', `"${IGNORE}"`]);
@@ -124,12 +130,16 @@ async function listen_for_files_changes() {
 					const path = `./${route}`;
 					diagnostic_store.prepare_for_new_check();
 					if (command === 'add') {
+						fs_changes_callbacks.get('creation').forEach((callbacks) => {
+							callbacks(path);
+						});
 						add_file_in_store(files_store, path, '', true);
 					} else if (command === 'unlink') {
 						try {
+							fs_changes_callbacks.get('deletion').forEach((callbacks) => {
+								callbacks(path);
+							});
 							delete_file_from_store(files_store, path);
-
-							// codemirror_instance.get().documents.delete(path);
 						} catch (e) {
 							/* empty */
 						}
@@ -648,6 +658,12 @@ export const webcontainer = {
 		a.click();
 	},
 	get_tree_from_container,
+	on_fs_change(event: FSChangedEvent, cb: FSChangedCallback) {
+		fs_changes_callbacks.get(event).add(cb);
+		return () => {
+			fs_changes_callbacks.get(event).delete(cb);
+		};
+	},
 };
 
 async function get_tree_from_container(as_string = true): Promise<FileSystemTree> {

@@ -18,6 +18,7 @@
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
+	import { onMount } from 'svelte';
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -92,6 +93,12 @@
 
 	on_command('format-current', () => {
 		read_current_tab($current_tab, is_image);
+	});
+
+	onMount(() => {
+		return webcontainer.on_fs_change('deletion', (path) => {
+			$codemirror_instance.documents.delete(path);
+		});
 	});
 
 	async function return_diagnostics() {
