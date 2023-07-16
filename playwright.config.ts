@@ -1,20 +1,12 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
-import dotenv from 'dotenv';
-dotenv.config();
-const dev = process.env.PLAYWRIGHT_DEV;
 
-console.log('######asdfa');
-
-//if we ever want /utils
-// → https://playwright.dev/docs/test-configuration#filtering-tests
 const config: PlaywrightTestConfig = {
 	webServer: {
-		command: dev ? '' : 'npm run build && npm run preview',
-		port: dev ? 5173 : 4173,
-		reuseExistingServer: !!dev,
+		command: 'npm run build && npm run preview',
+		port: 4173,
 	},
-	testDir: './tests',
-	testMatch: '*.ts',
+	testDir: 'tests',
+	testMatch: /.*\.e2e\.ts/,
 };
 
 export default config;
