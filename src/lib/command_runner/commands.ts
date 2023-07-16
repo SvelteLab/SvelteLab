@@ -1,8 +1,8 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
-import { PUBLIC_DISCORD_INVITE, PUBLIC_GITHUB_REPO } from '$env/static/public';
 import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
+import { PUBLIC_DISCORD_INVITE, PUBLIC_GITHUB_REPO } from '$lib/constants';
 import { is_dir } from '$lib/file_system';
 import { share_with_hash, share_with_id } from '$lib/share';
 import { editor_config } from '$lib/stores/editor_config_store';
@@ -49,6 +49,7 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
+
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
 	for (const file_or_dir in tree) {

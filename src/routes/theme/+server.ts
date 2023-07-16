@@ -1,4 +1,4 @@
-import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
+import { PUBLIC_THEME_COOKIE_NAME } from '$lib/constants';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {

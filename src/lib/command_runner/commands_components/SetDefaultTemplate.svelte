@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$env/static/public';
+	import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$lib/constants';
 	import { get_cookie, set_cookie } from '$lib/cookie';
 	import { createEventDispatcher } from 'svelte';
 	import { fix_title, template_icon_map } from './template_helpers';
