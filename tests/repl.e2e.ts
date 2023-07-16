@@ -3,9 +3,9 @@ import { expect, test } from '@playwright/test';
 test.describe('REPL', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
-		expect(
+		await expect(
 			page.frameLocator('iframe[title="content"]').getByText('Hello Basic Template!')
-		).toBeVisible({ timeout: 60000 });
+		).toBeVisible({ timeout: 60000 * 2 });
 	});
 	test('reflects changes', async ({ page }) => {
 		await page.getByText('<script>').click(); // select Editor
