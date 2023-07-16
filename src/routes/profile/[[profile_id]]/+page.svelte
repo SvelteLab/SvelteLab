@@ -27,11 +27,22 @@
 	});
 
 	let loading = [] as string[];
+	let sort_by = 'updated';
 
-	$: repls = data.repls.filter((repl) =>
-		repl.name.toLowerCase().includes($search?.toLowerCase() ?? '')
-	);
-
+	$: repls = data.repls
+		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
+		.sort((a, b) => {
+			switch (sort_by) {
+				case 'created':
+					return new Date(b.created).getTime() - new Date(a.created).getTime();
+				case 'updated':
+					return new Date(b.updated).getTime() - new Date(a.updated).getTime();
+				case 'name':
+					return a.name.localeCompare(b.name);
+				default:
+					return 0;
+			}
+		});
 	const relative_time = new RelativeTime();
 </script>
 
