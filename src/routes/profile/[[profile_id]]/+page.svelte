@@ -13,9 +13,12 @@
 	import ProfileHeader from './ProfileHeader.svelte';
 	import NoneFound from '~icons/material-symbols/sad-tab-outline-rounded';
 	import RelativeTime from '@yaireo/relative-time';
+	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
+	import MenuItem from '$lib/components/MenuItem.svelte';
 
 	export let data: PageData;
 
+	type SortByKey = 'created' | 'updated' | 'name';
 	let share: ShareFn;
 
 	onMount(async () => {
@@ -27,12 +30,23 @@
 	});
 
 	let loading = [] as string[];
+	let sort_by: SortByKey = 'updated';
 
-	$: repls = data.repls.filter((repl) =>
-		repl.name.toLowerCase().includes($search?.toLowerCase() ?? '')
-	);
+	const sort_functions: Record<
+		SortByKey,
+		(a: Record<string, string>, b: Record<string, string>) => number
+	> = {
+		created: (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
+		updated: (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime(),
+		name: (a, b) => a.name.localeCompare(b.name),
+	};
+
+	$: repls = data.repls
+		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
+		.sort(sort_functions[sort_by]);
 
 	const relative_time = new RelativeTime();
+	const sort_options: SortByKey[] = ['created', 'updated', 'name'];
 </script>
 
 <svelte:head>
@@ -40,12 +54,26 @@
 </svelte:head>
 <ProfileHeader />
 <main>
-	<input
-		bind:value={$search}
-		placeholder="🔍 Search..."
-		aria-label="Search for a repl"
-		type="search"
-	/>
+	<div id="top-bar">
+		<input
+			bind:value={$search}
+			placeholder="🔍 Search..."
+			aria-label="Search for a repl"
+			type="search"
+		/>
+
+		<DropdownMenu indicator>
+			<div slot="trigger" class="dropdown-trigger">
+				Sort by {sort_by}
+			</div>
+
+			{#each sort_options as option (option)}
+				{#if sort_by !== option}
+					<MenuItem on:click={() => (sort_by = option)}>{option}</MenuItem>
+				{/if}
+			{/each}
+		</DropdownMenu>
+	</div>
 	{#each repls as project (project.id)}
 		{@const created = relative_time.from(new Date(project.created))}
 		{@const updated = relative_time.from(new Date(project.updated))}
@@ -161,6 +189,15 @@
 		gap: 2rem;
 		max-width: 100%;
 		background-color: var(--sk-back-1);
+	}
+	#top-bar {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		grid-column: 1/-1;
+	}
+	.dropdown-trigger {
+		display: flex;
 	}
 	input {
 		grid-column: 1/-1;

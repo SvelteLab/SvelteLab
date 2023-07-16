@@ -26,7 +26,7 @@
 
 	$: open &&
 		computePosition(button, tooltip, {
-			placement: "bottom-start",
+			placement: 'bottom-start',
 			middleware: [shift()],
 		}).then(({ x, y }) => {
 			Object.assign(tooltip.style, {
