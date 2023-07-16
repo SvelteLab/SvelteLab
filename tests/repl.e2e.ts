@@ -3,11 +3,11 @@ import { expect, test } from '@playwright/test';
 test.describe('REPL', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
+	});
+	test('reflects changes', async ({ page }) => {
 		await expect(
 			page.frameLocator('iframe[title="content"]').getByText('Hello Basic Template!')
 		).toBeVisible({ timeout: 60000 * 5 });
-	});
-	test('reflects changes', async ({ page }) => {
 		await page.getByText('<script>').click(); // select Editor
 		await page.keyboard.down('Control');
 		await page.keyboard.press('A');
