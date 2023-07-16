@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
-import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
 import { get, writable } from 'svelte/store';
+import { PUBLIC_THEME_COOKIE_NAME } from './constants';
 import { get_cookie } from './cookie';
 import { update_terminal_theme } from './update_terminal_theme';
 

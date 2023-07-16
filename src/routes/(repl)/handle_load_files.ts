@@ -1,9 +1,9 @@
-import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
+import { parse } from '$lib/components/parsers';
+import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
+import { error } from '$lib/toast';
 import { webcontainer } from '$lib/webcontainer';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import type { LayoutData } from './$types';
-import { parse } from '$lib/components/parsers';
-import { error } from '$lib/toast';
 
 export async function handle_load_files(
 	data: LayoutData,

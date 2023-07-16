@@ -1,4 +1,4 @@
-import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
+import { GITHUB_VERIFIER_COOKIE_NAME } from '$lib/constants';
 import { templates } from '$lib/default_project_files';
 import { REDIRECT_URI } from '$lib/env.server';
 import type { LayoutServerLoad } from './$types';

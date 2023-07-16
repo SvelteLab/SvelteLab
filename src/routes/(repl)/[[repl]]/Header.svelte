@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$env/static/public';
 	import { save_repl } from '$lib/api/client/repls';
 	import { commands, on_command } from '$lib/command_runner/commands';
 	import AsyncButton from '$lib/components/AsyncButton.svelte';
@@ -11,6 +10,8 @@
 	import Logo from '$lib/components/Logo.svelte';
 	import MenuItem from '$lib/components/MenuItem.svelte';
 	import { stringify } from '$lib/components/parsers';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
+	import { ICON } from '$lib/icons';
 	import { share_with_hash, share_with_id } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
@@ -20,7 +21,6 @@
 	import { onMount } from 'svelte';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
-	import { ICON } from '$lib/icons';
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();

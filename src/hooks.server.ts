@@ -1,5 +1,5 @@
 import { POCKETBASE_URL } from '$env/static/private';
-import { PUBLIC_THEME_COOKIE_NAME } from '$env/static/public';
+import { PUBLIC_THEME_COOKIE_NAME } from '$lib/constants';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import PocketBase from 'pocketbase';
