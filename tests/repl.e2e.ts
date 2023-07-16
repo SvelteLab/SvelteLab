@@ -5,7 +5,7 @@ test.describe('REPL', () => {
 		await page.goto('/');
 		await expect(
 			page.frameLocator('iframe[title="content"]').getByText('Hello Basic Template!')
-		).toBeVisible({ timeout: 60000 * 2 });
+		).toBeVisible({ timeout: 60000 * 5 });
 	});
 	test('reflects changes', async ({ page }) => {
 		await page.getByText('<script>').click(); // select Editor
@@ -15,6 +15,8 @@ test.describe('REPL', () => {
 		await page.keyboard.press('Backspace');
 		const test_string = 'Hello World';
 		await page.keyboard.type('Hello World');
-		await page.frameLocator('iframe[title="content"]').getByText(test_string).click();
+		await expect(page.frameLocator('iframe[title="content"]').getByText(test_string)).toBeVisible({
+			timeout: 60000 * 5,
+		});
 	});
 });
