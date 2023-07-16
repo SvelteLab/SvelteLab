@@ -17,7 +17,7 @@
 	}
 </script>
 
-<li role="menuitem">
+<li role="menuitem" class="menuitem">
 	<svelte:element
 		this={href ? 'a' : 'button'}
 		{href}
@@ -30,6 +30,9 @@
 </li>
 
 <style>
+	.menuitem {
+		list-style: none;
+	}
 	.item {
 		display: flex;
 		align-items: center;
