@@ -256,7 +256,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	commands_to_return.push({
 		category: 'Project',
 		command: 'export-download-zip',
-		title: 'Export',
+		title: 'Download',
 		subtitle: 'download current project as .zip',
 		icon: Download,
 		async action() {

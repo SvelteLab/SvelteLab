@@ -51,7 +51,7 @@ Toggle line wrap for code editor.
 
 Opens a pane to search and install packages from npm.
 
-### Export
+### Download
 
 Download the current project as a .zip file.
 
