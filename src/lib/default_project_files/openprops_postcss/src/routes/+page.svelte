@@ -11,7 +11,7 @@
 	<a href="https://docs.sveltelab.dev/templates" target="_blank"> docs.sveltelab.dev/templates </a>
 </p>
 
-<style>
+<style lang="postcss">
 	h1 {
 		color: var(--indigo-8);
 	}
