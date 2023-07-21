@@ -1,0 +1,6 @@
+@import 'open-props/postcss/style';
+@import 'open-props/media.min.css';
+
+body {
+	background: var(--gray-2);
+}
