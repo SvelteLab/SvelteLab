@@ -1,4 +1,4 @@
-import { GITHUB_VERIFIER_COOKIE_NAME } from '$env/static/private';
+import { GITHUB_VERIFIER_COOKIE_NAME } from '$lib/constants';
 import { REDIRECT_URI } from '$lib/env.server.js';
 import { redirect } from '@sveltejs/kit';
 
@@ -12,6 +12,7 @@ export async function load({ locals, url, cookies, params: { redirect_to } }) {
 			code,
 		};
 	}
+	console.log({ code, code_verifier, REDIRECT_URI });
 	let auth_data;
 	try {
 		auth_data = await locals.pocketbase
