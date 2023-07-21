@@ -3,11 +3,14 @@ import Tailwind from '~icons/mdi/tailwind';
 import Mdsvex from '~icons/simple-icons/markdown';
 import Basic from '~icons/simple-icons/svelte';
 import Typescript from '~icons/simple-icons/typescript';
+import PostCSS from '~icons/simple-icons/postcss';
+import OpenProps from '~icons/sveltelab/open-props';
 export const template_icon_map = new Map(
 	Object.entries({
 		basic: Basic,
 		lib: Lib,
 		mdsvex: Mdsvex,
+		openprops_postcss: [OpenProps, PostCSS],
 		tailwind: Tailwind,
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
