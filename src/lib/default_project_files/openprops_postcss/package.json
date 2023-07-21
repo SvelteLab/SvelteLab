@@ -20,7 +20,6 @@
 		"vite": "^4.3.6"
 	},
 	"dependencies": {
-		"autoprefixer": "^10.4.14",
 		"open-props": "^1.5.10",
 		"postcss-preset-env": "^9.0.0"
 	}
