@@ -12,7 +12,6 @@ export async function load({ locals, url, cookies, params: { redirect_to } }) {
 			code,
 		};
 	}
-	console.log({ code, code_verifier, REDIRECT_URI });
 	let auth_data;
 	try {
 		auth_data = await locals.pocketbase
