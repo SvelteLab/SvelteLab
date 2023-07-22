@@ -2,5 +2,16 @@
 @import 'open-props/media.min.css';
 
 body {
-	background: var(--gray-2);
+	margin: 0.75em;
+	font-family: var(--font-sans);
+	background: var(--gray-1);
+	color: var(--gray-8);
+	accent-color: var(--indigo-5);
+
+	@media (prefers-color-scheme: dark) {
+		color-schema: dark;
+
+		background: var(--gray-8);
+		color: var(--gray-1);
+	}
 }
