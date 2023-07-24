@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Presentation, Slide, Code } from '@components'
+	import { Presentation, Slide } from '@components'
 </script>
 
 <Presentation>
