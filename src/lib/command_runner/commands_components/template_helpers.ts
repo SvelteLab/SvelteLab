@@ -4,6 +4,7 @@ import Mdsvex from '~icons/simple-icons/markdown';
 import Basic from '~icons/simple-icons/svelte';
 import Typescript from '~icons/simple-icons/typescript';
 import OpenProps from '~icons/sveltelab/open-props';
+import Animotion from '~icons/sveltelab/animotion';
 export const template_icon_map = new Map(
 	Object.entries({
 		basic: Basic,
@@ -13,6 +14,7 @@ export const template_icon_map = new Map(
 		tailwind: Tailwind,
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
+		animotion: Animotion,
 	})
 );
 
