@@ -15,10 +15,13 @@
 	import RelativeTime from '@yaireo/relative-time';
 	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
 	import MenuItem from '$lib/components/MenuItem.svelte';
+	import ArrowUpward from '~icons/material-symbols/arrow-upward';
+	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 
 	export let data: PageData;
 
 	type SortByKey = 'created' | 'updated' | 'name';
+	type SortOrder = 'asc' | 'desc';
 	let share: ShareFn;
 
 	onMount(async () => {
@@ -31,19 +34,29 @@
 
 	let loading = [] as string[];
 	let sort_by: SortByKey = 'updated';
+	let sort_order: SortOrder = 'asc';
 
 	const sort_functions: Record<
 		SortByKey,
-		(a: Record<string, string>, b: Record<string, string>) => number
+		(sort_order: 'asc' | 'desc') => (a: Record<string, string>, b: Record<string, string>) => number
 	> = {
-		created: (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
-		updated: (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime(),
-		name: (a, b) => a.name.localeCompare(b.name),
+		created: (sort_order) => (a, b) =>
+			sort_order === 'asc'
+				? new Date(a.created).getTime() - new Date(b.created).getTime()
+				: new Date(b.created).getTime() - new Date(a.created).getTime(),
+
+		updated: (sort_order) => (a, b) =>
+			sort_order === 'asc'
+				? new Date(a.updated).getTime() - new Date(b.updated).getTime()
+				: new Date(b.updated).getTime() - new Date(a.updated).getTime(),
+
+		name: (sort_order) => (a, b) =>
+			sort_order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
 	};
 
 	$: repls = data.repls
 		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
-		.sort(sort_functions[sort_by]);
+		.sort(sort_functions[sort_by](sort_order));
 
 	const relative_time = new RelativeTime();
 	const sort_options: SortByKey[] = ['created', 'updated', 'name'];
@@ -61,6 +74,17 @@
 			aria-label="Search for a repl"
 			type="search"
 		/>
+
+		<button
+			class="sort-order-button"
+			on:click={() => (sort_order = sort_order === 'asc' ? 'desc' : 'asc')}
+		>
+			{#if sort_order === 'asc'}
+				<ArrowUpward />
+			{:else}
+				<ArrowDownward />
+			{/if}
+		</button>
 
 		<DropdownMenu indicator>
 			<div slot="trigger" class="dropdown-trigger">
