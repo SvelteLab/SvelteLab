@@ -1,3 +1,50 @@
+<script context="module" lang="ts">
+	// https://gitlab.com/aedge/codemirror-web-workers-lsp-demo/-/blob/master/src/App.svelte
+	import { Transport } from '@open-rpc/client-js/src/transports/Transport';
+
+	import { getNotifications } from '@open-rpc/client-js/src/Request';
+	import type { JSONRPCRequestData, IJSONRPCData } from '@open-rpc/client-js/src/Request';
+
+	class PostMessageWorkerTransport extends Transport {
+		public declare worker: undefined | null | Worker;
+		public declare postMessageID: string;
+
+		constructor(worker: Worker) {
+			super();
+			this.worker = worker;
+
+			this.postMessageID = `post-message-transport-${Math.random()}`;
+		}
+
+		private messageHandler = (ev: MessageEvent) => {
+			console.log('<-', ev.data);
+			this.transportRequestManager.resolveResponse(JSON.stringify(ev.data));
+		};
+
+		public connect(): Promise<void> {
+			return new Promise((resolve, reject) => {
+				this.worker!.addEventListener('message', this.messageHandler);
+				resolve();
+			});
+		}
+
+		public async sendData(data: JSONRPCRequestData, timeout: number | null = 5000): Promise<any> {
+			console.log('->', data);
+			const prom = this.transportRequestManager.addRequest(data, null);
+			const notifications = getNotifications(data);
+			if (this.worker) {
+				this.worker.postMessage((data as IJSONRPCData).request);
+				this.transportRequestManager.settlePendingRequest(notifications);
+			}
+			return prom;
+		}
+
+		public close(): void {
+			this.worker.terminate();
+		}
+	}
+</script>
+
 <script lang="ts">
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
@@ -9,7 +56,6 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
-	import type { Extension } from '@codemirror/state';
 	import { EditorView } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
@@ -19,7 +65,30 @@
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
 	import { onMount } from 'svelte';
+	import SvelteWorker from '$lib/workers/svelte-language-server?worker';
+	import { LanguageServerClient, languageServerWithTransport } from 'codemirror-languageserver';
 
+	const svelte_language_worker = new SvelteWorker();
+	const transport = new PostMessageWorkerTransport(svelte_language_worker);
+
+	const language_client = new LanguageServerClient({
+		transport,
+		rootUri: '/',
+
+		documentUri: 'file:///App.svelte',
+		languageId: 'svelte',
+		workspaceFolders: null,
+	});
+	const language_with_transport = languageServerWithTransport({
+		transport,
+		documentUri: 'file:///App.svelte',
+		languageId: 'svelte',
+		workspaceFolders: null,
+		rootUri: 'file:///',
+		allowHTMLContent: true,
+		autoClose: false,
+		client: language_client,
+	});
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
 		{ tag: tags.keyword, color: 'var(--sk-code-keyword)' },
@@ -70,8 +139,10 @@
 	}
 	let extensions: Extension[];
 	$: get_extensions($editor_config).then((resolved_extensions) => {
-		extensions = resolved_extensions;
+		extensions = [...resolved_extensions];
+		// console.log(extensions);
 	});
+	$: console.log(extensions);
 
 	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
@@ -134,15 +205,18 @@
 				webcontainer.update_file($current_tab, new_code);
 				code = new_code;
 			}}
+			on:codemirror:documentChanged={({ detail: d }) => {
+				console.log(d);
+			}}
 			use:codemirror={{
 				lang,
 				langMap: langs,
 				theme,
 				tabSize: 3,
 				useTabs: true,
-				value: code,
-				documentId: $current_tab,
-				extensions,
+				value: files['App.svelte'],
+				documentId: 'file:///App.svelte',
+				extensions: [language_with_transport],
 				cursorPos: cursor,
 				setup: 'basic',
 				instanceStore: codemirror_instance,
