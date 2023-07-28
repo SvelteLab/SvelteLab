@@ -74,29 +74,30 @@
 			aria-label="Search for a repl"
 			type="search"
 		/>
-
-		<button
-			class="sort-order-button"
-			on:click={() => (sort_order = sort_order === 'asc' ? 'desc' : 'asc')}
-		>
-			{#if sort_order === 'asc'}
-				<ArrowUpward />
-			{:else}
-				<ArrowDownward />
-			{/if}
-		</button>
-
-		<DropdownMenu indicator>
-			<div slot="trigger" class="dropdown-trigger">
-				Sort by {sort_by}
-			</div>
-
-			{#each sort_options as option (option)}
-				{#if sort_by !== option}
-					<MenuItem on:click={() => (sort_by = option)}>{option}</MenuItem>
+		<div class="sort-wrapper">
+			<button
+				class="sort-order-button"
+				on:click={() => (sort_order = sort_order === 'asc' ? 'desc' : 'asc')}
+			>
+				{#if sort_order === 'asc'}
+					<ArrowUpward />
+				{:else}
+					<ArrowDownward />
 				{/if}
-			{/each}
-		</DropdownMenu>
+			</button>
+
+			<DropdownMenu indicator>
+				<div slot="trigger" class="dropdown-trigger">
+					Sort by {sort_by}
+				</div>
+
+				{#each sort_options as option (option)}
+					{#if sort_by !== option}
+						<MenuItem on:click={() => (sort_by = option)}>{option}</MenuItem>
+					{/if}
+				{/each}
+			</DropdownMenu>
+		</div>
 	</div>
 	{#each repls as project (project.id)}
 		{@const created = relative_time.from(new Date(project.created))}
@@ -220,6 +221,10 @@
 		gap: 1rem;
 		grid-column: 1/-1;
 		flex-wrap: wrap;
+	}
+	.sort-wrapper {
+		display: flex;
+		gap: 0.5rem;
 	}
 	.dropdown-trigger {
 		display: flex;
