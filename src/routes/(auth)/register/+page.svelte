@@ -23,7 +23,7 @@
 	</label>
 	<label>
 		Name
-		<input type="text" name="name" />
+		<input type="text" name="username" />
 	</label>
 	{#if form?.error}
 		<section data-error>

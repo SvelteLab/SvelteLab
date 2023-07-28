@@ -23,7 +23,9 @@
 	</a>
 </header>
 
-<slot />
+<main>
+	<slot />
+</main>
 
 <style>
 	header {
@@ -61,12 +63,19 @@
 	h1 {
 		color: var(--sk-text-1);
 		color: inherit;
-		font-size: 4rem;
+		font-size: 3rem;
+		padding: 0.5rem;
 		font-weight: 600;
 	}
 
 	a :global(svg) {
 		display: inline;
 		vertical-align: sub;
+	}
+
+	main {
+		display: grid;
+		place-items: center;
+		padding: 4rem;
 	}
 </style>

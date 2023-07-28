@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Logo from '$lib/components/Logo.svelte';
+	import { ICON } from '$lib/icons';
 	import type { ShareFn } from '$lib/share';
 	import { get_theme } from '$lib/theme';
 	import { error } from '$lib/toast';
@@ -68,7 +69,11 @@
 
 	{#if user}
 		<a href="/profile" class="btn" title="Profile">
-			<Avatar alt={`${user.name} profile`} src={`/proxy/?url=${user.avatarUrl}`} />
+			{#if user.avatarUrl}
+				<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
+			{:else}
+				<ICON.Profile />
+			{/if}
 		</a>
 		<form
 			use:enhance={() => () => {
