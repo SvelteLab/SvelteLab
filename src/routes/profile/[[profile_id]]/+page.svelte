@@ -219,6 +219,7 @@
 		justify-content: center;
 		gap: 1rem;
 		grid-column: 1/-1;
+		flex-wrap: wrap;
 	}
 	.dropdown-trigger {
 		display: flex;
@@ -294,5 +295,8 @@
 		background-color: var(--sk-back-5);
 		opacity: 0.7;
 		max-width: unset;
+	}
+	.loader {
+		grid-column: 1/-1;
 	}
 </style>

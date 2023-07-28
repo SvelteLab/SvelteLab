@@ -7,7 +7,7 @@ const register_schema = z
 		email: z.string(),
 		password: z.string().min(8),
 		passwordConfirm: z.string(),
-		name: z.string().optional(),
+		username: z.string().optional(),
 	})
 	.refine((data) => data.password === data.passwordConfirm, {
 		message: "Passwords don't match",
@@ -17,7 +17,6 @@ const register_schema = z
 export const actions = {
 	default: async ({ request, locals }) => {
 		const data = Object.fromEntries(await request.formData());
-
 		try {
 			register_schema.parse(data);
 			await locals.pocketbase.collection('users').create(data);

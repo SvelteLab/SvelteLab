@@ -1,13 +1,35 @@
+:global(body) {
+	background-color: var(--sk-back-1);
+}
+
+
 form {
+	--bg-form: var(--sk-back-2);
+	--bg-buttons: var(--sk-back-3);
 	border-radius: 0.5rem;
-	margin: auto;
 	display: flex;
 	flex-direction: column;
-	max-width: 45rem;
-	gap: 2.5rem;
-	background-color: var(--sk-back-2);
+	width: min(40rem, 90%);
+	gap: 2rem;
+	background-color: var(--bg-form);
 	padding: 3rem;
-	margin-top: 4rem;
+}
+
+@media (prefers-color-scheme: light) {
+	form {
+		--bg-form: var(--sk-back-3);
+		--bg-buttons: var(--sk-back-4);
+	}
+}
+
+:global(.dark) form {
+	--bg-form: var(--sk-back-2);
+	--bg-buttons: var(--sk-back-3);
+}
+
+:global(.light) form {
+	--bg-form: var(--sk-back-3);
+	--bg-buttons: var(--sk-back-4);
 }
 
 input {
@@ -31,7 +53,7 @@ button {
 	border-radius: 0.5rem;
 	padding: 1rem;
 	color: inherit;
-	border: 0.1rem solid var(--sk-theme-1);
+	background-color: var(--bg-buttons);
 }
 
 a:hover,
