@@ -62,6 +62,11 @@ export default defineConfig({
 	define: {
 		'process.env.NODE_ENV': '"production"',
 	},
+	optimizeDeps: {
+		exclude: ['./src/lib/language_servers/svelte/index.js'],
+		needsInterop: ['./src/lib/language_servers/svelte/index.js'],
+		force: true,
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},

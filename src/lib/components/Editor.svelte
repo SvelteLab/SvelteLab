@@ -17,19 +17,17 @@
 		}
 
 		private messageHandler = (ev: MessageEvent) => {
-			console.log('<-', ev.data);
 			this.transportRequestManager.resolveResponse(JSON.stringify(ev.data));
 		};
 
 		public connect(): Promise<void> {
-			return new Promise((resolve, reject) => {
-				this.worker!.addEventListener('message', this.messageHandler);
+			return new Promise((resolve) => {
+				if (this.worker) this.worker.addEventListener('message', this.messageHandler);
 				resolve();
 			});
 		}
 
-		public async sendData(data: JSONRPCRequestData, timeout: number | null = 5000): Promise<any> {
-			console.log('->', data);
+		public async sendData(data: JSONRPCRequestData): Promise<unknown> {
 			const prom = this.transportRequestManager.addRequest(data, null);
 			const notifications = getNotifications(data);
 			if (this.worker) {
@@ -40,84 +38,20 @@
 		}
 
 		public close(): void {
-			this.worker.terminate();
+			if (this.worker) this.worker.terminate();
 		}
 	}
-
-	// Regular files
-	const files = {
-		'Comp1.svelte':
-			`<` +
-			'scrip' +
-			`t lang="ts"` +
-			'>' +
-			`
-	function add(a, b) {
-		return a + b;
-	}
-
-	console.log(add(3, 5));
-</script` +
-			'>',
-		'App.svelte':
-			'<' +
-			`scrip` +
-			`t lang="ts">
-	import { onMount } from 'svelte';
-
-	let photos: Array<{thumbnailUrl: string, title: string}> = [];
-
-	onMount(async () => {
-		const res = await fetch(\`/tutorial/api/album\`);
-		photos = await res.json();
-	});
-` +
-			'</script' +
-			`>
-
-<h1>Photo album</h1>
-
-<div class="photos">
-	{#each photos as photo}
-		<figure>
-			<img src={photo.thumbnailUrl} alt={photo.title} />
-			<figcaption>{photo.title}</figcaption>
-		</figure>
-	{:else}
-		<!-- this block renders when photos.length === 0 -->
-		<p>loading...</p>
-	{/each}
-</div>
-
-<style>
-	.photos {
-		width: 100%;
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		grid-gap: 8px;
-	}
-
-	figure,
-	img {
-		width: 100%;
-		margin: 0;
-	}
-</style>
-`,
-	};
 </script>
 
 <script lang="ts">
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { editor_config, editor_preferences } from '$lib/stores/editor_config_store';
-	import { diagnostic_store } from '$lib/stores/editor_errors_store';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
 	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
-	import type { Diagnostic } from '@codemirror/lint';
 	import { EditorView } from '@codemirror/view';
 	import { abbreviationTracker } from '@emmetio/codemirror6-plugin';
 	import { tags } from '@lezer/highlight';
@@ -129,28 +63,14 @@
 	import { onMount } from 'svelte';
 	import SvelteWorker from '$lib/workers/svelte-language-server?worker';
 	import { LanguageServerClient, languageServerWithTransport } from 'codemirror-languageserver';
+	import type { Extension } from '@codemirror/state';
 
-	const svelte_language_worker = new SvelteWorker();
-	const transport = new PostMessageWorkerTransport(svelte_language_worker);
+	let svelte_language_worker: Worker = new SvelteWorker();
 
-	const language_client = new LanguageServerClient({
-		transport,
-		rootUri: '/',
+	let transport: PostMessageWorkerTransport;
 
-		documentUri: 'file:///App.svelte',
-		languageId: 'svelte',
-		workspaceFolders: null,
-	});
-	const language_with_transport = languageServerWithTransport({
-		transport,
-		documentUri: 'file:///App.svelte',
-		languageId: 'svelte',
-		workspaceFolders: null,
-		rootUri: 'file:///',
-		allowHTMLContent: true,
-		autoClose: false,
-		client: language_client,
-	});
+	let language_client: LanguageServerClient;
+
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
 		{ tag: tags.keyword, color: 'var(--sk-code-keyword)' },
@@ -159,6 +79,8 @@
 		{ tag: tags.tagName, color: 'var(--sk-code-tags)' },
 		{ tag: tags.className, color: 'var(--sk-code-component)' },
 	]);
+
+	const lang_clients = new Map<string, Extension[]>();
 
 	const theme = syntaxHighlighting(svelte_syntax_style);
 
@@ -182,6 +104,8 @@
 
 	let vim: (options: { status?: boolean }) => Extension;
 
+	let extensions: Extension[];
+
 	async function get_extensions(config: typeof $editor_config) {
 		const extensions = [js_snippets, svelte_snippets, abbreviationTracker()];
 		if (config.vim) {
@@ -199,12 +123,42 @@
 		}
 		return extensions;
 	}
-	let extensions: Extension[];
+
+	let current_language_client: Extension[] | undefined;
+
+	function get_language_client(uri: string) {
+		if (!uri || !extensions || !language_client || !transport) return;
+
+		if (lang_clients.has(uri)) {
+			const client = lang_clients.get(uri);
+			if (client && current_language_client !== client) {
+				extensions = [...extensions.filter((ext) => ext !== current_language_client), client];
+				current_language_client = client;
+			}
+		} else {
+			const client = languageServerWithTransport({
+				transport: transport as never,
+				rootUri: '/',
+				workspaceFolders: [{ name: 'root', uri: '/' }],
+				documentUri: `${$current_tab.replace('./', '/')}`,
+				languageId: lang || 'svelte',
+				allowHTMLContent: true,
+				client: language_client,
+			});
+			lang_clients.set(uri, client);
+			extensions = [...extensions.filter((ext) => ext !== current_language_client), client];
+			current_language_client = client;
+		}
+	}
+
 	$: get_extensions($editor_config).then((resolved_extensions) => {
 		extensions = [...resolved_extensions];
-		// console.log(extensions);
 	});
-	$: console.log(extensions);
+
+	// Create individual language client extensions for each document
+	// This also handles swapping out the current language client when switching tabs
+
+	$: get_language_client($current_tab);
 
 	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
@@ -229,25 +183,43 @@
 	});
 
 	onMount(() => {
-		return webcontainer.on_fs_change('deletion', (path) => {
+		const handle_webcontainer_init = webcontainer.on_init(async () => {
+			await Promise.allSettled([
+				webcontainer.read_file('./svelte.config.js', true),
+				webcontainer.read_file('./tsconfig.json', true),
+				webcontainer.read_file('./.svelte-kit/tsconfig.json', true),
+			]).then(([svelte_config, ts_config, kit_config]) => {
+				// Post the setup message containing the project's config files to the worker
+				svelte_language_worker.postMessage({
+					method: 'setup',
+					params: {
+						...(svelte_config.status === 'fulfilled' && { '/svelte.config.js': svelte_config }),
+						...(ts_config.status === 'fulfilled' && { '/tsconfig.json': ts_config }),
+						...(kit_config.status === 'fulfilled' && { '/.svelte-kit/tsconfig.json': kit_config }),
+					},
+				});
+				// Create the transport and language client after the worker is setup
+				// otherwise the worker will not be able to respond to the client
+				// TODO: investigate this
+				transport = new PostMessageWorkerTransport(svelte_language_worker);
+				language_client = new LanguageServerClient({
+					transport: transport as never,
+					rootUri: '/',
+					documentUri: `/${$current_tab.replace('./', '')}`,
+					languageId: lang || 'svelte',
+					workspaceFolders: [{ name: 'root', uri: '/' }],
+				});
+			});
+		});
+
+		const handle_fs_change = webcontainer.on_fs_change('deletion', (path) => {
 			$codemirror_instance.documents.delete(path);
 		});
+		return () => {
+			handle_fs_change();
+			handle_webcontainer_init();
+		};
 	});
-
-	async function return_diagnostics() {
-		const diagnostics: Diagnostic[] = [];
-		const svelte_diagnostics = (await diagnostic_store.get_diagnostic($current_tab)) ?? [];
-		for (let diagnostic of svelte_diagnostics) {
-			diagnostics.push({
-				from: get_character_from_pos(diagnostic.start.line, diagnostic.start.character, code),
-				to: get_character_from_pos(diagnostic.end.line, diagnostic.end.character, code),
-				message: diagnostic.message,
-				severity: diagnostic.type,
-				source: diagnostic.source,
-			});
-		}
-		return diagnostics;
-	}
 
 	export const codemirror_instance = withCodemirrorInstance();
 </script>
@@ -276,9 +248,9 @@
 				theme,
 				tabSize: 3,
 				useTabs: true,
-				value: files['App.svelte'],
-				documentId: 'file:///App.svelte',
-				extensions: [language_with_transport],
+				value: code,
+				documentId: `${$current_tab.replace('./', '/')}`,
+				extensions: extensions,
 				cursorPos: cursor,
 				setup: 'basic',
 				instanceStore: codemirror_instance,
@@ -286,7 +258,7 @@
 					duration: $editor_preferences.delay_duration ?? 300,
 					kind: $editor_preferences.delay_function ?? 'throttle',
 				},
-				lint: return_diagnostics,
+				// lint: return_d/iagnostics,
 				styles: {
 					'&': {
 						width: '100%',
