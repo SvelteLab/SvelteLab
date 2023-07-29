@@ -6,7 +6,9 @@
 	import Desktop from './Desktop.svelte';
 	import Mobile from './Mobile.svelte';
 
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	let Console: ComponentType<SvelteComponent> = PlaceholderComponent;
+	// eslint-disable-next-line @typescript-eslint/naming-convention
 	let Editor: ComponentType<SvelteComponent> = VoidEditor;
 
 	onMount(async () => {
