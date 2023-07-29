@@ -25,24 +25,31 @@ export type Tree = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const Index = flexsearch.Index ?? flexsearch;
 
 /** If the search is already initialized */
-export let inited = false;
+export const inited = {
+	svelte: false,
+	sveltekit: false,
+};
 
-let indexes: (typeof Index)[];
+const indexes: { svelte: (typeof Index)[]; sveltekit: (typeof Index)[] } = {
+	svelte: [],
+	sveltekit: [],
+};
 
 const map = new Map<string, Block>();
 
 const hrefs = new Map<string, string>();
 
-export function init(blocks: Block[]) {
-	if (inited) return;
+export function init(blocks: Block[], where: 'svelte' | 'sveltekit') {
+	if (inited[where]) return;
 
 	// we have multiple indexes, so we can rank sections (migration guide comes last)
 	const max_rank = Math.max(...blocks.map((block) => block.rank ?? 0));
 
-	indexes = Array.from({ length: max_rank + 1 }, () => new Index({ tokenize: 'forward' }));
+	indexes[where] = Array.from({ length: max_rank + 1 }, () => new Index({ tokenize: 'forward' }));
 
 	for (const block of blocks) {
 		const title = block.breadcrumbs.at(-1);
@@ -55,12 +62,12 @@ export function init(blocks: Block[]) {
 		// We'd probably want to test both implementations across browsers if memory usage becomes an issue
 		// TODO: fix the type by updating flexsearch after
 		// https://github.com/nextapps-de/flexsearch/pull/364 is merged and released
-		indexes[block.rank ?? 0].add(block.href, `${title} ${block.content}`);
+		indexes[where][block.rank ?? 0].add(block.href, `${title} ${block.content}`);
 
 		hrefs.set(block.breadcrumbs.join('::'), block.href);
 	}
 
-	inited = true;
+	inited[where] = true;
 }
 
 /**
@@ -68,11 +75,11 @@ export function init(blocks: Block[]) {
  * @param {string} query
  * @returns {Tree[]}
  */
-export function search(query: string) {
+export function search(query: string, where: 'svelte' | 'sveltekit') {
 	const escaped = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 	const regex = new RegExp(`(^|\\b)${escaped}`, 'i');
 
-	const blocks = indexes
+	const blocks = indexes[where]
 		.flatMap((index) => index.search(query))
 		.map(lookup)
 		.map((block, rank) => ({ block: block, rank }))

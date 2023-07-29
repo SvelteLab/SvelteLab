@@ -49,6 +49,7 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
+import type { SvelteComponentTyped } from 'svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -114,7 +115,15 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	}));
 
-	commands_to_return.push({
+	/**
+	 * Wrapper function to get proper autocomplete on the props of the components
+	 * @param command The command to push
+	 */
+	function push<T extends SvelteComponentTyped>(command: Command<T>) {
+		commands_to_return.push(command);
+	}
+
+	push({
 		category: 'Preferences',
 		command: 'toggle-file-tree',
 		title: 'Toggle File Tree',
@@ -125,7 +134,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'toggle-terminal',
 		title: 'Toggle Terminal',
@@ -136,7 +145,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'format-current',
 		title: 'Format',
@@ -149,7 +158,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'create-route',
 		title: 'Create Route',
@@ -162,20 +171,39 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'search-kit-docs',
 		title: 'Search Kit Docs',
 		subtitle: 'search SvelteKit documentation',
 		icon: SearchDocsIcon,
 		action_component: SearchDocs,
+		action_component_props: {
+			where: 'sveltekit',
+		},
 		key_bind: {
 			mod: ['$mod', 'Alt'],
 			keys: ['KeyK'],
 		},
 	});
 
-	commands_to_return.push({
+	push({
+		category: 'SvelteLab',
+		command: 'search-svelte-docs',
+		title: 'Search Svelte Docs',
+		subtitle: 'search Svelte documentation',
+		icon: SearchDocsIcon,
+		action_component: SearchDocs,
+		action_component_props: {
+			where: 'svelte',
+		},
+		key_bind: {
+			mod: ['$mod', 'Alt'],
+			keys: ['KeyD'],
+		},
+	});
+
+	push({
 		category: 'Project',
 		command: 'svelte-add',
 		title: 'Svelte Add',
@@ -185,7 +213,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: SvelteAdd,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'save',
 		title: 'Save',
@@ -214,7 +242,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	if ($page.data.id) {
-		commands_to_return.push({
+		push({
 			category: 'Project',
 			command: 'fork',
 			title: 'Fork',
@@ -226,7 +254,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		});
 	}
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'vim-keybindings',
 		title: 'Vim Keybindings',
@@ -235,7 +263,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action: editor_config.toggle_vim,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'line-wrap-code-editor',
 		title: 'Wrap Code',
@@ -244,7 +272,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action: editor_config.toggle_code_wrap,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'npm-install-package',
 		title: 'Install Package',
@@ -253,7 +281,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: InstallPackage,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'export-download-zip',
 		title: 'Download',
@@ -270,7 +298,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	if ($page.data.user) {
-		commands_to_return.push({
+		push({
 			category: 'SvelteLab',
 			command: 'profile',
 			title: 'Profile',
@@ -282,7 +310,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		});
 	}
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'new-project',
 		title: 'New Project',
@@ -297,7 +325,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'new-project-template',
 		title: 'New with Template',
@@ -307,7 +335,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: NewWithTemplate,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'default-project-template',
 		title: 'Set Default Template',
@@ -317,7 +345,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		action_component: SetDefaultTemplate,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'switch-theme',
 		title: 'Switch Theme',
@@ -328,7 +356,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 
 		command: 'toggle-config',
@@ -340,7 +368,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'toggle-sort',
 		title: 'Toggle Folder / File Sort Order',
@@ -352,7 +380,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	});
 
 	if ($page.data.id) {
-		commands_to_return.push({
+		push({
 			category: 'Project',
 			command: 'share-id',
 			title: 'Share Project',
@@ -370,7 +398,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		});
 	}
 
-	commands_to_return.push({
+	push({
 		category: 'Project',
 		command: 'share-hash',
 		title: 'Share Code Snapshot',
@@ -386,7 +414,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'open-sveltelab-docs',
 		title: 'Open SvelteLab Docs',
@@ -397,7 +425,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'editor-preferences',
 		title: 'Editor Preference',
@@ -407,7 +435,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		icon: Font,
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'Preferences',
 		command: 'remove-theme-preference',
 		title: 'Remove Theme Preference',
@@ -418,7 +446,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'open-sveltelab-github',
 		title: 'Open GitHub',
@@ -429,7 +457,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'submit-issue',
 		title: 'Submit Issue',
@@ -440,7 +468,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'join-discord',
 		title: 'Join Discord',
@@ -451,7 +479,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'credits',
 		title: 'Credits',
@@ -462,7 +490,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	commands_to_return.push({
+	push({
 		category: 'SvelteLab',
 		command: 'show-intro',
 		title: 'Show Intro',

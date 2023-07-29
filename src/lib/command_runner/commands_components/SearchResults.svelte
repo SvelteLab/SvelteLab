@@ -15,6 +15,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 	export let query: string;
 
+	export let where: 'svelte' | 'sveltekit';
+
 	const dispatch = createEventDispatcher();
 
 	function escape(text: string) {
@@ -46,9 +48,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 {:else}
 	<ul>
 		{#each results as result (result.href)}
+			{@const href =
+				where === 'svelte'
+					? `https://svelte.dev${result.href}`
+					: `https://kit.svelte.dev${result.href}`}
 			<li>
 				<a
-					href="https://kit.svelte.dev{result.href}"
+					{href}
 					target="_blank"
 					rel="noopener noreferrer"
 					on:click={() => dispatch('select')}
@@ -62,7 +68,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				</a>
 
 				{#if result.children.length > 0}
-					<svelte:self results={result.children} {query} on:select />
+					<svelte:self results={result.children} {query} {where} on:select />
 				{/if}
 			</li>
 		{:else}
