@@ -1,13 +1,13 @@
 <script lang="ts">
 	import PlaceholderComponent from '$lib/components/PlaceholderComponent.svelte';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
-	import type { ComponentType, SvelteComponentTyped } from 'svelte';
+	import type { ComponentType, SvelteComponent } from 'svelte';
 	import { onMount } from 'svelte';
 	import Desktop from './Desktop.svelte';
 	import Mobile from './Mobile.svelte';
 
-	let Console: ComponentType<SvelteComponentTyped> = PlaceholderComponent;
-	let Editor: ComponentType<SvelteComponentTyped> = VoidEditor;
+	let Console: ComponentType<SvelteComponent> = PlaceholderComponent;
+	let Editor: ComponentType<SvelteComponent> = VoidEditor;
 
 	onMount(async () => {
 		Console = (await import('$lib/components/Console.svelte')).default;

@@ -13,7 +13,7 @@
 
 <ul>
 	{#each [...diagnostics] as diagnostic}
-		<li class={diagnostic.type} transition:slide={{ delay: 250, duration: 250 }}>
+		<li class={diagnostic.type} transition:slide|global={{ delay: 250, duration: 250 }}>
 			<button
 				on:click={() => {
 					dispatch('click_on_diagnostic', diagnostic);

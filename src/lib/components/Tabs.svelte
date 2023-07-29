@@ -10,7 +10,7 @@
 		reorder_tabs,
 		tabs,
 	} from '$lib/tabs';
-	import { SvelteComponentTyped, onDestroy, type ComponentType } from 'svelte';
+	import { SvelteComponent, onDestroy, type ComponentType } from 'svelte';
 	import Vim from '~icons/file-icons/macvim';
 	import Routes from '~icons/material-symbols/alt-route';
 	import Close from '~icons/material-symbols/close-rounded';
@@ -21,7 +21,7 @@
 	const base_icons = {
 		routes: Routes,
 		lib: Lib,
-	} as Record<string, ComponentType<SvelteComponentTyped>>;
+	} as Record<string, ComponentType<SvelteComponent>>;
 
 	onDestroy(() => {
 		//close the tabs when we unmount the component
