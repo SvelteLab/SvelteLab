@@ -3,6 +3,7 @@
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 	import { DROPDOWN_CONTEXT } from './DropdownMenu.svelte';
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	interface $$Props extends HTMLButtonAttributes {
 		href?: string;
 	}
@@ -18,7 +19,9 @@
 </script>
 
 <li role="menuitem" class="menuitem">
+	<!-- eslint-disable-next-line svelte/valid-compile -->
 	<svelte:element
+		role="listitem"
 		this={href ? 'a' : 'button'}
 		{href}
 		class="item"

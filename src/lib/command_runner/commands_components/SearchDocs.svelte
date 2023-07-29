@@ -28,7 +28,6 @@
 </script>
 
 <section class="search">
-	<!-- svelte-ignore a11y-autofocus -->
 	<input
 		bind:this={search_input}
 		class="action-field"

@@ -3,7 +3,7 @@
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
 	import { onDestroy, tick } from 'svelte';
-	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
+	import { parseKeybinding, type KeyBindingMap, tinykeys } from 'tinykeys';
 	import Back from '~icons/material-symbols/arrow-back-rounded';
 	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
