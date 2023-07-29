@@ -32,7 +32,7 @@
 	<input
 		bind:this={search_input}
 		class="action-field"
-		placeholder="Search SvelteKit Documentation..."
+		placeholder="Search {where === 'svelte' ? 'Svelte' : 'SvelteKit'} Documentation..."
 		disabled={!search_docs}
 		bind:value={docs_query}
 		type="search"
