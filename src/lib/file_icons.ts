@@ -68,7 +68,7 @@ export function get_file_icon(filename: string) {
 
 const folder_icons = new Map<
 	RegExp,
-	{ closed: typeof SvelteComponent; open?: typeof SvelteComponent }
+	{ closed: typeof SvelteComponent<any>; open?: typeof SvelteComponent<any> }
 >([
 	[/lib$/, { closed: FolderLib, open: FolderLibOpen }],
 	[/src$/, { closed: FolderSrc, open: FolderSrcOpen }],

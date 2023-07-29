@@ -49,7 +49,7 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import type { SvelteComponentTyped } from 'svelte';
+import type { SvelteComponent } from 'svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -119,7 +119,7 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	 * Wrapper function to get proper autocomplete on the props of the components
 	 * @param command The command to push
 	 */
-	function push<T extends SvelteComponentTyped>(command: Command<T>) {
+	function push<T extends SvelteComponent>(command: Command<T>) {
 		commands_to_return.push(command);
 	}
 

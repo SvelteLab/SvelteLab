@@ -6,14 +6,14 @@
 	import { browser } from '$app/environment';
 	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 	import { Dialog as RawDialog } from 'as-comps';
-	import { SvelteComponentTyped, tick, type ComponentType } from 'svelte';
+	import { SvelteComponent, tick, type ComponentType } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
 
-	export let Console: ComponentType<SvelteComponentTyped>;
-	export let Editor: ComponentType<SvelteComponentTyped>;
+	export let Console: ComponentType<SvelteComponent>;
+	export let Editor: ComponentType<SvelteComponent>;
 
 	let update_height: () => void;
 
