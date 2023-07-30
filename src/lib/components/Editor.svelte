@@ -17,6 +17,8 @@
 		}
 
 		private messageHandler = (ev: MessageEvent) => {
+			console.log('<-', ev.data);
+
 			this.transportRequestManager.resolveResponse(JSON.stringify(ev.data));
 		};
 
@@ -28,6 +30,7 @@
 		}
 
 		public async sendData(data: JSONRPCRequestData): Promise<unknown> {
+			console.log('->', data);
 			const prom = this.transportRequestManager.addRequest(data, null);
 			const notifications = getNotifications(data);
 			if (this.worker) {
@@ -62,6 +65,7 @@
 	import Tabs from './Tabs.svelte';
 	import { onMount } from 'svelte';
 	import SvelteWorker from '$lib/workers/svelte-language-server?worker';
+	// import { createWorkerMessage } from '$lib/language_servers/svelte/messages';
 	import { LanguageServerClient, languageServerWithTransport } from 'codemirror-languageserver';
 	import type { Extension } from '@codemirror/state';
 
@@ -191,11 +195,15 @@
 			]).then(([svelte_config, ts_config, kit_config]) => {
 				// Post the setup message containing the project's config files to the worker
 				svelte_language_worker.postMessage({
-					method: 'setup',
+					method: '@@setup',
 					params: {
-						...(svelte_config.status === 'fulfilled' && { '/svelte.config.js': svelte_config }),
-						...(ts_config.status === 'fulfilled' && { '/tsconfig.json': ts_config }),
-						...(kit_config.status === 'fulfilled' && { '/.svelte-kit/tsconfig.json': kit_config }),
+						...(svelte_config.status === 'fulfilled' && {
+							'/svelte.config.js': svelte_config.value,
+						}),
+						...(ts_config.status === 'fulfilled' && { '/tsconfig.json': ts_config.value }),
+						...(kit_config.status === 'fulfilled' && {
+							'/.svelte-kit/tsconfig.json': kit_config.value,
+						}),
 					},
 				});
 				// Create the transport and language client after the worker is setup
