@@ -36,6 +36,16 @@
 
 # Development
 
+default branch is now `main`
+update your local config like this:
+
+```
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+git remote set-head origin -a
+```
+
 1. download [fitting pocketbase binary](https://pocketbase.io/docs/) and place in root
 1. `cp .env.sample .env`
 1. `pnpm i`
