@@ -36,8 +36,7 @@
 
 # Development
 
-default branch is now `main`
-update your local config like this:
+default branch is now `main` if you have a local `master` branch you can update it like this:
 
 ```
 git branch -m master main
