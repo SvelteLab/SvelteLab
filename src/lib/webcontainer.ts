@@ -538,6 +538,7 @@ export const webcontainer = {
 	async sync_file_system() {
 		files_store.set(await get_tree_from_container());
 	},
+	/** truth before boot */
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
 	},
@@ -673,9 +674,13 @@ export const webcontainer = {
 		}
 	},
 	async add_folder(path: string) {
-		await webcontainer_instance.fs.mkdir(path, {
-			recursive: true,
-		});
+		try {
+			await webcontainer_instance.fs.mkdir(path, {
+				recursive: true,
+			});
+		} catch (e) {
+			add_file_in_store(files_store, path, '', true);
+		}
 		get_subtree_from_path(path, get(files_store), true);
 		//trigger rerender
 		files_store.update((value) => value);
@@ -690,6 +695,19 @@ export const webcontainer = {
 		} catch (e) {
 			/* empty */
 		}
+	},
+	async move_file(origin: string, destination: string) {
+		// Todo: error handling and "offline" (i.e. w/o web container) store file system 
+		webcontainer.spawn('mv', [origin, destination]).then(async (process) => {
+			process.output.pipeTo(
+				new WritableStream({
+					write(chunk) {
+						terminal.write(chunk);
+					},
+				}),
+			);
+			await process.exit;
+		});
 	},
 	read_file,
 	async read_package_json() {

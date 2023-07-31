@@ -57,7 +57,7 @@
 				await process.exit;
 				toast.pop(progress_toast);
 				terminal.writeln(
-					'Finished svelte-add...you might need to restart your server for everything to properly work',
+					'➕✅ Finished svelte-add! You might need to restart your dev server...'
 				);
 			});
 	}}

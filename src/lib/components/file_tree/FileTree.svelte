@@ -28,6 +28,7 @@
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
+	import { ICON } from '$lib/icons';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -129,6 +130,10 @@
 			/>
 			<div class="hover-group" class:force={$open_menus[$base_path_store]}>
 				<DropdownMenu bind:open={$open_menus[$base_path_store]}>
+					<MenuItem on:click={() => webcontainer.sync_file_system()}>
+						<ICON.Sync />
+						Sync File Tree
+					</MenuItem>
 					<MenuItem on:click={get_upload_handler()}>
 						<Upload />
 						Upload File
@@ -190,8 +195,9 @@
 		{@const expanded = $expanded_paths.has(path)}
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
-			<li use:drop_assets={files_options(path + '/')} class="folder" class:open={expanded} use:dropzone={{on_dropzone:(e) => {
-				console.log(e, path)
+			<li use:drop_assets={files_options(path + '/')} class="folder" class:open={expanded} use:dropzone={{on_dropzone:(dropped_path) => {
+				console.log(dropped_path, path)
+				webcontainer.move_file(dropped_path, path)
 			}}}>
 				{#if renaming_path === path}
 					<AddFile
