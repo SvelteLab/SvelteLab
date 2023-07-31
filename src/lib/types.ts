@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ComponentType, SvelteComponent, SvelteComponentTyped } from 'svelte';
+import type { ComponentProps, ComponentType, SvelteComponent } from 'svelte';
 import type { KeyBinds } from './command_runner/shortcuts-utilities';
 
 export type SvelteError = {
@@ -25,11 +25,11 @@ type CreateExclusiveUnion<T, U = T> = T extends any
 	? T & Partial<Record<Exclude<DistributedKeyOf<U>, keyof T>, never>>
 	: never;
 
-export type Command = {
+export type Command<T extends SvelteComponent = SvelteComponent> = {
 	category: 'SvelteLab' | 'Project' | 'Preferences' | 'File';
 	title: string;
 	subtitle?: string;
-	icon?: typeof SvelteComponent;
+	icon?: typeof SvelteComponent<any>;
 	command?: string;
 	key_bind?: KeyBinds;
 	seo?: string;
@@ -37,9 +37,13 @@ export type Command = {
 	| {
 			action: () => void;
 	  }
-	| {
-			action_component: ComponentType<SvelteComponentTyped>;
-	  }
+	| ({
+			action_component: ComponentType<T>;
+	  } & (ComponentProps<T> extends { [key: string]: never }
+			? object
+			: {
+					action_component_props: ComponentProps<T>;
+			  }))
 >;
 
 export type NpmResponse = {

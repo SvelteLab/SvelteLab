@@ -3,15 +3,15 @@
 	import Iframe from '$lib/components/Iframe.svelte';
 	import { is_intro_open } from '$lib/stores/intro_store';
 	import { layout_store } from '$lib/stores/layout_store';
-	import type { ComponentType, SvelteComponentTyped } from 'svelte';
+	import type { ComponentType, SvelteComponent } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	export let Console: ComponentType<SvelteComponentTyped>;
+	export let Console: ComponentType<SvelteComponent>;
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	export let Editor: ComponentType<SvelteComponentTyped>;
+	export let Editor: ComponentType<SvelteComponent>;
 
 	function handle_pane() {
 		if (update_height) update_height();

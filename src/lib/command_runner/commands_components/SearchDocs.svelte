@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 	import SearchResults from './SearchResults.svelte';
 
+	export let where: 'svelte' | 'sveltekit';
+
 	let docs_query = '';
 	let docs_search_results = [] as Tree[];
 
@@ -12,7 +14,7 @@
 	let search_docs: Awaited<ReturnType<typeof get_search_docs>>;
 
 	onMount(async () => {
-		search_docs = await get_search_docs();
+		search_docs = await get_search_docs(where);
 		setTimeout(() => {
 			search_input.focus();
 		}, 100);
@@ -26,17 +28,16 @@
 </script>
 
 <section class="search">
-	<!-- svelte-ignore a11y-autofocus -->
 	<input
 		bind:this={search_input}
 		class="action-field"
-		placeholder="Search SvelteKit Documentation..."
+		placeholder="Search {where === 'svelte' ? 'Svelte' : 'SvelteKit'} Documentation..."
 		disabled={!search_docs}
 		bind:value={docs_query}
 		type="search"
 	/>
 	<aside>
-		<SearchResults results={docs_search_results} query={docs_query} />
+		<SearchResults {where} results={docs_search_results} query={docs_query} />
 	</aside>
 </section>
 

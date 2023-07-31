@@ -75,14 +75,24 @@
 		<MenuBar commands={$commands} />
 	</div>
 	<div class="grow">
-		<button
-			class="search-docs"
-			on:click={() => {
-				command_runner.open('search-kit-docs');
-			}}
-			title="Search sveltekit documentation"
-			><SearchDocsIcon /> Search SvelteKit Docs...
-		</button>
+		<div class="searches">
+			<button
+				class="search-docs"
+				on:click={() => {
+					command_runner.open('search-svelte-docs');
+				}}
+				title="Search svelte documentation"
+				><SearchDocsIcon /> Svelte Docs...
+			</button>
+			<button
+				class="search-docs"
+				on:click={() => {
+					command_runner.open('search-kit-docs');
+				}}
+				title="Search sveltekit documentation"
+				><SearchDocsIcon /> SvelteKit Docs...
+			</button>
+		</div>
 	</div>
 	{#if !mobile}
 		<button
@@ -276,10 +286,15 @@
 		width: 100%;
 	}
 
-	.search-docs {
-		border-radius: 99999rem;
+	.searches {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin: auto;
-		max-width: 24rem;
+		max-width: 30rem;
+	}
+
+	.search-docs {
 		font-size: 1.1rem;
 		color: var(--sk-text-2);
 		border: 1px solid var(--sk-back-5);
@@ -287,6 +302,20 @@
 		justify-content: center;
 		opacity: 0.8;
 		padding-block: 0.3rem;
+	}
+
+	.search-docs:first-child {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		border-top-left-radius: 100vmax;
+		border-bottom-left-radius: 100vmax;
+	}
+
+	.search-docs:last-child {
+		border-top-right-radius: 100vmax;
+		border-bottom-right-radius: 100vmax;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
 	}
 
 	.search-docs:hover {
@@ -343,7 +372,7 @@
 		color: white;
 	}
 
-	@media only screen and (max-width: 940px) {
+	@media only screen and (max-width: 950px) {
 		.search-docs {
 			display: none;
 		}

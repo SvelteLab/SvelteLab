@@ -3,7 +3,7 @@
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import type { Command } from '$lib/types';
 	import { onDestroy, tick } from 'svelte';
-	import tinykeys, { parseKeybinding, type KeyBindingMap } from 'tinykeys';
+	import { parseKeybinding, type KeyBindingMap, tinykeys } from 'tinykeys';
 	import Back from '~icons/material-symbols/arrow-back-rounded';
 	import Forward from '~icons/material-symbols/arrow-forward-rounded';
 	import { get_key_bind } from './shortcuts-utilities';
@@ -107,7 +107,7 @@
 					}
 					// if it has an action we run the action
 					if (has_action) {
-						command.action!();
+						command.action?.();
 						return;
 					}
 					// otherwise we open the command runner
@@ -132,14 +132,14 @@
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['P'],
+				keys: ['KeyP'],
 			})
 		] = open_file_palette;
 
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['E'],
+				keys: ['KeyE'],
 			})
 		] = open_file_palette;
 
@@ -162,14 +162,14 @@
 		key_binds[
 			get_key_bind({
 				mod: ['$mod', 'Shift'],
-				keys: ['P'],
+				keys: ['KeyP'],
 			})
 		] = open_command_palette;
 
 		key_binds[
 			get_key_bind({
 				mod: ['$mod'],
-				keys: ['K'],
+				keys: ['KeyK'],
 			})
 		] = open_command_palette;
 
@@ -241,6 +241,7 @@
 			</div>
 			<svelte:component
 				this={current_action_command.action_component}
+				{...current_action_command.action_component_props ?? {}}
 				on:completed={() => {
 					dialog.close();
 				}}
