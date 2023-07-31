@@ -4,7 +4,8 @@
 </script>
 
 <script lang="ts">
-	import { drop, handle_files } from '$lib/drop';
+	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
+	import { draggable, dropzone } from '$lib/dnd';
 	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
@@ -13,6 +14,7 @@
 	import { repl_name } from '$lib/stores/repl_id_store';
 	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
 	import { error } from '$lib/toast';
+	import { drop_assets, handle_files } from '$lib/upload_assets';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
 	import Plus from '~icons/material-symbols/add-rounded';
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
@@ -20,13 +22,12 @@
 	import ConfigFiles from '~icons/material-symbols/display-settings-outline-rounded';
 	import Sorting from '~icons/material-symbols/drive-folder-upload-outline-rounded';
 	import Edit from '~icons/material-symbols/edit';
+	import Label from '~icons/material-symbols/label';
 	import Upload from '~icons/material-symbols/upload';
 	import Dialog from '../Dialog.svelte';
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
-	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
-	import Label from '~icons/material-symbols/label';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -114,7 +115,7 @@
 	}
 </script>
 
-<ul class="file-tree" use:drop={files_options()}>
+<ul class="file-tree" use:drop_assets={files_options()}>
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<label for="project_name">
@@ -189,7 +190,9 @@
 		{@const expanded = $expanded_paths.has(path)}
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
-			<li use:drop={files_options(path + '/')} class="folder" class:open={expanded}>
+			<li use:drop_assets={files_options(path + '/')} class="folder" class:open={expanded} use:dropzone={{on_dropzone:(e) => {
+				console.log(e, path)
+			}}}>
 				{#if renaming_path === path}
 					<AddFile
 						{expanded}
@@ -303,7 +306,9 @@
 		{:else}
 			{@const icon = get_file_icon(node_name)}
 			{@const path = base_path + node_name}
-			<li class:open={$current_tab === path}>
+			<li class:open={$current_tab === path}
+			use:draggable={path}
+			>
 				{#if renaming_path === path}
 					<AddFile
 						type="file"
