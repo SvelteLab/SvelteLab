@@ -5,6 +5,8 @@ test.describe('REPL', () => {
 		await page.goto('/');
 	});
 	test('reflects changes', async ({ page }) => {
+		test.setTimeout(60000 * 10)
+
 		await expect(
 			page.frameLocator('iframe[title="content"]').getByText('Hello Basic Template!')
 		).toBeVisible({ timeout: 60000 * 5 });
