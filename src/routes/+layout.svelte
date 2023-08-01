@@ -7,6 +7,7 @@
 	apply_font_preferences();
 </script>
 
+
 <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
 <h1 class="screen-reader-only">SvelteLab</h1>
 <LoadingIndicator />

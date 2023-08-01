@@ -4,6 +4,7 @@ import Mdsvex from '~icons/simple-icons/markdown';
 import Basic from '~icons/simple-icons/svelte';
 import Typescript from '~icons/simple-icons/typescript';
 import OpenProps from '~icons/sveltelab/open-props';
+import Melt from '~icons/sveltelab/melt';
 import Threlte from '~icons/sveltelab/threlte';
 import Animotion from '~icons/fluent-emoji-high-contrast/magic-wand';
 
@@ -15,6 +16,7 @@ export const template_icon_map = new Map(
 		openprops: OpenProps,
 		tailwind: Tailwind,
 		threlte: Threlte,
+		melt_ui: Melt,
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
 		animotion: Animotion,
@@ -26,5 +28,5 @@ function capitalize(title: string) {
 }
 
 export function fix_title(title: string) {
-	return title.split('_').map(capitalize).join('+');
+	return title.split('_').map(capitalize).join(' ');
 }
