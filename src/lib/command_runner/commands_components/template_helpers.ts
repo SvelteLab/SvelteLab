@@ -4,6 +4,7 @@ import Mdsvex from '~icons/simple-icons/markdown';
 import Basic from '~icons/simple-icons/svelte';
 import Typescript from '~icons/simple-icons/typescript';
 import OpenProps from '~icons/sveltelab/open-props';
+import Threlte from '~icons/sveltelab/threlte';
 import Animotion from '~icons/fluent-emoji-high-contrast/magic-wand';
 
 export const template_icon_map = new Map(
@@ -13,6 +14,7 @@ export const template_icon_map = new Map(
 		mdsvex: Mdsvex,
 		openprops: OpenProps,
 		tailwind: Tailwind,
+		threlte: Threlte,
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
 		animotion: Animotion,
