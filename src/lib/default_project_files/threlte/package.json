@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
     "model-pipeline:run": "node scripts/model-pipeline.js"
   },
   "devDependencies": {
