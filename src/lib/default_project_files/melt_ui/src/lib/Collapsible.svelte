@@ -17,7 +17,7 @@
 	>
 	{#if $open}
 		<div use:melt={$content} transition:slide>
-			Check out the docs at <a href="https://www.melt-ui.com/">melt-ui.com</a>!
+			Check out the docs at <a target="_blank" href="https://www.melt-ui.com/">melt-ui.com</a>!
 		</div>
 	{/if}
 </div>
