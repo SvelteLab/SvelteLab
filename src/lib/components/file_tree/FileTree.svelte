@@ -195,10 +195,18 @@
 		{@const expanded = $expanded_paths.has(path)}
 		{@const icon = get_folder_icon(node_name, expanded)}
 		{#if is_dir(node)}
-			<li use:drop_assets={files_options(path + '/')} class="folder" class:open={expanded} use:dropzone={{on_dropzone:(dropped_path) => {
-				console.log(dropped_path, path)
-				webcontainer.move_file(dropped_path, path)
-			}}}>
+			<li
+				use:drop_assets={files_options(path + '/')}
+				class="folder"
+				class:open={expanded}
+				use:dropzone={{
+					on_dropzone: (dropped_path) => {
+						console.log(dropped_path, path);
+						webcontainer.move_file(dropped_path, path);
+						expand_path(path);
+					},
+				}}
+			>
 				{#if renaming_path === path}
 					<AddFile
 						{expanded}
@@ -312,9 +320,7 @@
 		{:else}
 			{@const icon = get_file_icon(node_name)}
 			{@const path = base_path + node_name}
-			<li class:open={$current_tab === path}
-			use:draggable={path}
-			>
+			<li class:open={$current_tab === path} use:draggable={path}>
 				{#if renaming_path === path}
 					<AddFile
 						type="file"
