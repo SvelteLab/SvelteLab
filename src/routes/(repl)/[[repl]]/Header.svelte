@@ -173,20 +173,11 @@
 		{/if}
 	{/if}
 	<!-- Share button or dropdown -->
-	{#if !$repl_id}
-		<button
-			on:click={async () => {
-				share_with_hash();
-			}}
-			title="Share Files Snapshot"
-		>
+	<DropdownMenu indicator>
+		<svelte:fragment slot="trigger">
 			<ICON.Share />
-		</button>
-	{:else}
-		<DropdownMenu indicator>
-			<svelte:fragment slot="trigger">
-				<ICON.Share />
-			</svelte:fragment>
+		</svelte:fragment>
+		{#if $repl_id}
 			<MenuItem
 				on:click={() => {
 					share_with_id();
@@ -196,12 +187,25 @@
 			</MenuItem>
 			<MenuItem
 				on:click={() => {
-					share_with_hash();
+					share_with_id(true);
 				}}
-				><ICON.Hash /> Share Code Snapshot
+			>
+				<ICON.Url /> Share Project (with files open)
 			</MenuItem>
-		</DropdownMenu>
-	{/if}
+		{/if}
+		<MenuItem
+			on:click={() => {
+				share_with_hash();
+			}}
+			><ICON.Hash /> Share Code Snapshot
+		</MenuItem>
+		<MenuItem
+			on:click={() => {
+				share_with_hash(true);
+			}}
+			><ICON.Hash /> Share Code Snapshot (with files open)
+		</MenuItem>
+	</DropdownMenu>
 	{#if user}
 		<!-- Profile or login -->
 		<DropdownMenu indicator>

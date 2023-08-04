@@ -396,6 +396,22 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				toast.pop(progress_toast);
 			},
 		});
+		push({
+			category: 'Project',
+			command: 'share-id-tabs',
+			title: 'Share Project (with open files)',
+			subtitle:
+				'copy link that shares current project via id, this keeps in sync when you update your project, it also share the open tabs',
+			icon: Share,
+			async action() {
+				const progress_toast = toast.push(`Sharing...`, {
+					initial: 0,
+					dismissable: false,
+				});
+				await share_with_id(true);
+				toast.pop(progress_toast);
+			},
+		});
 	}
 
 	push({
@@ -410,6 +426,22 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 				dismissable: false,
 			});
 			await share_with_hash();
+			toast.pop(progress_toast);
+		},
+	});
+
+	push({
+		category: 'Project',
+		command: 'share-hash-tabs',
+		title: 'Share Code Snapshot (with open files)',
+		subtitle: 'copy link that shares current files via hash, it also shares the open tabs',
+		icon: Share,
+		async action() {
+			const progress_toast = toast.push(`Sharing...`, {
+				initial: 0,
+				dismissable: false,
+			});
+			await share_with_hash(true);
 			toast.pop(progress_toast);
 		},
 	});
