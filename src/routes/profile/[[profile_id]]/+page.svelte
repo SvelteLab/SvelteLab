@@ -34,7 +34,7 @@
 
 	let loading = [] as string[];
 	let sort_by: SortByKey = 'updated';
-	let sort_order: SortOrder = 'asc';
+	let sort_order: SortOrder = 'desc';
 
 	const sort_functions: Record<
 		SortByKey,
