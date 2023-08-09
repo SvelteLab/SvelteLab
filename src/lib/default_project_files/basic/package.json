@@ -1,13 +1,13 @@
 {
-	"name": "sveltelab-basic",
+	"name": "basic",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"format": "prettier --plugin-search-dir . --write .",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json"
+		"lint": "prettier --plugin-search-dir . --check .",
+		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
