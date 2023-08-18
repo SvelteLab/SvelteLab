@@ -16,7 +16,7 @@ export function draggable(node: HTMLElement, data: string) {
 		},
 		destroy() {
 			node.removeEventListener('dragstart', handle_dragstart);
-		}
+		},
 	};
 }
 
@@ -32,7 +32,7 @@ export function dropzone(node: HTMLElement, options: DropzoneOptions) {
 	let state = {
 		dropEffect: 'move' as DropEffect,
 		dragover_class: 'droppable',
-		...options
+		...options,
 	};
 
 	function handle_drop(e: DragEvent) {
@@ -70,7 +70,7 @@ export function dropzone(node: HTMLElement, options: DropzoneOptions) {
 			state = {
 				dropEffect: 'move' as DropEffect,
 				dragover_class: 'droppable',
-				...options
+				...options,
 			};
 		},
 		destroy() {
@@ -78,6 +78,6 @@ export function dropzone(node: HTMLElement, options: DropzoneOptions) {
 			node.removeEventListener('drop', handle_drop);
 			node.removeEventListener('dragenter', handle_dragenter);
 			node.removeEventListener('dragleave', handle_dragleave);
-		}
+		},
 	};
 }

@@ -65,7 +65,7 @@
 									write(chunk) {
 										terminal.write(chunk);
 									},
-								})
+								}),
 							);
 							dispatch('completed');
 							await process.exit;

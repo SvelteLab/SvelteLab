@@ -17,7 +17,7 @@ export type Diagnostic = {
 };
 
 export function assert_diagnostic(
-	diagnostic_wannabe: unknown
+	diagnostic_wannabe: unknown,
 ): asserts diagnostic_wannabe is Diagnostic {
 	function assert_object(object_wannabe: unknown, name = ''): asserts object_wannabe is object {
 		if (typeof object_wannabe !== 'object' || object_wannabe == null) {

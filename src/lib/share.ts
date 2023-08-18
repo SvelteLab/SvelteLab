@@ -25,7 +25,7 @@ export async function share_with_id() {
 export async function share(
 	shareInfo: ShareData,
 	fallbackSuccessText = 'Copied to clipboard.',
-	fallbackErrorText = 'There was a problem copying the URL'
+	fallbackErrorText = 'There was a problem copying the URL',
 ) {
 	if (shareInfo.url?.startsWith('/')) {
 		const url = new URL(window.location.href);

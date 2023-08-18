@@ -47,7 +47,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	const result = (OG as any).render({ tree: files, name, id, img });
 
 	const element = toReactNode(
-		`${he.decode(result.html, { isAttributeValue: true })}<style>${result.css.code}</style>`
+		`${he.decode(result.html, { isAttributeValue: true })}<style>${result.css.code}</style>`,
 	);
 	const svg = await satori(element, {
 		fonts: [

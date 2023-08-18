@@ -19,7 +19,7 @@ body:
     attributes:
       label: Reproduction
       description: Try to provide a step by step descrition of how to reproduce the bug
-      placeholder: Step 1. 
+      placeholder: Step 1.
     validations:
       required: true
   - type: textarea

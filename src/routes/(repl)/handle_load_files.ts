@@ -7,7 +7,7 @@ import type { LayoutData } from './$types';
 
 export async function handle_load_files(
 	data: LayoutData,
-	set_loading_github_repo: (value: boolean) => void
+	set_loading_github_repo: (value: boolean) => void,
 ) {
 	const stored_project = window.localStorage.getItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
 	const hash = window.location.hash.substring(1);
@@ -31,7 +31,7 @@ export async function handle_load_files(
 				})
 				.catch(() => {
 					error('There was a problem during the cloning of you repo, try again');
-				})
+				}),
 		);
 	} else if (stored_project !== null) {
 		// if there's a stored_project we parse if and than delete it

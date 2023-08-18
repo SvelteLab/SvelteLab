@@ -32,7 +32,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		const prefix = index > 20 ? `…${content.slice(index - 15, index)}` : content.slice(0, index);
 		const suffix = content.slice(
 			index + query.length,
-			index + query.length + (80 - (prefix.length + query.length))
+			index + query.length + (80 - (prefix.length + query.length)),
 		);
 
 		return (

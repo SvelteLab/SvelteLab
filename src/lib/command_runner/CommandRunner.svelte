@@ -57,11 +57,11 @@
 		mode === 'file'
 			? commands.filter(
 					(c) =>
-						c.category === 'File' && c.title.toLowerCase().includes(search.trim().toLowerCase())
+						c.category === 'File' && c.title.toLowerCase().includes(search.trim().toLowerCase()),
 			  )
 			: fuzzy_search_command(
 					commands.filter((c) => c.category !== 'File'),
-					search.substring(1).trim().split(' ')[0]
+					search.substring(1).trim().split(' ')[0],
 			  );
 
 	$: marked_command = filtered_commands[0] as Command | null;
@@ -275,7 +275,7 @@
 					? parseKeybinding(get_key_bind(command.key_bind))
 					: null}
 				{@const key_bind_sequence = key_bind?.map((bind) =>
-					bind.flat(Infinity).map((key) => key.toString().replace('Control', 'Ctrl'))
+					bind.flat(Infinity).map((key) => key.toString().replace('Control', 'Ctrl')),
 				)}
 				{@const current = command === marked_command}
 				<li>
