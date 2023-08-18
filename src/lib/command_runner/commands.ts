@@ -15,6 +15,7 @@ import type { Command } from '$lib/types';
 import { files, webcontainer } from '$lib/webcontainer';
 import type { FileSystemTree } from '@webcontainer/api';
 import { toast } from '@zerodevx/svelte-toast';
+import type { SvelteComponent } from 'svelte';
 import { derived, get, type Readable } from 'svelte/store';
 import Profile from '~icons/material-symbols/account-circle';
 import New from '~icons/material-symbols/add-rounded';
@@ -49,7 +50,6 @@ import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
-import type { SvelteComponent } from 'svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
