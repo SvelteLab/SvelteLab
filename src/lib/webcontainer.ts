@@ -41,7 +41,7 @@ const recursive_warning_proxy_traps: ProxyHandler<never> = {
  */
 let webcontainer_instance = new Proxy<WebContainer>(
 	{} as WebContainer,
-	recursive_warning_proxy_traps
+	recursive_warning_proxy_traps,
 );
 
 const { subscribe, set } = writable({
@@ -54,7 +54,7 @@ const { subscribe, set } = writable({
 });
 
 type WebcontainerStoreType = Parameters<typeof subscribe>['0'] extends (
-	value: infer ActualType
+	value: infer ActualType,
 ) => unknown
 	? ActualType
 	: never;
@@ -146,7 +146,7 @@ async function listen_for_files_changes() {
 					}
 				}
 			},
-		})
+		}),
 	);
 	process.exit.then(listen_for_files_changes);
 }
@@ -166,7 +166,7 @@ function add_file_in_store(
 	store: Writable<any>,
 	path: string,
 	contents: string,
-	create_if_not_exist = false
+	create_if_not_exist = false,
 ) {
 	//get the file content from the path
 	const subtree = get_file_from_path(path, get(store), create_if_not_exist);
@@ -261,7 +261,7 @@ async function launch_jsh() {
 				}
 				terminal.write(data);
 			},
-		})
+		}),
 	);
 	// get the input writer and store it in the store
 	const shell_writer = jsh_process.input.getWriter();
@@ -324,7 +324,7 @@ async function spawn_process_and_show_output(cmd: string) {
 			write(chunk) {
 				terminal.write(chunk);
 			},
-		})
+		}),
 	);
 	return process;
 }
@@ -339,13 +339,13 @@ async function run_svelte_check() {
 			write(chunk) {
 				npm_list_output += chunk;
 			},
-		})
+		}),
 	);
 	await check_version_process.exit;
 	// check if svelte-check is present in `npm list` and extrapolate
 	// the version
 	const svelte_check_match = npm_list_output.match(
-		/svelte-check@(?<major>\d+).(?<minor>\d+).(?<patch>\d+)/
+		/svelte-check@(?<major>\d+).(?<minor>\d+).(?<patch>\d+)/,
 	);
 	if (svelte_check_match && svelte_check_match.groups) {
 		// svelte-check is present, we check if it's the correct version
@@ -358,14 +358,14 @@ async function run_svelte_check() {
 				'Your version of svelte-check is older than the required 3.4.3 to run the diagnostics...would you like to update?',
 				async () => {
 					const update_svelte_check_process = await spawn_process_and_show_output(
-						'npm install svelte-check@latest -D'
+						'npm install svelte-check@latest -D',
 					);
 					const result = await update_svelte_check_process.exit;
 					if (result === 0) {
 						run_svelte_check();
 					}
 				},
-				'Update'
+				'Update',
 			);
 		}
 		available = true;
@@ -379,14 +379,14 @@ async function run_svelte_check() {
 				// if they decide to install we proceed to install and if the installation
 				// is successful we run svelte-check again
 				const install_svelte_check_process = await spawn_process_and_show_output(
-					'npm install svelte-check@latest -D'
+					'npm install svelte-check@latest -D',
 				);
 				const result = await install_svelte_check_process.exit;
 				if (result === 0) {
 					run_svelte_check();
 				}
 			},
-			'Install'
+			'Install',
 		);
 	}
 
@@ -411,7 +411,7 @@ async function run_svelte_check() {
 					diagnostic_store.push_diagnositc(result);
 				}
 			},
-		})
+		}),
 	);
 	process.exit.then(() => {
 		diagnostic_store.set_is_running(false);
@@ -471,7 +471,7 @@ export const webcontainer = {
 		if (webcontainer_instance instanceof WebContainer) {
 			if (dev) {
 				console.warn(
-					"You are trying to init the webcontainer multiple times and that's not permitted. Check your code!"
+					"You are trying to init the webcontainer multiple times and that's not permitted. Check your code!",
 				);
 			}
 			return;
@@ -658,11 +658,34 @@ export const webcontainer = {
 		a.click();
 	},
 	get_tree_from_container,
+	walk_tree_and_collect: walk_tree_and_collect,
 	on_fs_change(event: FSChangedEvent, cb: FSChangedCallback) {
 		fs_changes_callbacks.get(event).add(cb);
 		return () => {
 			fs_changes_callbacks.get(event).delete(cb);
 		};
+	},
+	async get_directory_names(path: string, recursive = false) {
+		const walk = async (path: string, recursive: boolean, result: string[]): Promise<void> => {
+			const dir = await webcontainer_instance.fs.readdir(path, {
+				withFileTypes: true,
+			});
+
+			for (const node of dir) {
+				const node_path = `${path}/${node.name}`;
+				if (node.isDirectory()) {
+					result.push(node_path); // Push the directory path to the result array immediately
+
+					if (recursive) {
+						await walk(node_path, true, result); // Use the same result array for recursive calls
+					}
+				}
+			}
+		};
+
+		const result: string[] = [path]; // Initialize result array with the root directory
+		await walk(path, recursive, result);
+		return result;
 	},
 };
 
@@ -671,11 +694,41 @@ async function get_tree_from_container(as_string = true): Promise<FileSystemTree
 	return get_tree(root, '/', as_string);
 }
 
+type PathToFile = string;
+type FileContents = string;
+/** Walks a given file tree and returns  */
+function walk_tree_and_collect(file_tree: FileSystemTree): Record<PathToFile, FileContents> {
+	const result: Record<string, string> = {};
+	function walk(
+		path: string[] = [],
+		current_dir: string,
+		current: FileSystemTree | undefined = file_tree,
+	) {
+		path = [...path, current_dir === '' ? '' : current_dir.replace(/\/\/+/g, '/')];
+		const current_path = path.join('/');
+
+		for (const file of Object.keys(current)) {
+			const node = current[file];
+			if ('file' in node && node.file !== undefined) {
+				const path_name = `${current_path}/${file}`.replace(/\/\/+/g, '/');
+				// If the current entry is a file, add it to the dictionary
+				result[path_name] = (node.file.contents as string) ?? '';
+			} else if ('directory' in node && node.directory !== undefined) {
+				// If the current entry is a directory, recurse into it
+				walk(path, file, node.directory);
+			}
+		}
+
+		return result;
+	}
+	return walk([''], '', file_tree);
+}
+
 const decoder = new TextDecoder();
 async function get_tree(
 	dir: DirEnt<string>[],
 	path: string,
-	as_string: boolean
+	as_string: boolean,
 ): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
@@ -696,7 +749,7 @@ async function get_tree(
 				directory: await get_tree(
 					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
 					node_path + '/',
-					as_string
+					as_string,
 				),
 			};
 		}
@@ -704,4 +757,4 @@ async function get_tree(
 	return tree;
 }
 
-const IGNORE_LIST = ['.svelte-kit', 'node_modules'];
+const IGNORE_LIST = ['.svelte-kit/generated', '.svelte-kit/types', 'node_modules'];

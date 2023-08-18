@@ -10,6 +10,7 @@
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
+	import LanguageClientProvider from '$lib/components/LanguageClientProvider.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
@@ -58,7 +59,9 @@
 			<FileActions mobile />
 		</RawDialog>
 		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
-			<svelte:component this={Editor} />
+			<LanguageClientProvider>
+				<svelte:component this={Editor} />
+			</LanguageClientProvider>
 		</div>
 		<div class:hidden={$mobile_showing !== 'iframe'}>
 			<Iframe />

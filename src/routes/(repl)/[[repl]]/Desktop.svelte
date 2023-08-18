@@ -7,6 +7,7 @@
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
+	import LanguageClientProvider from '$lib/components/LanguageClientProvider.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
@@ -37,7 +38,9 @@
 					<Pane minSize={min_size}>
 						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 							<Pane minSize={min_size} class="editor-pane">
+								<LanguageClientProvider>
 								<svelte:component this={Editor} />
+								</LanguageClientProvider>
 							</Pane>
 							<Pane bind:size={$layout_store.terminal}>
 								<svelte:component this={Console} bind:update_height />

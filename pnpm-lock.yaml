@@ -91,7 +91,7 @@ dependencies:
     version: 0.0.27
   codemirror-languageserver:
     specifier: ^1.11.0
-    version: 1.11.0(@codemirror/language@6.8.0)(@lezer/common@1.0.2)
+    version: 1.11.0(@codemirror/language@6.8.0)(@lezer/common@1.0.3)
   events:
     specifier: ^3.3.0
     version: 3.3.0
@@ -191,8 +191,8 @@ devDependencies:
     specifier: ^3.0.0
     version: 3.0.0
   prettier-plugin-svelte:
-    specifier: ^2.10.1
-    version: 2.10.1(prettier@3.0.0)(svelte@4.1.1)
+    specifier: ^3.0.3
+    version: 3.0.3(prettier@3.0.0)(svelte@4.1.1)
   rollup-plugin-visualizer:
     specifier: ^5.9.2
     version: 5.9.2
@@ -1746,13 +1746,13 @@ packages:
       estree-walker: 3.0.3
       periscopic: 3.1.0
 
-  /codemirror-languageserver@1.11.0(@codemirror/language@6.8.0)(@lezer/common@1.0.2):
+  /codemirror-languageserver@1.11.0(@codemirror/language@6.8.0)(@lezer/common@1.0.3):
     resolution: {integrity: sha512-QtFEMc1yhi8wzKasE+OseMeikHpHdFt1wQdt5F4O3sKl7B1m56OcVuqmCAJipklbIPDkLecaXhd8oFvA72lfnw==}
     dependencies:
-      '@codemirror/autocomplete': 6.8.1(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.1)(@lezer/common@1.0.2)
+      '@codemirror/autocomplete': 6.9.0(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.15.3)(@lezer/common@1.0.3)
       '@codemirror/lint': 6.4.0
       '@codemirror/state': 6.2.1
-      '@codemirror/view': 6.14.1
+      '@codemirror/view': 6.15.3
       '@open-rpc/client-js': 1.8.1
       vscode-languageserver-protocol: 3.17.3
     transitivePeerDependencies:
@@ -2993,10 +2993,10 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-svelte@2.10.1(prettier@3.0.0)(svelte@4.1.1):
-    resolution: {integrity: sha512-Wlq7Z5v2ueCubWo0TZzKc9XHcm7TDxqcuzRuGd0gcENfzfT4JZ9yDlCbEgxWgiPmLHkBjfOtpAWkcT28MCDpUQ==}
+  /prettier-plugin-svelte@3.0.3(prettier@3.0.0)(svelte@4.1.1):
+    resolution: {integrity: sha512-dLhieh4obJEK1hnZ6koxF+tMUrZbV5YGvRpf2+OADyanjya5j0z1Llo8iGwiHmFWZVG/hLEw/AJD5chXd9r3XA==}
     peerDependencies:
-      prettier: ^1.16.4 || ^2.0.0
+      prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0
     dependencies:
       prettier: 3.0.0

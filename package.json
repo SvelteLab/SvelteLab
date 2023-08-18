@@ -83,7 +83,7 @@
 		"marked": "^5.1.2",
 		"postcss": "^8.4.27",
 		"prettier": "^3.0.0",
-		"prettier-plugin-svelte": "^2.10.1",
+		"prettier-plugin-svelte": "^3.0.3",
 		"rollup-plugin-visualizer": "^5.9.2",
 		"satori": "^0.10.1",
 		"satori-html": "^0.3.2",
