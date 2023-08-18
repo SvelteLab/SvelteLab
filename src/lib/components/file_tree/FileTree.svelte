@@ -26,7 +26,7 @@
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
 	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
-	import Label from '~icons/material-symbols/label'
+	import Label from '~icons/material-symbols/label';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -41,7 +41,7 @@
 		path_name: string,
 		type: typeof is_adding_type.kind,
 		content = new ArrayBuffer(0),
-		should_open = true
+		should_open = true,
 	) {
 		const path = path_name.split('/');
 		const name = path.pop();
@@ -121,7 +121,11 @@
 				<Label></Label>
 				<span class="screen-reader-only">Project Name</span>
 			</label>
-			<input style:--ch-count={$repl_name.length+'ch'} id="project_name" bind:value={$repl_name} />
+			<input
+				style:--ch-count={$repl_name.length + 'ch'}
+				id="project_name"
+				bind:value={$repl_name}
+			/>
 			<div class="hover-group" class:force={$open_menus[$base_path_store]}>
 				<DropdownMenu bind:open={$open_menus[$base_path_store]}>
 					<MenuItem on:click={get_upload_handler()}>

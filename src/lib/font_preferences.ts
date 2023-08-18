@@ -20,13 +20,13 @@ export function apply_font_preferences() {
 		if (!browser) return;
 		document.documentElement.style.setProperty(
 			'--sk-font-variant-ligatures',
-			ligatures ? 'initial' : 'none'
+			ligatures ? 'initial' : 'none',
 		);
 
 		document.documentElement.style.setProperty('--sk-editor-font-size', editor_size + 'rem');
 		document.documentElement.style.setProperty(
 			'--sk-editor-font-family',
-			editor_family.trim() || 'JetBrains Mono'
+			editor_family.trim() || 'JetBrains Mono',
 		);
 	});
 }

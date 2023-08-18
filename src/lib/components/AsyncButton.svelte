@@ -5,7 +5,7 @@
 	export let click: (
 		event: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
-		}
+		},
 	) => void;
 	// to set the loading state from outside
 	export let loading = false;
@@ -18,7 +18,7 @@
 		click: (
 			event: MouseEvent & {
 				currentTarget: EventTarget & HTMLButtonElement;
-			}
+			},
 		) => void;
 		loading?: boolean;
 		badged?: boolean;

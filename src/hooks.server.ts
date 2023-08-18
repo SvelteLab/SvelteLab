@@ -51,7 +51,7 @@ const handle_poketbase: Handle = async ({ event, resolve }) => {
 	expires.setTime(expires.getTime() + 1000 * 60 * 60 * 24 * 7);
 	response.headers.append(
 		'set-cookie',
-		event.locals.pocketbase.authStore.exportToCookie({ secure: true, expires, sameSite: 'none' })
+		event.locals.pocketbase.authStore.exportToCookie({ secure: true, expires, sameSite: 'none' }),
 	);
 
 	return response;

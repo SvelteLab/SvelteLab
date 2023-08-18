@@ -20,7 +20,7 @@ export const template_icon_map = new Map(
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
 		animotion: Animotion,
-	})
+	}),
 );
 
 function capitalize(title: string) {

@@ -41,6 +41,6 @@ export function load_emoji(code: string) {
 	const key = code;
 	if (key in emoji_cache) return emoji_cache[key];
 	return (emoji_cache[key] = fetch(
-		`https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${code.toLowerCase()}.svg`
+		`https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${code.toLowerCase()}.svg`,
 	).then((r) => r.text()));
 }
