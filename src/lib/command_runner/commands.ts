@@ -382,29 +382,13 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 	if ($page.data.id) {
 		push({
 			category: 'Project',
-			command: 'share-id',
-			title: 'Share Project',
-			subtitle:
-				'copy link that shares current project via id, this keeps in sync when you update your project',
+			command: 'share',
+			title: 'Share',
+			subtitle: 'share your current code via hash or the project via id',
 			icon: Share,
 			action_component: ShareProject,
-			action_component_props: {
-				share_way: 'id',
-			},
 		});
 	}
-
-	push({
-		category: 'Project',
-		command: 'share-hash',
-		title: 'Share Code Snapshot',
-		subtitle: 'copy link that shares current files via hash',
-		icon: Share,
-		action_component: ShareProject,
-		action_component_props: {
-			share_way: 'hash',
-		},
-	});
 
 	push({
 		category: 'SvelteLab',
