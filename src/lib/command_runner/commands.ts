@@ -379,16 +379,14 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-	if ($page.data.id) {
-		push({
-			category: 'Project',
-			command: 'share',
-			title: 'Share',
-			subtitle: 'share your current code via hash or the project via id',
-			icon: Share,
-			action_component: ShareProject,
-		});
-	}
+	push({
+		category: 'Project',
+		command: 'share',
+		title: 'Share',
+		subtitle: 'share your current code via hash or the project via id',
+		icon: Share,
+		action_component: ShareProject,
+	});
 
 	push({
 		category: 'SvelteLab',
