@@ -499,9 +499,20 @@ export const webcontainer = {
 		// avoid ghost files from previous projects
 		close_all_tabs();
 		await tick();
-		// we do this here to avoid opening a non existing file
-		if (does_file_exist(files, './src/routes/+page.svelte')) {
-			open_file('./src/routes/+page.svelte');
+		const search_params = new URLSearchParams(window.location.search);
+		const files_to_open_string = search_params.get('files') ?? './src/routes/+page.svelte';
+		const files_to_open = files_to_open_string.split(',');
+
+		function starts_with_dot_slash(str: string): str is `./${string}` {
+			return str.startsWith('./');
+		}
+
+		for (const file_to_open of files_to_open) {
+			if (!starts_with_dot_slash(file_to_open)) continue;
+			// we do this here to avoid opening a non existing file
+			if (does_file_exist(files, file_to_open)) {
+				open_file(file_to_open);
+			}
 		}
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {

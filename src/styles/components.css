@@ -46,7 +46,7 @@ input.action-field {
 
 button.action-confirm,
 a.action-confirm {
-	background-color: var(--sk-back-3);
+	background-color: var(--sk-back-4);
 	padding: 0.5rem 1rem;
 	border-radius: 0.5rem;
 	width: 100%;
@@ -56,7 +56,7 @@ a.action-confirm {
 
 button.action-confirm:hover,
 a.action-confirm:hover {
-	background-color: var(--sk-back-4);
+	background-color: var(--sk-back-3);
 }
 
 ul.action-selection-grid {
