@@ -12,7 +12,6 @@
 	import { stringify } from '$lib/components/parsers';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
 	import { ICON } from '$lib/icons';
-	import { share_with_hash, share_with_id } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
@@ -173,39 +172,36 @@
 		{/if}
 	{/if}
 	<!-- Share button or dropdown -->
-	<DropdownMenu indicator>
-		<svelte:fragment slot="trigger">
+	<!-- Share button or dropdown -->
+	{#if !$repl_id}
+		<button
+			on:click={async () => {
+				command_runner.open('share-hash');
+			}}
+			title="Share Files Snapshot"
+		>
 			<ICON.Share />
-		</svelte:fragment>
-		{#if $repl_id}
+		</button>
+	{:else}
+		<DropdownMenu indicator>
+			<svelte:fragment slot="trigger">
+				<ICON.Share />
+			</svelte:fragment>
 			<MenuItem
 				on:click={() => {
-					share_with_id();
+					command_runner.open('share-id');
 				}}
 			>
 				<ICON.Url /> Share Project
 			</MenuItem>
 			<MenuItem
 				on:click={() => {
-					share_with_id(true);
+					command_runner.open('share-hash');
 				}}
-			>
-				<ICON.Url /> Share Project (with files open)
+				><ICON.Hash /> Share Code Snapshot
 			</MenuItem>
-		{/if}
-		<MenuItem
-			on:click={() => {
-				share_with_hash();
-			}}
-			><ICON.Hash /> Share Code Snapshot
-		</MenuItem>
-		<MenuItem
-			on:click={() => {
-				share_with_hash(true);
-			}}
-			><ICON.Hash /> Share Code Snapshot (with files open)
-		</MenuItem>
-	</DropdownMenu>
+		</DropdownMenu>
+	{/if}
 	{#if user}
 		<!-- Profile or login -->
 		<DropdownMenu indicator>

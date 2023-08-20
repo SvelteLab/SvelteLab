@@ -2,12 +2,11 @@ import { get } from 'svelte/store';
 import { repl_id, repl_name } from './stores/repl_id_store';
 import { error, success } from './toast';
 import { webcontainer } from './webcontainer';
-import { tabs } from './tabs';
 
-export async function share_with_hash(with_files?: boolean) {
+export async function share_with_hash(with_files: string[] = []) {
 	const share_url = await webcontainer.get_share_url();
-	if (with_files) {
-		const open_files = get(tabs).join(',');
+	if (with_files.length > 0) {
+		const open_files = with_files.join(',');
 		share_url.searchParams.set('files', open_files);
 	}
 	await share({
@@ -17,10 +16,10 @@ export async function share_with_hash(with_files?: boolean) {
 	});
 }
 
-export async function share_with_id(with_files?: boolean) {
+export async function share_with_id(with_files: string[] = []) {
 	const share_url = new URL(window.location.href);
-	if (with_files) {
-		const open_files = get(tabs).join(',');
+	if (with_files.length > 0) {
+		const open_files = with_files.join(',');
 		share_url.searchParams.set('files', open_files);
 	}
 	share_url.pathname = get(repl_id) ?? '';

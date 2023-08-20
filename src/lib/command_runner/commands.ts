@@ -4,7 +4,6 @@ import { save_repl } from '$lib/api/client/repls';
 import { open_credits } from '$lib/components/Credits.svelte';
 import { PUBLIC_DISCORD_INVITE, PUBLIC_GITHUB_REPO } from '$lib/constants';
 import { is_dir } from '$lib/file_system';
-import { share_with_hash, share_with_id } from '$lib/share';
 import { editor_config } from '$lib/stores/editor_config_store';
 import { intro_hidden_forever, is_intro_open } from '$lib/stores/intro_store';
 import { layout_store } from '$lib/stores/layout_store';
@@ -49,6 +48,7 @@ import InstallPackage from './commands_components/InstallPackage.svelte';
 import NewWithTemplate from './commands_components/NewWithTemplate.svelte';
 import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
+import ShareProject from './commands_components/ShareProject.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
@@ -387,29 +387,9 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			subtitle:
 				'copy link that shares current project via id, this keeps in sync when you update your project',
 			icon: Share,
-			async action() {
-				const progress_toast = toast.push(`Sharing...`, {
-					initial: 0,
-					dismissable: false,
-				});
-				await share_with_id();
-				toast.pop(progress_toast);
-			},
-		});
-		push({
-			category: 'Project',
-			command: 'share-id-tabs',
-			title: 'Share Project (with open files)',
-			subtitle:
-				'copy link that shares current project via id, this keeps in sync when you update your project, it also share the open tabs',
-			icon: Share,
-			async action() {
-				const progress_toast = toast.push(`Sharing...`, {
-					initial: 0,
-					dismissable: false,
-				});
-				await share_with_id(true);
-				toast.pop(progress_toast);
+			action_component: ShareProject,
+			action_component_props: {
+				share_way: 'id',
 			},
 		});
 	}
@@ -420,29 +400,9 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		title: 'Share Code Snapshot',
 		subtitle: 'copy link that shares current files via hash',
 		icon: Share,
-		async action() {
-			const progress_toast = toast.push(`Sharing...`, {
-				initial: 0,
-				dismissable: false,
-			});
-			await share_with_hash();
-			toast.pop(progress_toast);
-		},
-	});
-
-	push({
-		category: 'Project',
-		command: 'share-hash-tabs',
-		title: 'Share Code Snapshot (with open files)',
-		subtitle: 'copy link that shares current files via hash, it also shares the open tabs',
-		icon: Share,
-		async action() {
-			const progress_toast = toast.push(`Sharing...`, {
-				initial: 0,
-				dismissable: false,
-			});
-			await share_with_hash(true);
-			toast.pop(progress_toast);
+		action_component: ShareProject,
+		action_component_props: {
+			share_way: 'hash',
 		},
 	});
 
