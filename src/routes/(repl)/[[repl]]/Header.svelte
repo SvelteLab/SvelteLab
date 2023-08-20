@@ -45,7 +45,7 @@
 			// of session because Firefox Mobile it's being weird)
 			window.localStorage.setItem(
 				PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
-				stringify(await webcontainer.get_tree_from_container(true))
+				stringify(await webcontainer.get_tree_from_container(true)),
 			);
 		} catch (e) {
 			if (!window.confirm('You will lose progress on this project...do you want to continue?')) {

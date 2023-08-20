@@ -13,3 +13,4 @@ src/lib/dependency-report.json
 static/~partytown/
 pocketbase
 pb_data
+test-results

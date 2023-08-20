@@ -60,7 +60,7 @@
 			extensions.unshift(
 				vim({
 					status: true,
-				})
+				}),
 			);
 		}
 		if (config.code_wrap) {
@@ -214,7 +214,7 @@
 					const new_pos = get_character_from_pos(
 						diagnostic.end.line,
 						diagnostic.end.character,
-						code
+						code,
 					);
 
 					$codemirror_instance.view?.focus();

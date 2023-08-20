@@ -1,7 +1,12 @@
 module.exports = {
 	root: true,
 	parser: '@typescript-eslint/parser',
-	extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier','plugin:svelte/recommended'],
+	extends: [
+		'eslint:recommended',
+		'plugin:@typescript-eslint/recommended',
+		'prettier',
+		'plugin:svelte/recommended',
+	],
 	plugins: ['@typescript-eslint'],
 	ignorePatterns: ['*.cjs'],
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
@@ -11,7 +16,7 @@ module.exports = {
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
-		extraFileExtension: ['.svelte']
+		extraFileExtension: ['.svelte'],
 	},
 	env: {
 		browser: true,
@@ -20,13 +25,13 @@ module.exports = {
 	},
 	overrides: [
 		{
-		  files: ['*.svelte'],
-		  parser: 'svelte-eslint-parser',
-		  parserOptions: {
-			parser: '@typescript-eslint/parser'
-		  }
-		}
-	  ],
+			files: ['*.svelte'],
+			parser: 'svelte-eslint-parser',
+			parserOptions: {
+				parser: '@typescript-eslint/parser',
+			},
+		},
+	],
 	rules: {
 		'@typescript-eslint/naming-convention': [
 			'error',

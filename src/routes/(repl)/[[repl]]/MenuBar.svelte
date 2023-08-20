@@ -17,11 +17,14 @@
 			},
 		} as Command,
 		...commands,
-	].reduce((acc, current) => {
-		if (!(current.category in acc)) acc[current.category] = [];
-		acc[current.category].push(current);
-		return acc;
-	}, {} as Record<string, Command[]>);
+	].reduce(
+		(acc, current) => {
+			if (!(current.category in acc)) acc[current.category] = [];
+			acc[current.category].push(current);
+			return acc;
+		},
+		{} as Record<string, Command[]>,
+	);
 
 	const CATEGORIES: Command['category'][] = ['SvelteLab', 'Project', 'Preferences'];
 </script>

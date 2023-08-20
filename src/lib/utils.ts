@@ -20,7 +20,7 @@ export function deferred_promise() {
  */
 export function async_click(
 	node: HTMLAnchorElement,
-	click_handler: (e: MouseEvent) => Promise<void>
+	click_handler: (e: MouseEvent) => Promise<void>,
 ) {
 	const generate_on_click =
 		(click_handler: (e: MouseEvent) => Promise<void>) => async (e: MouseEvent) => {

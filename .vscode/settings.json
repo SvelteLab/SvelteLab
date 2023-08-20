@@ -18,17 +18,7 @@
 	"files.associations": {
 		"*.svx": "markdown"
 	},
-	"cSpell.ignoreWords": [
-		"lezer",
-		"neocodemirror",
-		"publint",
-		"puruvj",
-		"zerodevx"
-	],
-	"npm.exclude": [
-		"**/src/lib/**/*"
-	],
-	"githubPullRequests.ignoredPullRequestBranches": [
-		"master"
-	]
+	"cSpell.ignoreWords": ["lezer", "neocodemirror", "publint", "puruvj", "zerodevx"],
+	"npm.exclude": ["**/src/lib/**/*"],
+	"githubPullRequests.ignoredPullRequestBranches": ["master"]
 }

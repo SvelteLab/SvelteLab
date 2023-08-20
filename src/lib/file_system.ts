@@ -7,7 +7,7 @@ export function is_dir(file: DirectoryNode | FileNode): file is DirectoryNode {
 export function get_file_from_path(
 	base_path: string,
 	files: FileSystemTree,
-	create_if_not_exist = false
+	create_if_not_exist = false,
 ) {
 	const path = base_path.split(/\.?\//);
 	let subtree: FileSystemTree = files;
@@ -48,7 +48,7 @@ export function get_file_from_path(
 export function get_subtree_from_path(
 	base_path: string,
 	files: FileSystemTree,
-	create_if_not_exist = false
+	create_if_not_exist = false,
 ) {
 	const path = base_path.split(/\.?\//);
 	let subtree: FileSystemTree = files;

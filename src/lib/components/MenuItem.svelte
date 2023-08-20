@@ -21,8 +21,8 @@
 <li role="menuitem" class="menuitem">
 	<!-- eslint-disable-next-line svelte/valid-compile -->
 	<svelte:element
-		role="listitem"
 		this={href ? 'a' : 'button'}
+		role="listitem"
 		{href}
 		class="item"
 		{...$$restProps}

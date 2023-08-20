@@ -13,7 +13,7 @@ addEventListener('message', async (event) => {
 			const res = await fetch(
 				where === 'sveltekit'
 					? `https://kit.svelte.dev/content.json`
-					: 'https://svelte.dev/content.json'
+					: 'https://svelte.dev/content.json',
 			);
 			const { blocks } = await res.json();
 			init(blocks, where);
