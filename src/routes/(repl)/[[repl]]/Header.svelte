@@ -12,9 +12,11 @@
 	import { stringify } from '$lib/components/parsers';
 	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
 	import { ICON } from '$lib/icons';
+	import { share_with_hash } from '$lib/share';
 	import { command_runner } from '$lib/stores/command_runner_store';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
+	import { tabs } from '$lib/tabs';
 	import { get_theme } from '$lib/theme';
 	import { webcontainer } from '$lib/webcontainer';
 	import { onMount } from 'svelte';
@@ -174,7 +176,11 @@
 	<!-- Share button or dropdown -->
 	<button
 		on:click={async () => {
-			command_runner.open('share');
+			if (!$repl_id && $tabs.length === 0) {
+				share_with_hash();
+			} else {
+				command_runner.open('share');
+			}
 		}}
 		title="Share"
 	>
