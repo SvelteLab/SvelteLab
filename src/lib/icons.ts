@@ -16,6 +16,9 @@ import Save from '~icons/material-symbols/save';
 import Share from '~icons/material-symbols/share';
 import Hash from '~icons/material-symbols/tag-rounded';
 import Terminal from '~icons/material-symbols/terminal-rounded';
+import CheckAll from '~icons/material-symbols/library-add-check-rounded';
+import CheckBoxBlank from '~icons/material-symbols/check-box-outline-blank';
+import Cloud from '~icons/material-symbols/cloud';
 
 export const ICON = {
 	Login,
@@ -36,4 +39,7 @@ export const ICON = {
 	Share,
 	Hash,
 	Terminal,
+	CheckAll,
+	CheckBoxBlank,
+	Cloud,
 };
