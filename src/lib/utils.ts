@@ -89,3 +89,9 @@ export class MapOfSet<K, V extends Set<TSet>, TSet = unknown> extends Map<K, V> 
 		return super.get(key)!;
 	}
 }
+
+export function inject_string(initial_string: string, index: number, string_to_inject: string) {
+	return `${initial_string.substring(0, index)}${string_to_inject}${initial_string.substring(
+		index,
+	)}`;
+}
