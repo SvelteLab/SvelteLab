@@ -19,7 +19,7 @@ import {
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { actionable } from './toast';
-import { MapOfSet, deferred_promise, version_compare } from './utils';
+import { MapOfSet, deferred_promise, inject_string, version_compare } from './utils';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -329,6 +329,28 @@ async function spawn_process_and_show_output(cmd: string) {
 	return process;
 }
 
+async function fix_vite_ssr_rewrite() {
+	const file_to_fix = './node_modules/@sveltejs/kit/src/exports/vite/dev/index.js';
+	const sveltekit_vite_dev = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
+	const split_sentence = 'ssrRewriteStacktrace';
+	const split_at_problem = sveltekit_vite_dev.split(split_sentence);
+	if (split_at_problem && split_at_problem.length === 2) {
+		const [first_half, second_half] = split_at_problem;
+		const first_injection_point = first_half.lastIndexOf('\n');
+		const fixed_first_half = inject_string(first_half, first_injection_point, 'try{');
+		const second_injection_point = second_half.indexOf('\n');
+		const fixed_second_half = inject_string(
+			second_half,
+			second_injection_point,
+			'}catch(e){ return stack }\n',
+		);
+		await webcontainer_instance.fs.writeFile(
+			file_to_fix,
+			`${fixed_first_half}${split_sentence}${fixed_second_half}`,
+		);
+	}
+}
+
 async function run_svelte_check() {
 	if (is_sveltecheck_running) return;
 	const check_version_process = await webcontainer_instance.spawn('npm', ['list']);
@@ -524,6 +546,7 @@ export const webcontainer = {
 		launch_jsh();
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
+		await fix_vite_ssr_rewrite();
 		webcontainer.run_dev_server();
 	},
 	/**
