@@ -19,7 +19,7 @@ import {
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, open_file } from './tabs';
 import { actionable } from './toast';
-import { MapOfSet, deferred_promise, inject_string, version_compare } from './utils';
+import { MapOfSet, deferred_promise, version_compare } from './utils';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -329,25 +329,54 @@ async function spawn_process_and_show_output(cmd: string) {
 	return process;
 }
 
+/**
+ * I went trough the sveltekit codebase and since the creation of the file
+ * there are only those two instances of of this function. By listing them all we should be set
+ * for older projects and also if that function ever changes we would not replace that anymore.
+ */
+const broken_functions_map = new Map([
+	[
+		`function fix_stack_trace(error) {
+		return error.stack ? vite.ssrRewriteStacktrace(error.stack) : error.stack;
+	}`,
+		`function fix_stack_trace(error) {
+		try{
+			return error.stack ? vite.ssrRewriteStacktrace(error.stack) : error.stack;
+		}catch(_e){
+			return error.stack;
+		}
+	}`,
+	],
+	[
+		`function fix_stack_trace(stack) {
+		return stack ? vite.ssrRewriteStacktrace(stack) : stack;
+	}`,
+		`function fix_stack_trace(stack) {
+		try{
+			return stack ? vite.ssrRewriteStacktrace(stack) : stack;
+		}catch(_e){
+			return stack;
+		}
+	}`,
+	],
+]);
+
+/**
+ * There's a weird bug right now where the function to fix stack traces in the vite dev
+ * server for sveltekit get's called twice causing the dev server to crash if there's an error
+ * on the server. To fix this we momentarily replace that node module file and we try/catch
+ * the call to fix_stack_trace. Let's hope in the future we get to delete this weird hack
+ */
 async function fix_vite_ssr_rewrite() {
 	const file_to_fix = './node_modules/@sveltejs/kit/src/exports/vite/dev/index.js';
-	const sveltekit_vite_dev = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
-	const split_sentence = 'ssrRewriteStacktrace';
-	const split_at_problem = sveltekit_vite_dev.split(split_sentence);
-	if (split_at_problem && split_at_problem.length === 2) {
-		const [first_half, second_half] = split_at_problem;
-		const first_injection_point = first_half.lastIndexOf('\n');
-		const fixed_first_half = inject_string(first_half, first_injection_point, 'try{');
-		const second_injection_point = second_half.indexOf('\n');
-		const fixed_second_half = inject_string(
-			second_half,
-			second_injection_point,
-			'}catch(e){ return stack }\n',
-		);
-		await webcontainer_instance.fs.writeFile(
-			file_to_fix,
-			`${fixed_first_half}${split_sentence}${fixed_second_half}`,
-		);
+	try {
+		let sveltekit_vite_dev = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
+		for (const [old, replacement] of broken_functions_map.entries()) {
+			sveltekit_vite_dev = sveltekit_vite_dev.replace(old, replacement);
+		}
+		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_vite_dev);
+	} catch (_) {
+		/** empty */
 	}
 }
 
