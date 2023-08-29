@@ -379,6 +379,29 @@ async function fix_vite_ssr_rewrite() {
 		/** empty */
 	}
 }
+/**
+ * Inject a window.parent.postMessage in the navigate function of the sveltekit client to get
+ * a message when sveltekit navigate inside the iframe. This works for forms, links and goto.
+ */
+async function inject_postmessage() {
+	// weird regex i know but this basically get the navigated function find the if(started) check
+	// inside there capturing the value in the parenthesis of stores.navigating.set
+	const navigate_regex =
+		/(function navigate\((?:.|\n|\n\r)*?\(started\)(?:.|\n|\n\r)*?)(?:stores\.navigating.set\(((?:.|\n|\n\r)*?)\))/m;
+	const file_to_fix = './node_modules/@sveltejs/kit/src/runtime/client/client.js';
+	try {
+		// read the client file
+		let sveltekit_runtime_client = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
+		// replace the regex injecting a window.parent.postMessage before setting the navigating store
+		sveltekit_runtime_client = sveltekit_runtime_client.replace(
+			navigate_regex,
+			"$1\nwindow?.parent?.postMessage?.(JSON.stringify($2),'*');\nstores.navigating.set($2)",
+		);
+		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_runtime_client);
+	} catch (_) {
+		/** empty */
+	}
+}
 
 async function run_svelte_check() {
 	if (is_sveltecheck_running) return;
@@ -576,6 +599,7 @@ export const webcontainer = {
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
 		await fix_vite_ssr_rewrite();
+		await inject_postmessage();
 		webcontainer.run_dev_server();
 	},
 	/**
