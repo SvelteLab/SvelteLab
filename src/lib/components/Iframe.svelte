@@ -1,13 +1,31 @@
 <script lang="ts">
 	import { webcontainer } from '$lib/webcontainer';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import InstallDeps from '~icons/line-md/downloading-loop';
 	import Booting from '~icons/line-md/loading-alt-loop';
 	import Error from '~icons/material-symbols/chat-error-rounded';
 	import OpenInNew from '~icons/material-symbols/open-in-new';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
 
-	async function handleUrlChange(e: SubmitEvent) {
+	$: showed_url = $webcontainer.iframe_path;
+
+	onMount(() => {
+		function handler(e: MessageEvent) {
+			try {
+				const navigation = JSON.parse(e.data);
+				const new_path = navigation.to.url.replace($webcontainer.webcontainer_url, '');
+				showed_url = new_path;
+			} catch (e) {
+				/**empty*/
+			}
+		}
+		window.addEventListener('message', handler);
+		return () => {
+			window.removeEventListener('message', handler);
+		};
+	});
+
+	async function handle_url_change(e: SubmitEvent) {
 		webcontainer.set_iframe_path(''); // refresh even if nothing changed
 		const url = new FormData(e.target as HTMLFormElement).get('url')?.toString() || '/';
 		await tick();
@@ -32,7 +50,7 @@
 
 <section>
 	{#if $webcontainer.webcontainer_url}
-		<form on:submit|preventDefault={handleUrlChange}>
+		<form on:submit|preventDefault={handle_url_change}>
 			<button title="Refresh">
 				<Refresh />
 			</button>
@@ -41,7 +59,7 @@
 				aria-label="current path"
 				name="url"
 				type="text"
-				value={$webcontainer.iframe_path}
+				value={showed_url}
 			/>
 			<a
 				title="Open in new Tab"
