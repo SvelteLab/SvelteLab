@@ -72,6 +72,7 @@
 		</form>
 		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
 			<iframe
+				allow="geolocation; microphone; camera; payment; autoplay; serial; cross-origin-isolated"
 				title="content"
 				src={$webcontainer.webcontainer_url.startsWith('.')
 					? $webcontainer.webcontainer_url

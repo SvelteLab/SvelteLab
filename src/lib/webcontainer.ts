@@ -527,6 +527,9 @@ async function read_file(path: string, as_string = true) {
 	}
 }
 
+function starts_with_dot_slash(str: string): str is `./${string}` {
+	return str.startsWith('./');
+}
 /**
  * The actual webcontainer store with useful methods
  */
@@ -576,10 +579,6 @@ export const webcontainer = {
 		const search_params = new URLSearchParams(window.location.search);
 		const files_to_open_string = search_params.get('files') ?? './src/routes/+page.svelte';
 		const files_to_open = files_to_open_string.split(',');
-
-		function starts_with_dot_slash(str: string): str is `./${string}` {
-			return str.startsWith('./');
-		}
 
 		for (const file_to_open of files_to_open) {
 			if (!starts_with_dot_slash(file_to_open)) continue;
@@ -750,6 +749,9 @@ export const webcontainer = {
 		return () => {
 			fs_changes_callbacks.get(event).delete(cb);
 		};
+	},
+	check_file_exist(path: `./${string}`) {
+		return does_file_exist(get(files), path);
 	},
 };
 
