@@ -697,7 +697,6 @@ export const webcontainer = {
 		}
 	},
 	async move_file(origin: string, destination: string) {
-		// Todo: error handling and "offline" (i.e. w/o web container) store file system 
 		webcontainer.spawn('mv', [origin, destination]).then(async (process) => {
 			process.output.pipeTo(
 				new WritableStream({
@@ -707,6 +706,7 @@ export const webcontainer = {
 				}),
 			);
 			await process.exit;
+			webcontainer.sync_file_system();
 		});
 	},
 	read_file,

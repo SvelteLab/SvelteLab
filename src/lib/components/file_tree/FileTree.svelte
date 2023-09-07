@@ -199,6 +199,7 @@
 				use:drop_assets={files_options(path + '/')}
 				class="folder"
 				class:open={expanded}
+				use:draggable={path}
 				use:dropzone={{
 					on_dropzone: (dropped_path) => {
 						console.log(dropped_path, path);
