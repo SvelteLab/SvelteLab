@@ -13,7 +13,14 @@
 	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
-	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
+	import {
+		close_all_subpath,
+		close_file,
+		current_tab,
+		open_file,
+		rename_tab,
+		tabs,
+	} from '$lib/tabs';
 	import { error } from '$lib/toast';
 	import { drop_assets, handle_files } from '$lib/upload_assets';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
@@ -118,6 +125,9 @@
 	function handle_drop(dropped_path: string, path: string) {
 		webcontainer.move_file(dropped_path, path);
 		expand_path(path);
+		// todo: not close the tabs but somehow fix them up and keep them alive for better UX
+		$tabs = $tabs.filter((t) => !t.includes(dropped_path));
+		if ($current_tab.includes(dropped_path)) $current_tab = $tabs[0] || '';
 	}
 </script>
 
@@ -210,9 +220,9 @@
 				use:drop_assets={files_options(path + '/')}
 				class="folder"
 				class:open={expanded}
-				use:draggable={path}
+				use:draggable={path + '/'}
 				use:dropzone={{
-					on_dropzone: (dropped_path) => handle_drop(dropped_path, path),
+					on_dropzone: (dropped_path) => handle_drop(dropped_path, path + '/'),
 				}}
 			>
 				{#if renaming_path === path}
