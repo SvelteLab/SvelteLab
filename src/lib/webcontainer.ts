@@ -697,7 +697,8 @@ export const webcontainer = {
 		}
 	},
 	async move_file(origin: string, destination: string) {
-		webcontainer.spawn('mv', [origin, destination]).then(async (process) => {
+		try {
+			const process = await webcontainer.spawn('mv', [origin, destination]);
 			process.output.pipeTo(
 				new WritableStream({
 					write(chunk) {
@@ -707,7 +708,9 @@ export const webcontainer = {
 			);
 			await process.exit;
 			webcontainer.sync_file_system();
-		});
+		} catch (e) {
+			console.error(e);
+		}
 	},
 	read_file,
 	async read_package_json() {

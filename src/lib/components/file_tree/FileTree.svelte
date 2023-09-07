@@ -8,6 +8,7 @@
 	import { draggable, dropzone } from '$lib/dnd';
 	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
 	import { get_subtree_from_path, is_dir } from '$lib/file_system';
+	import { ICON } from '$lib/icons';
 	import { base_path as base_path_store } from '$lib/stores/base_path_store';
 	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
@@ -28,7 +29,6 @@
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
-	import { ICON } from '$lib/icons';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -114,9 +114,20 @@
 			file_input.click();
 		};
 	}
+
+	function handle_drop(dropped_path: string, path: string) {
+		webcontainer.move_file(dropped_path, path);
+		expand_path(path);
+	}
 </script>
 
-<ul class="file-tree" use:drop_assets={files_options()}>
+<ul
+	class="file-tree"
+	use:drop_assets={files_options()}
+	use:dropzone={{
+		on_dropzone: (dropped_path) => handle_drop(dropped_path, base_path),
+	}}
+>
 	{#if base_path === $base_path_store}
 		<li class="root">
 			<label for="project_name">
@@ -201,11 +212,7 @@
 				class:open={expanded}
 				use:draggable={path}
 				use:dropzone={{
-					on_dropzone: (dropped_path) => {
-						console.log(dropped_path, path);
-						webcontainer.move_file(dropped_path, path);
-						expand_path(path);
-					},
+					on_dropzone: (dropped_path) => handle_drop(dropped_path, path),
 				}}
 			>
 				{#if renaming_path === path}
