@@ -47,7 +47,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 
 const { subscribe, set } = writable({
 	webcontainer_url: '',
-	status: 'booting' as 'booting' | 'waiting' | 'server_closed',
+	status: 'booting' as 'booting' | 'waiting' | 'server_closed' | 'running',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
@@ -560,7 +560,7 @@ export const webcontainer = {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
 			run_svelte_check();
-			merge_state({ webcontainer_url: url });
+			merge_state({ webcontainer_url: url, status: 'running' });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
 					merge_state({ webcontainer_url: '', status: 'server_closed' });
@@ -697,8 +697,17 @@ export const webcontainer = {
 			/* empty */
 		}
 	},
+	/**
+	 * @param origin could be a file or folder
+	 * @param destination should always a folder with trailing `/`
+	 */
 	async move_file(origin: string, destination: string) {
 		try {
+			const status = get({ subscribe }).status;
+			if (status === 'booting' || status === 'waiting') {
+				// don't move if booting or waiting
+				return;
+			}
 			const process = await webcontainer.spawn('mv', [origin, destination]);
 			process.output.pipeTo(
 				new WritableStream({
@@ -709,17 +718,16 @@ export const webcontainer = {
 			);
 			await process.exit;
 			webcontainer.sync_file_system();
+			// fixup tabs and current_tab
+			expand_path(destination);
+			const file_name = !origin.endsWith('/') ? origin.split('/').pop() : undefined;
+			tabs.update(($tabs) => $tabs.map((t) => t.replace(origin, destination + (file_name || ''))));
+			current_tab.update(($current_tab) =>
+				$current_tab.replace(origin, destination + (file_name || '')),
+			);
 		} catch (e) {
 			console.error(e);
 		}
-		expand_path(destination);
-		// todo: not close the tabs but somehow fix them up and keep them alive for better UX
-		tabs.update(($tabs) => $tabs.filter((t) => !t.includes(origin)));
-		current_tab.update(($current_tab) => {
-			const $tabs = get(tabs);
-			if ($current_tab.includes(origin)) $current_tab = $tabs[0] || '';
-			return $current_tab;
-		});
 	},
 	read_file,
 	async read_package_json() {
