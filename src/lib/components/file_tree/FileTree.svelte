@@ -124,10 +124,6 @@
 
 	function handle_drop(dropped_path: string, path: string) {
 		webcontainer.move_file(dropped_path, path);
-		expand_path(path);
-		// todo: not close the tabs but somehow fix them up and keep them alive for better UX
-		$tabs = $tabs.filter((t) => !t.includes(dropped_path));
-		if ($current_tab.includes(dropped_path)) $current_tab = $tabs[0] || '';
 	}
 </script>
 

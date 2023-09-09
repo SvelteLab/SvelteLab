@@ -17,9 +17,10 @@ import {
 	is_sveltecheck_running,
 } from './stores/editor_errors_store';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
-import { close_all_tabs, open_file } from './tabs';
+import { close_all_tabs, current_tab, open_file, tabs } from './tabs';
 import { actionable } from './toast';
 import { MapOfSet, deferred_promise, version_compare } from './utils';
+import { expand_path } from './stores/expanded_paths';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -711,6 +712,14 @@ export const webcontainer = {
 		} catch (e) {
 			console.error(e);
 		}
+		expand_path(destination);
+		// todo: not close the tabs but somehow fix them up and keep them alive for better UX
+		tabs.update(($tabs) => $tabs.filter((t) => !t.includes(origin)));
+		current_tab.update(($current_tab) => {
+			const $tabs = get(tabs);
+			if ($current_tab.includes(origin)) $current_tab = $tabs[0] || '';
+			return $current_tab;
+		});
 	},
 	read_file,
 	async read_package_json() {
