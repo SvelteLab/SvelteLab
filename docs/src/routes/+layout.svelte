@@ -5,6 +5,7 @@
 	import '../styles/global.css';
 	import type { LayoutData } from './$types';
 	import Header from './Header.svelte';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 
 	export let data: LayoutData;
 	let open = false;
@@ -56,6 +57,7 @@
 			<slot />
 		</article>
 	</main>
+	<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
 </div>
 
 <style>
