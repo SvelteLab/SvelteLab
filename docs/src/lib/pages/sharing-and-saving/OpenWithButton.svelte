@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
-	import { copyToClipboard } from '$lib/util';
+	import { copy_to_clipboard } from '$lib/util';
+	import { toast } from '@zerodevx/svelte-toast';
 
 	const logos = ['dark_short', 'dark_wide', 'light_short', 'light_wide'];
 	const base_url = dev ? 'http://localhost:5173/' : 'https://docs.sveltelab.dev/';
@@ -8,11 +9,11 @@
 
 	$: {
 		if (repo.username) {
-			convertURLToVariables(repo.username);
+			convert_url_to_variables(repo.username);
 		}
 	}
 
-	function convertURLToVariables(username: string) {
+	function convert_url_to_variables(username: string) {
 		try {
 			const url = new URL(username);
 			if (url.host != 'github.com') return;
@@ -27,14 +28,14 @@
 		}
 	}
 
-	function copyMarkdown(logo: string) {
+	function copy_markdown(logo: string) {
 		const string = `[![Open in SvelteLab](${base_url}button/${logo}.svg)](https://sveltelab.dev/github.com/${repo.username}/${repo.name})`;
 
-		copyToClipboard(string);
-		alert('copied');
+		copy_to_clipboard(string);
+		toast.push('Copied Markdown to clipboard!');
 	}
 
-	function copyHTML(logo: string) {
+	function copy_html(logo: string) {
 		const string = `<a href="https://sveltelab.dev/github.com/${repo.username}/${repo.name}">
   <img
     alt="Open in SvelteLab"
@@ -42,8 +43,8 @@
   />
 </a>`;
 
-		copyToClipboard(string);
-		alert('copied');
+		copy_to_clipboard(string);
+		toast.push('Copied HTML to clipboard!');
 	}
 </script>
 
@@ -64,8 +65,8 @@
 			<div class="buttoncard">
 				<img src="/button/{logo}.svg" alt="" />
 				<div>
-					<button on:click={() => copyHTML(logo)}>Copy HTML</button>
-					<button on:click={() => copyMarkdown(logo)}>Copy Markdown</button>
+					<button on:click={() => copy_html(logo)}>Copy HTML</button>
+					<button on:click={() => copy_markdown(logo)}>Copy Markdown</button>
 				</div>
 			</div>
 		{/each}
@@ -127,5 +128,9 @@
 		padding-top: 5px;
 		padding-bottom: 5px;
 		height: min-content;
+	}
+
+	button:hover {
+		background-color: var(--sk-text-3);
 	}
 </style>
