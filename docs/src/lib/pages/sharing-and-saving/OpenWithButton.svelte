@@ -121,8 +121,8 @@
 	}
 
 	button {
-		background-color: var(--sk-back-5);
-		color: #fff;
+		background-color: var(--sk-back-4);
+		color: var(--sk-text-1);
 		padding-left: 10px;
 		padding-right: 10px;
 		padding-top: 5px;
@@ -131,6 +131,6 @@
 	}
 
 	button:hover {
-		background-color: var(--sk-text-3);
+		background-color: var(--sk-back-1);
 	}
 </style>
