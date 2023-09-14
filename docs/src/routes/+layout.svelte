@@ -57,7 +57,15 @@
 			<slot />
 		</article>
 	</main>
-	<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
+	<SvelteToast
+		options={{
+			reversed: true,
+			intro: { y: 192 },
+			theme: {
+				'--toastBarBackground': 'var(--sk-theme-1)'
+			}
+		}}
+	/>
 </div>
 
 <style>
