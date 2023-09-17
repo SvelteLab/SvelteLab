@@ -14,7 +14,7 @@ export async function \${}(\${}) {
 				label: 'kitEndpoint',
 				detail: 'SvelteKit Endpoint',
 				boost: 70,
-			}
+			},
 		),
 		snippetCompletion(
 			`/** @type {import('./$types').Actions} */
@@ -25,7 +25,7 @@ export const actions = {
 				label: 'kitActions',
 				detail: 'SvelteKit Actions',
 				boost: 80,
-			}
+			},
 		),
 		snippetCompletion(
 			`/** @type {import('./$types').\${} */
@@ -36,7 +36,7 @@ export async function load(\${}) {
 				label: 'kitLoad',
 				detail: 'SvelteKit Load',
 				boost: 90,
-			}
+			},
 		),
 		snippetCompletion(
 			`/** @type {import('./$types').Handle */
@@ -49,7 +49,7 @@ export async function handle({ event, resolve }) {
 				label: 'kitHandle',
 				detail: 'SvelteKit Handle',
 				boost: 40,
-			}
+			},
 		),
 		snippetCompletion(
 			`/** @type {import('./$types').ParamMatcher */
@@ -60,7 +60,7 @@ export function match(param) {
 				label: 'kitParamMatcher',
 				detail: 'SvelteKit Param Matcher',
 				boost: -50,
-			}
+			},
 		),
 		snippetCompletion(
 			`export const snapshot = {
@@ -75,7 +75,7 @@ export function match(param) {
 				label: 's-snapshots',
 				detail: 'add code for the snapshot',
 				boost: 40,
-			}
+			},
 		),
 	],
 });
@@ -97,7 +97,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-start',
 				detail: 'starting point for a svelte component',
 				boost: 100,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#if \${condition}}
@@ -107,7 +107,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-if',
 				detail: 'if block',
 				boost: 90,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#if \${condition}}
@@ -119,16 +119,13 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-if-else',
 				detail: 'if else block',
 				boost: 85,
-			}
+			},
 		),
-		snippetCompletion(
-			`<pre>{JSON.stringify(\${data}, null, 2)}</pre>`,
-			{
-				label: 's-dump',
-				detail: 'dump a variable nicely formatted',
-				boost: 83,
-			}
-		),
+		snippetCompletion(`<pre>{JSON.stringify(\${data}, null, 2)}</pre>`, {
+			label: 's-dump',
+			detail: 'dump a variable nicely formatted',
+			boost: 83,
+		}),
 		snippetCompletion(
 			`{#await \${promise}}
 	\${}
@@ -137,7 +134,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-await',
 				detail: 'await block',
 				boost: 20,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#await \${promise} then \${}}
@@ -147,7 +144,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-await-then',
 				detail: 'await block without pending state',
 				boost: 10,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#each \${array} as \${item}}
@@ -157,7 +154,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-each',
 				detail: 'each block',
 				boost: 80,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#each \${array} as \${item}}
@@ -169,7 +166,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-each-else',
 				detail: 'each else block',
 				boost: 79,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#each \${array} as \${item},(\${key})}
@@ -179,7 +176,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-each-key',
 				detail: 'each keyed block',
 				boost: 75,
-			}
+			},
 		),
 		snippetCompletion(
 			`<ul>
@@ -191,7 +188,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-each-ul',
 				detail: 'each keyed block with ul',
 				boost: 78,
-			}
+			},
 		),
 		snippetCompletion(
 			`{#key \${key}}
@@ -201,7 +198,7 @@ export const svelte_snippets = svelteLanguage.data.of({
 				label: 's-key',
 				detail: 'key block',
 				boost: 30,
-			}
+			},
 		),
 	],
 });

@@ -6,7 +6,7 @@ export function click_outside(
 	}: {
 		enabled: boolean;
 		func: (node: Node) => unknown;
-	}
+	},
 ) {
 	const handle_outside_click = (event: MouseEvent) => {
 		if (node.contains(event.target as Node)) return;

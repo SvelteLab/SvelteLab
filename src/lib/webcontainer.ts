@@ -757,4 +757,4 @@ async function get_tree(
 	return tree;
 }
 
-const IGNORE_LIST = ['.svelte-kit/generated', '.svelte-kit/types', 'node_modules'];
+const IGNORE_LIST = ['.svelte-kit/generated', 'node_modules'];
