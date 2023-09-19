@@ -50,14 +50,8 @@ export function close_all_subpath(path: string) {
 }
 
 export function rename_tab(old_path: string, new_path: string) {
-	tabs.update(($tabs) => {
-		const index = $tabs.findIndex((p) => p === old_path);
-		if (index >= 0) {
-			$tabs.splice(index, 1);
-			$tabs.push(new_path);
-		}
-		return $tabs;
-	});
+	tabs.update(($tabs) => $tabs.map((t) => t.replace(old_path, new_path)));
+	current_tab.update(($current_tab) => $current_tab.replace(old_path, new_path));
 }
 
 export function close_all_tabs() {

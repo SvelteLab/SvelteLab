@@ -698,16 +698,14 @@ export const webcontainer = {
 		}
 	},
 	/**
-	 * @param origin could be a file or folder
+	 * @param origin could be a file or folder with trailing `/`
 	 * @param destination should always a folder with trailing `/`
 	 */
 	async move_file(origin: string, destination: string) {
 		try {
-			const status = get({ subscribe }).status;
-			if (status === 'booting' || status === 'waiting') {
-				// don't move if booting or waiting
-				return;
-			}
+			const { status } = get({ subscribe });
+			if (status === 'booting') return;
+
 			const process = await webcontainer.spawn('mv', [origin, destination]);
 			process.output.pipeTo(
 				new WritableStream({
@@ -717,14 +715,18 @@ export const webcontainer = {
 				}),
 			);
 			await process.exit;
+
 			webcontainer.sync_file_system();
+			expand_path(destination.slice(0, -1));
+
 			// fixup tabs and current_tab
-			expand_path(destination);
-			const file_name = !origin.endsWith('/') ? origin.split('/').pop() : undefined;
-			tabs.update(($tabs) => $tabs.map((t) => t.replace(origin, destination + (file_name || ''))));
-			current_tab.update(($current_tab) =>
-				$current_tab.replace(origin, destination + (file_name || '')),
-			);
+			const origin_is_file = !origin.endsWith('/');
+			const file_name = origin_is_file ? origin.split('/').pop() : '';
+			if (!origin_is_file) {
+				origin = origin.split('/').slice(0, -2).join('/') + '/';
+			}
+			tabs.update(($tabs) => $tabs.map((t) => t.replace(origin, destination + file_name)));
+			current_tab.update(($current_tab) => $current_tab.replace(origin, destination + file_name));
 		} catch (e) {
 			console.error(e);
 		}
