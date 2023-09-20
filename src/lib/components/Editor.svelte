@@ -81,14 +81,9 @@
 			});
 			return;
 		}
-		webcontainer
-			.read_file(tab)
-			.then((file) => {
-				code = file;
-			})
-			.catch(() => {
-				$current_tab = '';
-			});
+		webcontainer.read_file(tab).then((file) => {
+			code = file;
+		});
 	}
 
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
