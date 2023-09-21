@@ -73,15 +73,15 @@
 		extensions = resolved_extensions;
 	});
 
-	function read_current_tab(current_tab: string, is_image: boolean) {
-		if (!current_tab) return;
+	function read_current_tab(tab: string, is_image: boolean) {
+		if (!tab) return;
 		if (is_image) {
-			webcontainer.read_file(current_tab, false).then((file) => {
+			webcontainer.read_file(tab, false).then((file) => {
 				image_bytes = file;
 			});
 			return;
 		}
-		webcontainer.read_file(current_tab).then((file) => {
+		webcontainer.read_file(tab).then((file) => {
 			code = file;
 		});
 	}

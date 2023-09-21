@@ -17,9 +17,10 @@ import {
 	is_sveltecheck_running,
 } from './stores/editor_errors_store';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
-import { close_all_tabs, open_file } from './tabs';
+import { close_all_tabs, current_tab, open_file, tabs } from './tabs';
 import { actionable } from './toast';
 import { MapOfSet, deferred_promise, version_compare } from './utils';
+import { expand_path } from './stores/expanded_paths';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -46,7 +47,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 
 const { subscribe, set } = writable({
 	webcontainer_url: '',
-	status: 'booting' as 'booting' | 'waiting' | 'server_closed',
+	status: 'booting' as 'booting' | 'waiting' | 'server_closed' | 'running',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
@@ -538,6 +539,7 @@ export const webcontainer = {
 	async sync_file_system() {
 		files_store.set(await get_tree_from_container());
 	},
+	/** truth before boot */
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
 	},
@@ -558,7 +560,7 @@ export const webcontainer = {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
 			run_svelte_check();
-			merge_state({ webcontainer_url: url });
+			merge_state({ webcontainer_url: url, status: 'running' });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
 					merge_state({ webcontainer_url: '', status: 'server_closed' });
@@ -673,9 +675,13 @@ export const webcontainer = {
 		}
 	},
 	async add_folder(path: string) {
-		await webcontainer_instance.fs.mkdir(path, {
-			recursive: true,
-		});
+		try {
+			await webcontainer_instance.fs.mkdir(path, {
+				recursive: true,
+			});
+		} catch (e) {
+			add_file_in_store(files_store, path, '', true);
+		}
 		get_subtree_from_path(path, get(files_store), true);
 		//trigger rerender
 		files_store.update((value) => value);
@@ -689,6 +695,40 @@ export const webcontainer = {
 			delete_file_from_store(files_store, path);
 		} catch (e) {
 			/* empty */
+		}
+	},
+	/**
+	 * @param origin could be a file or folder with trailing `/`
+	 * @param destination should always a folder with trailing `/`
+	 */
+	async move_file(origin: string, destination: string) {
+		try {
+			const { status } = get({ subscribe });
+			if (status === 'booting') return;
+
+			const process = await webcontainer.spawn('mv', [origin, destination]);
+			process.output.pipeTo(
+				new WritableStream({
+					write(chunk) {
+						terminal.write(chunk);
+					},
+				}),
+			);
+			await process.exit;
+
+			webcontainer.sync_file_system();
+			expand_path(destination.slice(0, -1));
+
+			// fixup tabs and current_tab
+			const origin_is_file = !origin.endsWith('/');
+			const file_name = origin_is_file ? origin.split('/').pop() : '';
+			if (!origin_is_file) {
+				origin = origin.split('/').slice(0, -2).join('/') + '/';
+			}
+			tabs.update(($tabs) => $tabs.map((t) => t.replace(origin, destination + file_name)));
+			current_tab.update(($current_tab) => $current_tab.replace(origin, destination + file_name));
+		} catch (e) {
+			console.error(e);
 		}
 	},
 	read_file,

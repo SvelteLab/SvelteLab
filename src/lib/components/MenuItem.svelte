@@ -19,7 +19,7 @@
 </script>
 
 <li role="menuitem" class="menuitem">
-	<!-- eslint-disable-next-line svelte/valid-compile -->
+	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 	<svelte:element
 		this={href ? 'a' : 'button'}
 		role="listitem"

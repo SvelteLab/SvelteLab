@@ -5,6 +5,7 @@ import { webcontainer } from '$lib/webcontainer';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import type { LayoutData } from './$types';
 
+/** gets called in root layout after navigate to handle new files */
 export async function handle_load_files(
 	data: LayoutData,
 	set_loading_github_repo: (value: boolean) => void,

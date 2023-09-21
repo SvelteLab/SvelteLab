@@ -50,7 +50,7 @@ type DropOptions = {
 	error?: (message?: string) => void;
 };
 
-export function drop(node: HTMLElement, options: DropOptions) {
+export function drop_assets(node: HTMLElement, options: DropOptions) {
 	let stored_options = options;
 	let class_remove_timeout: ReturnType<typeof setTimeout>;
 	function prevent_dragover(e: Event) {
@@ -59,13 +59,11 @@ export function drop(node: HTMLElement, options: DropOptions) {
 		node.classList.add('drag-target');
 		clearTimeout(class_remove_timeout);
 	}
-	node.addEventListener('dragover', prevent_dragover);
 	function on_dragleave() {
 		class_remove_timeout = setTimeout(() => {
 			node.classList.remove('drag-target');
 		}, 100);
 	}
-	node.addEventListener('dragleave', on_dragleave);
 	async function drop_listener(e: DragEvent) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -76,7 +74,11 @@ export function drop(node: HTMLElement, options: DropOptions) {
 				: [...(e.dataTransfer?.files ?? [])]) ?? [];
 		handle_files(files, stored_options);
 	}
+
+	node.addEventListener('dragover', prevent_dragover);
+	node.addEventListener('dragleave', on_dragleave);
 	node.addEventListener('drop', drop_listener);
+
 	return {
 		destroy() {
 			node.removeEventListener('dragover', prevent_dragover);
