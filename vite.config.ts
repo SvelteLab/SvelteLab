@@ -59,6 +59,9 @@ export default defineConfig({
 	resolve: {
 		dedupe: ['@codemirror/state'],
 	},
+	define: {
+		'process.env.NODE_ENV': '"production"',
+	},
 	optimizeDeps: {
 		exclude: [...fs.readdirSync('./src/lib/lsp/svelte')],
 		needsInterop: [...fs.readdirSync('./src/lib/lsp/svelte')],
