@@ -865,7 +865,6 @@ async function get_tree(
 	dir: DirEnt<string>[],
 	path: string,
 	as_string: boolean,
-	as_string: boolean,
 ): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
