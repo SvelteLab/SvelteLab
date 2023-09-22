@@ -101,7 +101,7 @@ export const listening_for_fs = {
 
 type FSChangedCallback = (path: string) => void;
 
-type FSChangedEvent = 'creation' | 'deletion';
+type FSChangedEvent = 'creation' | 'deletion' | 'modification';
 
 const fs_changes_callbacks = new MapOfSet<FSChangedEvent, Set<FSChangedCallback>>();
 
@@ -124,7 +124,7 @@ async function listen_for_files_changes() {
 				const matches = data.match(/(?<command>(?:unlink|add)):(?<route>.*)/);
 				if (matches) {
 					const { command, route } = matches.groups as {
-						command: 'unlink' | 'add';
+						command: 'unlink' | 'add' | 'change';
 						route: string;
 					};
 					const path = `./${route}`;
@@ -143,6 +143,13 @@ async function listen_for_files_changes() {
 						} catch (e) {
 							/* empty */
 						}
+					} else if (command === 'change') {
+						fs_changes_callbacks.get('modification').forEach((callbacks) => {
+							callbacks(path);
+						});
+						read_file(path).then((contents) => {
+							add_file_in_store(files_store, path, contents);
+						});
 					}
 				}
 			},

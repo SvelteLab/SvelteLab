@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { WorkerRPC } from '$lib/lsp/svelte/index.js';
+	import { WorkerRPC } from '$lib/lsp/svelte';
 	import SvelteLanguageWorkerURL from '$lib/workers/svelte-language-server?worker&url';
 	import TypescriptLanguageWorkerURL from '$lib/workers/typescript-language-server?worker&url';
 
@@ -12,6 +12,7 @@
 		'mjs',
 		'ts',
 		'css',
+		'postcss',
 		'json',
 		'md',
 	] as const;
@@ -25,6 +26,7 @@
 		mjs: 'javascript',
 		ts: 'typescript',
 		css: 'css',
+		postcss: 'css',
 		json: 'json',
 		md: 'markdown',
 	};
@@ -45,8 +47,19 @@
 	let typescript_language_worker: Worker;
 
 	let svelte_transport: WorkerRPC;
-
 	let ts_transport: WorkerRPC;
+
+	const throttle = <T>(func: (...args: T[]) => void, wait: number) => {
+		let timeout: ReturnType<typeof setTimeout> | undefined;
+
+		return (...args: T[]) => {
+			if (timeout) return;
+			timeout = setTimeout(() => {
+				func(...args);
+				timeout = undefined;
+			}, wait);
+		};
+	};
 
 	const create_language_servers = () => {
 		const setup = () => {
@@ -64,14 +77,14 @@
 				rootUri: 'file:///',
 				workspaceFolders: null,
 				documentUri: '',
-				languageId: '',
+				languageId: 'svelte',
 				allowHTMLContent: true,
 			} as never);
 			ts_transport = new WorkerRPC(typescript_language_worker, {
 				rootUri: 'file:///',
 				workspaceFolders: null,
 				documentUri: '',
-				languageId: '',
+				languageId: 'typescript',
 				allowHTMLContent: true,
 			} as never);
 
@@ -117,7 +130,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import type { Extension } from '@codemirror/state';
 	import { languageServerWithTransport } from 'codemirror-languageserver';
-	import { onMount, setContext } from 'svelte';
+	import { onDestroy, onMount, setContext } from 'svelte';
 	import { derived, writable } from 'svelte/store';
 	import VoidEditor from './VoidEditor.svelte';
 
@@ -135,26 +148,44 @@
 	// Lets us know when the language client is ready and all initialization procedures have been completed
 	const setup_completed = deferred_promise();
 
+	const to_file_url = (path: string) => {
+		if (path.startsWith('file://')) {
+			return path;
+		} else if (path.startsWith('.') || path.startsWith('..')) {
+			return `${path.replace(/\.\.?\//, 'file:///')}`;
+		} else if (path.startsWith('/')) {
+			return `file://${path}`;
+		}
+		return `file:///${path}`;
+	};
+
 	// Store the current document uri formatted as `file:///path/to/file.ext`
-	const document_uri = derived(
-		current_tab,
-		($current_tab) => `${$current_tab.replace('./', 'file:///')}`,
-	);
+	const document_uri = derived(current_tab, ($current_tab) => to_file_url($current_tab));
 
 	let resolved = false;
 
+	const get_current_lang = ($document_uri: string) => {
+		const current_lang = $document_uri.split('.').at(-1) ?? '';
+		const lang = is_supported_lang(current_lang) ? lang_map[current_lang] : undefined;
+		return lang;
+	};
+
+	/** Sends the 'setup' RPC message to the language servers */
 	const setup = async (
 		project_type: 'fresh' | 'existing',
 		configs_or_files: Record<string, string>,
 	) => {
 		if (project_type === 'fresh') {
+			await svelte_transport.addFiles(configs_or_files);
+			await ts_transport.addFiles(configs_or_files);
+
 			await svelte_transport.setup(configs_or_files);
 			await ts_transport.setup(configs_or_files);
 		} else {
-			await svelte_transport.setup(configs_or_files);
-			await ts_transport.setup(configs_or_files);
-			// await svelte_transport.setup({});
-			// await ts_transport.setup({});
+			await svelte_transport.setup({});
+			await ts_transport.setup({});
+			await svelte_transport.addFiles(configs_or_files);
+			await ts_transport.addFiles(configs_or_files);
 		}
 		setup_completed.resolve(true);
 		resolved = true;
@@ -163,20 +194,32 @@
 	const get_language_client = () => {
 		let is_being_executed = false;
 
-		const create_new_client = () => {
+		const create_new_client = ($document_uri: string) => {
 			const current_lang = $document_uri.split('.').at(-1) ?? '';
-			const lang = is_supported_lang(current_lang) ? lang_map[current_lang] : undefined;
-			if (!lang || (lang !== 'typescript' &&lang !== 'javascript ' && lang !== 'svelte')) return;
+			const lang = get_current_lang($document_uri);
+
+			if (!lang || (lang !== 'typescript' && lang !== 'javascript' && lang !== 'svelte')) {
+				update_extensions_with_client([]);
+				return;
+			}
 			const transport =
-				current_lang === 'ts' || current_lang === 'js' ? ts_transport : svelte_transport;
+				lang === 'javascript' || lang === 'typescript' ? ts_transport : svelte_transport;
+			console.log({ transport, lang, current_lang });
 
 			// Create a new language client transport for the current tab if one doesn't exist
 			const client = languageServerWithTransport({
 				transport: transport as never,
 				rootUri: 'file:///',
-				workspaceFolders: [{ uri: 'file:///', name: '' }],
+				workspaceFolders: null,
 				documentUri: $document_uri,
-				languageId: lang ?? '',
+				languageId:
+					lang === 'javascript'
+						? 'typescript'
+						: lang === 'typescript'
+						? 'typescript'
+						: lang === 'svelte'
+						? 'svelte'
+						: '',
 				allowHTMLContent: true,
 				client: transport.client(),
 				autoClose: false,
@@ -190,7 +233,7 @@
 			current_language_transport = client;
 		};
 
-		const get_existing_client = () => {
+		const get_existing_client = ($document_uri: string) => {
 			const client = lang_clients.get($document_uri);
 
 			// If the current language client is not the same as the one for the current tab, swap them out
@@ -201,24 +244,20 @@
 			}
 		};
 
-		return () => {
-			try {
-				if (is_being_executed) return;
-				is_being_executed = true;
+		return ($document_uri: string) => {
+			if (is_being_executed) return console.log('already being executed');
+			is_being_executed = true;
 
-				if (!resolved) {
-					is_being_executed = false;
-					return;
-				}
-
-				if (lang_clients.has($document_uri)) {
-					get_existing_client();
-				} else {
-					create_new_client();
-				}
-			} finally {
-				is_being_executed = false;
+			if (!resolved) {
+				return;
 			}
+
+			if (lang_clients.has($document_uri)) {
+				get_existing_client($document_uri);
+			} else {
+				create_new_client($document_uri);
+			}
+			is_being_executed = false;
 		};
 	};
 
@@ -228,37 +267,85 @@
 
 		let is_initialized = false;
 
+		const has_svelte_kit_dotfiles = (files: Record<string, string>) => {
+			const keys = Object.keys(files);
+
+			return (
+				keys.filter((key) => key.includes('.svelte-kit/types')).length >= 1 &&
+				keys.some(
+					(file) =>
+						file.includes('.svelte-kit/') &&
+						(file.includes('tsconfig.json') ||
+							file.includes('ambient.d.ts') ||
+							file.includes('types')),
+				)
+			);
+		};
+
+		const listen_for_type_changes = webcontainer.on_fs_change('modification', throttle(async (path) => {
+			if (path.includes('.svelte-kit/types')) {
+				const file = await webcontainer.read_file(path, true);
+				svelte_transport.addFiles({[to_absolute_path(path)]: file});
+			}
+		}, 250))
+
 		const listen_for_configs = webcontainer.on_fs_change('creation', async (path) => {
+			if (has_svelte_kit_dotfiles(configs)) {
+				if (!is_initialized) {
+					is_initialized = true;
+
+					configs[to_absolute_path(path)] = await webcontainer.read_file(path, true);
+					if (!configs['/tsconfig.json'] || !configs['/jsconfig.json']) {
+						configs['/tsconfig.json'] = `{
+						"extends": "./.svelte-kit/tsconfig.json",
+						"compilerOptions": {
+							"allowJs": true,
+							"checkJs": true,
+							"esModuleInterop": true,
+							"forceConsistentCasingInFileNames": true,
+							"resolveJsonModule": true,
+							"skipLibCheck": true,
+							"sourceMap": true,
+							"strict": true
+						}
+						// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
+						//
+						// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+						// from the referenced tsconfig.json - TypeScript does not merge them in
+					}`;
+					}
+
+					await setup('fresh', configs);
+				} else {
+					const temp = { [to_absolute_path(path)]: await webcontainer.read_file(path, true) };
+					await svelte_transport.addFiles(temp);
+				}
+				return;
+			}
+
 			if (path === './.svelte-kit/tsconfig.json') {
 				await webcontainer.read_file(path, true).then(async (file) => {
-					if (!is_initialized) {
-						if (!is_initialized) is_initialized = true;
-
-						configs[to_absolute_path(path)] = file;
-
-						await setup('fresh', configs);
-					} else {
-						const temp = { [to_absolute_path(path)]: file };
-						await svelte_transport.addFiles(temp);
-					}
-					return;
+					configs[to_absolute_path(path)] = file;
 				});
 			} else if (
 				path === './tsconfig.json' ||
 				path === './jsconfig.json' ||
 				path === './svelte.config.js' ||
 				path === './.svelte-kit/ambient.d.ts' ||
-				path.startsWith('./.svelte-kit/types/')
+				path.startsWith('./.svelte-kit/')
 			) {
+				console.log(path, 'created', configs);
 				await webcontainer.read_file(path, true).then((file) => {
 					configs[to_absolute_path(path)] = file;
 				});
 			}
 		});
-		return listen_for_configs;
+		return {listen_for_configs, listen_for_type_changes};
 	}
 
-	onMount(() => {
+	let handle_config_changes: (() => void) | undefined;
+
+	onMount(async () => {
 		const worker_handlers = create_language_servers();
 
 		const workers = worker_handlers.setup();
@@ -266,27 +353,26 @@
 		({ svelte_transport, ts_transport } = workers);
 
 		console.count('calls');
-		const handle_config_changes = webcontainer.on_init(async () => {
+		handle_config_changes = webcontainer.on_init(async () => {
 			const tree = await webcontainer.get_tree_from_container(true);
 			const files = webcontainer.walk_tree_and_collect(tree);
 
 			await svelte_transport.addFiles(files);
-
 			await webcontainer.read_package_json().then(async (json) => {
-				await svelte_transport.fetchTypes(json);
-				await ts_transport.fetchTypes(json);
+				svelte_transport.fetchTypes(json);
 				if (Object.keys(files).some((file) => file.includes('.svelte-kit/'))) {
 					await setup('existing', files);
 				} else {
 					await ts_transport.addFiles(files);
-					await setup_fresh_project();
+
+					setup_fresh_project();
 				}
 			});
 		});
+	});
 
-		return () => {
-			handle_config_changes();
-		};
+	onDestroy(() => {
+		if (typeof handle_config_changes === 'function') handle_config_changes();
 	});
 
 	setContext(LANGUAGE_CLIENT_CONTEXT, {

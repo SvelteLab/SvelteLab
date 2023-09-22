@@ -31,6 +31,7 @@
 <div class="grid">
 	<Header />
 	<main id="main">
+		<LanguageClientProvider>
 		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
 			<Pane minSize={min_size}>
 				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
@@ -38,9 +39,7 @@
 					<Pane minSize={min_size}>
 						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
 							<Pane minSize={min_size} class="editor-pane">
-								<LanguageClientProvider>
 								<svelte:component this={Editor} />
-								</LanguageClientProvider>
 							</Pane>
 							<Pane bind:size={$layout_store.terminal}>
 								<svelte:component this={Console} bind:update_height />
@@ -55,13 +54,14 @@
 						<Iframe />
 					</Pane>
 					{#if $is_intro_open}
-						<Pane minSize={min_size}>
-							<Intro />
-						</Pane>
+					<Pane minSize={min_size}>
+						<Intro />
+					</Pane>
 					{/if}
 				</Splitpanes>
 			</Pane>
 		</Splitpanes>
+	</LanguageClientProvider>
 	</main>
 </div>
 

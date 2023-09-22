@@ -88,6 +88,9 @@ declare class WorkerRPC extends PostMessageWorkerTransport {
      * @param worker The path to the worker file.
      * @param options The options to pass to the Language Client.
      */
+    constructor(worker: string, options: Omit<LanguageServerClientOptions, "transport"> & {
+        transport: WorkerRPC;
+    });
     constructor(worker: string, options: Omit<LanguageServerClientOptions, "transport">);
     client: () => LanguageServerClient;
     dispose(): void;

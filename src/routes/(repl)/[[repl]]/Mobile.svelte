@@ -35,6 +35,7 @@
 <div class="container">
 	<Header mobile />
 	<main id="main">
+		<LanguageClientProvider>
 		<RawDialog
 			bind:isOpen={$showing_files}
 			noCloseButton
@@ -59,16 +60,15 @@
 			<FileActions mobile />
 		</RawDialog>
 		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
-			<LanguageClientProvider>
 				<svelte:component this={Editor} />
-			</LanguageClientProvider>
-		</div>
-		<div class:hidden={$mobile_showing !== 'iframe'}>
+			</div>
+			<div class:hidden={$mobile_showing !== 'iframe'}>
 			<Iframe />
 		</div>
 		<div class:hidden={$mobile_showing !== 'terminal'}>
 			<svelte:component this={Console} bind:update_height />
 		</div>
+	</LanguageClientProvider>
 	</main>
 	<MobileFooter />
 </div>

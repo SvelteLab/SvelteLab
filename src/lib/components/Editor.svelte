@@ -21,7 +21,7 @@
 	import type { SupportedLanguage } from './LanguageClientProvider.svelte';
 	import type { Readable, Writable } from 'svelte/store';
 
-	const { extensions, get_language_client, document_uri }: {document_uri: Readable<string>, extensions: Writable<Extension[]>, get_language_client: (uri: string) => void} = getContext(Symbol.for('svelte_language_worker'))
+	const { extensions, get_language_client, document_uri: document_uri_store }: {document_uri: Readable<string>, extensions: Writable<Extension[]>, get_language_client: (uri: string) => void} = getContext(Symbol.for('svelte_language_worker'))
 
 	const svelte_syntax_style = HighlightStyle.define([
 		{ tag: tags.comment, color: 'var(--sk-code-comment)' },
@@ -44,11 +44,13 @@
 		mjs: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript()),
 		ts: () => import('@codemirror/lang-javascript').then((lang) => lang.javascript({typescript: true})),
 		css: () => import('@codemirror/lang-css').then((lang) => lang.css()),
+		postcss: () => import('@codemirror/lang-css').then((lang) => lang.css()),
 		json: () => import('@codemirror/lang-json').then((lang) => lang.json()),
 		md: () => import('@codemirror/lang-markdown').then((lang) => lang.markdown()),
 	}
 
 
+	let document_uri = $document_uri_store;
 	let code: string;
 	let image_bytes: Uint8Array;
 
@@ -58,7 +60,7 @@
 
 
 	async function get_extensions(config: typeof $editor_config) {
-		const extensions = [js_snippets, svelte_snippets, abbreviationTracker()];
+		const extensions = [svelte_snippets, abbreviationTracker()];
 		if (config.vim) {
 			if (!vim) {
 				vim = await import('@replit/codemirror-vim').then((vim_import) => vim_import.vim);
@@ -85,13 +87,16 @@
 	function read_current_tab(current_tab: string, is_image: boolean) {
 		if (!current_tab) return;
 		if (is_image) {
-			webcontainer.read_file(current_tab, false).then((file) => {
+			webcontainer.read_file(`.${new URL(current_tab).pathname}`, false).then((file) => {
 				image_bytes = file;
 			});
 		}
-		webcontainer.read_file(current_tab).then((file) => {
-			code = file;
-			get_language_client($document_uri);
+		webcontainer.read_file(`.${new URL(current_tab).pathname}`).then((file) => {
+			document_uri = current_tab;
+			get_language_client(current_tab);
+			queueMicrotask(()=>{
+				code = file;	
+			})
 
 		});
 	}
@@ -99,13 +104,13 @@
 	$: current_lang = $current_tab.split('.').at(-1) ?? 'svelte';
 	$: lang = current_lang in langs ? current_lang : undefined;
 	$: is_image = ['png', 'bmp', 'jpg', 'jpeg', 'gif', 'webp'].includes(current_lang);
-
+	
 	on_command('format-current', () => {
 		read_current_tab($current_tab, is_image);
 	});
-
+	
 	onMount(() => {
-		const current_tab_unsub = current_tab.subscribe((tab) => {
+		const current_tab_unsub = document_uri_store.subscribe((tab) => {
 			read_current_tab(tab, is_image);
 		})
 
@@ -137,6 +142,7 @@
 				webcontainer.update_file($current_tab, new_code);
 				code = new_code;
 			}}
+			
 			use:codemirror={{
 				lang,
 				langMap: langs,
@@ -144,7 +150,7 @@
 				tabSize: 3,
 				useTabs: true,
 				value: code,
-				documentId: $document_uri ,
+				documentId: document_uri ,
 				extensions: $extensions,
 				cursorPos: cursor,
 				setup: 'basic',
