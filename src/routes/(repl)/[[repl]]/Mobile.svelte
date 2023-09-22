@@ -36,39 +36,39 @@
 	<Header mobile />
 	<main id="main">
 		<LanguageClientProvider>
-		<RawDialog
-			bind:isOpen={$showing_files}
-			noCloseButton
-			includedTrigger={false}
-			dialogIn={fly}
-			dialogOut={fly}
-			dialogInOptions={{ x: -500 }}
-			dialogOutOptions={{ x: -500 }}
-			autofocus={false}
-			--as-dialog-padding="0"
-			--as-dialog-top="calc(50% + 2.6rem)"
-			--as-dialog-overflow="visible"
-			--as-dialog-left="0"
-			--as-dialog-right="auto"
-			--as-dialog-transform="translateY(-50%)"
-			--as-dialog-border-radius="0"
-			--as-dialog-width="calc(100% - 4em)"
-			--as-dialog-max-width="800px"
-			--as-dialog-height="100%"
-			--as-dialog-max-height="calc(100% - 2em)"
-		>
-			<FileActions mobile />
-		</RawDialog>
-		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
+			<RawDialog
+				bind:isOpen={$showing_files}
+				noCloseButton
+				includedTrigger={false}
+				dialogIn={fly}
+				dialogOut={fly}
+				dialogInOptions={{ x: -500 }}
+				dialogOutOptions={{ x: -500 }}
+				autofocus={false}
+				--as-dialog-padding="0"
+				--as-dialog-top="calc(50% + 2.6rem)"
+				--as-dialog-overflow="visible"
+				--as-dialog-left="0"
+				--as-dialog-right="auto"
+				--as-dialog-transform="translateY(-50%)"
+				--as-dialog-border-radius="0"
+				--as-dialog-width="calc(100% - 4em)"
+				--as-dialog-max-width="800px"
+				--as-dialog-height="100%"
+				--as-dialog-max-height="calc(100% - 2em)"
+			>
+				<FileActions mobile />
+			</RawDialog>
+			<div class="editor" class:hidden={$mobile_showing !== 'code'}>
 				<svelte:component this={Editor} />
 			</div>
 			<div class:hidden={$mobile_showing !== 'iframe'}>
-			<Iframe />
-		</div>
-		<div class:hidden={$mobile_showing !== 'terminal'}>
-			<svelte:component this={Console} bind:update_height />
-		</div>
-	</LanguageClientProvider>
+				<Iframe />
+			</div>
+			<div class:hidden={$mobile_showing !== 'terminal'}>
+				<svelte:component this={Console} bind:update_height />
+			</div>
+		</LanguageClientProvider>
 	</main>
 	<MobileFooter />
 </div>

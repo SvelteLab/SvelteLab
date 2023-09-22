@@ -12,5 +12,9 @@ export function get_cookie(name: string): string | undefined {
 }
 
 export function set_cookie(name: string, value: string) {
-	document.cookie = `${name}=${value}`;
+	const now = new Date();
+	const expiration = new Date();
+	expiration.setTime(now.getTime() + 1000 * 3600 * 24 * 365);
+	const expires = expiration.toUTCString();
+	document.cookie = `${name}=${value};expires=${expires}`;
 }

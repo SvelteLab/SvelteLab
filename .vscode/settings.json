@@ -20,8 +20,5 @@
 	},
 	"cSpell.ignoreWords": ["lezer", "neocodemirror", "publint", "puruvj", "zerodevx"],
 	"npm.exclude": ["**/src/lib/**/*"],
-	"githubPullRequests.ignoredPullRequestBranches": ["master"],
-	"[svelte]": {
-		"editor.formatOnSaveMode": "modificationsIfAvailable"
-	}
+	"githubPullRequests.ignoredPullRequestBranches": ["master"]
 }

@@ -19,10 +19,10 @@
 </script>
 
 <li role="menuitem" class="menuitem">
-	<!-- eslint-disable-next-line svelte/valid-compile -->
+	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 	<svelte:element
-		role="listitem"
 		this={href ? 'a' : 'button'}
+		role="listitem"
 		{href}
 		class="item"
 		{...$$restProps}

@@ -89,3 +89,17 @@ export class MapOfSet<K, V extends Set<TSet>, TSet = unknown> extends Map<K, V> 
 		return super.get(key)!;
 	}
 }
+
+export function base64_to_ui8a(base64: string) {
+	const bin_string = atob(base64);
+	const arr = [...bin_string].map((letter) => {
+		return letter.codePointAt(0)!;
+	});
+	return Uint8Array.from(arr);
+}
+
+const text_decoder = new TextDecoder();
+
+export function ui8a_to_string(ui8a: Uint8Array) {
+	return text_decoder.decode(ui8a);
+}

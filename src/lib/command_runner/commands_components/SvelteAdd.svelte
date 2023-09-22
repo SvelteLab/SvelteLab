@@ -52,13 +52,11 @@
 						write(chunk) {
 							terminal.write(chunk);
 						},
-					})
+					}),
 				);
 				await process.exit;
 				toast.pop(progress_toast);
-				terminal.writeln(
-					'Finished svelte-add...you might need to restart your server for everything to properly work'
-				);
+				terminal.writeln('➕✅ Finished svelte-add! You might need to restart your dev server...');
 			});
 	}}
 >

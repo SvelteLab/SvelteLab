@@ -11,7 +11,7 @@
 	let route = '/';
 	let old_to_add = null as null | string;
 	let input: HTMLInputElement;
-	let is_ts = false;
+	let is_ts = webcontainer.check_file_exist('./tsconfig.json');
 
 	const creatable_file = {
 		'+page.svelte': {
@@ -172,7 +172,7 @@ export const GET: RequestHandler = async () => {
 </script>
 
 <form
-	on:submit|preventDefault={async (e) => {
+	on:submit|preventDefault={async () => {
 		const path = `src/routes/${route}`.split('/').filter(Boolean);
 		let prefix = '/';
 		for (const dir of path) {

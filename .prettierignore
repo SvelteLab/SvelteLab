@@ -13,3 +13,4 @@ package-lock.json
 yarn.lock
 /src/lib/language_servers/*
 /src/lib/lsp/*
+/pb_migrations

@@ -17,9 +17,10 @@ import {
 	is_sveltecheck_running,
 } from './stores/editor_errors_store';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
-import { close_all_tabs, open_file } from './tabs';
+import { close_all_tabs, current_tab, open_file, tabs } from './tabs';
 import { actionable } from './toast';
 import { MapOfSet, deferred_promise, version_compare } from './utils';
+import { expand_path } from './stores/expanded_paths';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -46,7 +47,7 @@ let webcontainer_instance = new Proxy<WebContainer>(
 
 const { subscribe, set } = writable({
 	webcontainer_url: '',
-	status: 'booting' as 'booting' | 'waiting' | 'server_closed',
+	status: 'booting' as 'booting' | 'waiting' | 'server_closed' | 'running',
 	iframe_path: '/',
 	process_writer: null as WritableStreamDefaultWriter<string> | null,
 	running_process: null as WebContainerProcess | null,
@@ -336,6 +337,80 @@ async function spawn_process_and_show_output(cmd: string) {
 	return process;
 }
 
+/**
+ * I went trough the sveltekit codebase and since the creation of the file
+ * there are only those two instances of of this function. By listing them all we should be set
+ * for older projects and also if that function ever changes we would not replace that anymore.
+ */
+const broken_functions_map = new Map([
+	[
+		`function fix_stack_trace(error) {
+		return error.stack ? vite.ssrRewriteStacktrace(error.stack) : error.stack;
+	}`,
+		`function fix_stack_trace(error) {
+		try{
+			return error.stack ? vite.ssrRewriteStacktrace(error.stack) : error.stack;
+		}catch(_e){
+			return error.stack;
+		}
+	}`,
+	],
+	[
+		`function fix_stack_trace(stack) {
+		return stack ? vite.ssrRewriteStacktrace(stack) : stack;
+	}`,
+		`function fix_stack_trace(stack) {
+		try{
+			return stack ? vite.ssrRewriteStacktrace(stack) : stack;
+		}catch(_e){
+			return stack;
+		}
+	}`,
+	],
+]);
+
+/**
+ * There's a weird bug right now where the function to fix stack traces in the vite dev
+ * server for sveltekit get's called twice causing the dev server to crash if there's an error
+ * on the server. To fix this we momentarily replace that node module file and we try/catch
+ * the call to fix_stack_trace. Let's hope in the future we get to delete this weird hack
+ */
+async function fix_vite_ssr_rewrite() {
+	const file_to_fix = './node_modules/@sveltejs/kit/src/exports/vite/dev/index.js';
+	try {
+		let sveltekit_vite_dev = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
+		for (const [old, replacement] of broken_functions_map.entries()) {
+			sveltekit_vite_dev = sveltekit_vite_dev.replace(old, replacement);
+		}
+		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_vite_dev);
+	} catch (_) {
+		/** empty */
+	}
+}
+/**
+ * Inject a window.parent.postMessage in the navigate function of the sveltekit client to get
+ * a message when sveltekit navigate inside the iframe. This works for forms, links and goto.
+ */
+async function inject_postmessage() {
+	// weird regex i know but this basically get the navigated function find the if(started) check
+	// inside there capturing the value in the parenthesis of stores.navigating.set
+	const navigate_regex =
+		/(function navigate\((?:.|\n|\n\r)*?\(started\)(?:.|\n|\n\r)*?)(?:stores\.navigating.set\(((?:.|\n|\n\r)*?)\))/m;
+	const file_to_fix = './node_modules/@sveltejs/kit/src/runtime/client/client.js';
+	try {
+		// read the client file
+		let sveltekit_runtime_client = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
+		// replace the regex injecting a window.parent.postMessage before setting the navigating store
+		sveltekit_runtime_client = sveltekit_runtime_client.replace(
+			navigate_regex,
+			"$1\nwindow?.parent?.postMessage?.(JSON.stringify($2),'*');\nstores.navigating.set($2)",
+		);
+		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_runtime_client);
+	} catch (_) {
+		/** empty */
+	}
+}
+
 async function run_svelte_check() {
 	if (is_sveltecheck_running) return;
 	const check_version_process = await webcontainer_instance.spawn('npm', ['list']);
@@ -460,6 +535,9 @@ async function read_file(path: string, as_string = true) {
 	}
 }
 
+function starts_with_dot_slash(str: string): str is `./${string}` {
+	return str.startsWith('./');
+}
 /**
  * The actual webcontainer store with useful methods
  */
@@ -468,6 +546,7 @@ export const webcontainer = {
 	async sync_file_system() {
 		files_store.set(await get_tree_from_container());
 	},
+	/** truth before boot */
 	async set_file_system(files: FileSystemTree) {
 		files_store.set(files);
 	},
@@ -488,7 +567,7 @@ export const webcontainer = {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
 			run_svelte_check();
-			merge_state({ webcontainer_url: url });
+			merge_state({ webcontainer_url: url, status: 'running' });
 			webcontainer_instance.on('port', (closed_port: number) => {
 				if (port === closed_port) {
 					merge_state({ webcontainer_url: '', status: 'server_closed' });
@@ -506,9 +585,16 @@ export const webcontainer = {
 		// avoid ghost files from previous projects
 		close_all_tabs();
 		await tick();
-		// we do this here to avoid opening a non existing file
-		if (does_file_exist(files, './src/routes/+page.svelte')) {
-			open_file('./src/routes/+page.svelte');
+		const search_params = new URLSearchParams(window.location.search);
+		const files_to_open_string = search_params.get('files') ?? './src/routes/+page.svelte';
+		const files_to_open = files_to_open_string.split(',');
+
+		for (const file_to_open of files_to_open) {
+			if (!starts_with_dot_slash(file_to_open)) continue;
+			// we do this here to avoid opening a non existing file
+			if (does_file_exist(files, file_to_open)) {
+				open_file(file_to_open);
+			}
 		}
 		init_callbacks.forEach((callback) => {
 			if (typeof callback === 'function') {
@@ -520,6 +606,8 @@ export const webcontainer = {
 		launch_jsh();
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
+		await fix_vite_ssr_rewrite();
+		await inject_postmessage();
 		webcontainer.run_dev_server();
 	},
 	/**
@@ -594,9 +682,13 @@ export const webcontainer = {
 		}
 	},
 	async add_folder(path: string) {
-		await webcontainer_instance.fs.mkdir(path, {
-			recursive: true,
-		});
+		try {
+			await webcontainer_instance.fs.mkdir(path, {
+				recursive: true,
+			});
+		} catch (e) {
+			add_file_in_store(files_store, path, '', true);
+		}
 		get_subtree_from_path(path, get(files_store), true);
 		//trigger rerender
 		files_store.update((value) => value);
@@ -610,6 +702,40 @@ export const webcontainer = {
 			delete_file_from_store(files_store, path);
 		} catch (e) {
 			/* empty */
+		}
+	},
+	/**
+	 * @param origin could be a file or folder with trailing `/`
+	 * @param destination should always a folder with trailing `/`
+	 */
+	async move_file(origin: string, destination: string) {
+		try {
+			const { status } = get({ subscribe });
+			if (status === 'booting') return;
+
+			const process = await webcontainer.spawn('mv', [origin, destination]);
+			process.output.pipeTo(
+				new WritableStream({
+					write(chunk) {
+						terminal.write(chunk);
+					},
+				}),
+			);
+			await process.exit;
+
+			webcontainer.sync_file_system();
+			expand_path(destination.slice(0, -1));
+
+			// fixup tabs and current_tab
+			const origin_is_file = !origin.endsWith('/');
+			const file_name = origin_is_file ? origin.split('/').pop() : '';
+			if (!origin_is_file) {
+				origin = origin.split('/').slice(0, -2).join('/') + '/';
+			}
+			tabs.update(($tabs) => $tabs.map((t) => t.replace(origin, destination + file_name)));
+			current_tab.update(($current_tab) => $current_tab.replace(origin, destination + file_name));
+		} catch (e) {
+			console.error(e);
 		}
 	},
 	read_file,
@@ -671,6 +797,9 @@ export const webcontainer = {
 		return () => {
 			fs_changes_callbacks.get(event).delete(cb);
 		};
+	},
+	check_file_exist(path: `./${string}`) {
+		return does_file_exist(get(files), path);
 	},
 	async get_directory_names(path: string, recursive = false) {
 		const walk = async (path: string, recursive: boolean, result: string[]): Promise<void> => {
@@ -735,6 +864,7 @@ const decoder = new TextDecoder();
 async function get_tree(
 	dir: DirEnt<string>[],
 	path: string,
+	as_string: boolean,
 	as_string: boolean,
 ): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};

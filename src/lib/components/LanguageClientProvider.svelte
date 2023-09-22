@@ -49,7 +49,7 @@
 	let svelte_transport: WorkerRPC;
 	let ts_transport: WorkerRPC;
 
-	const throttle = <T>(func: (...args: T[]) => void, wait: number) => {
+	const throttle = <T,>(func: (...args: T[]) => void, wait: number) => {
 		let timeout: ReturnType<typeof setTimeout> | undefined;
 
 		return (...args: T[]) => {
@@ -282,12 +282,15 @@
 			);
 		};
 
-		const listen_for_type_changes = webcontainer.on_fs_change('modification', throttle(async (path) => {
-			if (path.includes('.svelte-kit/types')) {
-				const file = await webcontainer.read_file(path, true);
-				svelte_transport.addFiles({[to_absolute_path(path)]: file});
-			}
-		}, 250))
+		const listen_for_type_changes = webcontainer.on_fs_change(
+			'modification',
+			throttle(async (path) => {
+				if (path.includes('.svelte-kit/types')) {
+					const file = await webcontainer.read_file(path, true);
+					svelte_transport.addFiles({ [to_absolute_path(path)]: file });
+				}
+			}, 250),
+		);
 
 		const listen_for_configs = webcontainer.on_fs_change('creation', async (path) => {
 			if (has_svelte_kit_dotfiles(configs)) {
@@ -340,7 +343,7 @@
 				});
 			}
 		});
-		return {listen_for_configs, listen_for_type_changes};
+		return { listen_for_configs, listen_for_type_changes };
 	}
 
 	let handle_config_changes: (() => void) | undefined;

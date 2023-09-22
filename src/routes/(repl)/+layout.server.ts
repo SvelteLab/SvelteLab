@@ -6,6 +6,7 @@ import { redirect } from '@sveltejs/kit';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
 import type { LayoutServerLoad } from './$types';
+import { base64_to_ui8a, ui8a_to_string } from '$lib/utils';
 
 export const ssr = false;
 
@@ -36,7 +37,7 @@ async function fetch_github_repo(base_url: string, is_dir = true) {
 		} else if (files.type === 'file') {
 			retval[files.name] = {
 				file: {
-					contents: atob(await fetch_github_repo(files.url, false)),
+					contents: ui8a_to_string(base64_to_ui8a(await fetch_github_repo(files.url, false))),
 				},
 			};
 		}
@@ -47,15 +48,15 @@ async function fetch_github_repo(base_url: string, is_dir = true) {
 export const load: LayoutServerLoad = async ({
 	params,
 	locals,
-	url: { searchParams },
+	url: { searchParams: search_params },
 	cookies,
 }) => {
 	const { repl } = params;
-	const provider = searchParams.get('provider');
-	const owner = searchParams.get('owner');
-	const repo = searchParams.get('repo');
-	const branch = searchParams.get('branch');
-	const path = searchParams.get('path');
+	const provider = search_params.get('provider');
+	const owner = search_params.get('owner');
+	const repo = search_params.get('repo');
+	const branch = search_params.get('branch');
+	const path = search_params.get('path');
 
 	// if there's an owner and a repo and there isn't a repl id we
 	// are trying to load files from github
@@ -74,9 +75,9 @@ export const load: LayoutServerLoad = async ({
 
 	// if there's a ?login query param we are back from the login and we can try load files
 	// from the local storage so don't bother getting them from pocketbase
-	const from_login = searchParams.get('login') !== null;
+	const from_login = search_params.get('login') !== null;
 	const saved_default_template = cookies.get(PUBLIC_TEMPLATE_COOKIE_NAME) ?? 'basic';
-	const template = searchParams.get('t') ?? saved_default_template;
+	const template = search_params.get('t') ?? saved_default_template;
 	const default_files =
 		default_project_files[template] ?? default_project_files[saved_default_template];
 	let files: FileSystemTree = (default_files as DirectoryNode).directory;
