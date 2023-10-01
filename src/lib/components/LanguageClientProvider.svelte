@@ -147,10 +147,11 @@
 	let setup_complete = writable(false);
 	// Lets us know when the language client is ready and all initialization procedures have been completed
 	const setup_completed = deferred_promise();
-	$: if (resolved === true) {
-		setup_complete.set(true);
-	}
 	$: console.log({ $setup_complete, resolved });
+	// setup_completed.promise.then(() => {
+	// 	setup_complete.set(true);
+	// 	console.log({ setup_completed: true });
+	// });
 	const to_file_url = (path: string) => {
 		if (path.startsWith('file://')) {
 			return path;
@@ -176,19 +177,24 @@
 	/** Sends the 'setup' RPC message to the language servers */
 	const setup = async (
 		project_type: 'fresh' | 'existing',
-		configs_or_files: Record<string, string>,
+		config_files: Record<string, string>,
+		files?: Record<string, string>,
 	) => {
 		if (project_type === 'fresh') {
-			await svelte_transport.addFiles(configs_or_files);
-			await ts_transport.addFiles(configs_or_files);
+			await Promise.all([
+				svelte_transport.addFiles(files ?? config_files),
 
-			await svelte_transport.setup(configs_or_files);
-			await ts_transport.setup(configs_or_files);
+				ts_transport.addFiles(files ?? config_files),
+				svelte_transport.setup(config_files),
+				ts_transport.setup(config_files),
+			]);
 		} else {
-			await svelte_transport.addFiles(configs_or_files);
-			await ts_transport.addFiles(configs_or_files);
-			await svelte_transport.setup({});
-			await ts_transport.setup({});
+			await Promise.all([
+				svelte_transport.addFiles(files ?? config_files),
+				ts_transport.addFiles(files ?? config_files),
+				svelte_transport.setup(config_files),
+				ts_transport.setup(config_files),
+			]);
 		}
 		setup_completed.resolve(true);
 		resolved = true;
@@ -247,13 +253,10 @@
 			}
 		};
 
-		return ($document_uri: string) => {
-			if (is_being_executed) return console.log('already being executed');
+		return async ($document_uri: string) => {
+			if (is_being_executed || !resolved) return console.log('already being executed');
 			is_being_executed = true;
-
-			if (!resolved) {
-				return;
-			}
+			await setup_completed.promise;
 
 			if (lang_clients.has($document_uri)) {
 				get_existing_client($document_uri);
@@ -264,26 +267,16 @@
 		};
 	};
 
-	function setup_fresh_project() {
+	function setup_fresh_project(files: Record<string, string> = {}) {
 		if (resolved) return;
 		const configs: Record<string, string> = {};
 
 		let is_initialized = false;
 
-		const has_svelte_kit_dotfiles = (files: Record<string, string>) => {
-			const keys = Object.keys(files);
-
-			return (
-				keys.filter((key) => key.includes('.svelte-kit/types')).length >= 1 &&
-				keys.some(
-					(file) =>
-						file.includes('.svelte-kit/') &&
-						(file.includes('tsconfig.json') ||
-							file.includes('ambient.d.ts') ||
-							file.includes('types')),
-				)
+		const has_svelte_kit_dotfiles = (files: Record<string, string>) =>
+			Object.keys(files).some((file) =>
+				file.match(/(\.svelte-kit|ambient\.d\.ts|types|svelte\.config\.js)/),
 			);
-		};
 
 		const listen_for_type_changes = webcontainer.on_fs_change(
 			'modification',
@@ -301,8 +294,9 @@
 					is_initialized = true;
 
 					configs[to_absolute_path(path)] = await webcontainer.read_file(path, true);
-					if (!configs['/tsconfig.json'] || !configs['/jsconfig.json']) {
-						configs['/tsconfig.json'] = `{
+
+					if (!files['/tsconfig.json'] || !files['/jsconfig.json']) {
+						files['/tsconfig.json'] = `{
 						${project_is_sveltekit ? `"extends": "./.svelte-kit/tsconfig.json",` : ''}
 						"compilerOptions": {
 							"allowJs": true,
@@ -314,7 +308,6 @@
 							"sourceMap": true,
 							"strict": true
 						},
-						"include": ["**/*.d.ts"]
 						// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 						//
 						// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
@@ -322,10 +315,12 @@
 					}`;
 					}
 
-					await setup('fresh', configs);
+					console.log('setup if', path);
+					setup('fresh', configs, files);
 				} else {
+					console.log('else block', path);
 					const temp = { [to_absolute_path(path)]: await webcontainer.read_file(path, true) };
-					await svelte_transport.addFiles(temp);
+					svelte_transport.addFiles(temp);
 				}
 				return;
 			}
@@ -338,7 +333,7 @@
 				path.startsWith('./.svelte-kit/')
 			) {
 				console.log(path, 'created', configs);
-				await webcontainer.read_file(path, true).then((file) => {
+				webcontainer.read_file(path, true).then((file) => {
 					configs[to_absolute_path(path)] = file;
 				});
 			}
@@ -360,11 +355,8 @@
 			const tree = await webcontainer.get_tree_from_container(true, false);
 			const files = webcontainer.walk_tree_and_collect(tree);
 
-			await webcontainer.read_package_json().then(async (json) => {
-				await svelte_transport.addFiles(files);
-				await ts_transport.addFiles(files);
-				await svelte_transport.fetchTypes(json);
-				await ts_transport.fetchTypes(json);
+			webcontainer.read_package_json().then(async (json) => {
+				await Promise.all([svelte_transport.fetchTypes(json), ts_transport.fetchTypes(json)]);
 
 				if (typeof json === 'object' && 'devDependencies' in json) {
 					if (json.devDependencies['@sveltejs/kit']) {
@@ -374,7 +366,7 @@
 				if (Object.keys(files).some((file) => file.includes('.svelte-kit/'))) {
 					await setup('existing', files);
 				} else {
-					setup_fresh_project();
+					setup_fresh_project(files);
 				}
 			});
 		});
