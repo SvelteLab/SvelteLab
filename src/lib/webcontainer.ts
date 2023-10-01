@@ -825,9 +825,12 @@ export const webcontainer = {
 	},
 };
 
-async function get_tree_from_container(as_string = true): Promise<FileSystemTree> {
+async function get_tree_from_container(
+	as_string = true,
+	ignore_node_modules = true,
+): Promise<FileSystemTree> {
 	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
-	return get_tree(root, '/', as_string);
+	return get_tree(root, '/', as_string, ignore_node_modules);
 }
 
 type PathToFile = string;
@@ -861,10 +864,12 @@ function walk_tree_and_collect(file_tree: FileSystemTree): Record<PathToFile, Fi
 }
 
 const decoder = new TextDecoder();
+
 async function get_tree(
 	dir: DirEnt<string>[],
 	path: string,
 	as_string: boolean,
+	ignore_node_modules = true,
 ): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
@@ -880,12 +885,17 @@ async function get_tree(
 					contents,
 				},
 			};
-		} else if (node.isDirectory() && !IGNORE_LIST.includes(node.name)) {
+		} else if (
+			node.isDirectory() &&
+			(!IGNORE_LIST.includes(node.name) ||
+				(ignore_node_modules === false && node.name === 'node_modules'))
+		) {
 			tree[node.name] = {
 				directory: await get_tree(
 					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
 					node_path + '/',
 					as_string,
+					true,
 				),
 			};
 		}

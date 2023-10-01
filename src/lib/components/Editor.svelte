@@ -15,7 +15,7 @@
 	import Errors from './Errors.svelte';
 	import ImageFromBytes from './ImageFromBytes.svelte';
 	import Tabs from './Tabs.svelte';
-	import { getContext, onMount } from 'svelte';
+	import { getContext, onMount, tick } from 'svelte';
 	import type { Extension } from '@codemirror/state';
 	import type { SupportedLanguage } from './LanguageClientProvider.svelte';
 	import type { Readable, Writable } from 'svelte/store';
@@ -24,8 +24,10 @@
 		extensions,
 		get_language_client,
 		document_uri: document_uri_store,
+		setup_complete,
 	}: {
 		document_uri: Readable<string>;
+		setup_complete: Promise<void>;
 		extensions: Writable<Extension[]>;
 		get_language_client: (uri: string) => void;
 	} = getContext(Symbol.for('svelte_language_worker'));
@@ -87,14 +89,16 @@
 	});
 
 	function read_current_tab(tab: string, is_image: boolean) {
-		if (!tab) return;
+		if (!tab || tab === 'file:///') return;
 		if (is_image) {
 			webcontainer.read_file(`.${new URL(tab).pathname}`, false).then((file) => {
 				image_bytes = file;
 			});
 		}
+		console.log('read-current-tab', { tab });
 		webcontainer.read_file(`.${new URL(tab).pathname}`).then((file) => {
 			document_uri = tab;
+			console.log('read-current-tab', { tab });
 			get_language_client(tab);
 			queueMicrotask(() => {
 				code = file;
@@ -111,127 +115,144 @@
 	});
 
 	onMount(() => {
-		const current_tab_unsub = document_uri_store.subscribe((tab) => {
-			read_current_tab(tab, is_image);
-		});
+		let current_tab_unsub: () => void;
+		let handle_fs_change: () => void;
 
-		const handle_fs_change = webcontainer.on_fs_change('deletion', (path) => {
-			$codemirror_instance.documents.delete(path);
-		});
+		(async () => {
+			await setup_complete;
+
+			current_tab_unsub = document_uri_store.subscribe((tab) => {
+				read_current_tab(tab, is_image);
+			});
+
+			handle_fs_change = webcontainer.on_fs_change('deletion', (path) => {
+				$codemirror_instance.documents.delete(path);
+			});
+		})();
 		return () => {
-			current_tab_unsub();
-			handle_fs_change();
+			if (current_tab_unsub) {
+				current_tab_unsub();
+			}
+			if (handle_fs_change) {
+				handle_fs_change();
+			}
 		};
 	});
 
 	export const codemirror_instance = withCodemirrorInstance();
+
+	$: console.log({ setup_complete });
 </script>
 
-{#if !$current_tab}
+{#await setup_complete.then(tick)}
 	<VoidEditor />
-{:else}
-	<Tabs />
-	{#if is_image}
-		<ImageFromBytes {image_bytes} type={current_lang} />
+{:then}
+	{#if !$current_tab || $document_uri_store === 'file:///'}
+		<VoidEditor />
 	{:else}
-		<div
-			class="codemirror-wrapper"
-			on:codemirror:textChange={({ detail: new_code }) => {
-				if (new_code === code || new_code === null) return;
-				// puruvj suggested using this event instead
-				// of the object one
-				webcontainer.update_file($current_tab, new_code);
-				code = new_code;
-			}}
-			use:codemirror={{
-				lang,
-				langMap: langs,
-				theme,
-				tabSize: 3,
-				useTabs: true,
-				value: code,
-				documentId: document_uri,
-				extensions: $extensions,
-				cursorPos: cursor,
-				setup: 'basic',
-				instanceStore: codemirror_instance,
-				onChangeBehavior: {
-					duration: $editor_preferences.delay_duration ?? 300,
-					kind: $editor_preferences.delay_function ?? 'throttle',
-				},
-				styles: {
-					'&': {
-						width: '100%',
-						height: '100%',
-						overflow: 'auto',
-						backgroundColor: 'var(--sk-back-1)',
-						color: 'var(--sk-code-base)',
+		<Tabs />
+		{#if is_image}
+			<ImageFromBytes {image_bytes} type={current_lang} />
+		{:else}
+			<div
+				class="codemirror-wrapper"
+				on:codemirror:textChange={({ detail: new_code }) => {
+					if (new_code === code || new_code === null) return;
+					// puruvj suggested using this event instead
+					// of the object one
+					webcontainer.update_file($current_tab, new_code);
+					code = new_code;
+				}}
+				use:codemirror={{
+					lang,
+					langMap: langs,
+					theme,
+					tabSize: 3,
+					useTabs: true,
+					value: code,
+					documentId: document_uri,
+					extensions: $extensions,
+					cursorPos: cursor,
+					setup: 'basic',
+					instanceStore: codemirror_instance,
+					onChangeBehavior: {
+						duration: $editor_preferences.delay_duration ?? 300,
+						kind: $editor_preferences.delay_function ?? 'throttle',
 					},
-					'*': {
-						fontFamily: 'var(--sk-font-mono)',
-						tabSize: 3,
-						fontSize: 'var(--sk-editor-font-size)',
+					styles: {
+						'&': {
+							width: '100%',
+							height: '100%',
+							overflow: 'auto',
+							backgroundColor: 'var(--sk-back-1)',
+							color: 'var(--sk-code-base)',
+						},
+						'*': {
+							fontFamily: 'var(--sk-font-mono)',
+							tabSize: 3,
+							fontSize: 'var(--sk-editor-font-size)',
+						},
+						'.cm-gutters': {
+							border: 'none',
+						},
+						'.cm-gutter': {
+							backgroundColor: 'var(--sk-back-1)',
+							color: 'var(--sk-code-base)',
+						},
+						'.cm-line.cm-activeLine': {
+							backgroundColor: 'var(--sk-back-translucent)',
+						},
+						'.cm-activeLineGutter': {
+							backgroundColor: 'var(--sk-back-3)',
+						},
+						'.cm-focused.cm-selectionBackground': {
+							backgroundColor: 'var(--sk-back-4) !important',
+						},
+						'.cm-selectionBackground': {
+							backgroundColor: 'var(--sk-back-5) !important',
+						},
+						'.cm-cursor': {
+							borderColor: 'var(--sk-code-base)',
+						},
+						'.cm-tooltip': {
+							border: 'none',
+							background: 'var(--sk-back-3)',
+						},
+						'.cm-tooltip.cm-tooltip-autocomplete > ul': {
+							background: 'var(--sk-back-3)',
+						},
+						'.cm-tooltip-autocomplete ul li[aria-selected]': {
+							background: 'var(--sk-theme-1)',
+							color: 'var(--sk-text-1)',
+						},
+						'.cm-tooltip-lint': {
+							background: 'var(--sk-back-3)',
+							color: 'var(--sk-text-1)',
+						},
+						'.cm-panels': {
+							background: 'var(--sk-back-3)',
+							color: 'var(--sk-text-1)',
+						},
 					},
-					'.cm-gutters': {
-						border: 'none',
-					},
-					'.cm-gutter': {
-						backgroundColor: 'var(--sk-back-1)',
-						color: 'var(--sk-code-base)',
-					},
-					'.cm-line.cm-activeLine': {
-						backgroundColor: 'var(--sk-back-translucent)',
-					},
-					'.cm-activeLineGutter': {
-						backgroundColor: 'var(--sk-back-3)',
-					},
-					'.cm-focused.cm-selectionBackground': {
-						backgroundColor: 'var(--sk-back-4) !important',
-					},
-					'.cm-selectionBackground': {
-						backgroundColor: 'var(--sk-back-5) !important',
-					},
-					'.cm-cursor': {
-						borderColor: 'var(--sk-code-base)',
-					},
-					'.cm-tooltip': {
-						border: 'none',
-						background: 'var(--sk-back-3)',
-					},
-					'.cm-tooltip.cm-tooltip-autocomplete > ul': {
-						background: 'var(--sk-back-3)',
-					},
-					'.cm-tooltip-autocomplete ul li[aria-selected]': {
-						background: 'var(--sk-theme-1)',
-						color: 'var(--sk-text-1)',
-					},
-					'.cm-tooltip-lint': {
-						background: 'var(--sk-back-3)',
-						color: 'var(--sk-text-1)',
-					},
-					'.cm-panels': {
-						background: 'var(--sk-back-3)',
-						color: 'var(--sk-text-1)',
-					},
-				},
-			}}
-		/>
-		{#if current_lang === 'svelte'}
-			<Errors
-				on:click_on_diagnostic={({ detail: diagnostic }) => {
-					const new_pos = get_character_from_pos(
-						diagnostic.end.line,
-						diagnostic.end.character,
-						code,
-					);
-
-					$codemirror_instance.view?.focus();
-					cursor = new_pos;
 				}}
 			/>
+			{#if current_lang === 'svelte'}
+				<Errors
+					on:click_on_diagnostic={({ detail: diagnostic }) => {
+						const new_pos = get_character_from_pos(
+							diagnostic.end.line,
+							diagnostic.end.character,
+							code,
+						);
+
+						$codemirror_instance.view?.focus();
+						cursor = new_pos;
+					}}
+				/>
+			{/if}
 		{/if}
 	{/if}
-{/if}
+{/await}
 
 <style>
 	:global(.codemirror-wrapper) {

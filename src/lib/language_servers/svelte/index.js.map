@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../../../../Downloads/cm-lsp/src/messages.ts"],
-  "sourcesContent": ["export const workerRPCMethods = [\n\t\"@@setup\",\n\t\"@@add-files\",\n\t\"@@fetch-types\",\n] as const;\nexport type WorkerRPCMethod = (typeof workerRPCMethods)[number];\n\ntype URI = string;\ntype FileContents = string;\n\ntype WorkerMessage<T extends WorkerRPCMethod> = {\n\tmethod: T;\n\tparams: Record<URI, FileContents>;\n};\n\ntype SetupMessage = WorkerMessage<\"@@setup\">;\n\ntype AddFilesMessage = WorkerMessage<\"@@add-files\">;\ntype FetchTypesMessage = WorkerMessage<\"@@fetch-types\">;\n\nexport type { FetchTypesMessage, WorkerMessage, SetupMessage, AddFilesMessage };\n\nexport const createWorkerMessage = <T extends WorkerRPCMethod>(\n\tmethod: \"setup\" | \"add-files\" | \"fetch-types\",\n\tparams: WorkerMessage<T>[\"params\"],\n): WorkerMessage<T> => ({\n\tmethod: `@@${method}` as T,\n\tparams,\n});\n"],
-  "mappings": "AAAO,IAAMA,EAAmB,CAC/B,UACA,cACA,eACD,EAkBaC,EAAsB,CAClCC,EACAC,KACuB,CACvB,OAAQ,KAAKD,CAAM,GACnB,OAAAC,CACD",
-  "names": ["workerRPCMethods", "createWorkerMessage", "method", "params"]
-}

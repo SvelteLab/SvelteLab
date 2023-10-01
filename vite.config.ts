@@ -62,11 +62,6 @@ export default defineConfig({
 	define: {
 		'process.env.NODE_ENV': '"production"',
 	},
-	optimizeDeps: {
-		exclude: [...fs.readdirSync('./src/lib/lsp/svelte')],
-		needsInterop: [...fs.readdirSync('./src/lib/lsp/svelte')],
-		force: true,
-	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},

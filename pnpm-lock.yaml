@@ -119,6 +119,9 @@ dependencies:
   pocketbase:
     specifier: ^0.15.3
     version: 0.15.3
+  svelte-language-server-web:
+    specifier: ^0.0.11
+    version: 0.0.11(codemirror-languageserver@1.11.0)(estree-walker@2.0.2)
   svelte-splitpanes:
     specifier: ^0.8.0
     version: 0.8.0(svelte@4.1.1)
@@ -2123,7 +2126,6 @@ packages:
 
   /estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
-    dev: true
 
   /estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
@@ -3398,6 +3400,16 @@ packages:
     dependencies:
       svelte: 4.1.1
     dev: true
+
+  /svelte-language-server-web@0.0.11(codemirror-languageserver@1.11.0)(estree-walker@2.0.2):
+    resolution: {integrity: sha512-FUrt+wipkQI4bnQxA9viygFsC1VcXIGsAOz0gQRxoW/CteJ6Y1xcggnxjL4DlB9bVYGjiNI9nUOyvVZVm42a2Q==}
+    peerDependencies:
+      codemirror-languageserver: ^1.11.0
+      estree-walker: 2.0.2
+    dependencies:
+      codemirror-languageserver: 1.11.0(@codemirror/language@6.8.0)(@lezer/common@1.0.3)
+      estree-walker: 2.0.2
+    dev: false
 
   /svelte-local-storage-store@0.5.0(svelte@4.1.1):
     resolution: {integrity: sha512-SEDrpapeia6fUqta+r1NvSLlJYPkZ4pBcl15EYIOSPNzy6vhpoXu8cnzUDmZxsWl7fZGAHxrVH9UyZCbyO4W+g==}
