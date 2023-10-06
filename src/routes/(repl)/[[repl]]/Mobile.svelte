@@ -10,7 +10,6 @@
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
-	import LanguageClientProvider from '$lib/components/LanguageClientProvider.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
@@ -35,40 +34,38 @@
 <div class="container">
 	<Header mobile />
 	<main id="main">
-		<LanguageClientProvider>
-			<RawDialog
-				bind:isOpen={$showing_files}
-				noCloseButton
-				includedTrigger={false}
-				dialogIn={fly}
-				dialogOut={fly}
-				dialogInOptions={{ x: -500 }}
-				dialogOutOptions={{ x: -500 }}
-				autofocus={false}
-				--as-dialog-padding="0"
-				--as-dialog-top="calc(50% + 2.6rem)"
-				--as-dialog-overflow="visible"
-				--as-dialog-left="0"
-				--as-dialog-right="auto"
-				--as-dialog-transform="translateY(-50%)"
-				--as-dialog-border-radius="0"
-				--as-dialog-width="calc(100% - 4em)"
-				--as-dialog-max-width="800px"
-				--as-dialog-height="100%"
-				--as-dialog-max-height="calc(100% - 2em)"
-			>
-				<FileActions mobile />
-			</RawDialog>
-			<div class="editor" class:hidden={$mobile_showing !== 'code'}>
-				<svelte:component this={Editor} />
-			</div>
-			<div class:hidden={$mobile_showing !== 'iframe'}>
-				<Iframe />
-			</div>
-			<div class:hidden={$mobile_showing !== 'terminal'}>
-				<svelte:component this={Console} bind:update_height />
-			</div>
-		</LanguageClientProvider>
+		<RawDialog
+			bind:isOpen={$showing_files}
+			noCloseButton
+			includedTrigger={false}
+			dialogIn={fly}
+			dialogOut={fly}
+			dialogInOptions={{ x: -500 }}
+			dialogOutOptions={{ x: -500 }}
+			autofocus={false}
+			--as-dialog-padding="0"
+			--as-dialog-top="calc(50% + 2.6rem)"
+			--as-dialog-overflow="visible"
+			--as-dialog-left="0"
+			--as-dialog-right="auto"
+			--as-dialog-transform="translateY(-50%)"
+			--as-dialog-border-radius="0"
+			--as-dialog-width="calc(100% - 4em)"
+			--as-dialog-max-width="800px"
+			--as-dialog-height="100%"
+			--as-dialog-max-height="calc(100% - 2em)"
+		>
+			<FileActions mobile />
+		</RawDialog>
+		<div class="editor" class:hidden={$mobile_showing !== 'code'}>
+			<svelte:component this={Editor} />
+		</div>
+		<div class:hidden={$mobile_showing !== 'iframe'}>
+			<Iframe />
+		</div>
+		<div class:hidden={$mobile_showing !== 'terminal'}>
+			<svelte:component this={Console} bind:update_height />
+		</div>
 	</main>
 	<MobileFooter />
 </div>

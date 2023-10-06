@@ -7,7 +7,6 @@
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
-	import LanguageClientProvider from '$lib/components/LanguageClientProvider.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
@@ -31,37 +30,35 @@
 <div class="grid">
 	<Header />
 	<main id="main">
-		<LanguageClientProvider>
-			<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-				<Pane minSize={min_size}>
-					<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
-						<Pane bind:size={$layout_store.file_tree}><FileActions {min_size} /></Pane>
-						<Pane minSize={min_size}>
-							<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
-								<Pane minSize={min_size} class="editor-pane">
-									<svelte:component this={Editor} />
-								</Pane>
-								<Pane bind:size={$layout_store.terminal}>
-									<svelte:component this={Console} bind:update_height />
-								</Pane>
-							</Splitpanes>
-						</Pane>
-					</Splitpanes>
-				</Pane>
-				<Pane size={42} minSize={min_size}>
-					<Splitpanes horizontal>
-						<Pane minSize={min_size}>
-							<Iframe />
-						</Pane>
-						{#if $is_intro_open}
-							<Pane minSize={min_size}>
-								<Intro />
+		<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+			<Pane minSize={min_size}>
+				<Splitpanes on:ready={handle_pane} on:resized={handle_pane}>
+					<Pane bind:size={$layout_store.file_tree}><FileActions {min_size} /></Pane>
+					<Pane minSize={min_size}>
+						<Splitpanes horizontal on:ready={handle_pane} on:resized={handle_pane}>
+							<Pane minSize={min_size} class="editor-pane">
+								<svelte:component this={Editor} />
 							</Pane>
-						{/if}
-					</Splitpanes>
-				</Pane>
-			</Splitpanes>
-		</LanguageClientProvider>
+							<Pane bind:size={$layout_store.terminal}>
+								<svelte:component this={Console} bind:update_height />
+							</Pane>
+						</Splitpanes>
+					</Pane>
+				</Splitpanes>
+			</Pane>
+			<Pane size={42} minSize={min_size}>
+				<Splitpanes horizontal>
+					<Pane minSize={min_size}>
+						<Iframe />
+					</Pane>
+					{#if $is_intro_open}
+						<Pane minSize={min_size}>
+							<Intro />
+						</Pane>
+					{/if}
+				</Splitpanes>
+			</Pane>
+		</Splitpanes>
 	</main>
 </div>
 

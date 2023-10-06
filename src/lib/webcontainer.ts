@@ -586,7 +586,11 @@ export const webcontainer = {
 		close_all_tabs();
 		await tick();
 		const search_params = new URLSearchParams(window.location.search);
-		const files_to_open_string = search_params.get('files') ?? './src/routes/+page.svelte';
+		const files_to_open_string =
+			search_params.get('files') ?? './src/routes/+page.svelte' in files
+				? './src/routes/+page.svelte'
+				: find_first_of_file_ext(files, 'svelte', 'svx') || '';
+		console.log(files_to_open_string);
 		const files_to_open = files_to_open_string.split(',');
 
 		for (const file_to_open of files_to_open) {
@@ -861,6 +865,33 @@ function walk_tree_and_collect(file_tree: FileSystemTree): Record<PathToFile, Fi
 		return result;
 	}
 	return walk([''], '', file_tree);
+}
+
+function find_first_of_file_ext(
+	file_tree: FileSystemTree,
+	...file_exts: string[]
+): string | undefined {
+	const walk = (
+		current_dir: string,
+		current: FileSystemTree | undefined = file_tree,
+	): string | undefined => {
+		for (const file of (
+			Object.keys(current) as unknown as Exclude<keyof FileSystemTree, number>[]
+		).sort((a, b) => (current[a] ? -1 : current[b] ? 1 : 0))) {
+			const node = current[file];
+			if ('file' in node && node.file !== undefined) {
+				if (file_exts.some((ext) => file.endsWith(ext))) {
+					return `.${current_dir}/${file}`.replace(/\/\/+/g, '/');
+				}
+			} else if ('directory' in node && node.directory !== undefined) {
+				const result = walk(`${current_dir}/${file}`.replace(/\/\/+/g, '/'), node.directory);
+				if (result) {
+					return result;
+				}
+			}
+		}
+	};
+	return walk('/', file_tree);
 }
 
 const decoder = new TextDecoder();

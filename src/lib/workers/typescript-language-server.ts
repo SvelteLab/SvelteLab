@@ -1,3 +1,3 @@
-import { TypeScriptWorker as typescript_worker } from 'svelte-language-server-web/tsWorker';
+import { TypeScriptWorker as typescript_worker } from '$lib/lsp/svelte/tsWorker';
 
 export default typescript_worker();

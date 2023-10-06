@@ -120,8 +120,8 @@ dependencies:
     specifier: ^0.15.3
     version: 0.15.3
   svelte-language-server-web:
-    specifier: ^0.0.3
-    version: 0.0.3(codemirror-languageserver@1.11.0)(estree-walker@2.0.2)
+    specifier: ^0.0.5
+    version: 0.0.5(codemirror-languageserver@1.11.0)(estree-walker@2.0.2)
   svelte-splitpanes:
     specifier: ^0.8.0
     version: 0.8.0(svelte@4.1.1)
@@ -3401,8 +3401,8 @@ packages:
       svelte: 4.1.1
     dev: true
 
-  /svelte-language-server-web@0.0.3(codemirror-languageserver@1.11.0)(estree-walker@2.0.2):
-    resolution: {integrity: sha512-X8xPEDqdVHs8D425E+24TnkZIjAnMO3W3ARjmJLdB0sqO+LoXXjjIp7U1OmchjCrOgmbB0A8XYUzouybsALtsQ==}
+  /svelte-language-server-web@0.0.5(codemirror-languageserver@1.11.0)(estree-walker@2.0.2):
+    resolution: {integrity: sha512-7eMM9YjmB08qjLwYzCh2JBqhpfNn2pRNGATU1MujC9xjNkCUloRSFqnJ4oZW58sDXOpO+VD+SnDgaOBfisfwFA==}
     peerDependencies:
       codemirror-languageserver: ^1.11.0
       estree-walker: 2.0.2

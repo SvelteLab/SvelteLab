@@ -1,3 +1,3 @@
-import { SvelteLanguageWorker as svelte_worker } from 'svelte-language-server-web/svelteWorker';
+import { SvelteLanguageWorker as svelte_worker } from '$lib/lsp/svelte/worker';
 
 export default svelte_worker();
