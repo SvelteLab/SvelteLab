@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { WorkerRPC } from '$lib/lsp/svelte';
+	import { WorkerRPC } from 'svelte-language-server-web';
 	import SvelteLanguageWorkerURL from '$lib/workers/svelte-language-server?worker&url';
 	import TypescriptLanguageWorkerURL from '$lib/workers/typescript-language-server?worker&url';
 

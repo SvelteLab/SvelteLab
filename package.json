@@ -58,7 +58,7 @@
 		"magic-string": "^0.30.2",
 		"material-icon-theme": "^4.29.0",
 		"pocketbase": "^0.15.3",
-		"svelte-language-server-web": "^0.0.5",
+		"svelte-language-server-web": "^0.0.6",
 		"svelte-splitpanes": "^0.8.0",
 		"tinykeys": "^2.1.0",
 		"uuid": "^9.0.0",
