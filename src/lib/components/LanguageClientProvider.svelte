@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import { WorkerRPC } from 'svelte-language-server-web';
-	import SvelteLanguageWorkerURL from '$lib/workers/svelte-language-server?worker&url';
-	import TypescriptLanguageWorkerURL from '$lib/workers/typescript-language-server?worker&url';
+	import SvelteLanguageWorkerURL from '$lib/workers/svelte-language-server?url';
+	import TypescriptLanguageWorkerURL from '$lib/workers/typescript-language-server?url';
 
 	export type LanguageClientContext = {
 		document_uri: Readable<string>;
