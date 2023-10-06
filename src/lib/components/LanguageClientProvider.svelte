@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
 	import { WorkerRPC } from 'svelte-language-server-web';
-	import SvelteLanguageWorkerURL from '$lib/workers/svelte-language-server?url';
-	import TypescriptLanguageWorkerURL from '$lib/workers/typescript-language-server?url';
 
 	export type LanguageClientContext = {
 		document_uri: Readable<string>;
@@ -137,12 +135,15 @@
 			if (ts_transport && svelte_transport) return { svelte_transport, ts_transport };
 
 			typescript_language_worker = new Worker(
-				new URL(TypescriptLanguageWorkerURL, import.meta.url),
+				new URL('../workers/typescript-language-server.js', import.meta.url),
 				{ type: 'module' },
 			);
-			svelte_language_worker = new Worker(new URL(SvelteLanguageWorkerURL, import.meta.url), {
-				type: 'module',
-			});
+			svelte_language_worker = new Worker(
+				new URL('../workers/svelte-language-server.js', import.meta.url),
+				{
+					type: 'module',
+				},
+			);
 
 			svelte_transport = new WorkerRPC(svelte_language_worker, {
 				rootUri: 'file:///',

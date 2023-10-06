@@ -62,6 +62,9 @@ export default defineConfig({
 	define: {
 		'process.env.NODE_ENV': '"production"',
 	},
+	worker: {
+		format: 'es',
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 	},
