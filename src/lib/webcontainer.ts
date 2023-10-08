@@ -590,7 +590,6 @@ export const webcontainer = {
 			search_params.get('files') ?? './src/routes/+page.svelte' in files
 				? './src/routes/+page.svelte'
 				: find_first_of_file_ext(files, 'svelte', 'svx') || '';
-		console.log(files_to_open_string);
 		const files_to_open = files_to_open_string.split(',');
 
 		for (const file_to_open of files_to_open) {

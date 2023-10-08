@@ -6,10 +6,11 @@
 		setup_complete: Promise<void>;
 		extensions: Writable<Extension[]>;
 		get_language_client: (uri: string) => Promise<void>;
+		delete_file: (uri: string) => Promise<void>;
 		update_file: (uri: string, contents: string) => Promise<void>;
 	};
 
-	const lang_keys = [
+	export const lang_keys = [
 		'svelte',
 		'svx',
 		'html',
@@ -23,7 +24,7 @@
 		'md',
 	] as const;
 
-	const lang_map = {
+	export const lang_map = {
 		svelte: 'svelte',
 		svx: 'svelte',
 		html: 'html',
@@ -41,13 +42,11 @@
 	export type SupportedFileExtension = (typeof lang_keys)[number];
 	export type SupportedLanguage = (typeof lang_map)[SupportedFileExtension];
 
-	export const is_supported_file_ext = (lang: string | undefined): lang is SupportedFileExtension =>
-		supported_languages.includes(lang as never);
+	export const is_supported_editor_file_ext = (
+		lang: string | undefined,
+	): lang is SupportedFileExtension => supported_languages.includes(lang as never);
 
-	export const is_supported_lang = (lang: string | undefined): lang is SupportedLanguage =>
-		lang ? lang in lang_map : false;
-
-	export const is_supported_lsp_lang = (lang: string | undefined): lang is SupportedLanguage =>
+	export const is_supported_editor_lang = (lang: string | undefined): lang is SupportedLanguage =>
 		lang ? lang in lang_map : false;
 
 	export const is_lsp_file_type = (document_uri: string) =>
@@ -55,7 +54,7 @@
 
 	export const get_current_lang = ($document_uri: string): SupportedLanguage | undefined => {
 		const current_lang = $document_uri.split('.').at(-1) ?? '';
-		const lang = is_supported_file_ext(current_lang) ? lang_map[current_lang] : undefined;
+		const lang = is_supported_editor_file_ext(current_lang) ? lang_map[current_lang] : undefined;
 		return lang;
 	};
 
@@ -63,7 +62,7 @@
 		$document_uri: string,
 	): SupportedFileExtension | undefined => {
 		const current_lang = $document_uri.split('.').at(-1) ?? '';
-		const lang = is_supported_file_ext(current_lang) ? current_lang : undefined;
+		const lang = is_supported_editor_file_ext(current_lang) ? current_lang : undefined;
 		return lang;
 	};
 
@@ -130,6 +129,28 @@
 			});
 		};
 	};
+
+	/**
+	 * Converts a path to a file url
+	 *
+	 * @example
+	 * ```typescript
+	 * to_file_url('./foo/bar.ts') // file:///foo/bar.ts
+	 * to_file_url('/foo/bar.ts') // file:///foo/bar.ts
+	 * to_file_url('file:///foo/bar.ts') // file:///foo/bar.ts
+	 * ```
+	 */
+	const to_file_url = (path: string) => {
+		if (path.startsWith('file://')) {
+			return path;
+		} else if (path.startsWith('.') || path.startsWith('..')) {
+			return `${path.replace(/\.\.?\//, 'file:///')}`;
+		} else if (path.startsWith('/')) {
+			return `file://${path}`;
+		}
+		return `file:///${path.replace('./', '')}`;
+	};
+
 	const create_language_servers = () => {
 		const setup = () => {
 			if (ts_transport && svelte_transport) return { svelte_transport, ts_transport };
@@ -202,7 +223,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import type { Extension } from '@codemirror/state';
 	import { languageServerWithTransport } from 'codemirror-languageserver';
-	import { onDestroy, onMount, setContext, tick } from 'svelte';
+	import { onMount, setContext, tick } from 'svelte';
 	import { derived, writable, type Readable, type Writable } from 'svelte/store';
 
 	// Swap out the current language client with the new one
@@ -213,38 +234,33 @@
 		]);
 	};
 
+	// The transports used to communicate with the language servers
 	let svelte_transport: WorkerRPC;
 	let ts_transport: WorkerRPC;
+
+	// Both variables are used for properly creating a fallback tsconfig/jsconfig
 	let project_is_sveltekit = false;
 	let project_is_typescript = false;
 
-	// Lets us know when the language client is ready and all initialization procedures have been completed
+	// Lets us know when the language client is ready
+	// and all initialization procedures have been completed
 	const setup_completed = deferred_promise();
+	let resolved = false;
 
-	const to_file_url = (path: string) => {
-		if (path.startsWith('file://')) {
-			return path;
-		} else if (path.startsWith('.') || path.startsWith('..')) {
-			return `${path.replace(/\.\.?\//, 'file:///')}`;
-		} else if (path.startsWith('/')) {
-			return `file://${path}`;
-		}
-		return `file:///${path.replace('./', '')}`;
-	};
-
+	// Helper for determining if a path is a tsconfig.json or jsconfig.json
 	const is_tsconfig_or_jsconfig = (path: string) =>
 		(path.includes('tsconfig.') || path.includes('jsconfig.')) && path.endsWith('.json');
 
 	// Store the current document uri formatted as `file:///path/to/file.ext`
 	const document_uri = derived(current_tab, ($current_tab) => to_file_url($current_tab));
 
-	let resolved = false;
-
-	/** Sends the 'setup' RPC message to the language servers */
+	/** Sends the 'setup' RPC message to the language servers,
+	 * 	and adds the project files + config files to the language servers
+	 */
 	const setup = async (
 		project_type: 'fresh' | 'existing',
 		config_files: Record<string, string>,
-		files?: Record<string, string>,
+		files: Record<string, string> = {},
 	) => {
 		resolved = true;
 
@@ -252,17 +268,13 @@
 			await Promise.all([
 				svelte_transport.setup(config_files),
 				ts_transport.setup(config_files),
-				svelte_transport.addFiles(files ?? {}),
-				ts_transport.addFiles(files ?? {}),
-				svelte_transport.addFiles(config_files),
-				ts_transport.addFiles(config_files),
+				svelte_transport.addFiles({ ...config_files, ...files }),
+				ts_transport.addFiles({ ...config_files, ...files }),
 			]);
 		} else {
 			await Promise.all([
-				svelte_transport.addFiles(files ?? config_files),
-				ts_transport.addFiles(files ?? config_files),
-				svelte_transport.setup(config_files),
-				ts_transport.setup(config_files),
+				svelte_transport.addFiles({ ...config_files, ...files }),
+				ts_transport.addFiles({ ...config_files, ...files }),
 			]);
 		}
 		setup_completed.resolve(true);
@@ -271,13 +283,17 @@
 	const get_language_client = () => {
 		let is_being_executed = false;
 
+		const reset_language_transport = () => {
+			update_extensions_with_client([]);
+			current_language_transport = undefined;
+		};
+
 		const create_new_client = async ($document_uri: string) => {
 			const current_ext = get_current_file_ext($document_uri);
 			const lang = get_current_lang($document_uri);
 
 			if (!current_ext || !lang || !is_lsp_file_type($document_uri)) {
-				update_extensions_with_client([]);
-				current_language_transport = [];
+				reset_language_transport();
 				return;
 			}
 
@@ -287,13 +303,12 @@
 			const transport = ts_or_js ? ts_transport : is_svelte ? svelte_transport : undefined;
 
 			if (!transport) {
-				update_extensions_with_client([]);
-				current_language_transport = [];
-
+				reset_language_transport();
 				return;
 			}
 
 			await tick();
+
 			// Create a new language client transport for the current tab if one doesn't exist
 			const client = languageServerWithTransport({
 				transport: transport as never,
@@ -310,14 +325,14 @@
 			lang_clients.set($document_uri, client);
 
 			update_extensions_with_client(client);
-
 			current_language_transport = client;
 		};
 
 		const get_existing_client = ($document_uri: string) => {
 			const client = lang_clients.get($document_uri);
 
-			// If the current language client is not the same as the one for the current tab, swap them out
+			// If the current language client is not the same as the one for the current tab,
+			// swap them out
 			if (client && current_language_transport !== client) {
 				update_extensions_with_client(client);
 
@@ -326,14 +341,15 @@
 		};
 
 		return async ($document_uri: string) => {
-			if (is_being_executed || !resolved) return console.log('already being executed');
+			if (is_being_executed || !resolved) return console.debug('already being executed');
 			is_being_executed = true;
+
 			await setup_completed.promise;
 
 			if (lang_clients.has($document_uri)) {
 				get_existing_client($document_uri);
 			} else {
-				create_new_client($document_uri);
+				await create_new_client($document_uri);
 			}
 			is_being_executed = false;
 		};
@@ -356,6 +372,7 @@
 			);
 		};
 
+		// Listen for changes to SK-specific type files
 		const listen_for_type_changes = webcontainer.on_fs_change(
 			'modification',
 			throttle(async (path) => {
@@ -368,11 +385,15 @@
 
 		const on_config_callback = async (path: string) => {
 			if (has_svelte_kit_dotfiles(configs) || !project_is_sveltekit) {
-				if (!resolved) {
+				if (resolved) {
+					const temp = { [to_absolute_path(path)]: await webcontainer.read_file(path, true) };
+					await svelte_transport.addFiles(temp);
+				} else {
 					configs[to_absolute_path(path)] = await webcontainer.read_file(path, true);
 
 					if (!files['/tsconfig.json'] && !files['/jsconfig.json']) {
-						files[project_is_typescript ? '/tsconfig.json' : '/jsconfig.json'] = `{
+						files[project_is_typescript ? '/tsconfig.json' : '/jsconfig.json'] = `
+						{
 							${project_is_sveltekit ? `"extends": "./.svelte-kit/tsconfig.json",` : ''}
 							"compilerOptions": {
 								"allowJs": true,
@@ -385,19 +406,13 @@
 								"strict": true
 							},
 							"include": ["**/**/*/*.d.ts", "**/*.ts", "**/*.js", "**/*.svelte"],
-							// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
-							//
-							// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
-							// from the referenced tsconfig.json - TypeScript does not merge them in
 						}`;
 					}
 					setup('fresh', configs, files);
-				} else {
-					const temp = { [to_absolute_path(path)]: await webcontainer.read_file(path, true) };
-					await svelte_transport.addFiles(temp);
 				}
 				return;
 			}
+
 			if (
 				is_tsconfig_or_jsconfig(path) ||
 				path === './svelte.config.js' ||
@@ -422,16 +437,17 @@
 		return { listen_for_configs, listen_for_type_changes };
 	}
 
-	let handle_config_changes: (() => void) | undefined;
+	onMount(() => {
+		let listen_for_configs: () => void | undefined;
+		let listen_for_type_changes: () => void | undefined;
 
-	onMount(async () => {
 		const worker_handlers = create_language_servers();
 
 		const workers = worker_handlers.setup();
 
 		({ svelte_transport, ts_transport } = workers);
 
-		handle_config_changes = webcontainer.on_init(async () => {
+		const handle_config_changes = webcontainer.on_init(async () => {
 			const tree = await webcontainer.get_tree_from_container(true, false);
 			const files = webcontainer.walk_tree_and_collect(tree);
 
@@ -445,18 +461,26 @@
 						project_is_typescript = true;
 					}
 				}
+
 				await tick();
+
 				if (Object.keys(files).some((file) => file.includes('.svelte-kit/'))) {
 					await setup('existing', files);
 				} else {
-					setup_fresh_project(files);
+					const setup_listeners = setup_fresh_project(files);
+
+					if (setup_listeners) {
+						({ listen_for_configs, listen_for_type_changes } = setup_listeners);
+					}
 				}
 			});
 		});
-	});
 
-	onDestroy(() => {
-		if (typeof handle_config_changes === 'function') handle_config_changes();
+		return () => {
+			if (typeof handle_config_changes === 'function') handle_config_changes();
+			if (typeof listen_for_configs === 'function') listen_for_configs();
+			if (typeof listen_for_type_changes === 'function') listen_for_type_changes();
+		};
 	});
 
 	setContext(LANGUAGE_CLIENT_CONTEXT, {
@@ -464,6 +488,12 @@
 		document_uri,
 		get_language_client: get_language_client(),
 		setup_complete: setup_completed.promise,
+		delete_file: async (uri: string) => {
+			await Promise.all([
+				svelte_transport.deleteFile(to_absolute_path(uri)),
+				ts_transport.deleteFile(to_absolute_path(uri)),
+			]);
+		},
 		update_file: async (uri: string, contents: string) => {
 			await Promise.all([
 				svelte_transport.addFiles({ [to_absolute_path(uri)]: contents }),

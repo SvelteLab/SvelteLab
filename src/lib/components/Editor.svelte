@@ -27,13 +27,14 @@
 			}, miliseconds);
 		};
 	}
+
+	const file_uri_to_dot_path = (uri: string) => `.${new URL(uri).pathname}`;
 </script>
 
 <script lang="ts">
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { editor_config, editor_preferences } from '$lib/stores/editor_config_store';
-	import { svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
 	import { get_character_from_pos } from '$lib/utils';
 	import { webcontainer } from '$lib/webcontainer';
@@ -59,6 +60,7 @@
 		extensions,
 		get_language_client,
 		document_uri,
+		delete_file: delete_lsp_file,
 		setup_complete,
 		update_file: update_lsp_file,
 	}: LanguageClientContext = getContext(Symbol.for('svelte_language_worker'));
@@ -112,8 +114,13 @@
 		code = new_code;
 	};
 
+	async function open_editor_document(uri: string) {
+		if (!uri || uri === 'file:///') return;
+		await get_language_client(uri);
+	}
+
 	async function get_extensions(config: typeof $editor_config) {
-		const extensions = [svelte_snippets, abbreviationTracker()];
+		const extensions = [abbreviationTracker()] as (Extension | Extension[])[];
 		if (config.vim) {
 			if (!vim) {
 				vim = await import('@replit/codemirror-vim').then((vim_import) => vim_import.vim);
@@ -137,16 +144,11 @@
 	async function read_current_tab(tab: string, is_image: boolean) {
 		if (!tab || tab === 'file:///') return;
 		if (is_image) {
-			image_bytes = await webcontainer.read_file(`.${new URL(tab).pathname}`, false);
+			image_bytes = await webcontainer.read_file(file_uri_to_dot_path(tab), false);
 		}
 
-		const code = await webcontainer.read_file(`.${new URL(tab).pathname}`);
+		const code = await webcontainer.read_file(file_uri_to_dot_path(tab));
 		update_code(code);
-	}
-
-	async function open_editor_document(uri: string) {
-		if (!uri || uri === 'file:///') return;
-		await get_language_client(uri);
 	}
 
 	$: current_lang = get_current_file_ext($current_tab) ?? 'svelte';
@@ -161,16 +163,20 @@
 		let current_tab_unsub: () => void;
 		let handle_fs_change: () => void;
 
+		// force the current tab to be read when lsp is setup
 		setup_complete.then(() => open_editor_document($document_uri));
 		current_tab_unsub = document_uri.subscribe(async () => {
 			await tick();
 			await read_current_tab($document_uri, is_image);
+			await tick();
 			await open_editor_document($document_uri);
 		});
 
 		handle_fs_change = webcontainer.on_fs_change('deletion', (path) => {
 			$codemirror_instance.documents.delete(path);
+			delete_lsp_file(path);
 		});
+
 		return () => {
 			if (current_tab_unsub) {
 				current_tab_unsub();
@@ -199,6 +205,7 @@
 				// of the object one
 				webcontainer.update_file($current_tab, new_code);
 				update_code(new_code);
+
 				if (!is_lsp_file_type($document_uri)) {
 					debounced_file_update({ document_uri: $document_uri, new_code });
 				}
