@@ -13,14 +13,7 @@
 	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
 	import { layout_store } from '$lib/stores/layout_store';
 	import { repl_name } from '$lib/stores/repl_id_store';
-	import {
-		close_all_subpath,
-		close_file,
-		current_tab,
-		open_file,
-		rename_tab,
-		tabs,
-	} from '$lib/tabs';
+	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
 	import { error } from '$lib/toast';
 	import { drop_assets, handle_files } from '$lib/upload_assets';
 	import { files as files_store, webcontainer } from '$lib/webcontainer';
@@ -131,7 +124,11 @@
 	class="file-tree"
 	use:drop_assets={files_options()}
 	use:dropzone={{
-		on_dropzone: (dropped_path) => handle_drop(dropped_path, base_path),
+		on_dropzone: (dropped_path, e) => {
+			// this means we are loading files so no need to move them
+			if (e.dataTransfer?.types.includes('Files')) return;
+			handle_drop(dropped_path, base_path);
+		},
 	}}
 >
 	{#if base_path === $base_path_store}
@@ -218,7 +215,11 @@
 				class:open={expanded}
 				use:draggable={path + '/'}
 				use:dropzone={{
-					on_dropzone: (dropped_path) => handle_drop(dropped_path, path + '/'),
+					on_dropzone: (dropped_path, e) => {
+						// this means we are loading files so no need to move them
+						if (e.dataTransfer?.types.includes('Files')) return;
+						handle_drop(dropped_path, path + '/');
+					},
 				}}
 			>
 				{#if renaming_path === path}
