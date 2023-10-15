@@ -48,7 +48,7 @@
 
 	let renaming_path = null as string | null;
 
-	const { update_file: update_lsp_file }: LanguageClientContext = getContext(
+	const { update_lsp_file }: LanguageClientContext = getContext(
 		Symbol.for('svelte_language_worker'),
 	);
 

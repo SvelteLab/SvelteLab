@@ -2,12 +2,34 @@
 	import { WorkerRPC } from 'svelte-language-server-web';
 
 	export type LanguageClientContext = {
+		/**
+		 * The current document uri, formatted as `file:///path/to/file.ext`
+		 */
 		document_uri: Readable<string>;
+		/**
+		 * A promise that resolves when the language servers have been setup
+		 */
 		setup_complete: Promise<void>;
+		/**
+		 * Extensions for use within the CodeMirror editor
+		 */
 		extensions: Writable<Extension[]>;
+		/** Opens a document with the LSP client */
 		get_language_client: (uri: string) => Promise<void>;
-		delete_file: (uri: string) => Promise<void>;
-		update_file: (uri: string, contents: string) => Promise<void>;
+		/**
+		 * - if `true` then the browser supports using the Language Server
+		 * - if `false` then the browser does not support using the Language Server,
+		 * and the Language Client Provider should not be used.
+		 */
+		supports_lsp: Readable<boolean>;
+		/**
+		 *  Notifies the Language Servers that a file has been deleted
+		 */
+		delete_lsp_file: (uri: string) => Promise<void>;
+		/**
+		 *  Notifies the Language Servers that a file has been updated
+		 */
+		update_lsp_file: (uri: string, contents: string) => Promise<void>;
 	};
 
 	export const lang_keys = [
@@ -58,6 +80,10 @@
 		return lang;
 	};
 
+	/**
+	 * Returns the current file extension, if supported.
+	 * Otherwise, returns `undefined`
+	 */
 	export const get_current_file_ext = (
 		$document_uri: string,
 	): SupportedFileExtension | undefined => {
@@ -65,6 +91,23 @@
 		const lang = is_supported_editor_file_ext(current_lang) ? current_lang : undefined;
 		return lang;
 	};
+
+	function supports_module_workers() {
+		let supports = false;
+		const tester = {
+			get type() {
+				supports = true;
+				return supports ? 'module' : 'classic';
+			}, // it's been called, it's supported
+		};
+		try {
+			new Worker('data:', tester);
+		} catch (e) {
+			console.log('Unsupported browser for language server usage, disabling...');
+		}
+
+		return supports;
+	}
 
 	const to_absolute_path = (path: string) => path.replace('./', '/');
 
@@ -94,9 +137,9 @@
 	const async_mutex = <A, R>(func: (...args: A[]) => Promise<R>) => {
 		let active_tasks = 0;
 
-		const queue: (() => void)[] = [];
+		const queue: (() => Promise<void>)[] = [];
 
-		const run_task = async (f: () => void) => {
+		const run_task = async (f: () => Promise<void>) => {
 			active_tasks++;
 			try {
 				await f();
@@ -113,7 +156,7 @@
 			}
 		}
 
-		return async (...args: A[]): Promise<R> => {
+		return (...args: A[]): Promise<R> => {
 			return new Promise((resolve, reject) => {
 				const wrapped_task = async () => {
 					try {
@@ -151,8 +194,14 @@
 		return `file:///${path.replace('./', '')}`;
 	};
 
+	const race = <T,>(timeout: number, callback: Promise<T>) =>
+		Promise.race<T>([new Promise((r) => setTimeout(r, timeout)), callback]);
+
 	const create_language_servers = () => {
+		const is_supported = supports_module_workers();
+
 		const setup = () => {
+			if (!is_supported) return { svelte_transport, ts_transport };
 			if (ts_transport && svelte_transport) return { svelte_transport, ts_transport };
 
 			typescript_language_worker = new Worker(
@@ -192,6 +241,7 @@
 		 *  be garbage collected unless we explicitly tell them to close
 		 */
 		const dispose = () => {
+			if (!is_supported) return;
 			// Close the RPC channels, which will in turn close the language servers
 			svelte_transport.close();
 			ts_transport.close();
@@ -211,7 +261,7 @@
 			current_language_transport = undefined;
 		};
 
-		return { setup, dispose };
+		return { setup, dispose, is_supported };
 	};
 
 	let current_language_transport: Extension[] | undefined;
@@ -223,7 +273,7 @@
 	import { webcontainer } from '$lib/webcontainer';
 	import type { Extension } from '@codemirror/state';
 	import { languageServerWithTransport } from 'codemirror-languageserver';
-	import { onMount, setContext, tick } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import { derived, writable, type Readable, type Writable } from 'svelte/store';
 
 	// Swap out the current language client with the new one
@@ -237,6 +287,8 @@
 	// The transports used to communicate with the language servers
 	let svelte_transport: WorkerRPC;
 	let ts_transport: WorkerRPC;
+
+	let supports_lsp = writable(false);
 
 	// Both variables are used for properly creating a fallback tsconfig/jsconfig
 	let project_is_sveltekit = false;
@@ -257,32 +309,25 @@
 	/** Sends the 'setup' RPC message to the language servers,
 	 * 	and adds the project files + config files to the language servers
 	 */
-	const setup = async (
-		project_type: 'fresh' | 'existing',
-		config_files: Record<string, string>,
-		files: Record<string, string> = {},
-	) => {
-		resolved = true;
+	const setup = async (config_files: Record<string, string>, files: Record<string, string> = {}) =>
+		new Promise((resolve) => {
+			const ready = () => {
+				setup_completed.resolve(true);
+				resolved = true;
+				resolve(undefined);
+			};
 
-		if (project_type === 'fresh') {
-			await Promise.all([
-				svelte_transport.setup(config_files),
-				ts_transport.setup(config_files),
-				svelte_transport.addFiles({ ...config_files, ...files }),
-				ts_transport.addFiles({ ...config_files, ...files }),
-			]);
-		} else {
-			await Promise.all([
-				svelte_transport.addFiles({ ...config_files, ...files }),
-				ts_transport.addFiles({ ...config_files, ...files }),
-			]);
-		}
-		setup_completed.resolve(true);
-	};
+			race(
+				1000,
+				Promise.all<unknown[]>([
+					svelte_transport.addFiles({ ...config_files, ...files }),
+					svelte_transport.setup(config_files),
+					ts_transport.setup(config_files),
+				]),
+			).then(ready);
+		});
 
 	const get_language_client = () => {
-		let is_being_executed = false;
-
 		const reset_language_transport = () => {
 			update_extensions_with_client([]);
 			current_language_transport = undefined;
@@ -306,8 +351,6 @@
 				reset_language_transport();
 				return;
 			}
-
-			await tick();
 
 			// Create a new language client transport for the current tab if one doesn't exist
 			const client = languageServerWithTransport({
@@ -341,17 +384,12 @@
 		};
 
 		return async ($document_uri: string) => {
-			if (is_being_executed || !resolved) return console.debug('already being executed');
-			is_being_executed = true;
-
 			await setup_completed.promise;
-
 			if (lang_clients.has($document_uri)) {
 				get_existing_client($document_uri);
 			} else {
 				await create_new_client($document_uri);
 			}
-			is_being_executed = false;
 		};
 	};
 
@@ -359,24 +397,28 @@
 		if (resolved) return;
 		const configs: Record<string, string> = {};
 
-		const has_svelte_kit_dotfiles = (files: Record<string, string>) => {
-			const keys = Object.keys(files);
-			return (
-				!resolved &&
-				keys.length >= 2 &&
-				keys.some((file) =>
-					file.match(
-						/(\.svelte-kit(\/tsconfig\.json|\/types)?|ambient\.d\.ts|types|svelte\.config\.js)/,
-					),
-				)
-			);
-		};
+		const has_svelte_kit_dotfiles = (() => {
+			let resolved = false;
+			return (files: Record<string, string>) => {
+				const keys = Object.keys(files);
+				const result =
+					!resolved &&
+					keys.length >= 4 &&
+					keys.some((file) =>
+						file.match(
+							/(\.svelte-kit(\/tsconfig\.json|\/types)?|route_meta_data|\$types.d.ts|ambient\.d\.ts|types|svelte\.config\.js)/,
+						),
+					);
+				if (result) resolved = true;
+				return result;
+			};
+		})();
 
 		// Listen for changes to SK-specific type files
 		const listen_for_type_changes = webcontainer.on_fs_change(
 			'modification',
 			throttle(async (path) => {
-				if (path.includes('.svelte-kit/types')) {
+				if (path.includes('.svelte-kit/')) {
 					const file = await webcontainer.read_file(path, true);
 					svelte_transport.addFiles({ [to_absolute_path(path)]: file });
 				}
@@ -384,15 +426,22 @@
 		);
 
 		const on_config_callback = async (path: string) => {
+			const absolute_path = to_absolute_path(path);
+			if (
+				is_tsconfig_or_jsconfig(path) ||
+				path === './svelte.config.js' ||
+				path === './.svelte-kit/ambient.d.ts' ||
+				path.startsWith('./.svelte-kit/')
+			) {
+				await webcontainer.read_file(path, true).then((file) => {
+					configs[absolute_path] = file;
+				});
+			}
 			if (has_svelte_kit_dotfiles(configs) || !project_is_sveltekit) {
-				if (resolved) {
-					const temp = { [to_absolute_path(path)]: await webcontainer.read_file(path, true) };
-					await svelte_transport.addFiles(temp);
-				} else {
-					configs[to_absolute_path(path)] = await webcontainer.read_file(path, true);
+				configs[absolute_path] = await webcontainer.read_file(path, true);
 
-					if (!files['/tsconfig.json'] && !files['/jsconfig.json']) {
-						files[project_is_typescript ? '/tsconfig.json' : '/jsconfig.json'] = `
+				if (!files['/tsconfig.json'] && !files['/jsconfig.json']) {
+					files[project_is_typescript ? '/tsconfig.json' : '/jsconfig.json'] = `
 						{
 							${project_is_sveltekit ? `"extends": "./.svelte-kit/tsconfig.json",` : ''}
 							"compilerOptions": {
@@ -407,30 +456,16 @@
 							},
 							"include": ["**/**/*/*.d.ts", "**/*.ts", "**/*.js", "**/*.svelte"],
 						}`;
-					}
-					setup('fresh', configs, files);
 				}
-				return;
+				await setup(configs, files);
+			} else {
+				configs[absolute_path] = await webcontainer.read_file(path, true);
+				await svelte_transport.addFiles({ [absolute_path]: configs[absolute_path] });
 			}
-
-			if (
-				is_tsconfig_or_jsconfig(path) ||
-				path === './svelte.config.js' ||
-				path === './.svelte-kit/ambient.d.ts' ||
-				path.startsWith('./.svelte-kit/')
-			) {
-				await webcontainer.read_file(path, true).then((file) => {
-					configs[to_absolute_path(path)] = file;
-				});
-				return;
-			}
-			await webcontainer.read_file(path, true).then((file) => {
-				return svelte_transport.addFiles({ [to_absolute_path(path)]: file });
-			});
 		};
 
 		// We use the mutex here to ensure things are executed one at a time
-		const mutex = async_mutex(on_config_callback);
+		const mutex = async_mutex<string, void>((path) => race(5000, on_config_callback(path)));
 
 		const listen_for_configs = webcontainer.on_fs_change('creation', mutex);
 
@@ -447,12 +482,27 @@
 
 		({ svelte_transport, ts_transport } = workers);
 
+		supports_lsp.set(worker_handlers.is_supported);
+
+		if (!$supports_lsp) {
+			setup_completed.resolve(true);
+			resolved = true;
+
+			return;
+		}
+
 		const handle_config_changes = webcontainer.on_init(async () => {
 			const tree = await webcontainer.get_tree_from_container(true, false);
 			const files = webcontainer.walk_tree_and_collect(tree);
 
 			webcontainer.read_package_json().then(async (json) => {
-				await svelte_transport.fetchTypes(json);
+				await Promise.all([
+					svelte_transport.fetchTypes(json),
+					ts_transport.fetchTypes(json),
+					svelte_transport.addFiles(files),
+					ts_transport.addFiles(files),
+				]);
+
 				if (typeof json === 'object' && 'devDependencies' in json) {
 					if (json.devDependencies['@sveltejs/kit']) {
 						project_is_sveltekit = true;
@@ -462,10 +512,8 @@
 					}
 				}
 
-				await tick();
-
 				if (Object.keys(files).some((file) => file.includes('.svelte-kit/'))) {
-					await setup('existing', files);
+					await setup(files);
 				} else {
 					const setup_listeners = setup_fresh_project(files);
 
@@ -488,13 +536,17 @@
 		document_uri,
 		get_language_client: get_language_client(),
 		setup_complete: setup_completed.promise,
-		delete_file: async (uri: string) => {
+		supports_lsp: derived(supports_lsp, ($supports_lsp) => $supports_lsp),
+		delete_lsp_file: async (uri: string) => {
+			if (!$supports_lsp) throw new Error('Language Server not supported');
 			await Promise.all([
 				svelte_transport.deleteFile(to_absolute_path(uri)),
 				ts_transport.deleteFile(to_absolute_path(uri)),
 			]);
 		},
-		update_file: async (uri: string, contents: string) => {
+		update_lsp_file: async (uri: string, contents: string) => {
+			if (!$supports_lsp) throw new Error('Language Server not supported');
+
 			await Promise.all([
 				svelte_transport.addFiles({ [to_absolute_path(uri)]: contents }),
 				ts_transport.addFiles({ [to_absolute_path(uri)]: contents }),
