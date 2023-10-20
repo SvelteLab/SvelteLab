@@ -345,6 +345,18 @@ async function spawn_process_and_show_output(cmd: string) {
 const broken_functions_map = new Map([
 	[
 		`function fix_stack_trace(error) {
+		vite.ssrFixStacktrace(error);
+		return error.stack;
+	}`,
+		`function fix_stack_trace(error) {
+			try{
+				vite.ssrFixStacktrace(error);
+			}catch(e){}
+			return error.stack;
+		}`,
+	],
+	[
+		`function fix_stack_trace(error) {
 		return error.stack ? vite.ssrRewriteStacktrace(error.stack) : error.stack;
 	}`,
 		`function fix_stack_trace(error) {
