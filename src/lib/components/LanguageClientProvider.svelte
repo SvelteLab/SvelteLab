@@ -101,8 +101,8 @@
 			}, // it's been called, it's supported
 		};
 		try {
-			new Worker('data:', tester);
-		} catch (e) {
+			new Worker('data:,', tester).terminate();
+		} catch {
 			console.log('Unsupported browser for language server usage, disabling...');
 		}
 
@@ -457,7 +457,7 @@
 							"include": ["**/**/*/*.d.ts", "**/*.ts", "**/*.js", "**/*.svelte"],
 						}`;
 				}
-				await setup(configs, files);
+				setup(configs, files);
 			} else {
 				configs[absolute_path] = await webcontainer.read_file(path, true);
 				await svelte_transport.addFiles({ [absolute_path]: configs[absolute_path] });
@@ -465,7 +465,7 @@
 		};
 
 		// We use the mutex here to ensure things are executed one at a time
-		const mutex = async_mutex<string, void>((path) => race(5000, on_config_callback(path)));
+		const mutex = async_mutex<string, void>((path) => on_config_callback(path));
 
 		const listen_for_configs = webcontainer.on_fs_change('creation', mutex);
 
