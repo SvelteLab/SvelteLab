@@ -48,6 +48,7 @@
 		"@yaireo/relative-time": "^1.0.4",
 		"as-comps": "^0.0.27",
 		"codemirror-languageserver": "^1.11.0",
+		"events": "^3.3.0",
 		"flexsearch": "^0.7.31",
 		"fzf": "^0.5.2",
 		"he": "^1.2.0",
