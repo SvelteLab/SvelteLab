@@ -1,0 +1,24 @@
+{
+	"name": "five",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite dev",
+		"preview": "vite preview",
+		"format": "prettier --plugin-search-dir . --write .",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.1.1",
+		"@sveltejs/kit": "^1.27.4",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.10.1",
+		"svelte": "5.0.0-next.1",
+		"svelte-check": "^3.6.0",
+		"tslib": "^2.6.2",
+		"typescript": "^5.2.2",
+		"vite": "^4.5.0"
+	},
+	"type": "module"
+}

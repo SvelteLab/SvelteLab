@@ -657,7 +657,7 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		await run_command('npm install');
+		await run_command('npm install --legacy-peer-deps');
 		listen_for_files_changes();
 	},
 	/**
