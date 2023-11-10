@@ -11,6 +11,8 @@
 				class="action-confirm"
 				title="Open {template}"
 				href="./?t={template}"
+				target="_blank"
+				rel="noopener noreferrer"
 			>
 				{#if icons}
 					{#if !Array.isArray(icons)}
