@@ -1,7 +1,9 @@
-<script>
-   let name = $state('Runes')
+<script lang="ts">
+	import Counter from '$lib/Counter.svelte';
+
+	export let data;
 </script>
 
-<h1>Hello {name}!</h1>
+<h1>Hello {data.name}!</h1>
 
-<input bind:value={name}>
+<Counter count={5}/>
