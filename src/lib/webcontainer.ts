@@ -21,6 +21,7 @@ import { close_all_tabs, current_tab, open_file, tabs } from './tabs';
 import { actionable } from './toast';
 import { MapOfSet, deferred_promise, version_compare } from './utils';
 import { expand_path } from './stores/expanded_paths';
+import { page } from '$app/stores';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -657,7 +658,8 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		await run_command('npm install --legacy-peer-deps');
+		const is_five = get(page).url.searchParams.get('t') === 'five';
+		await run_command(is_five ? 'npm install --legacy-peer-deps' : 'npm install');
 		listen_for_files_changes();
 	},
 	/**
