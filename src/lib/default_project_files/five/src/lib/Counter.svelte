@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { count } = $props();
+	let { count } = $props<{ count: number }>();
 
 	$effect(() => {
 		if (count >= 10) {
