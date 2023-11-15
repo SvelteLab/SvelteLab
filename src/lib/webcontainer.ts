@@ -663,7 +663,7 @@ export const webcontainer = {
 			package_json?.dependencies?.svelte ?? package_json?.devDependencies?.svelte;
 		const is_five =
 			svelte_version === 'next' ||
-			semver.gt(semver.valid(semver.coerce(svelte_version)) ?? '', '5.0.0');
+			semver.gte(semver.valid(semver.coerce(svelte_version)) ?? '', '5.0.0');
 		await run_command(is_five ? 'npm install --legacy-peer-deps' : 'npm install');
 		listen_for_files_changes();
 	},
