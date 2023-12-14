@@ -19,8 +19,8 @@ New unsaved projects can only be shared via code snapshot.
 
 Saved projects can be shared via Project ID. The contents of this link will stay in sync with any updates you save to your project.
 
-## Open project from GitHub
+## Open template from GitHub
 
-Projects can also be opened with github with the following url format: `https://sveltelab.dev/github.com/username/repo`
+Projects can also be opened from a GitHub REPO with the following url format: `https://sveltelab.dev/github.com/username/repo`. Simply type `sveltelab.dev/` before `github.com` in your url bar.
 
 <OpenWithButton/>
