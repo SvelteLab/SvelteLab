@@ -8,6 +8,7 @@ import {
 	type WebContainerProcess,
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent } from 'lz-string';
+import semver from 'semver';
 import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
 import { stringify } from './components/parsers';
@@ -16,11 +17,11 @@ import {
 	diagnostic_store,
 	is_sveltecheck_running,
 } from './stores/editor_errors_store';
+import { expand_path } from './stores/expanded_paths';
 import { file_status, is_repl_to_save, repl_name } from './stores/repl_id_store';
 import { close_all_tabs, current_tab, open_file, tabs } from './tabs';
 import { actionable } from './toast';
 import { MapOfSet, deferred_promise, version_compare } from './utils';
-import { expand_path } from './stores/expanded_paths';
 
 /**
  * Used to throw an useful error if you try to access any function before initing
@@ -667,7 +668,13 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		await run_command('npm install');
+		/// TODO remove when svelte 5 is normally installable
+		const svelte_version =
+			package_json?.dependencies?.svelte ?? package_json?.devDependencies?.svelte;
+		const is_five =
+			svelte_version === 'next' ||
+			semver.gte(semver.valid(semver.coerce(svelte_version)) ?? '', '5.0.0');
+		await run_command(is_five ? 'npm install --legacy-peer-deps' : 'npm install');
 		listen_for_files_changes();
 	},
 	/**
