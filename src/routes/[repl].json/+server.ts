@@ -13,6 +13,6 @@ export async function GET({ params, locals }) {
 		const { user, expand, ...record } = await get_repl_from_id(repl, locals.pocketbase);
 		return json(record);
 	} catch (e) {
-		throw error(404);
+		error(404);
 	}
 }

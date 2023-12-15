@@ -30,6 +30,6 @@ export const actions = {
 			return fail(400, { error: 'Something unexpected happen. Sorry :/' });
 		}
 
-		throw redirect(303, '/');
+		redirect(303, '/');
 	},
 } satisfies Actions;

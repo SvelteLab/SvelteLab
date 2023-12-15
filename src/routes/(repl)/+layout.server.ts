@@ -103,7 +103,7 @@ export const load: LayoutServerLoad = async ({
 	}
 
 	if (!files) {
-		throw redirect(300, '/');
+		redirect(300, '/');
 	}
 	return {
 		// we can use normal JSON.stringify here because it comes

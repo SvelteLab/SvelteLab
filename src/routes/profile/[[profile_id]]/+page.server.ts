@@ -5,7 +5,7 @@ import { fork } from '$lib/api/server/fork';
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { profile_id } = params;
 	if (!locals.user && !profile_id) {
-		throw redirect(301, '/');
+		redirect(301, '/');
 	}
 	const user_id = profile_id ?? locals.user?.id;
 	let profile;
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			.then((user) => structuredClone(user));
 	} catch (e) {
 		console.log(e);
-		throw redirect(301, '/');
+		redirect(301, '/');
 	}
 	return {
 		repls: locals.pocketbase
