@@ -31,5 +31,5 @@ export async function load({ locals, url, cookies, params: { redirect_to } }) {
 			console.log(e);
 		}
 	}
-	throw redirect(302, `/${redirect_to}?login=true`);
+	redirect(302, `/${redirect_to}?login=true`);
 }

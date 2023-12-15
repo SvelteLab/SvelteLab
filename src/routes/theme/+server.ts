@@ -6,7 +6,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (theme) {
 		cookies.set(PUBLIC_THEME_COOKIE_NAME, theme, { httpOnly: false, path: '/' });
 	} else {
-		cookies.delete(PUBLIC_THEME_COOKIE_NAME);
+		cookies.delete(PUBLIC_THEME_COOKIE_NAME, {
+			path: '/',
+		});
 	}
 	return new Response('Theme Cookie Set');
 };

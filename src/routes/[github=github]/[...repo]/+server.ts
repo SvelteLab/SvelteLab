@@ -13,5 +13,5 @@ export const GET: RequestHandler = async ({ params }) => {
 			search_params.set(group, info[group]);
 		}
 	}
-	throw redirect(301, `/?${search_params}`);
+	redirect(301, `/?${search_params}`);
 };
