@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		redirect(301, '/');
 	}
 	return {
-		repls: locals.pocketbase
+		repls: await locals.pocketbase
 			.collection('repls')
 			.getList(1, 50, {
 				filter: `user.id = "${user_id}"`,

@@ -9,6 +9,7 @@ import {
 	file_status,
 } from '$lib/stores/repl_id_store';
 import { stringify } from '$lib/components/parsers';
+import { pushState } from '$app/navigation';
 
 /**
  * This function does what it takes to save the repl, it set the state
@@ -46,7 +47,7 @@ export async function save_repl(is_forking = false) {
 			// means it's the first time the user saves this project,
 			// we push with the history api because we just want the url
 			// to change there's no need to run the load function again
-			window.history.pushState(null, '', `/${created.id}`);
+			pushState(`/${created.id}`, {});
 			repl_id.set(created.id);
 		}
 	} else {
