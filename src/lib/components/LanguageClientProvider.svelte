@@ -194,9 +194,6 @@
 		return `file:///${path.replace('./', '')}`;
 	};
 
-	const race = <T,>(timeout: number, callback: Promise<T>) =>
-		Promise.race<T>([new Promise((r) => setTimeout(r, timeout)), callback]);
-
 	const create_language_servers = () => {
 		const is_supported = supports_module_workers();
 
@@ -317,14 +314,15 @@
 				resolve(undefined);
 			};
 
-			race(
-				1000,
-				Promise.all<unknown[]>([
-					svelte_transport.addFiles({ ...config_files, ...files }),
-					svelte_transport.setup(config_files),
-					ts_transport.setup(config_files),
-				]),
-			).then(ready);
+			svelte_transport
+				.addFiles({ ...config_files, ...files })
+				.then(() => {
+					return svelte_transport.setup(config_files);
+				})
+				.then(() => {
+					return ts_transport.setup(config_files);
+				})
+				.then(ready);
 		});
 
 	const get_language_client = () => {
@@ -384,7 +382,6 @@
 		};
 
 		return async ($document_uri: string) => {
-			await setup_completed.promise;
 			if (lang_clients.has($document_uri)) {
 				get_existing_client($document_uri);
 			} else {

@@ -146,12 +146,15 @@ async function listen_for_files_changes() {
 							/* empty */
 						}
 					} else if (command === 'change') {
-						fs_changes_callbacks.get('modification').forEach((callbacks) => {
-							callbacks(path);
-						});
-						read_file(path).then((contents) => {
-							add_file_in_store(files_store, path, contents);
-						});
+						read_file(path)
+							.then((contents) => {
+								add_file_in_store(files_store, path, contents);
+							})
+							.then(() => {
+								fs_changes_callbacks.get('modification').forEach((callbacks) => {
+									queueMicrotask(() => callbacks(path));
+								});
+							});
 					}
 				}
 			},
