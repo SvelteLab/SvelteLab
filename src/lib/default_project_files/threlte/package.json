@@ -6,31 +6,20 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "prettier --plugin-search-dir . --check . && eslint .",
-    "format": "prettier --plugin-search-dir . --write .",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+    "lint": "eslint .",
     "model-pipeline:run": "node scripts/model-pipeline.js"
   },
   "devDependencies": {
-    "@dimforge/rapier3d-compat": "^0.11.2",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "@theatre/core": "^0.6.1",
-    "@theatre/studio": "^0.6.1",
-    "@threlte/core": "latest",
-    "@threlte/extras": "latest",
-    "@threlte/rapier": "latest",
-    "@threlte/theatre": "latest",
     "eslint": "^8.28.0",
-    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte": "^2.30.0",
-    "prettier": "^2.8.0",
-    "prettier-plugin-svelte": "^2.10.1",
-    "svelte": "^4.0.5",
-    "svelte-check": "^3.4.6",
-    "three": "^0.153.0",
-    "vite": "^5.0.0"
+    "svelte": "^4.2.7",
+    "vite": "^5.0.3",
+    "three": "^0.159.0",
+    "@threlte/core": "^7.0.10",
+    "@threlte/extras": "^8.0.8"
   },
   "type": "module"
 }
