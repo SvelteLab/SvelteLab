@@ -4,5 +4,4 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ params }) => {
 	redirect(301, build_import_href(params.repo));
-	return new Response();
 };
