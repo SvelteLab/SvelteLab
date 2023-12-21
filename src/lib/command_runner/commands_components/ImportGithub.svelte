@@ -1,32 +1,44 @@
 <script lang="ts">
-	import { github_regex } from '$lib/github_import_regex';
+	import { build_import_href, github_regex } from '$lib/github_import_regex';
 
-	let value = '';
-	$: info = value.match(github_regex)?.groups || {};
+	export let value = 'https://github.com/';
+	$: repo = value.split('github.com/')[1];
+	$: info = repo?.match(github_regex)?.groups;
 </script>
 
 <form>
 	<label>
-		Github URL
-		<input
-			bind:value
-			type="text"
-			class="action-field"
-			aria-describedby="github-url-hint"
-			placeholder="https://github.com/SvelteLab/SvelteLab/tree/main/src/lib/default_project_files/tailwind"
-		/>
-		<span id="github-url-hint"> You can also use a github folder path! </span>
+		Github Repo URL
+		<!-- svelte-ignore a11y-autofocus -->
+		<input bind:value autofocus type="text" class="action-field" />
 	</label>
 
-	<dl>
-		{#each Object.keys(info) as group}
-			<!-- content here -->
-			<dt>{group}</dt>
-			<dd>{info[group]}</dd>
-		{/each}
-	</dl>
+	{#if info}
+		<dl>
+			{#each Object.keys(info) as group}
+				<dt>{group[0].toUpperCase()}{group.slice(1)}:</dt>
+				{#if info[group]}
+					<dd>{info[group]}</dd>
+				{:else}
+					<dd><i>none...</i></dd>
+				{/if}
+			{/each}
+		</dl>
+	{:else}
+		Enter a valid Github Repository URL like <code>https://github.com/SvelteLab/SvelteLab</code> or
+		even use a folder path like
+		<code
+			>https://github.com/SvelteLab/SvelteLab/tree/main/src/lib/default_project_files/tailwind</code
+		>
+	{/if}
 
-	<button class="action-confirm">Import this repo!</button>
+	<button
+		class="action-confirm"
+		disabled={!info?.owner || !info?.repo}
+		on:click={() => {
+			window.location.href = build_import_href(repo);
+		}}>Import this Repo!</button
+	>
 </form>
 
 <style>
@@ -34,5 +46,23 @@
 		display: grid;
 		gap: 2rem;
 		margin: 2rem;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: min-content auto;
+	}
+
+	dl > * {
+		margin-block: 0.5rem;
+	}
+
+	dt {
+		font-weight: 600;
+		margin-inline-end: 2rem;
+	}
+
+	dd:has(i) {
+		color: var(--sk-text-3);
 	}
 </style>
