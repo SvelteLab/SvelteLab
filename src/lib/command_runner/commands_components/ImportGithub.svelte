@@ -27,12 +27,14 @@
 	{:else}
 		<p>
 			Enter a valid Github Repository URL like <code>https://github.com/SvelteLab/SvelteLab</code>
-			or even use a folder path like
+			or use a folder path like
 			<code
 				>https://github.com/SvelteLab/SvelteLab/tree/main/src/lib/default_project_files/tailwind</code
-			>
-			or you can simply type <code>sveltelab.dev/</code> before <code>github.com/...</code> in your url
-			bar while visiting a repository.
+			>.
+		</p>
+		<p>
+			Pro Tip: you can add <code>sveltelab.dev/</code> before <code>github.com/...</code> in your url
+			bar while visiting a repository or folder and hit enter to import as a SvelteLab project!
 		</p>
 	{/if}
 
@@ -68,5 +70,16 @@
 
 	dd:has(i) {
 		color: var(--sk-text-3);
+	}
+
+	code {
+		white-space: pre;
+		white-space: pre-wrap;
+		word-break: break-all;
+		word-wrap: break-word;
+	}
+
+	p {
+		margin: 0;
 	}
 </style>
