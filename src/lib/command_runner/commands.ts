@@ -50,6 +50,7 @@ import SearchDocs from './commands_components/SearchDocs.svelte';
 import SetDefaultTemplate from './commands_components/SetDefaultTemplate.svelte';
 import ShareProject from './commands_components/ShareProject.svelte';
 import SvelteAdd from './commands_components/SvelteAdd.svelte';
+import ImportGithub from './commands_components/ImportGithub.svelte';
 
 function get_files_from_tree(tree: FileSystemTree, path = './') {
 	const files = [] as { file: string; path: string }[];
@@ -323,6 +324,17 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 			mod: ['$mod', 'Shift'],
 			keys: ['KeyC'],
 		},
+	});
+
+
+	push({
+		category: 'Project',
+		command: 'import-github',
+		title: 'Import from Github',
+		subtitle: 'create new project a template from github',
+		seo: 'github import template',
+		icon: GitHub,
+		action_component: ImportGithub,
 	});
 
 	push({

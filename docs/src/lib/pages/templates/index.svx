@@ -17,3 +17,9 @@ To speed up creation of new Projects, SvelteLab offers a couple of SvelteKit Tem
 You can also set one of the above as your **default Templates**, so any new Project always starts of with these integrations.
 
 ![Set Default Template Command running, showing possible options]({set_default_template})
+
+## Open template from GitHub
+
+Projects can also be opened from a GitHub REPO with the following url format: `https://sveltelab.dev/github.com/username/repo`. Simply type `sveltelab.dev/` before `github.com` in your url bar.
+
+<OpenWithButton/>
