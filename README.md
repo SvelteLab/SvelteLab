@@ -11,10 +11,15 @@
 - 📒 Templates (TypeScript, Tailwind, mdsvex)
 - 📄 SvelteKit File Icons
 - 🛤️ SvelteKit Route Generation
-- ➕ [Svelte Add](https://github.com/svelte-add/svelte-add)
+- ➕ [Svelte Add](https://github.com/svelte-add/svelte-add) integration
 - 📦 Install Packages
 - ⌨️ Vim Keybindings
 - 👻 Hide Config Clutter (show file tree from `/src`)
+- 💌 Share Code via Hash or Share Project via ID
+- 🐙 Import from GitHub
+- 📦 Download Projects
+- 💻 [CLI](https://www.npmjs.com/package/sveltelab)
+- 🔧 Editor Preferences
 
 🧡 Made with Svelte, for Svelte, by Svelte lovers!
 
