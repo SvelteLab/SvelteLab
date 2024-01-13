@@ -103,7 +103,7 @@ export const listening_for_fs = {
 
 type FSChangedCallback = (path: string) => void;
 
-type FSChangedEvent = 'creation' | 'deletion';
+type FSChangedEvent = 'creation' | 'deletion' | 'modification';
 
 const fs_changes_callbacks = new MapOfSet<FSChangedEvent, Set<FSChangedCallback>>();
 
@@ -126,7 +126,7 @@ async function listen_for_files_changes() {
 				const matches = data.match(/(?<command>(?:unlink|add)):(?<route>.*)/);
 				if (matches) {
 					const { command, route } = matches.groups as {
-						command: 'unlink' | 'add';
+						command: 'unlink' | 'add' | 'change';
 						route: string;
 					};
 					const path = `./${route}`;
@@ -145,6 +145,16 @@ async function listen_for_files_changes() {
 						} catch (e) {
 							/* empty */
 						}
+					} else if (command === 'change') {
+						read_file(path)
+							.then((contents) => {
+								add_file_in_store(files_store, path, contents);
+							})
+							.then(() => {
+								fs_changes_callbacks.get('modification').forEach((callbacks) => {
+									queueMicrotask(() => callbacks(path));
+								});
+							});
 					}
 				}
 			},
@@ -592,7 +602,10 @@ export const webcontainer = {
 		close_all_tabs();
 		await tick();
 		const search_params = new URLSearchParams(window.location.search);
-		const files_to_open_string = search_params.get('files') ?? './src/routes/+page.svelte';
+		const files_to_open_string =
+			search_params.get('files') ?? './src/routes/+page.svelte' in files
+				? './src/routes/+page.svelte'
+				: find_first_of_file_ext(files, 'svelte', 'svx') || '';
 		const files_to_open = files_to_open_string.split(',');
 
 		for (const file_to_open of files_to_open) {
@@ -803,6 +816,7 @@ export const webcontainer = {
 		a.click();
 	},
 	get_tree_from_container,
+	walk_tree_and_collect: walk_tree_and_collect,
 	on_fs_change(event: FSChangedEvent, cb: FSChangedCallback) {
 		fs_changes_callbacks.get(event).add(cb);
 		return () => {
@@ -812,18 +826,102 @@ export const webcontainer = {
 	check_file_exist(path: `./${string}`) {
 		return does_file_exist(get(files), path);
 	},
+	async get_directory_names(path: string, recursive = false) {
+		const walk = async (path: string, recursive: boolean, result: string[]): Promise<void> => {
+			const dir = await webcontainer_instance.fs.readdir(path, {
+				withFileTypes: true,
+			});
+
+			for (const node of dir) {
+				const node_path = `${path}/${node.name}`;
+				if (node.isDirectory()) {
+					result.push(node_path); // Push the directory path to the result array immediately
+
+					if (recursive) {
+						await walk(node_path, true, result); // Use the same result array for recursive calls
+					}
+				}
+			}
+		};
+
+		const result: string[] = [path]; // Initialize result array with the root directory
+		await walk(path, recursive, result);
+		return result;
+	},
 };
 
-async function get_tree_from_container(as_string = true): Promise<FileSystemTree> {
+async function get_tree_from_container(
+	as_string = true,
+	ignore_node_modules = true,
+): Promise<FileSystemTree> {
 	const root = await webcontainer_instance.fs.readdir('/', { withFileTypes: true });
-	return get_tree(root, '/', as_string);
+	return get_tree(root, '/', as_string, ignore_node_modules);
+}
+
+type PathToFile = string;
+type FileContents = string;
+/** Walks a given file tree and returns  */
+function walk_tree_and_collect(file_tree: FileSystemTree): Record<PathToFile, FileContents> {
+	const result: Record<string, string> = {};
+	function walk(
+		path: string[] = [],
+		current_dir: string,
+		current: FileSystemTree | undefined = file_tree,
+	) {
+		path = [...path, current_dir === '' ? '' : current_dir.replace(/\/\/+/g, '/')];
+		const current_path = path.join('/');
+
+		for (const file of Object.keys(current)) {
+			const node = current[file];
+			if ('file' in node && node.file !== undefined) {
+				const path_name = `${current_path}/${file}`.replace(/\/\/+/g, '/');
+				// If the current entry is a file, add it to the dictionary
+				result[path_name] = (node.file.contents as string) ?? '';
+			} else if ('directory' in node && node.directory !== undefined) {
+				// If the current entry is a directory, recurse into it
+				walk(path, file, node.directory);
+			}
+		}
+
+		return result;
+	}
+	return walk([''], '', file_tree);
+}
+
+function find_first_of_file_ext(
+	file_tree: FileSystemTree,
+	...file_exts: string[]
+): string | undefined {
+	const walk = (
+		current_dir: string,
+		current: FileSystemTree | undefined = file_tree,
+	): string | undefined => {
+		for (const file of (
+			Object.keys(current) as unknown as Exclude<keyof FileSystemTree, number>[]
+		).sort((a, b) => (current[a] ? -1 : current[b] ? 1 : 0))) {
+			const node = current[file];
+			if ('file' in node && node.file !== undefined) {
+				if (file_exts.some((ext) => file.endsWith(ext))) {
+					return `.${current_dir}/${file}`.replace(/\/\/+/g, '/');
+				}
+			} else if ('directory' in node && node.directory !== undefined) {
+				const result = walk(`${current_dir}/${file}`.replace(/\/\/+/g, '/'), node.directory);
+				if (result) {
+					return result;
+				}
+			}
+		}
+	};
+	return walk('/', file_tree);
 }
 
 const decoder = new TextDecoder();
+
 async function get_tree(
 	dir: DirEnt<string>[],
 	path: string,
 	as_string: boolean,
+	ignore_node_modules = true,
 ): Promise<FileSystemTree> {
 	const tree: FileSystemTree = {};
 	for (const node of dir) {
@@ -839,12 +937,17 @@ async function get_tree(
 					contents,
 				},
 			};
-		} else if (node.isDirectory() && !IGNORE_LIST.includes(node.name)) {
+		} else if (
+			node.isDirectory() &&
+			(!IGNORE_LIST.includes(node.name) ||
+				(ignore_node_modules === false && node.name === 'node_modules'))
+		) {
 			tree[node.name] = {
 				directory: await get_tree(
 					await webcontainer_instance.fs.readdir(node_path, { withFileTypes: true }),
 					node_path + '/',
 					as_string,
+					true,
 				),
 			};
 		}
@@ -852,4 +955,4 @@ async function get_tree(
 	return tree;
 }
 
-const IGNORE_LIST = ['.svelte-kit', 'node_modules'];
+const IGNORE_LIST = ['.svelte-kit/generated', 'node_modules'];

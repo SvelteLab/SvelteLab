@@ -12,3 +12,4 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 /pb_migrations
+/src/lib/default_project_files/*

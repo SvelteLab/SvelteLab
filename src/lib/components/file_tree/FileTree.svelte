@@ -29,6 +29,8 @@
 	import DropdownMenu from '../DropdownMenu.svelte';
 	import MenuItem from '../MenuItem.svelte';
 	import AddFile from './AddFile.svelte';
+	import type { LanguageClientContext } from '../LanguageClientProvider.svelte';
+	import { getContext } from 'svelte';
 
 	export let base_path = './';
 	export let is_adding_type: { path: string | null; kind: 'folder' | 'file' | null } = {
@@ -38,6 +40,10 @@
 	export let root_adding_type: typeof is_adding_type.kind = null;
 
 	let renaming_path = null as string | null;
+
+	const { update_lsp_file }: LanguageClientContext = getContext(
+		Symbol.for('svelte_language_worker'),
+	);
 
 	async function handle_add(
 		path_name: string,
@@ -55,6 +61,7 @@
 		}
 		if (type === 'file') {
 			await webcontainer.add_file(prefix + name, new Uint8Array(content));
+			await update_lsp_file(path_name, new TextDecoder().decode(content));
 			if (should_open) {
 				open_file(prefix + name);
 			}

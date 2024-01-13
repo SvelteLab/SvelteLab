@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import Desktop from './Desktop.svelte';
 	import Mobile from './Mobile.svelte';
+	import LanguageClientProvider from '$lib/components/LanguageClientProvider.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	let Console: ComponentType<SvelteComponent> = PlaceholderComponent;
@@ -21,8 +22,10 @@
 
 <svelte:window bind:innerWidth={width} />
 
-{#if width >= 500}
-	<Desktop {Console} {Editor} />
-{:else}
-	<Mobile {Console} {Editor} />
-{/if}
+<LanguageClientProvider>
+	{#if width >= 500}
+		<Desktop {Console} {Editor} />
+	{:else}
+		<Mobile {Console} {Editor} />
+	{/if}
+</LanguageClientProvider>
