@@ -8,6 +8,7 @@ import type PoketBase from 'pocketbase';
 
 async function get_folders_from_user(pocketbase: PoketBase) {
 	const record = await pocketbase.collection('categorized_repls').getFullList();
+	console.log({ record });
 	return categorized_repls_schema.parse(record);
 }
 
@@ -20,8 +21,8 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 			user: locals.user,
 			templates,
 			promises: {
-				categorized_repls
-			}
+				categorized_repls,
+			},
 		};
 	}
 	let github_login;

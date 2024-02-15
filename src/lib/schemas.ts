@@ -39,7 +39,6 @@ export const file_system_schema = z.record(z.union([file_schema, directory_schem
 
 const record_schema = z.object({
 	id: z.string().optional(),
-	files: file_system_schema,
 	user: z.string(),
 	expand: z.record(z.string(), z.any()).optional(),
 });
@@ -48,13 +47,14 @@ export const repl_schema = record_schema.extend({
 	name: z.string().min(2),
 	files: file_system_schema,
 	user: z.string(),
-	category: z.string()
+	category: z.string(),
 });
 
 export const categorized_repl_schema = record_schema.extend({
 	category: z.string(),
 	user: z.string(),
-	name: z.string()
+	name: z.string(),
+	id: z.string(),
 });
 
 export type CategorizedRepl = z.infer<typeof categorized_repl_schema>;
