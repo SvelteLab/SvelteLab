@@ -98,8 +98,5 @@
 		"vite": "^5.0.9",
 		"vitest": "^1.0.0",
 		"workbox-precaching": "^7.0.0"
-	},
-	"engines": {
-		"node": ">=18 <19"
 	}
 }

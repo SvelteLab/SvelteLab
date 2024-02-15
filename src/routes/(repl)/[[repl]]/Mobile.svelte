@@ -2,13 +2,12 @@
 	import Dialog from '$lib/components/Dialog.svelte';
 	import FileActions from '$lib/components/FileActions.svelte';
 	import Iframe from '$lib/components/Iframe.svelte';
+	import ReplsList from '$lib/components/ReplsList.svelte';
 	import { is_intro_open } from '$lib/stores/intro_store';
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
-	import { browser } from '$app/environment';
 	import {
 		mobile_showing,
 		showing_files,
-		showing_repls_list
+		showing_repls_list,
 	} from '$lib/stores/mobile_showing_store';
 	import { Dialog as RawDialog } from 'as-comps';
 	import { SvelteComponent, tick, type ComponentType } from 'svelte';
@@ -16,7 +15,6 @@
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
-	import ReplsList from '$lib/components/ReplsList.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
