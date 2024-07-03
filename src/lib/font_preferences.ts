@@ -4,6 +4,7 @@ import { persisted } from 'svelte-local-storage-store';
 const default_preferences = {
 	ligatures: true,
 	editor_size: 1.6,
+	tab_size: 3,
 	editor_family: 'JetBrains Mono',
 };
 

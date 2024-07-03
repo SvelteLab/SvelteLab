@@ -2,6 +2,7 @@
 	import { on_command } from '$lib/command_runner/commands';
 	import VoidEditor from '$lib/components/VoidEditor.svelte';
 	import { editor_config, editor_preferences } from '$lib/stores/editor_config_store';
+	import font_preferences from '$lib/font_preferences';
 	import { diagnostic_store } from '$lib/stores/editor_errors_store';
 	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
 	import { current_tab } from '$lib/tabs';
@@ -138,7 +139,7 @@
 				lang,
 				langMap: langs,
 				theme,
-				tabSize: 3,
+				tabSize: $font_preferences.tab_size ?? 3,
 				useTabs: true,
 				value: code,
 				documentId: $current_tab,
@@ -161,7 +162,7 @@
 					},
 					'*': {
 						fontFamily: 'var(--sk-font-mono)',
-						tabSize: 3,
+						tabSize: $font_preferences.tab_size ?? 3,
 						fontSize: 'var(--sk-editor-font-size)',
 					},
 					'.cm-gutters': {
