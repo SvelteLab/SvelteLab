@@ -139,7 +139,7 @@
 				lang,
 				langMap: langs,
 				theme,
-				tabSize: $font_preferences.tab_size ?? 3,
+				tabSize: $font_preferences.tab_size ?? 2,
 				useTabs: true,
 				value: code,
 				documentId: $current_tab,
@@ -162,7 +162,7 @@
 					},
 					'*': {
 						fontFamily: 'var(--sk-font-mono)',
-						tabSize: $font_preferences.tab_size ?? 3,
+						tabSize: $font_preferences.tab_size ?? 2,
 						fontSize: 'var(--sk-editor-font-size)',
 					},
 					'.cm-gutters': {
