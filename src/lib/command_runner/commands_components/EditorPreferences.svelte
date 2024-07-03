@@ -17,6 +17,13 @@
 			</span>
 		</label>
 		<label>
+			Tabsize
+			<input type="range" min="1" max="8" bind:value={$font_preferences.tab_size} />
+			<span>
+				<code>{$font_preferences.tab_size} spaces</code>
+			</span>
+		</label>
+		<label>
 			Family
 			<input
 				class="action-field"
@@ -73,7 +80,7 @@
 	.grid {
 		display: grid;
 		gap: 2rem;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 	}
 
 	@media only screen and (max-width: 770px) {
