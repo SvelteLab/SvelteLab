@@ -162,7 +162,7 @@
 					},
 					'*': {
 						fontFamily: 'var(--sk-font-mono)',
-						tabSize: $font_preferences.tab_size ?? 2,
+						tabSize: 'var(--sk-editor-tab-size)',
 						fontSize: 'var(--sk-editor-font-size)',
 					},
 					'.cm-gutters': {
