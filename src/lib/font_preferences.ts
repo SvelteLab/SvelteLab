@@ -17,7 +17,7 @@ export function set_default_font_preferences() {
 }
 
 export function apply_font_preferences() {
-	font_preferences.subscribe(({ ligatures, editor_size, editor_family }) => {
+	font_preferences.subscribe(({ ligatures, editor_size, tab_size, editor_family }) => {
 		if (!browser) return;
 		document.documentElement.style.setProperty(
 			'--sk-font-variant-ligatures',
@@ -25,6 +25,7 @@ export function apply_font_preferences() {
 		);
 
 		document.documentElement.style.setProperty('--sk-editor-font-size', editor_size + 'rem');
+		document.documentElement.style.setProperty('--sk-editor-tab-size', tab_size ?? 2);
 		document.documentElement.style.setProperty(
 			'--sk-editor-font-family',
 			editor_family.trim() || 'JetBrains Mono',
