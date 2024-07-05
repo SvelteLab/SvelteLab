@@ -326,7 +326,6 @@ export const commands: Readable<Command[]> = derived([files, page], ([$files, $p
 		},
 	});
 
-
 	push({
 		category: 'Project',
 		command: 'import-github',

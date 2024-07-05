@@ -658,13 +658,7 @@ export const webcontainer = {
 			listen_for_files_changes();
 			return Promise.resolve(0);
 		}
-		/// TODO remove when svelte 5 is normally installable
-		const svelte_version =
-			package_json?.dependencies?.svelte ?? package_json?.devDependencies?.svelte;
-		const is_five =
-			svelte_version === 'next' ||
-			semver.gte(semver.valid(semver.coerce(svelte_version)) ?? '', '5.0.0');
-		await run_command(is_five ? 'npm install --legacy-peer-deps' : 'npm install');
+		await run_command('npm install');
 		listen_for_files_changes();
 	},
 	/**

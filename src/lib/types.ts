@@ -43,7 +43,7 @@ export type Command<T extends SvelteComponent = SvelteComponent> = {
 			? object
 			: {
 					action_component_props: ComponentProps<T>;
-			  }))
+				}))
 >;
 
 export type NpmResponse = {

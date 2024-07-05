@@ -6,6 +6,7 @@ order: 600
 <script>
 	import new_with_template from "./new_with_template.png";
 	import set_default_template from "./set_default_template.png";
+	import OpenWithButton from "$lib/components/OpenWithButton.svelte"
 </script>
 
 # Templates

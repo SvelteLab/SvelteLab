@@ -58,11 +58,11 @@
 			? commands.filter(
 					(c) =>
 						c.category === 'File' && c.title.toLowerCase().includes(search.trim().toLowerCase()),
-			  )
+				)
 			: fuzzy_search_command(
 					commands.filter((c) => c.category !== 'File'),
 					search.substring(1).trim().split(' ')[0],
-			  );
+				);
 
 	$: marked_command = filtered_commands[0] as Command | null;
 

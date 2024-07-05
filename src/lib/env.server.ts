@@ -7,5 +7,5 @@ export const REDIRECT_URI = IS_PREVIEW
 	? `https://${process.env.VERCEL_GIT_REPO_SLUG}-git-${process.env.VERCEL_GIT_COMMIT_REF?.replace(
 			'#',
 			'',
-	  )}-sveltelab.vercel.app/redirect`
+		)}-sveltelab.vercel.app/redirect`
 	: PUBLIC_GITHUB_REDIRECT_URI;

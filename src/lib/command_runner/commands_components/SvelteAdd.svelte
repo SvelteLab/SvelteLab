@@ -39,12 +39,7 @@
 			dismissable: false,
 		});
 		webcontainer
-			.spawn('npx', [
-				'-y',
-				'svelte-add@latest',
-				integrations_to_add.map((i) => i.name).join('+'),
-				'--install',
-			])
+			.spawn('npx', ['-y', 'svelte-add@latest', integrations_to_add.map((i) => i.name).join('+')])
 			.then(async (process) => {
 				dispatch('completed');
 				process.output.pipeTo(

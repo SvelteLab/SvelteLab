@@ -2,7 +2,7 @@ import Lib from '~icons/material-symbols/local-library-rounded';
 import Tailwind from '~icons/mdi/tailwind';
 import Mdsvex from '~icons/simple-icons/markdown';
 import Basic from '~icons/simple-icons/svelte';
-import Five from '~icons/ph/magic-wand-duotone'
+import Next from '~icons/ph/magic-wand-duotone';
 import Typescript from '~icons/simple-icons/typescript';
 import OpenProps from '~icons/sveltelab/open-props';
 import Melt from '~icons/sveltelab/melt';
@@ -21,7 +21,7 @@ export const template_icon_map = new Map(
 		typescript: Typescript,
 		typescript_tailwind: [Typescript, Tailwind],
 		animotion: Animotion,
-		five: Five,
+		next: Next,
 	}),
 );
 
