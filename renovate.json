@@ -1,0 +1,8 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"github>NullVoxPopuli/renovate:weekly.json5",
+		"github>NullVoxPopuli/renovate:npm-groups.json5"
+	],
+	"packageRules": []
+}
