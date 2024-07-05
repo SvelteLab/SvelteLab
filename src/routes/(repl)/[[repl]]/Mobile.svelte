@@ -5,16 +5,16 @@
 	import { is_intro_open } from '$lib/stores/intro_store';
 	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
 	import { Dialog as RawDialog } from 'as-comps';
-	import { SvelteComponent, tick, type ComponentType } from 'svelte';
+	import { tick } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	export let Console: ComponentType<SvelteComponent>;
+	export let Console;
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	export let Editor: ComponentType<SvelteComponent>;
+	export let Editor;
 
 	let update_height: () => void;
 

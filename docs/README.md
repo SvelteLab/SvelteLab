@@ -1,4 +1,4 @@
-# sveltelab docs 
+# sveltelab docs
 
 the official docs for sveltelab
 

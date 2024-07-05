@@ -1,4 +1,5 @@
 <script lang="ts">
+	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
 	import { draggable, dropzone } from '$lib/dnd';
 	import { get_file_icon } from '$lib/file_icons';
 	import { editor_config } from '$lib/stores/editor_config_store';
@@ -10,18 +11,17 @@
 		reorder_tabs,
 		tabs,
 	} from '$lib/tabs';
-	import { SvelteComponent, onDestroy, type ComponentType } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Vim from '~icons/file-icons/macvim';
 	import Routes from '~icons/material-symbols/alt-route';
 	import Close from '~icons/material-symbols/close-rounded';
 	import Folder from '~icons/material-symbols/folder';
 	import Lib from '~icons/material-symbols/local-library';
-	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
 
 	const base_icons = {
 		routes: Routes,
 		lib: Lib,
-	} as Record<string, ComponentType<SvelteComponent>>;
+	};
 
 	onDestroy(() => {
 		//close the tabs when we unmount the component

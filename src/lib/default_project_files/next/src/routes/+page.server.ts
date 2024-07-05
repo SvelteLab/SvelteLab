@@ -1,5 +1,5 @@
 export async function load() {
 	return {
-		name: '🖐️'
+		name: 'svelte@next'
 	};
 }

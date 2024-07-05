@@ -11,6 +11,6 @@
 <Counter />
 
 <p>
-	Learn more about templates at
+	Learn about setting up a new default template like Typescript or Tailwind at
 	<a href="https://docs.sveltelab.dev/templates" target="_blank"> docs.sveltelab.dev/templates </a>
 </p>

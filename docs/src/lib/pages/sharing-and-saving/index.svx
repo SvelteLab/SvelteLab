@@ -4,7 +4,7 @@ order: 400
 ---
 
 <script>
-    import OpenWithButton from "./OpenWithButton.svelte"
+    import OpenWithButton from "$lib/components/OpenWithButton.svelte"
 </script>
 
 # Sharing and Saving Projects

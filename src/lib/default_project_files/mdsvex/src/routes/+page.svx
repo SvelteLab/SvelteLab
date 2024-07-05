@@ -4,8 +4,8 @@
 	export let data;
 </script>
 
-<Penguin walk={true} />
-
-# {data.name}!
+# Hello {data.name}!
 
 svelte in markdown
+
+<Penguin walk={true} />
