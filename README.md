@@ -53,6 +53,6 @@ git remote set-head origin -a
 1. download [fitting pocketbase binary](https://pocketbase.io/docs/) and place in root
 1. `cp .env.sample .env`
 1. `pnpm i`
-1. `pnpm dev`
+1. `./pocketbase serve`
 1. go to http://127.0.0.1:8090/_/ and setup your PocketBase Admin
-1. enjoy your local sveltelab instance under http://localhost:5173/
+1. `pnpm dev`
