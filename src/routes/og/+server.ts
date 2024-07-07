@@ -15,7 +15,7 @@ const height = 630;
 const width = 1200;
 
 export const config = {
-	runtime: 'nodejs18.x',
+	runtime: 'nodejs20.x',
 };
 
 async function get_repl_from_id(id: string, pocketbase: PoketBase) {
