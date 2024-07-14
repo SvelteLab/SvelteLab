@@ -2,10 +2,17 @@
 	import LogoLong from '$lib/components/LogoLong.svelte';
 	import TreeMap from '$lib/components/TreeMap.svelte';
 	import type { FileSystemTree } from '@webcontainer/api';
-	export let tree: FileSystemTree;
-	export let name = 'Hello SvelteLab';
-	export let id: string | undefined;
-	export let img: string;
+
+	const {
+		tree,
+		name = 'Hello SvelteLab',
+		id,
+		img,
+	}: { tree: FileSystemTree; name?: string; id?: string; img: string } = $props();
+
+	const sentence = id
+		? 'Take a look at my project on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by svelte lovers.'
+		: 'Head on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by svelte lovers and start hacking around with SvelteKit at the speed of light.';
 </script>
 
 <div class="wrapper">
@@ -24,11 +31,7 @@
 			<h2>/{id}</h2>
 		{/if}
 		<p>
-			{#if id}
-				{'Take a look at my project on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by svelte lovers.'}
-			{:else}
-				{'Head on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by svelte lovers and start hacking around with SvelteKit at the speed of light.'}
-			{/if}
+			{sentence}
 		</p>
 	</div>
 </div>
