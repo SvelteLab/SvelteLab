@@ -4,7 +4,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
 import type { Plugin } from 'vite';
-import fs from 'fs';
+import fs from 'node:fs';
 
 function raw_fonts(ext: string[]) {
 	return {

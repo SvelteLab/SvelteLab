@@ -4,7 +4,7 @@
 	import type { FileSystemTree } from '@webcontainer/api';
 	export let tree: FileSystemTree;
 	export let name = 'Hello SvelteLab';
-	export let id: string;
+	export let id: string | undefined;
 	export let img: string;
 </script>
 
