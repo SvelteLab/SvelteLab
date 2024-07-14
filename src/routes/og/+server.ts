@@ -10,6 +10,7 @@ import type { RequestHandler } from './$types';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import he from 'he';
 import { get_icon_code, load_emoji } from './tweemoji';
+import { render } from 'svelte/server';
 
 const height = 630;
 const width = 1200;
@@ -42,9 +43,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			img = record.expand?.user.avatarUrl;
 		}
 	}
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const result = (OG as any).render({ tree: files, name, id, img });
+	const result = render(OG, { props: { tree: files, name, id, img }});
 
 	const element = toReactNode(
 		`${he.decode(result.html, { isAttributeValue: true })}<style>${result.css.code}</style>`,
