@@ -1,16 +1,16 @@
-import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
-import JetBrainsMono from './JetBrainsMono-Regular.ttf';
-import { html as toReactNode } from 'satori-html';
-import OG from './OG.svelte';
-import { replSchema } from '$lib/schemas';
-import type PoketBase from 'pocketbase';
 import { default_project_files } from '$lib/default_project_files';
-import type { RequestHandler } from './$types';
-import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
+import { replSchema, type Directory, type Repl } from '$lib/schemas';
+import { Resvg } from '@resvg/resvg-js';
 import he from 'he';
-import { get_icon_code, load_emoji } from './tweemoji';
+import type PoketBase from 'pocketbase';
+import satori from 'satori';
+import { html as toReactNode } from 'satori-html';
 import { render } from 'svelte/server';
+import type { RequestHandler } from './$types';
+import JetBrainsMono from './JetBrainsMono-Regular.ttf';
+import OG from './OG.svelte';
+import { get_icon_code, load_emoji } from './tweemoji';
+import type { FileSystemTree } from '@webcontainer/api';
 
 const height = 630;
 const width = 1200;
@@ -30,7 +30,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 	const repl_id = url.searchParams.get('repl_id');
 	const template = url.searchParams.get('t') ?? 'basic';
 	const default_files = default_project_files[template] ?? default_project_files['basic'];
-	let files: FileSystemTree = (default_files as DirectoryNode).directory;
+	let files: Repl['files'] = (default_files as Directory).directory;
 	let name = 'Hello SvelteLab!';
 	let id;
 	let img = `${url.origin}/icon192.png`;
@@ -43,11 +43,10 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 			img = record.expand?.user.avatarUrl;
 		}
 	}
-	const result = render(OG, { props: { tree: files, name, id, img }});
-	console.log(JSON.stringify(result, null, 2));
+	const result = render(OG, { props: { tree: files as FileSystemTree, name, id, img } });
 
 	const element = toReactNode(
-		`${he.decode(result.html, { isAttributeValue: true })}`,
+		`${he.decode(result.body, { isAttributeValue: true })}${result.head}`,
 	);
 	const svg = await satori(element, {
 		fonts: [

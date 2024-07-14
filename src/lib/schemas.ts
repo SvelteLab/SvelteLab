@@ -44,3 +44,7 @@ export const replSchema = z.object({
 	user: z.string(),
 	expand: z.record(z.string(), z.any()).optional(),
 });
+
+export type Repl = z.infer<typeof replSchema>;
+
+export type Directory = z.infer<typeof directorySchema>;
