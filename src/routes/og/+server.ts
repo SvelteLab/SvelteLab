@@ -44,6 +44,7 @@ export const GET: RequestHandler = async ({ url, locals }) => {
 		}
 	}
 	const result = render(OG, { props: { tree: files, name, id, img }});
+	console.log(JSON.stringify(result, null, 2));
 
 	const element = toReactNode(
 		`${he.decode(result.html, { isAttributeValue: true })}`,
