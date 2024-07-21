@@ -115,7 +115,7 @@ importers:
         version: 0.30.10
       material-icon-theme:
         specifier: ^5.4.2
-        version: 5.4.2
+        version: 5.6.0
       pocketbase:
         specifier: ^0.21.3
         version: 0.21.3
@@ -1674,8 +1674,8 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  material-icon-theme@5.4.2:
-    resolution: {integrity: sha512-5pILtdR/qLXQZgPCrMBfid5ej+wItH7Esi5ab5Godv5v5yqh8XN7wIqDM8+UgX8eGiJb19qJEeO2Xs5I/mrJWQ==}
+  material-icon-theme@5.6.0:
+    resolution: {integrity: sha512-K+5NX/v6pd3RT+0oU3sNoCACkcqh6WykZGwlWg4ftzWYTC+fGpuX+DUNqsO1SgJ8q0Rm86t5tHamMqSWWHcGgw==}
     engines: {vscode: ^1.51.0}
 
   merge-stream@2.0.0:
@@ -4016,10 +4016,9 @@ snapshots:
 
   marked@13.0.2: {}
 
-  material-icon-theme@5.4.2:
+  material-icon-theme@5.6.0:
     dependencies:
       chroma-js: 2.4.2
-      lodash.merge: 4.6.2
       svgson: 5.3.1
 
   merge-stream@2.0.0: {}
