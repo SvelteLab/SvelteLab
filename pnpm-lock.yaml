@@ -49,7 +49,7 @@ importers:
         version: 6.28.6
       '@emmetio/codemirror6-plugin':
         specifier: ^0.3.1
-        version: 0.3.1(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/highlight@0.19.8)(@codemirror/history@0.19.2)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1)
+        version: 0.3.2(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)
       '@floating-ui/dom':
         specifier: ^1.6.7
         version: 1.6.8
@@ -269,14 +269,6 @@ packages:
   '@codemirror/commands@6.6.0':
     resolution: {integrity: sha512-qnY+b7j1UNcTS31Eenuc/5YJB6gQOzkUoNmJQc0rznwqSRpeaWWpjkWy2C/MPTcePpsKJEM26hXrOXl1+nceXg==}
 
-  '@codemirror/highlight@0.19.8':
-    resolution: {integrity: sha512-v/lzuHjrYR8MN2mEJcUD6fHSTXXli9C1XGYpr+ElV6fLBIUhMTNKR3qThp611xuWfXfwDxeL7ppcbkM/MzPV3A==}
-    deprecated: As of 0.20.0, this package has been split between @lezer/highlight and @codemirror/language
-
-  '@codemirror/history@0.19.2':
-    resolution: {integrity: sha512-unhP4t3N2smzmHoo/Yio6ueWi+il8gm9VKrvi6wlcdGH5fOfVDNkmjHQ495SiR+EdOG35+3iNebSPYww0vN7ow==}
-    deprecated: As of 0.20.0, this package has been merged into @codemirror/commands
-
   '@codemirror/lang-css@6.2.1':
     resolution: {integrity: sha512-/UNWDNV5Viwi/1lpr/dIXJNWiwDxpw13I4pTUAsNxZdg6E0mI2kTQb0P2iHczg1Tu+H4EBgJR+hYhKiHKko7qg==}
 
@@ -292,34 +284,17 @@ packages:
   '@codemirror/lang-markdown@6.2.5':
     resolution: {integrity: sha512-Hgke565YcO4fd9pe2uLYxnMufHO5rQwRr+AAhFq8ABuhkrjyX8R5p5s+hZUTdV60O0dMRjxKhBLxz8pu/MkUVA==}
 
-  '@codemirror/language@0.19.10':
-    resolution: {integrity: sha512-yA0DZ3RYn2CqAAGW62VrU8c4YxscMQn45y/I9sjBlqB1e2OTQLg4CCkMBuMSLXk4xaqjlsgazeOQWaJQOKfV8Q==}
-
   '@codemirror/language@6.10.2':
     resolution: {integrity: sha512-kgbTYTo0Au6dCSc/TFy7fK3fpJmgHDv1sG1KNQKJXVi+xBTEeBPY/M30YXiU6mMXeH+YIDLsbrT4ZwNRdtF+SA==}
 
   '@codemirror/lint@6.8.1':
     resolution: {integrity: sha512-IZ0Y7S4/bpaunwggW2jYqwLuHj0QtESf5xcROewY6+lDNwZ/NzvR4t+vpYgg9m7V8UXLPYqG+lu3DF470E5Oxg==}
 
-  '@codemirror/rangeset@0.19.9':
-    resolution: {integrity: sha512-V8YUuOvK+ew87Xem+71nKcqu1SXd5QROMRLMS/ljT5/3MCxtgrRie1Cvild0G/Z2f1fpWxzX78V0U4jjXBorBQ==}
-    deprecated: As of 0.20.0, this package has been merged into @codemirror/state
-
   '@codemirror/search@6.5.6':
     resolution: {integrity: sha512-rpMgcsh7o0GuCDUXKPvww+muLA1pDJaFrpq/CCHtpQJYz8xopu4D1hPcKRoDD0YlF8gZaqTNIRa4VRBWyhyy7Q==}
 
-  '@codemirror/state@0.19.9':
-    resolution: {integrity: sha512-psOzDolKTZkx4CgUqhBQ8T8gBc0xN5z4gzed109aF6x7D7umpDRoimacI/O6d9UGuyl4eYuDCZmDFr2Rq7aGOw==}
-
   '@codemirror/state@6.4.1':
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
-
-  '@codemirror/text@0.19.6':
-    resolution: {integrity: sha512-T9jnREMIygx+TPC1bOuepz18maGq/92q2a+n4qTqObKwvNMg+8cMTslb8yxeEDEq7S3kpgGWxgO1UWbQRij0dA==}
-    deprecated: As of 0.20.0, this package has been merged into @codemirror/state
-
-  '@codemirror/view@0.19.48':
-    resolution: {integrity: sha512-0eg7D2Nz4S8/caetCTz61rK0tkHI17V/d15Jy0kLOT8dTLGGNJUponDnW28h2B6bERmPlVHKh8MJIr5OCp1nGw==}
 
   '@codemirror/view@6.28.6':
     resolution: {integrity: sha512-bhwB1AZ6zU4M3dNKm8Aa2BXwj5mWDqE9IWpqxYKJoLCnx+AcwcMuLO01tLWgc1mx4vT1IVYVqx86YoqUsATrqQ==}
@@ -327,19 +302,16 @@ packages:
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
 
-  '@emmetio/codemirror6-plugin@0.3.1':
-    resolution: {integrity: sha512-G4NLJvqjEm5A6F1ryb075Vw/IC9U00M65mlUHMc/2WsdO4KYaKDkCdgqO5WwmQXIl3DeBLQMy90sL4dHDfc6Ow==}
+  '@emmetio/codemirror6-plugin@0.3.2':
+    resolution: {integrity: sha512-rm9H63mg6UhV/h6pV/cxlY5sLrnii/e3yhOLupx1WuXpW6HJg/2Tfzks2OIqPP1spSu3zSOzSYd4DlrDbbpvMA==}
     peerDependencies:
-      '@codemirror/autocomplete': ^6.1.0
-      '@codemirror/commands': ^6.0.1
-      '@codemirror/highlight': ^0.19.8
-      '@codemirror/history': ^0.19.2
-      '@codemirror/lang-css': ^6.0.0
-      '@codemirror/lang-html': ^6.1.0
-      '@codemirror/language': ^6.2.1
-      '@codemirror/state': ^6.1.1
-      '@codemirror/view': ^6.2.0
-      '@lezer/common': ^1.0.0
+      '@codemirror/autocomplete': ^6.17.0
+      '@codemirror/commands': ^6.6.0
+      '@codemirror/lang-css': ^6.2.1
+      '@codemirror/lang-html': ^6.4.9
+      '@codemirror/language': ^6.10.2
+      '@codemirror/state': ^6.4.1
+      '@codemirror/view': ^6.29.1
 
   '@emmetio/css-abbreviation@2.1.8':
     resolution: {integrity: sha512-s9yjhJ6saOO/uk1V74eifykk2CBYi01STTK3WlXWGOepyKa23ymJ053+DNQjpFcy1ingpaO7AxCcwLvHFY9tuw==}
@@ -566,9 +538,6 @@ packages:
     resolution: {integrity: sha512-f5DRIOZf7wxogefH03RjMPMdBF7ADTWUMoOs9kaJo06EfwF+aFhMZMDZxHg/Xe12hptN9xoZjGso2fdjapBRIA==}
     engines: {node: '>=10'}
 
-  '@lezer/common@0.15.12':
-    resolution: {integrity: sha512-edfwCxNLnzq5pBA/yaIhwJ3U3Kz8VAUOTRg0hhxaizaI1N+qxV7EXDv/kLCkLeq2RzSFvxexlaj5Mzfn2kY0Ig==}
-
   '@lezer/common@1.2.1':
     resolution: {integrity: sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ==}
 
@@ -586,9 +555,6 @@ packages:
 
   '@lezer/json@1.0.2':
     resolution: {integrity: sha512-xHT2P4S5eeCYECyKNPhr4cbEL9tc8w83SPwRC373o9uEdrvGKTZoJVAGxpOsZckMlEh9W23Pc72ew918RWQOBQ==}
-
-  '@lezer/lr@0.15.8':
-    resolution: {integrity: sha512-bM6oE6VQZ6hIFxDNKk8bKPa14hqFrV07J/vHGOeiAbJReIaQXmkVb6xQu4MR+JBTLa5arGRyAAjJe1qaQt3Uvg==}
 
   '@lezer/lr@1.4.2':
     resolution: {integrity: sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==}
@@ -2567,20 +2533,6 @@ snapshots:
       '@codemirror/view': 6.28.6
       '@lezer/common': 1.2.1
 
-  '@codemirror/highlight@0.19.8':
-    dependencies:
-      '@codemirror/language': 0.19.10
-      '@codemirror/rangeset': 0.19.9
-      '@codemirror/state': 0.19.9
-      '@codemirror/view': 0.19.48
-      '@lezer/common': 0.15.12
-      style-mod: 4.1.2
-
-  '@codemirror/history@0.19.2':
-    dependencies:
-      '@codemirror/state': 0.19.9
-      '@codemirror/view': 0.19.48
-
   '@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6)':
     dependencies:
       '@codemirror/autocomplete': 6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1)
@@ -2628,14 +2580,6 @@ snapshots:
       '@lezer/common': 1.2.1
       '@lezer/markdown': 1.3.0
 
-  '@codemirror/language@0.19.10':
-    dependencies:
-      '@codemirror/state': 0.19.9
-      '@codemirror/text': 0.19.6
-      '@codemirror/view': 0.19.48
-      '@lezer/common': 0.15.12
-      '@lezer/lr': 0.15.8
-
   '@codemirror/language@6.10.2':
     dependencies:
       '@codemirror/state': 6.4.1
@@ -2651,31 +2595,13 @@ snapshots:
       '@codemirror/view': 6.28.6
       crelt: 1.0.6
 
-  '@codemirror/rangeset@0.19.9':
-    dependencies:
-      '@codemirror/state': 0.19.9
-
   '@codemirror/search@6.5.6':
     dependencies:
       '@codemirror/state': 6.4.1
       '@codemirror/view': 6.28.6
       crelt: 1.0.6
 
-  '@codemirror/state@0.19.9':
-    dependencies:
-      '@codemirror/text': 0.19.6
-
   '@codemirror/state@6.4.1': {}
-
-  '@codemirror/text@0.19.6': {}
-
-  '@codemirror/view@0.19.48':
-    dependencies:
-      '@codemirror/rangeset': 0.19.9
-      '@codemirror/state': 0.19.9
-      '@codemirror/text': 0.19.6
-      style-mod: 4.1.2
-      w3c-keyname: 2.2.8
 
   '@codemirror/view@6.28.6':
     dependencies:
@@ -2687,19 +2613,16 @@ snapshots:
     dependencies:
       '@emmetio/scanner': 1.0.4
 
-  '@emmetio/codemirror6-plugin@0.3.1(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/highlight@0.19.8)(@codemirror/history@0.19.2)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1)':
+  '@emmetio/codemirror6-plugin@0.3.2(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)':
     dependencies:
       '@codemirror/autocomplete': 6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1)
       '@codemirror/commands': 6.6.0
-      '@codemirror/highlight': 0.19.8
-      '@codemirror/history': 0.19.2
       '@codemirror/lang-css': 6.2.1(@codemirror/view@6.28.6)
       '@codemirror/lang-html': 6.4.9
       '@codemirror/language': 6.10.2
       '@codemirror/state': 6.4.1
       '@codemirror/view': 6.28.6
       '@emmetio/math-expression': 1.0.5
-      '@lezer/common': 1.2.1
       emmet: 2.4.7
 
   '@emmetio/css-abbreviation@2.1.8':
@@ -2876,8 +2799,6 @@ snapshots:
       string-argv: 0.3.2
       type-detect: 4.0.8
 
-  '@lezer/common@0.15.12': {}
-
   '@lezer/common@1.2.1': {}
 
   '@lezer/css@1.1.8':
@@ -2907,10 +2828,6 @@ snapshots:
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
       '@lezer/lr': 1.4.2
-
-  '@lezer/lr@0.15.8':
-    dependencies:
-      '@lezer/common': 0.15.12
 
   '@lezer/lr@1.4.2':
     dependencies:
