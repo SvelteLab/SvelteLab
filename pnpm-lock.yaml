@@ -112,7 +112,7 @@ importers:
         version: 1.5.0
       magic-string:
         specifier: ^0.30.10
-        version: 0.30.10
+        version: 0.30.11
       material-icon-theme:
         specifier: ^5.4.2
         version: 5.6.0
@@ -530,6 +530,9 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.4.15':
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
+
+  '@jridgewell/sourcemap-codec@1.5.0':
+    resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
@@ -1628,8 +1631,8 @@ packages:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
     hasBin: true
 
-  magic-string@0.30.10:
-    resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
+  magic-string@0.30.11:
+    resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
 
   make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
@@ -2787,6 +2790,8 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.4.15': {}
 
+  '@jridgewell/sourcemap-codec@1.5.0': {}
+
   '@jridgewell/trace-mapping@0.3.25':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
@@ -3034,7 +3039,7 @@ snapshots:
       esm-env: 1.0.0
       import-meta-resolve: 4.1.0
       kleur: 4.1.5
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       mrmime: 2.0.0
       sade: 1.8.1
       set-cookie-parser: 2.6.0
@@ -3072,7 +3077,7 @@ snapshots:
       debug: 4.3.5
       deepmerge: 4.3.1
       kleur: 4.1.5
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       svelte: 5.0.0-next.184
       svelte-hmr: 0.16.0(svelte@5.0.0-next.184)
       vite: 5.3.3(@types/node@20.14.10)
@@ -3086,7 +3091,7 @@ snapshots:
       debug: 4.3.5
       deepmerge: 4.3.1
       kleur: 4.1.5
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       svelte: 5.0.0-next.184
       vite: 5.3.3(@types/node@20.14.10)
       vitefu: 0.2.5(vite@5.3.3(@types/node@20.14.10))
@@ -3222,7 +3227,7 @@ snapshots:
 
   '@vitest/snapshot@1.6.0':
     dependencies:
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       pathe: 1.1.2
       pretty-format: 29.7.0
 
@@ -3923,9 +3928,9 @@ snapshots:
 
   lz-string@1.5.0: {}
 
-  magic-string@0.30.10:
+  magic-string@0.30.11:
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
 
   make-dir@3.1.0:
     dependencies:
@@ -4302,7 +4307,7 @@ snapshots:
 
   sorcery@0.11.1:
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
+      '@jridgewell/sourcemap-codec': 1.5.0
       buffer-crc32: 1.0.0
       minimist: 1.2.8
       sander: 0.5.1
@@ -4399,7 +4404,7 @@ snapshots:
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       sorcery: 0.11.1
       strip-indent: 3.0.0
       svelte: 5.0.0-next.184
@@ -4436,7 +4441,7 @@ snapshots:
       esrap: 1.2.2
       is-reference: 3.0.2
       locate-character: 3.0.0
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       zimmerframe: 1.1.2
 
   sveltekit-search-params@2.1.2(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@4.0.0-next.4(svelte@5.0.0-next.184)(vite@5.3.3(@types/node@20.14.10)))(svelte@5.0.0-next.184)(vite@5.3.3(@types/node@20.14.10)))(svelte@5.0.0-next.184)(vite@5.3.3(@types/node@20.14.10)):
@@ -4583,7 +4588,7 @@ snapshots:
       debug: 4.3.5
       execa: 8.0.1
       local-pkg: 0.5.0
-      magic-string: 0.30.10
+      magic-string: 0.30.11
       pathe: 1.1.2
       picocolors: 1.0.1
       std-env: 3.7.0
