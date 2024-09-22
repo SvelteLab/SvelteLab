@@ -49,7 +49,7 @@ importers:
         version: 6.28.6
       '@emmetio/codemirror6-plugin':
         specifier: ^0.3.1
-        version: 0.3.2(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)
+        version: 0.3.3(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)
       '@floating-ui/dom':
         specifier: ^1.6.7
         version: 1.6.10
@@ -302,8 +302,8 @@ packages:
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
 
-  '@emmetio/codemirror6-plugin@0.3.2':
-    resolution: {integrity: sha512-rm9H63mg6UhV/h6pV/cxlY5sLrnii/e3yhOLupx1WuXpW6HJg/2Tfzks2OIqPP1spSu3zSOzSYd4DlrDbbpvMA==}
+  '@emmetio/codemirror6-plugin@0.3.3':
+    resolution: {integrity: sha512-3Jrg+hywi2xQtQMkR4ZYCWWUNsxcIpiQ2+fup3J76XyduDcCQfYL1Gu0xAiiF7Qi69H6gCQqU5wkDi5ZNq1hCQ==}
     peerDependencies:
       '@codemirror/autocomplete': ^6.17.0
       '@codemirror/commands': ^6.6.0
@@ -1218,8 +1218,8 @@ packages:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
 
-  emmet@2.4.7:
-    resolution: {integrity: sha512-O5O5QNqtdlnQM2bmKHtJgyChcrFMgQuulI+WdiOw2NArzprUqqxUW6bgYtKvzKgrsYpuLWalOkdhNP+1jluhCA==}
+  emmet@2.4.8:
+    resolution: {integrity: sha512-wFe/dxsx7oi/M2UJ/3yBu4Fm24Irho6lqut4C1YFaZebCvCCMygoDGC7W6I+8+K8PAjfa/Ojn52UHi8WCdDiRA==}
 
   emoji-regex@10.3.0:
     resolution: {integrity: sha512-QpLs9D9v9kArv4lfDEgg1X/gN5XLnf/A6l9cs8SPZLRZR3ZkY9+kwIQTxm+fsSej5UMYGE8fdoaZVIBlqG0XTw==}
@@ -2616,7 +2616,7 @@ snapshots:
     dependencies:
       '@emmetio/scanner': 1.0.4
 
-  '@emmetio/codemirror6-plugin@0.3.2(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)':
+  '@emmetio/codemirror6-plugin@0.3.3(@codemirror/autocomplete@6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1))(@codemirror/commands@6.6.0)(@codemirror/lang-css@6.2.1(@codemirror/view@6.28.6))(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)':
     dependencies:
       '@codemirror/autocomplete': 6.17.0(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.6)(@lezer/common@1.2.1)
       '@codemirror/commands': 6.6.0
@@ -2626,7 +2626,7 @@ snapshots:
       '@codemirror/state': 6.4.1
       '@codemirror/view': 6.28.6
       '@emmetio/math-expression': 1.0.5
-      emmet: 2.4.7
+      emmet: 2.4.8
 
   '@emmetio/css-abbreviation@2.1.8':
     dependencies:
@@ -3480,7 +3480,7 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
-  emmet@2.4.7:
+  emmet@2.4.8:
     dependencies:
       '@emmetio/abbreviation': 2.3.3
       '@emmetio/css-abbreviation': 2.1.8
