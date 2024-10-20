@@ -82,7 +82,7 @@ importers:
         version: 3.4.0(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@4.0.0-next.4(svelte@5.0.0-next.184)(vite@5.3.3(@types/node@20.14.10)))(svelte@5.0.0-next.184)(vite@5.3.3(@types/node@20.14.10)))(svelte@5.0.0-next.184)
       '@webcontainer/api':
         specifier: ^1.2.0
-        version: 1.2.2
+        version: 1.4.0
       '@xterm/addon-fit':
         specifier: ^0.10.0
         version: 0.10.0(@xterm/xterm@5.5.0)
@@ -944,8 +944,8 @@ packages:
   '@vitest/utils@1.6.0':
     resolution: {integrity: sha512-21cPiuGMoMZwiOHa2i4LXkMkMkCGzA+MVFV70jRwHo95dL4x/ts5GZhML1QWuy7yfp3WzK3lRvZi3JnXTYqrBw==}
 
-  '@webcontainer/api@1.2.2':
-    resolution: {integrity: sha512-Wq1TUePMYjX0cKWk4Z33rJY2Xv2u+/JPQ8xtI2i8b2Oql09mtNqSTMgdUMfTnNHdDZI3H3/9lrw3D4iqDpzVlA==}
+  '@webcontainer/api@1.4.0':
+    resolution: {integrity: sha512-JlgyrIPW46ngSHCvXkYbbbDi0RboMt+iuy6RGB8z6B3xugk65RJaiAl0mI6qxj8z+X1dcP2P4pBpy5lIPTYsmg==}
 
   '@xterm/addon-fit@0.10.0':
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}
@@ -3251,7 +3251,7 @@ snapshots:
       loupe: 2.3.7
       pretty-format: 29.7.0
 
-  '@webcontainer/api@1.2.2': {}
+  '@webcontainer/api@1.4.0': {}
 
   '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0)':
     dependencies:
