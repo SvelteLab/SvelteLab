@@ -1,16 +1,14 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	let { data } = $props();
+	let metadata = $derived(data.page_info?.metadata ?? {});
 
-	export let data: PageData;
-	$: metadata = data.page_info?.metadata ?? {};
-
-	$: current_index = data.pages.findIndex((p) => p.link === data.page_info?.link);
+	let current_index = $derived(data.pages.findIndex((p) => p.link === data.page_info?.link));
 </script>
 
 <svelte:head>
 	<title>{metadata.title} – SvelteLab Docs</title>
 </svelte:head>
-<svelte:component this={data.page} />
+<data.page />
 
 {#if current_index > -1}
 	{@const prev_index = current_index - 1}
