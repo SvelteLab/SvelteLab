@@ -1,7 +1,6 @@
 <script>
 	import { Collapsible } from '$lib/index.js';
 
-	/** @type {{data: any}} */
 	let { data } = $props();
 </script>
 
