@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Counter from '$lib/Counter.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <h1>Hello {data.name}!</h1>
