@@ -1,5 +1,8 @@
 <script>
 	import '../app.postcss';
+
+	/** @type {{children?: import('svelte').Snippet}} */
+	let { children } = $props();
 </script>
 
-<slot />
+{@render children?.()}
