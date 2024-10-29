@@ -8,6 +8,11 @@
 
 	import { navigation } from '@stores/navigation'
 	import options from '@config'
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	onMount(() => {
 		const deck = new Reveal(options)
@@ -62,10 +67,10 @@
 	}
 </script>
 
-<svelte:window on:hashchange={updateHash} />
+<svelte:window onhashchange={updateHash} />
 
 <div class="reveal">
 	<div class="slides">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

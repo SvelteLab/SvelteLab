@@ -12,22 +12,22 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/vite-plugin-svelte": "^3.1.1",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@tsconfig/svelte": "^5.0.0",
 		"@types/node": "^20.4.4",
 		"@types/reveal.js": "^5.0.3",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.27",
 		"postcss-load-config": "^6.0.1",
-		"prettier": "^3.0.0",
-		"prettier-plugin-svelte": "^3.0.0",
+		"prettier": "^3.1.0",
+		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.5",
-		"svelte": "^4.1.1",
-		"svelte-check": "^3.4.6",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
 		"tailwindcss": "^3.3.3",
 		"tslib": "^2.6.0",
-		"typescript": "^5.1.6",
-		"vite": "^5.3.3"
+		"typescript": "^5.5.0",
+		"vite": "^5.4.4"
 	},
 	"dependencies": {
 		"@fontsource-variable/jetbrains-mono": "^5.0.6",
