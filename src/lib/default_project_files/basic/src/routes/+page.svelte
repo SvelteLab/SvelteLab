@@ -1,7 +1,8 @@
 <script>
 	import Counter from '$lib/Counter.svelte';
 
-	export let data;
+	/** @type {{data: any}} */
+	let { data } = $props();
 </script>
 
 <h1>
