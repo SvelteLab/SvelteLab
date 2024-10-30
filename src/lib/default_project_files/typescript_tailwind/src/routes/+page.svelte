@@ -1,6 +1,7 @@
 <script>
 	import Counter from '$lib/Counter.svelte';
-	export let data;
+
+	let { data } = $props();
 </script>
 
 <h1 class="text-3xl font-bold text-[#ff3e00]">

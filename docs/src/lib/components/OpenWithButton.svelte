@@ -5,13 +5,7 @@
 
 	const logos = ['dark_short', 'dark_wide', 'light_short', 'light_wide'];
 	const base_url = dev ? 'http://localhost:5173/' : 'https://docs.sveltelab.dev/';
-	let repo = { username: '', name: '' };
-
-	$: {
-		if (repo.username) {
-			convert_url_to_variables(repo.username);
-		}
-	}
+	let repo = $state({ username: '', name: '' });
 
 	function convert_url_to_variables(username: string) {
 		try {
@@ -46,6 +40,11 @@
 		copy_to_clipboard(string);
 		toast.push('Copied HTML to clipboard!');
 	}
+	$effect(() => {
+		if (repo.username) {
+			convert_url_to_variables(repo.username);
+		}
+	});
 </script>
 
 <div class="card">
@@ -65,8 +64,8 @@
 			<div class="buttoncard">
 				<img src="/button/{logo}.svg" alt="" />
 				<div>
-					<button on:click={() => copy_html(logo)}>Copy HTML</button>
-					<button on:click={() => copy_markdown(logo)}>Copy Markdown</button>
+					<button onclick={() => copy_html(logo)}>Copy HTML</button>
+					<button onclick={() => copy_markdown(logo)}>Copy Markdown</button>
 				</div>
 			</div>
 		{/each}

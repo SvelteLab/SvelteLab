@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
+import type { Component } from 'svelte';
 import type { PageLoad } from './$types';
-import type { SvelteComponentTyped, ComponentType } from 'svelte';
 
 export function entries() {
 	// we just need the first slug, the rest will be crawled
@@ -10,8 +10,7 @@ export function entries() {
 export const load = (async ({ params: { slug = 'welcome' }, parent }) => {
 	let page;
 	try {
-		page = (await import(`../../lib/pages/${slug}/index.svx`))
-			.default as ComponentType<SvelteComponentTyped>;
+		page = (await import(`../../lib/pages/${slug}/index.svx`)).default as Component;
 	} catch (e) {
 		throw error(404);
 	}

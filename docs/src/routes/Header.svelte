@@ -9,7 +9,7 @@
 
 <header>
 	<button
-		on:click={() => {
+		onclick={() => {
 			dispatcher('open');
 		}}
 		class="open-menu"><Hamburger /></button

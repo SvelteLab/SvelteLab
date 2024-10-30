@@ -1,7 +1,7 @@
 <script>
 	import { Collapsible } from '$lib/index.js';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <h1>

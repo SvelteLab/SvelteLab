@@ -1,3 +1,8 @@
+<script>
+	/** @type {{children?: import('svelte').Snippet}} */
+	let { children } = $props();
+</script>
+
 <aside class="notes">
-	<slot />
+	{@render children?.()}
 </aside>
