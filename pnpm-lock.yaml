@@ -88,7 +88,7 @@ dependencies:
     version: 5.5.0
   '@yaireo/relative-time':
     specifier: ^1.0.4
-    version: 1.0.4
+    version: 1.0.5
   as-comps:
     specifier: ^0.0.27
     version: 0.0.27
@@ -1660,8 +1660,8 @@ packages:
     resolution: {integrity: sha512-hqJHYaQb5OptNunnyAnkHyM8aCjZ1MEIDTQu1iIbbTD/xops91NB5yq1ZK/dC2JDbVWtF23zUtl9JE2NqwT87A==}
     dev: false
 
-  /@yaireo/relative-time@1.0.4:
-    resolution: {integrity: sha512-ILW0k/xtOsnnzLZg+3tk+A9HtTOYu4GI4bG1epBxJ/borIZgGDRMD8kVjzitGyKbV0LOsOchIMZdsAaQxRgImA==}
+  /@yaireo/relative-time@1.0.5:
+    resolution: {integrity: sha512-70+d5xRsX06cDVDn6WiV2qwWDSLrkLg8QsAQyeD+EiQeZga5EfwvvXrFcdDh2GI83QsnTJyHYxp58M1DMKurVQ==}
     engines: {node: '>=12.0.0'}
     dev: false
 
