@@ -115,7 +115,7 @@ dependencies:
     version: 5.4.2
   pocketbase:
     specifier: ^0.21.3
-    version: 0.21.3
+    version: 0.21.5
   semver:
     specifier: ^7.6.2
     version: 7.6.2
@@ -3194,8 +3194,8 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /pocketbase@0.21.3:
-    resolution: {integrity: sha512-bsQRZ1mj4dhPJ4P5iSrDqWQtBX2NtuBkf6IOZwTv27zZOw6zrISgo963i5JD/99qKKD5aMSMDPGk1BE9ZyI7Cg==}
+  /pocketbase@0.21.5:
+    resolution: {integrity: sha512-bnI/uinnQps+ElSlzxkc4yvwuSFfKcoszDtXH/4QT2FhGq2mJVUvDlxn+rjRXVntUjPfmMG5LEPZ1eGqV6ssog==}
     dev: false
 
   /postcss-load-config@3.1.4(postcss@8.4.39):
