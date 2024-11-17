@@ -49,7 +49,7 @@ dependencies:
     version: 0.3.1(@codemirror/autocomplete@6.17.0)(@codemirror/commands@6.6.0)(@codemirror/highlight@0.19.8)(@codemirror/history@0.19.2)(@codemirror/lang-css@6.2.1)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.2)(@codemirror/state@6.4.1)(@codemirror/view@6.28.4)(@lezer/common@1.2.1)
   '@floating-ui/dom':
     specifier: ^1.6.7
-    version: 1.6.7
+    version: 1.6.12
   '@jridgewell/trace-mapping':
     specifier: ^0.3.25
     version: 0.3.25
@@ -755,8 +755,8 @@ packages:
       '@floating-ui/utils': 0.2.8
     dev: false
 
-  /@floating-ui/dom@1.6.7:
-    resolution: {integrity: sha512-wmVfPG5o2xnKDU4jx/m4w5qva9FWHcnZ8BvzEe90D/RpwsJaTAVYPEPdQ8sbr/N8zZTAHlZUTQdqg8ZUbzHmng==}
+  /@floating-ui/dom@1.6.12:
+    resolution: {integrity: sha512-NP83c0HjokcGVEMeoStg317VD9W7eDlGK7457dMBANbKA6GJZdc7rjujdgqzTaz93jkGgc5P/jeWbaCHnMNc+w==}
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/utils': 0.2.8
