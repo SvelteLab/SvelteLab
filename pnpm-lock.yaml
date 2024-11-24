@@ -121,7 +121,7 @@ dependencies:
     version: 7.6.2
   svelte-splitpanes:
     specifier: ^8.0.8
-    version: 8.0.8(svelte@5.0.0)
+    version: 8.0.9(svelte@5.0.0)
   tinykeys:
     specifier: ^2.1.0
     version: 2.1.0
@@ -2278,11 +2278,15 @@ packages:
   /esm-env-robust@0.0.3:
     resolution: {integrity: sha512-90Gnuw2DALOqlL1581VxP3GHPUNHX9U+fQ+8FNcTTFClhY5gEggAAnJ3q1b2Oq23knRsjv8YpNeMRPaMLUymOA==}
     dependencies:
-      esm-env: 1.0.0
+      esm-env: 1.1.4
     dev: false
 
   /esm-env@1.0.0:
     resolution: {integrity: sha512-Cf6VksWPsTuW01vU9Mk/3vRue91Zevka5SjyNf3nEpokFRuqt/KjUQoGAwq9qMmhpLTHmXzSIrFRw8zxWzmFBA==}
+
+  /esm-env@1.1.4:
+    resolution: {integrity: sha512-oO82nKPHKkzIj/hbtuDYy/JHqBHFlMIW36SDiPCVsj87ntDLcWN+sJ1erdVryd4NxODacFTsdrIE3b7IamqbOg==}
+    dev: false
 
   /espree@10.2.0:
     resolution: {integrity: sha512-upbkBJbckcCNBDBDXEbuhjbP68n+scUd3k/U2EkyM9nw+I/jPiL4cLF/Al06CF96wRltFda16sxDFrxsI1v0/g==}
@@ -3700,10 +3704,10 @@ packages:
       typescript: 5.5.3
     dev: true
 
-  /svelte-splitpanes@8.0.8(svelte@5.0.0):
-    resolution: {integrity: sha512-GmEXRNOqsNouUxWbrM/b88Q7eHLzbt8lspXU6Z5xSnzfL38xP/TnKct+m9t1GW2WF2NxGcXAJ/SPU9EcmgD6Qw==}
+  /svelte-splitpanes@8.0.9(svelte@5.0.0):
+    resolution: {integrity: sha512-L3oLXTC99M191FInTXJ/f/2i0welRql1QuVbPaU8iy6nvCR6X9VyjHCsCpLqKGWHwqkWo/AM9CQ1c0nzlb+MkA==}
     peerDependencies:
-      svelte: ^4.2.19
+      svelte: ^4.2.19 || ^5.1.0
     dependencies:
       esm-env-robust: 0.0.3
       svelte: 5.0.0
