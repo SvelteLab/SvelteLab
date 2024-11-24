@@ -79,7 +79,7 @@ dependencies:
     version: 3.4.0(@sveltejs/kit@2.7.3)(svelte@5.0.0)
   '@webcontainer/api':
     specifier: ^1.2.0
-    version: 1.2.0
+    version: 1.5.1
   '@xterm/addon-fit':
     specifier: ^0.10.0
     version: 0.10.0(@xterm/xterm@5.5.0)
@@ -1644,8 +1644,8 @@ packages:
       pretty-format: 29.7.0
     dev: true
 
-  /@webcontainer/api@1.2.0:
-    resolution: {integrity: sha512-tzoKBd4lLdhHy5GHFpUkl+ndoSba8JqmB7x0ZQFnWfjbcbQOvKQfxA8MEMUYhgqjWHnbrWdAfnBEHz5f5lYG5A==}
+  /@webcontainer/api@1.5.1:
+    resolution: {integrity: sha512-+ELk+TbTOUx0LawAUdB+nnxaofg/FxUXo/Ac/+CzHSP3SOc3ebBAW3fLo4UZfvJdUW+ygWZOiQMthPLQXvKZEg==}
     dev: false
 
   /@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0):
