@@ -45,8 +45,8 @@ dependencies:
     specifier: ^6.28.4
     version: 6.35.0
   '@emmetio/codemirror6-plugin':
-    specifier: ^0.3.1
-    version: 0.3.4(@codemirror/autocomplete@6.18.3)(@codemirror/commands@6.7.1)(@codemirror/lang-css@6.3.0)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.4)(@codemirror/state@6.4.1)(@codemirror/view@6.35.0)
+    specifier: ^0.4.0
+    version: 0.4.0(@codemirror/autocomplete@6.18.3)(@codemirror/commands@6.7.1)(@codemirror/lang-css@6.3.0)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.4)(@codemirror/state@6.4.1)(@codemirror/view@6.35.0)
   '@floating-ui/dom':
     specifier: ^1.6.7
     version: 1.6.12
@@ -387,8 +387,8 @@ packages:
       '@emmetio/scanner': 1.0.4
     dev: false
 
-  /@emmetio/codemirror6-plugin@0.3.4(@codemirror/autocomplete@6.18.3)(@codemirror/commands@6.7.1)(@codemirror/lang-css@6.3.0)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.4)(@codemirror/state@6.4.1)(@codemirror/view@6.35.0):
-    resolution: {integrity: sha512-73as2fljrGPqg9JuhjCLC+6fQH1TyoAUCw04gg8SER2PvNWNWxrU3IaTCWXlZdHvncit1hy22DQJOxKBwFGHZw==}
+  /@emmetio/codemirror6-plugin@0.4.0(@codemirror/autocomplete@6.18.3)(@codemirror/commands@6.7.1)(@codemirror/lang-css@6.3.0)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.4)(@codemirror/state@6.4.1)(@codemirror/view@6.35.0):
+    resolution: {integrity: sha512-ZP3W8JvN0cEFTdsrcKPIBg/K9sadE15g//TfubPXfM28ZxUp3SwNASbRfRLRQmPyP73+pAZzLqeOwACUUz/oAw==}
     peerDependencies:
       '@codemirror/autocomplete': ^6.17.0
       '@codemirror/commands': ^6.6.0
