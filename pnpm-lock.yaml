@@ -75,8 +75,8 @@ dependencies:
     specifier: ^6.2.1
     version: 6.2.1(@codemirror/commands@6.7.1)(@codemirror/language@6.10.4)(@codemirror/search@6.5.8)(@codemirror/state@6.4.1)(@codemirror/view@6.35.0)
   '@sveltejs/site-kit':
-    specifier: ^3.4.0
-    version: 3.4.0(@sveltejs/kit@2.8.2)(svelte@5.2.7)
+    specifier: ^5.0.0
+    version: 5.2.2(@sveltejs/kit@2.8.2)(svelte@5.2.7)
   '@webcontainer/api':
     specifier: ^1.2.0
     version: 1.5.1
@@ -1259,14 +1259,16 @@ packages:
       tiny-glob: 0.2.9
       vite: 5.4.11(@types/node@20.17.7)
 
-  /@sveltejs/site-kit@3.4.0(@sveltejs/kit@2.8.2)(svelte@5.2.7):
-    resolution: {integrity: sha512-jMwL8eWNBN0WeWoO8qXx8zUvDywiittc4GGNfX1CXwC6i2bgbrfHke+RrZmNxOrMeSgDcoCnYL0kKZmmg6al7w==}
+  /@sveltejs/site-kit@5.2.2(@sveltejs/kit@2.8.2)(svelte@5.2.7):
+    resolution: {integrity: sha512-XLLxVUV/dYytCsUeODAkjtzlaIBSn1kdcH5U36OuN7gMsPEHDy5L/dsWjf1/vDln3JStH5lqZPEN8Fovm33KhA==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
       svelte: ^3.54.0
     dependencies:
       '@sveltejs/kit': 2.8.2(@sveltejs/vite-plugin-svelte@4.0.1)(svelte@5.2.7)(vite@5.4.11)
+      esm-env: 1.1.4
       svelte: 5.2.7
+      svelte-local-storage-store: 0.4.0(svelte@5.2.7)
     dev: false
 
   /@sveltejs/vite-plugin-svelte-inspector@2.1.0(@sveltejs/vite-plugin-svelte@3.1.2)(svelte@5.2.7)(vite@5.4.11):
@@ -3402,6 +3404,15 @@ packages:
     dependencies:
       svelte: 5.2.7
     dev: true
+
+  /svelte-local-storage-store@0.4.0(svelte@5.2.7):
+    resolution: {integrity: sha512-ctPykTt4S3BE5bF0mfV0jKiUR1qlmqLvnAkQvYHLeb9wRyO1MdIFDVI23X+TZEFleATHkTaOpYZswIvf3b2tWA==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0
+    dependencies:
+      svelte: 5.2.7
+    dev: false
 
   /svelte-local-storage-store@0.6.4(svelte@5.2.7):
     resolution: {integrity: sha512-45WoY2vSGPQM1sIQJ9jTkPPj20hYeqm+af6mUGRFSPP5WglZf36YYoZqwmZZ8Dt/2SU8lem+BTA8/Z/8TkqNLg==}
