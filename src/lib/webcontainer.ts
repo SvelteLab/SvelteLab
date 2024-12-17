@@ -613,7 +613,7 @@ export const webcontainer = {
 		merge_state({ status: 'waiting' });
 		await webcontainer.install_dependencies();
 		await fix_vite_ssr_rewrite();
-		await inject_postmessage();
+		// await inject_postmessage();
 		webcontainer.run_dev_server();
 	},
 	/**
