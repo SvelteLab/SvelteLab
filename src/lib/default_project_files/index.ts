@@ -1,7 +1,8 @@
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 
 const project = import.meta.glob('./**/!(package-lock.json)', {
-	as: 'raw',
+	query: '?raw',
+	import: 'default',
 	eager: true,
 });
 
