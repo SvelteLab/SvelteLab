@@ -15,14 +15,12 @@ const config = {
 	},
 	vitePlugin: {
 		inspector: true,
-		experimental: {
-			dynamicCompileOptions({ filename }) {
-				if (filename.includes('/og/OG.svelte')) {
-					return {
-						css: 'injected',
-					};
-				}
-			},
+		dynamicCompileOptions({ filename }) {
+			if (filename.includes('/og/OG.svelte')) {
+				return {
+					css: 'injected',
+				};
+			}
 		},
 	},
 };
