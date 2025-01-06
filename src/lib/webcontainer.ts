@@ -274,7 +274,9 @@ async function launch_jsh() {
 						open_file(file_to_open);
 					}
 				}
-				terminal.write(data);
+				if (!data.startsWith('svelte:inspector')) {
+					terminal.write(data);
+				}
 			},
 		}),
 	);
