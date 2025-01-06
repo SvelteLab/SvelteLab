@@ -4,8 +4,8 @@
 	import InstallDeps from '~icons/line-md/downloading-loop';
 	import Booting from '~icons/line-md/loading-alt-loop';
 	import Error from '~icons/material-symbols/chat-error-rounded';
-	import OpenInNew from '~icons/material-symbols/open-in-new';
 	import Refresh from '~icons/material-symbols/refresh-rounded';
+	// import OpenInNew from '~icons/material-symbols/open-in-new';
 
 	$: showed_url = $webcontainer.iframe_path;
 
@@ -61,14 +61,14 @@
 				type="text"
 				value={showed_url}
 			/>
-			<a
+			<!-- <a
 				title="Open in new Tab"
 				href={$webcontainer.webcontainer_url + $webcontainer.iframe_path}
 				target="_blank"
 				rel="noopener noreferrer"
 			>
 				<OpenInNew />
-			</a>
+			</a> -->
 		</form>
 		{#key $webcontainer.webcontainer_url + $webcontainer.iframe_path}
 			<iframe
@@ -77,7 +77,7 @@
 				src={$webcontainer.webcontainer_url.startsWith('.')
 					? $webcontainer.webcontainer_url
 					: $webcontainer.webcontainer_url + $webcontainer.iframe_path}
-			/>
+			></iframe>
 		{/key}
 	{:else}
 		<div class="loader">
