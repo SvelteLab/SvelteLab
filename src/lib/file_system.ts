@@ -1,6 +1,6 @@
-import type { DirectoryNode, FileNode, FileSystemTree } from '@webcontainer/api';
+import type { DirectoryNode, FileNode, FileSystemTree, SymlinkNode } from '@webcontainer/api';
 
-export function is_dir(file: DirectoryNode | FileNode): file is DirectoryNode {
+export function is_dir(file: DirectoryNode | FileNode | SymlinkNode): file is DirectoryNode {
 	return 'directory' in file;
 }
 

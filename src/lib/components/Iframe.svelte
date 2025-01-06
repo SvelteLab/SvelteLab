@@ -11,7 +11,6 @@
 
 	onMount(() => {
 		function handler(e: MessageEvent) {
-			console.log(e);
 			try {
 				const navigation = JSON.parse(e.data);
 				const new_path = navigation.to.url.replace($webcontainer.webcontainer_url, '');
