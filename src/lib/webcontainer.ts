@@ -213,6 +213,8 @@ const jsh_queue = new Set<{ cmd: string; callback?: () => void }>();
 // for example to launch the chokidar listener after the npm i
 const jsh_finish_queue = new Set<() => void>();
 
+const JSH_LISTENING_STRING = '\u001b[1G\u001b[0J\u001b[35m❯\u001b[39m \u001b[3G';
+
 async function launch_jsh() {
 	// we launch the shell
 	const jsh_process = await webcontainer_instance.spawn('jsh', {
@@ -246,7 +248,7 @@ async function launch_jsh() {
 					// if data includes ❯ and jsh it's already listening it finished a command
 					// so we can get the next one and run it if there's one. If there's no we set
 					// is_jsh_listening to true
-				} else if (data.includes('❯') && already_listening) {
+				} else if (data.includes(JSH_LISTENING_STRING) && already_listening) {
 					jsh_finish_queue.forEach((callback) => callback());
 					jsh_finish_queue.clear();
 					const command = jsh_queue.values().next().value as { cmd: string; callback?: () => void };
@@ -261,7 +263,20 @@ async function launch_jsh() {
 						is_jsh_listening: !command,
 					});
 				}
-				terminal.write(data);
+				if (data.startsWith('svelte:inspector')) {
+					const file_to_open = data
+						.split(' ')
+						.pop()!
+						.trim()
+						.replace(webcontainer_instance.workdir, '.') as `./${string}`;
+					const files = get(files_store);
+					if (does_file_exist(files, file_to_open)) {
+						open_file(file_to_open);
+					}
+				}
+				if (!data.startsWith('svelte:inspector')) {
+					terminal.write(data);
+				}
 			},
 		}),
 	);
@@ -408,8 +423,12 @@ async function inject_postmessage() {
 		let sveltekit_runtime_client = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
 		// replace the regex injecting a window.parent.postMessage before setting the navigating store
 		const match = sveltekit_runtime_client.match(navigate_regex);
-		if(match && match.index){
-			sveltekit_runtime_client = "import { get as sveltelab_get } from 'svelte/store';\n"+sveltekit_runtime_client.substring(0, match[0].length + match.index)+"\nwindow?.parent?.postMessage?.(JSON.stringify(sveltelab_get(stores.navigating)),'*');\n"+sveltekit_runtime_client.substring(match[0].length + match.index);
+		if (match && match.index) {
+			sveltekit_runtime_client =
+				"import { get as sveltelab_get } from 'svelte/store';\n" +
+				sveltekit_runtime_client.substring(0, match[0].length + match.index) +
+				"\nwindow?.parent?.postMessage?.(JSON.stringify(sveltelab_get(stores.navigating)),'*');\n" +
+				sveltekit_runtime_client.substring(match[0].length + match.index);
 		}
 		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_runtime_client);
 	} catch (_) {
@@ -611,6 +630,11 @@ export const webcontainer = {
 		// on mount we launch the shell
 		launch_jsh();
 		merge_state({ status: 'waiting' });
+		await run_command('export PATH=$PATH:/home');
+		await run_command('echo "echo svelte:inspector \\$2" > /home/inspector');
+		await run_command('chmod 777 /home/inspector');
+		await run_command('export EDITOR=inspector');
+		terminal.clear();
 		await webcontainer.install_dependencies();
 		await fix_vite_ssr_rewrite();
 		await inject_postmessage();
