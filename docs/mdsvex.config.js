@@ -32,6 +32,7 @@ const config = defineConfig({
 		dashes: 'oldschool'
 	},
 
+	// TODO: Convert to rehype plugins since slug and autolink are EOL.
 	remarkPlugins: [
 		slug,
 		[

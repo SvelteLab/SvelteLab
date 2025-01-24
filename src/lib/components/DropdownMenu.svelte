@@ -6,14 +6,13 @@
 	import { click_outside } from '$lib/click_outside';
 	import { computePosition, shift } from '@floating-ui/dom';
 	import { setContext } from 'svelte';
-	import { v4 as uuidv4 } from 'uuid';
 	import MoreVert from '~icons/material-symbols/more-vert';
 
 	export let open = false;
 	export let indicator = false;
 
-	const menu_id = uuidv4();
-	const trigger_id = uuidv4();
+	const menu_id = crypto.randomUUID();
+	const trigger_id = crypto.randomUUID();
 
 	function close_menu() {
 		open = false;
