@@ -13,37 +13,37 @@ importers:
         version: 0.0.27
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.225
+        specifier: ^2.2.299
         version: 2.2.299
       '@sveltejs/adapter-static':
-        specifier: ^3.0.2
+        specifier: ^3.0.8
         version: 3.0.8(@sveltejs/kit@2.16.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.2)(vite@6.0.11))(svelte@5.19.2)(vite@6.0.11))
       '@sveltejs/kit':
-        specifier: ^2.5.27
+        specifier: ^2.16.1
         version: 2.16.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.2)(vite@6.0.11))(svelte@5.19.2)(vite@6.0.11)
       '@sveltejs/site-kit':
-        specifier: ^5.0.0
+        specifier: ^5.2.2
         version: 5.2.2(@sveltejs/kit@2.16.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.2)(vite@6.0.11))(svelte@5.19.2)(vite@6.0.11))(svelte@5.19.2)
       '@sveltejs/vite-plugin-svelte':
-        specifier: ^5.0.0
+        specifier: ^5.0.3
         version: 5.0.3(svelte@5.19.2)(vite@6.0.11)
       '@typescript-eslint/eslint-plugin':
-        specifier: ^8.0.0
+        specifier: ^8.21.0
         version: 8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.18.0)(typescript@5.7.3))(eslint@9.18.0)(typescript@5.7.3)
       '@typescript-eslint/parser':
-        specifier: ^8.0.0
+        specifier: ^8.21.0
         version: 8.21.0(eslint@9.18.0)(typescript@5.7.3)
       '@zerodevx/svelte-toast':
-        specifier: ^0.9.5
+        specifier: ^0.9.6
         version: 0.9.6(svelte@5.19.2)
       eslint:
-        specifier: ^9.6.0
+        specifier: ^9.18.0
         version: 9.18.0
       eslint-config-prettier:
         specifier: ^9.1.0
         version: 9.1.0(eslint@9.18.0)
       eslint-plugin-svelte:
-        specifier: ^2.45.1
+        specifier: ^2.46.1
         version: 2.46.1(eslint@9.18.0)(svelte@5.19.2)
       mdast-util-to-string:
         specifier: ^4.0.0
@@ -52,31 +52,31 @@ importers:
         specifier: ^0.11.2
         version: 0.11.2(svelte@5.19.2)
       prettier:
-        specifier: ^3.3.2
+        specifier: ^3.4.2
         version: 3.4.2
       prettier-plugin-svelte:
-        specifier: ^3.2.6
+        specifier: ^3.3.3
         version: 3.3.3(prettier@3.4.2)(svelte@5.19.2)
       remark-autolink-headings:
-        specifier: ^7.0.0
+        specifier: ^7.0.1
         version: 7.0.1
       remark-slug:
-        specifier: ^7.0.0
+        specifier: ^7.0.1
         version: 7.0.1
       remark-toc:
         specifier: ^9.0.0
         version: 9.0.0
       svelte:
-        specifier: ^5.0.0
+        specifier: ^5.19.2
         version: 5.19.2
       svelte-check:
-        specifier: ^4.0.0
+        specifier: ^4.1.4
         version: 4.1.4(svelte@5.19.2)(typescript@5.7.3)
       tslib:
-        specifier: ^2.6.3
+        specifier: ^2.8.1
         version: 2.8.1
       typescript:
-        specifier: ^5.5.3
+        specifier: ^5.7.3
         version: 5.7.3
       unist-util-visit:
         specifier: ^5.0.0
@@ -85,7 +85,7 @@ importers:
         specifier: ^22.0.0
         version: 22.0.0(svelte@5.19.2)
       vite:
-        specifier: ^6.0.0
+        specifier: ^6.0.11
         version: 6.0.11
 
 packages:
