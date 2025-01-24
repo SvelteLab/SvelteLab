@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@xterm/xterm@5.5.0':
+    hash: txygus6f7e63y4mxgqlukag6lu
+    path: patches/@xterm__xterm@5.5.0.patch
+
 importers:
 
   .:
@@ -85,10 +90,10 @@ importers:
         version: 1.5.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
-        version: 0.10.0(@xterm/xterm@5.5.0)
+        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))
       '@xterm/xterm':
         specifier: ^5.5.0
-        version: 5.5.0
+        version: 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
       '@yaireo/relative-time':
         specifier: ^1.0.5
         version: 1.0.5
@@ -3147,11 +3152,11 @@ snapshots:
 
   '@webcontainer/api@1.5.1': {}
 
-  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0)':
+  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))':
     dependencies:
-      '@xterm/xterm': 5.5.0
+      '@xterm/xterm': 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
 
-  '@xterm/xterm@5.5.0': {}
+  '@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)': {}
 
   '@yaireo/relative-time@1.0.5': {}
 
