@@ -99,5 +99,10 @@
 	},
 	"engines": {
 		"node": ">=18"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@xterm/xterm@5.5.0": "patches/@xterm__xterm@5.5.0.patch"
+		}
 	}
 }

@@ -1,16 +1,6 @@
 <script lang="ts">
 	import { layout_store } from '$lib/stores/layout_store';
 	import { fit_addon, terminal } from '$lib/terminal';
-	import { onMount } from 'svelte';
-
-	let div: HTMLDivElement;
-
-	onMount(() => {
-		terminal.open(div);
-		setTimeout(() => {
-			update_height();
-		}, 300);
-	});
 
 	export const update_height = () => {
 		fit_addon.fit();
@@ -22,9 +12,16 @@
 			update_height();
 		}, 300);
 	}
+
+	function attach_terminal(node: HTMLDivElement) {
+		terminal.open(node);
+		setTimeout(() => {
+			update_height();
+		}, 300);
+	}
 </script>
 
-<div bind:this={div} />
+<div use:attach_terminal></div>
 
 <style>
 	div {
