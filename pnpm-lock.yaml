@@ -122,8 +122,8 @@ importers:
         specifier: ^5.17.0
         version: 5.17.0
       pocketbase:
-        specifier: ^0.21.5
-        version: 0.21.5
+        specifier: ^0.25.0
+        version: 0.25.1
       satori:
         specifier: ^0.12.1
         version: 0.12.1
@@ -1792,8 +1792,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pocketbase@0.21.5:
-    resolution: {integrity: sha512-bnI/uinnQps+ElSlzxkc4yvwuSFfKcoszDtXH/4QT2FhGq2mJVUvDlxn+rjRXVntUjPfmMG5LEPZ1eGqV6ssog==}
+  pocketbase@0.25.1:
+    resolution: {integrity: sha512-2IH0KLI/qMNR/E17C7BGWX2FxW7Tead+igLHOWZ45P56v/NyVT18Jnmddeft+3qWWGL1Hog2F8bc4orWV/+Fcg==}
 
   postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
@@ -3887,7 +3887,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pocketbase@0.21.5: {}
+  pocketbase@0.25.1: {}
 
   postcss-load-config@3.1.4(postcss@8.5.1):
     dependencies:

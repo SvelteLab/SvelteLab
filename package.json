@@ -56,7 +56,7 @@
 		"lz-string": "^1.5.0",
 		"magic-string": "^0.30.17",
 		"material-icon-theme": "^5.17.0",
-		"pocketbase": "^0.21.5",
+		"pocketbase": "^0.25.0",
 		"satori": "^0.12.1",
 		"satori-html": "^0.3.2",
 		"semver": "^7.6.3",
