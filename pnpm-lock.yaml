@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@xterm/xterm@5.5.0':
-    hash: txygus6f7e63y4mxgqlukag6lu
+    hash: 5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9
     path: patches/@xterm__xterm@5.5.0.patch
 
 importers:
@@ -90,10 +90,10 @@ importers:
         version: 1.5.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
-        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))
+        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))
       '@xterm/xterm':
         specifier: ^5.5.0
-        version: 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+        version: 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
       '@yaireo/relative-time':
         specifier: ^1.0.5
         version: 1.0.5
@@ -123,7 +123,7 @@ importers:
         version: 5.17.0
       pocketbase:
         specifier: ^0.25.0
-        version: 0.25.1
+        version: 0.25.2
       satori:
         specifier: ^0.12.1
         version: 0.12.1
@@ -1792,8 +1792,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  pocketbase@0.25.1:
-    resolution: {integrity: sha512-2IH0KLI/qMNR/E17C7BGWX2FxW7Tead+igLHOWZ45P56v/NyVT18Jnmddeft+3qWWGL1Hog2F8bc4orWV/+Fcg==}
+  pocketbase@0.25.2:
+    resolution: {integrity: sha512-ONZl1+qHJMnhR2uacBlBJ90lm7njtL/zy0606+1ROfK9hSL4LRBRc8r89rMcNRzPzRqCNyoFTh2Qg/lYXdEC1w==}
 
   postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
@@ -3152,11 +3152,11 @@ snapshots:
 
   '@webcontainer/api@1.5.1': {}
 
-  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))':
+  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))':
     dependencies:
-      '@xterm/xterm': 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+      '@xterm/xterm': 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
 
-  '@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)': {}
+  '@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)': {}
 
   '@yaireo/relative-time@1.0.5': {}
 
@@ -3887,7 +3887,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  pocketbase@0.25.1: {}
+  pocketbase@0.25.2: {}
 
   postcss-load-config@3.1.4(postcss@8.5.1):
     dependencies:
