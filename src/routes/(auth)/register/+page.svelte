@@ -37,7 +37,7 @@
 	</button>
 	<hr />
 	{#if data.github_login}
-		<a href={`${data.github_login?.authUrl}${data.REDIRECT_URI}${$page.url.pathname}`}>
+		<a href={`${data.github_login?.authURL}${data.REDIRECT_URI}${$page.url.pathname}`}>
 			<ICON.Github /> Login with GitHub
 		</a>
 	{/if}

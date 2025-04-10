@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import type { Record } from 'pocketbase';
+import type { RecordModel as Record } from 'pocketbase';
 import { json } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ locals, params: { repl_id } }) => {
