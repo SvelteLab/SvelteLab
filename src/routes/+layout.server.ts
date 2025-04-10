@@ -19,7 +19,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	// in a cookie
 	try {
 		const auth_methods = await locals.pocketbase.collection('users').listAuthMethods();
-		github_login = auth_methods.authProviders.find((p) => p.name === 'github');
+		github_login = auth_methods.oauth2.providers.find((p) => p.name === 'github');
 	} catch (e) {
 		console.error(e);
 		if (e instanceof ClientResponseError) {
