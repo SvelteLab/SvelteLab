@@ -25,7 +25,8 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 				filter: `user.id = "${user_id}"`,
 				sort: '-updated',
 			})
-			.then((repls) => repls.items.map((repl) => structuredClone(repl))),
+			.then((repls) => repls.items.map((repl) => structuredClone(repl)))
+			.catch((e)=>console.log(e)),
 		profile,
 	};
 };
