@@ -186,9 +186,6 @@
 					</form>
 				{/if}
 			</div>
-			<a data-sveltekit-preload-data="off" href="/{project.id}" class="tree">
-				<TreeMap tree={project.files} />
-			</a>
 			{#if loading.includes(project.id)}
 				<div class="loading">
 					<Pending />
@@ -257,20 +254,11 @@
 		border-radius: 0.5rem;
 		overflow: hidden;
 		height: 100%;
-		background-color: var(--sk-back-2);
+		background-image: linear-gradient(90deg, var(--sk-back-2) 70%, var(--sk-theme-1));
 		position: relative;
 	}
 	article > * {
 		max-width: 80%;
-	}
-	.tree {
-		right: 0;
-		top: 0;
-		width: 20%;
-		bottom: 0;
-		position: absolute;
-		border-left: 1px solid var(--sk-code-bg);
-		background: linear-gradient(-45deg, var(--sk-code-bg), transparent);
 	}
 	.buttons {
 		margin-block-start: 2.5rem;

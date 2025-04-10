@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	}
 	return {
 		repls: await locals.pocketbase
-			.collection('repls')
+			.collection('profile_repls')
 			.getList(1, 50, {
 				filter: `user.id = "${user_id}"`,
 				sort: '-updated',
