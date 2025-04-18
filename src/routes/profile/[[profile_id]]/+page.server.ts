@@ -18,15 +18,15 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		console.log(e);
 		redirect(301, '/');
 	}
+	const repls = await locals.pocketbase
+		.collection('profile_repls')
+		.getList(1, 50, {
+			filter: `user.id = "${user_id}"`,
+			sort: '-updated',
+		})
+		.then((repls) => repls.items.map((repl) => structuredClone(repl)));
 	return {
-		repls: await locals.pocketbase
-			.collection('profile_repls')
-			.getList(1, 50, {
-				filter: `user.id = "${user_id}"`,
-				sort: '-updated',
-			})
-			.then((repls) => repls.items.map((repl) => structuredClone(repl)))
-			.catch((e)=>console.log(e)),
+		repls,
 		profile,
 	};
 };
