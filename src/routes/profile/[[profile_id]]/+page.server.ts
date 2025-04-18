@@ -25,9 +25,17 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			sort: '-updated',
 		})
 		.then((repls) => repls.items.map((repl) => structuredClone(repl)));
+	const rest_repls = locals.pocketbase
+		.collection('profile_repls')
+		.getFullList({
+			filter: `user.id = "${user_id}"`,
+			sort: '-updated',
+		})
+		.then((repls) => repls.map((repl) => structuredClone(repl)));
 	return {
 		repls,
 		profile,
+		rest_repls,
 	};
 };
 

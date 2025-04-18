@@ -54,7 +54,20 @@
 			sort_order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
 	};
 
-	$: repls = data.repls
+	let use_rest_repls = false;
+
+	let rest_repls: Awaited<typeof data.rest_repls> | undefined = undefined;
+
+	function get_rest_repls(rest_repls_promise: typeof data.rest_repls) {
+		rest_repls = undefined;
+		rest_repls_promise.then((rest) => {
+			rest_repls = rest;
+		});
+	}
+
+	$: get_rest_repls(data.rest_repls);
+
+	$: repls = (rest_repls ?? data.repls)
 		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
 		.sort(sort_functions[sort_by](sort_order));
 
