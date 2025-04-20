@@ -54,20 +54,7 @@
 			sort_order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
 	};
 
-	let use_rest_repls = false;
-
-	let rest_repls: Awaited<typeof data.rest_repls> | undefined = undefined;
-
-	function get_rest_repls(rest_repls_promise: typeof data.rest_repls) {
-		rest_repls = undefined;
-		rest_repls_promise.then((rest) => {
-			rest_repls = rest;
-		});
-	}
-
-	$: get_rest_repls(data.rest_repls);
-
-	$: repls = (rest_repls ?? data.repls)
+	$: repls = data.repls
 		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
 		.sort(sort_functions[sort_by](sort_order));
 
@@ -121,84 +108,130 @@
 				duration: 250,
 			}}
 		>
-			<a data-sveltekit-preload-data="off" href="/{project.id}">
-				<p>
-					{project.name}
-				</p>
-				<small title={project.created}>created {created}</small>
-				{#if created != updated}
-					<small title={project.updated}>updated {updated}</small>
-				{/if}
-				<code>/{project.id}</code>
-			</a>
-			<div class="buttons">
-				<button
-					on:click={() => {
-						share?.({
-							text: `Take a look at my REPL`,
-							title: `SvelteLab - ${project.name}`,
-							url: `/${project.id}`,
-						});
-					}}
-				>
-					<Share />
-				</button>
-				{#if data.user}
-					<form
-						use:enhance={() => {
-							loading.push(project.id);
-							loading = loading;
-							return ({ update }) => {
-								loading = loading.filter((id) => id !== project.id);
-								update();
-							};
+			<div>
+				<a data-sveltekit-preload-data="off" href="/{project.id}">
+					<p>
+						{project.name}
+					</p>
+					<small title={project.created}>created {created}</small>
+					{#if created != updated}
+						<small title={project.updated}>updated {updated}</small>
+					{/if}
+					<code>/{project.id}</code>
+				</a>
+				<div class="buttons">
+					<button
+						on:click={() => {
+							share?.({
+								text: `Take a look at my REPL`,
+								title: `SvelteLab - ${project.name}`,
+								url: `/${project.id}`,
+							});
 						}}
-						action="?/fork"
-						method="POST"
 					>
-						<input name="id" type="hidden" value={project.id} />
-						<button
-							on:click={(e) => {
-								if (!window.confirm(`Are you sure you want to fork "${project.name}"`)) {
-									e.stopPropagation();
-									e.preventDefault();
-								}
+						<Share />
+					</button>
+					{#if data.user}
+						<form
+							use:enhance={() => {
+								loading.push(project.id);
+								loading = loading;
+								return ({ update }) => {
+									loading = loading.filter((id) => id !== project.id);
+									update();
+								};
 							}}
+							action="?/fork"
+							method="POST"
 						>
-							<Fork />
-						</button>
-					</form>
-				{/if}
-				{#if data.user?.id === data.profile.id}
-					<form
-						use:enhance={() => {
-							loading.push(project.id);
-							loading = loading;
-							return ({ update }) => {
-								loading = loading.filter((id) => id !== project.id);
-								// optimistic update
-								repls = repls.filter((repl) => repl.id !== project.id);
-								update();
-							};
-						}}
-						action="?/delete"
-						method="POST"
-					>
-						<input name="id" type="hidden" value={project.id} />
-						<button
-							on:click={(e) => {
-								if (!window.confirm(`Are you sure you want to delete "${project.name}"`)) {
-									e.stopPropagation();
-									e.preventDefault();
-								}
+							<input name="id" type="hidden" value={project.id} />
+							<button
+								on:click={(e) => {
+									if (!window.confirm(`Are you sure you want to fork "${project.name}"`)) {
+										e.stopPropagation();
+										e.preventDefault();
+									}
+								}}
+							>
+								<Fork />
+							</button>
+						</form>
+					{/if}
+					{#if data.user?.id === data.profile.id}
+						<form
+							use:enhance={() => {
+								loading.push(project.id);
+								loading = loading;
+								return ({ update }) => {
+									loading = loading.filter((id) => id !== project.id);
+									// optimistic update
+									repls = repls.filter((repl) => repl.id !== project.id);
+									update();
+								};
 							}}
-							style:color="var(--sk-theme-1)"
+							action="?/delete"
+							method="POST"
 						>
-							<TrashCan />
-						</button>
-					</form>
-				{/if}
+							<input name="id" type="hidden" value={project.id} />
+							<button
+								on:click={(e) => {
+									if (!window.confirm(`Are you sure you want to delete "${project.name}"`)) {
+										e.stopPropagation();
+										e.preventDefault();
+									}
+								}}
+								style:color="var(--sk-theme-1)"
+							>
+								<TrashCan />
+							</button>
+						</form>
+					{/if}
+				</div>
 			</div>
+			<a data-sveltekit-preload-data="off" href="/{project.id}" class="tree">
+				<TreeMap
+					tree={{
+						dir: {
+							directory: {
+								route: {
+									directory: {
+										'1': {
+											file: {
+												contents: '',
+											},
+										},
+										'2': {
+											file: {
+												contents: '',
+											},
+										},
+									},
+								},
+								'1': {
+									file: {
+										contents: '',
+									},
+								},
+							},
+						},
+						'1': {
+							file: {
+								contents: '',
+							},
+						},
+						'2': {
+							file: {
+								contents: '',
+							},
+						},
+						'3': {
+							file: {
+								contents: '',
+							},
+						},
+					}}
+				/>
+			</a>
 			{#if loading.includes(project.id)}
 				<div class="loading">
 					<Pending />
@@ -267,11 +300,21 @@
 		border-radius: 0.5rem;
 		overflow: hidden;
 		height: 100%;
-		background-image: linear-gradient(90deg, var(--sk-back-2) 70%, var(--sk-theme-1));
+		background-color: var(--sk-back-2);
+		border-left: 1px solid var(--sk-theme-1);
 		position: relative;
 	}
 	article > * {
 		max-width: 80%;
+	}
+	.tree {
+		right: 0;
+		top: 0;
+		width: 20%;
+		bottom: 0;
+		position: absolute;
+		border-left: 1px solid var(--sk-code-bg);
+		background: linear-gradient(-45deg, var(--sk-code-bg), transparent);
 	}
 	.buttons {
 		margin-block-start: 2.5rem;
