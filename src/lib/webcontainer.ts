@@ -423,7 +423,7 @@ stores.navigating.subscribe($navigating => {
 		window?.parent?.postMessage?.(JSON.stringify($navigating), '*');
 	}
 });
-`
+`;
 		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_runtime_client);
 	} catch (_) {
 		/** empty */
@@ -582,6 +582,7 @@ export const webcontainer = {
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
+		webcontainer_instance.setPreviewScript(`window.parent.postMessage(JSON.stringify({ to: { url: location.href } }), '*');`);
 		webcontainer_instance.on('server-ready', (port, url) => {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
