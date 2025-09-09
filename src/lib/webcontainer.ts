@@ -418,11 +418,11 @@ async function inject_postmessage() {
 		// read the client file
 		let sveltekit_runtime_client = await webcontainer_instance.fs.readFile(file_to_fix, 'utf-8');
 		sveltekit_runtime_client += `
-stores.navigating.subscribe($navigating => {
-	if ($navigating) {
-		window?.parent?.postMessage?.(JSON.stringify($navigating), '*');
-	}
-});
+if (typeof window !== 'undefined') {
+	stores.page.subscribe(() => {
+		window.parent.postMessage(JSON.stringify({ url: location.href }), '*');
+	});
+}
 `;
 		await webcontainer_instance.fs.writeFile(file_to_fix, sveltekit_runtime_client);
 	} catch (_) {
@@ -582,7 +582,7 @@ export const webcontainer = {
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
-		webcontainer_instance.setPreviewScript(`window.parent.postMessage(JSON.stringify({ to: { url: location.href } }), '*');`);
+		webcontainer_instance.setPreviewScript(`window.parent.postMessage(JSON.stringify({ url: location.href }), '*');`);
 		webcontainer_instance.on('server-ready', (port, url) => {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
