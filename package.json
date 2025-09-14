@@ -49,7 +49,7 @@
 		"@xterm/xterm": "^5.5.0",
 		"@yaireo/relative-time": "^1.0.5",
 		"as-comps": "^0.0.27",
-		"flexsearch": "^0.7.43",
+		"flexsearch": "^0.8.0",
 		"fzf": "^0.5.2",
 		"he": "^1.2.0",
 		"jszip": "^3.10.1",
