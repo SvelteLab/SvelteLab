@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@xterm/xterm@5.5.0':
-    hash: txygus6f7e63y4mxgqlukag6lu
+    hash: 5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9
     path: patches/@xterm__xterm@5.5.0.patch
 
 importers:
@@ -57,7 +57,7 @@ importers:
         version: 0.4.0(@codemirror/autocomplete@6.18.4)(@codemirror/commands@6.8.0)(@codemirror/lang-css@6.3.1)(@codemirror/lang-html@6.4.9)(@codemirror/language@6.10.8)(@codemirror/state@6.5.1)(@codemirror/view@6.36.2)
       '@floating-ui/dom':
         specifier: ^1.6.13
-        version: 1.6.13
+        version: 1.7.4
       '@jridgewell/trace-mapping':
         specifier: ^0.3.25
         version: 0.3.25
@@ -90,10 +90,10 @@ importers:
         version: 1.5.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
-        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))
+        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))
       '@xterm/xterm':
         specifier: ^5.5.0
-        version: 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+        version: 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
       '@yaireo/relative-time':
         specifier: ^1.0.5
         version: 1.0.5
@@ -255,6 +255,7 @@ packages:
   '@builder.io/partytown@0.10.3':
     resolution: {integrity: sha512-N2SWA3c5vEad3rgdAFM3zMb6uc7aXqibkgAz4ijvYzycgQXJ4dE5oH6fGFMXSQWj6ayVlLT1/CmpflYUJHfmQg==}
     engines: {node: '>=18.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     hasBin: true
 
   '@codemirror/autocomplete@6.18.4':
@@ -500,14 +501,14 @@ packages:
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@floating-ui/core@1.6.9':
-    resolution: {integrity: sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==}
+  '@floating-ui/core@1.7.3':
+    resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
 
-  '@floating-ui/dom@1.6.13':
-    resolution: {integrity: sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==}
+  '@floating-ui/dom@1.7.4':
+    resolution: {integrity: sha512-OOchDgh4F2CchOX94cRVqhvy7b3AFb+/rQXyswmzmGakRfkMgoWVjfnLWkRirfLEfuD4ysVW16eXzwt3jHIzKA==}
 
-  '@floating-ui/utils@0.2.9':
-    resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+  '@floating-ui/utils@0.2.10':
+    resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -856,6 +857,7 @@ packages:
 
   '@sveltejs/site-kit@3.4.0':
     resolution: {integrity: sha512-jMwL8eWNBN0WeWoO8qXx8zUvDywiittc4GGNfX1CXwC6i2bgbrfHke+RrZmNxOrMeSgDcoCnYL0kKZmmg6al7w==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
       svelte: ^3.54.0
@@ -2619,16 +2621,16 @@ snapshots:
       '@eslint/core': 0.10.0
       levn: 0.4.1
 
-  '@floating-ui/core@1.6.9':
+  '@floating-ui/core@1.7.3':
     dependencies:
-      '@floating-ui/utils': 0.2.9
+      '@floating-ui/utils': 0.2.10
 
-  '@floating-ui/dom@1.6.13':
+  '@floating-ui/dom@1.7.4':
     dependencies:
-      '@floating-ui/core': 1.6.9
-      '@floating-ui/utils': 0.2.9
+      '@floating-ui/core': 1.7.3
+      '@floating-ui/utils': 0.2.10
 
-  '@floating-ui/utils@0.2.9': {}
+  '@floating-ui/utils@0.2.10': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -3152,11 +3154,11 @@ snapshots:
 
   '@webcontainer/api@1.5.1': {}
 
-  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))':
+  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))':
     dependencies:
-      '@xterm/xterm': 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+      '@xterm/xterm': 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
 
-  '@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)': {}
+  '@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)': {}
 
   '@yaireo/relative-time@1.0.5': {}
 
