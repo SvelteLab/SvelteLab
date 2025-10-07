@@ -12,8 +12,8 @@
 	onMount(() => {
 		function handler(e: MessageEvent) {
 			try {
-				const navigation = JSON.parse(e.data);
-				const new_path = navigation.to.url.replace($webcontainer.webcontainer_url, '');
+				const { url } = JSON.parse(e.data);
+				const new_path = url.replace($webcontainer.webcontainer_url, '');
 				showed_url = new_path;
 			} catch (e) {
 				/**empty*/
