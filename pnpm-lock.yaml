@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@xterm/xterm@5.5.0':
-    hash: txygus6f7e63y4mxgqlukag6lu
+    hash: 5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9
     path: patches/@xterm__xterm@5.5.0.patch
 
 importers:
@@ -90,10 +90,10 @@ importers:
         version: 1.5.1
       '@xterm/addon-fit':
         specifier: ^0.10.0
-        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))
+        version: 0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))
       '@xterm/xterm':
         specifier: ^5.5.0
-        version: 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+        version: 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
       '@yaireo/relative-time':
         specifier: ^1.0.5
         version: 1.0.5
@@ -101,8 +101,8 @@ importers:
         specifier: ^0.0.27
         version: 0.0.27
       flexsearch:
-        specifier: ^0.7.43
-        version: 0.7.43
+        specifier: ^0.8.0
+        version: 0.8.212
       fzf:
         specifier: ^0.5.2
         version: 0.5.2
@@ -255,6 +255,7 @@ packages:
   '@builder.io/partytown@0.10.3':
     resolution: {integrity: sha512-N2SWA3c5vEad3rgdAFM3zMb6uc7aXqibkgAz4ijvYzycgQXJ4dE5oH6fGFMXSQWj6ayVlLT1/CmpflYUJHfmQg==}
     engines: {node: '>=18.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     hasBin: true
 
   '@codemirror/autocomplete@6.18.4':
@@ -856,6 +857,7 @@ packages:
 
   '@sveltejs/site-kit@3.4.0':
     resolution: {integrity: sha512-jMwL8eWNBN0WeWoO8qXx8zUvDywiittc4GGNfX1CXwC6i2bgbrfHke+RrZmNxOrMeSgDcoCnYL0kKZmmg6al7w==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
       svelte: ^3.54.0
@@ -1411,8 +1413,8 @@ packages:
   flatted@3.3.2:
     resolution: {integrity: sha512-AiwGJM8YcNOaobumgtng+6NHuOqC3A7MixFeDafM3X9cIUM+xUXoS5Vfgf+OihAYe20fxqNM9yPBXJzRtZ/4eA==}
 
-  flexsearch@0.7.43:
-    resolution: {integrity: sha512-c5o/+Um8aqCSOXGcZoqZOm+NqtVwNsvVpWv6lfmSclU954O3wvQKxxK8zj74fPaSJbXpSLTs4PRhh+wnoCXnKg==}
+  flexsearch@0.8.212:
+    resolution: {integrity: sha512-wSyJr1GUWoOOIISRu+X2IXiOcVfg9qqBRyCPRUdLMIGJqPzMo+jMRlvE83t14v1j0dRMEaBbER/adQjp6Du2pw==}
 
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
@@ -3152,11 +3154,11 @@ snapshots:
 
   '@webcontainer/api@1.5.1': {}
 
-  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu))':
+  '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9))':
     dependencies:
-      '@xterm/xterm': 5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)
+      '@xterm/xterm': 5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)
 
-  '@xterm/xterm@5.5.0(patch_hash=txygus6f7e63y4mxgqlukag6lu)': {}
+  '@xterm/xterm@5.5.0(patch_hash=5dc725e31734b976eb1417b1dc5494d96e0631390b4476ffc5ee5dd7e8aba9f9)': {}
 
   '@yaireo/relative-time@1.0.5': {}
 
@@ -3556,7 +3558,7 @@ snapshots:
 
   flatted@3.3.2: {}
 
-  flexsearch@0.7.43: {}
+  flexsearch@0.8.212: {}
 
   foreground-child@3.3.0:
     dependencies:
