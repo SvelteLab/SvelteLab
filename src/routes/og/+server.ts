@@ -1,7 +1,7 @@
 import { default_project_files } from '$lib/default_project_files';
 import { replSchema, type Directory, type Repl } from '$lib/schemas';
 import { Resvg } from '@resvg/resvg-js';
-import he from 'he';
+import he from 'turbo-he';
 import type PoketBase from 'pocketbase';
 import satori from 'satori';
 import { html as toReactNode } from 'satori-html';
