@@ -443,7 +443,7 @@ async function run_svelte_check() {
 			// ad we prompt the user to update
 			available = false;
 			actionable(
-				'Your version of svelte-check is older than the required 3.4.3 to run the diagnostics...would you like to update?',
+				'Your version of svelte-check is older than the required 3.4.3 to run the diagnostics. Would you like to update?',
 				async () => {
 					const update_svelte_check_process = await spawn_process_and_show_output(
 						'npm install svelte-check@latest -D',
