@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import TreeMap from '$lib/components/TreeMap.svelte';
-	import type { ShareFn } from '$lib/share';
+	import TreeMap from '#lib/components/TreeMap.svelte';
+	import type { ShareFn } from '#lib/share.js';
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { queryParam, ssp } from 'sveltekit-search-params';
@@ -13,8 +13,8 @@
 	import ProfileHeader from './ProfileHeader.svelte';
 	import NoneFound from '~icons/material-symbols/sad-tab-outline-rounded';
 	import RelativeTime from '@yaireo/relative-time';
-	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
-	import MenuItem from '$lib/components/MenuItem.svelte';
+	import DropdownMenu from '#lib/components/DropdownMenu.svelte';
+	import MenuItem from '#lib/components/MenuItem.svelte';
 	import ArrowUpward from '~icons/material-symbols/arrow-upward';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 
@@ -25,7 +25,7 @@
 	let share: ShareFn;
 
 	onMount(async () => {
-		share = (await import('$lib/share')).share;
+		share = (await import('#lib/share.js')).share;
 	});
 
 	const search = queryParam('s', ssp.string(), {
@@ -109,7 +109,7 @@
 			}}
 		>
 			<div>
-				<a data-sveltekit-preload-data="off" href="/{project.id}">
+				<a data-sveltekit-preload-data="false" href="/{project.id}">
 					<p>
 						{project.name}
 					</p>
@@ -188,7 +188,7 @@
 					{/if}
 				</div>
 			</div>
-			<a data-sveltekit-preload-data="off" href="/{project.id}" class="tree">
+			<a data-sveltekit-preload-data="false" href="/{project.id}" class="tree">
 				<TreeMap
 					tree={{
 						dir: {

@@ -1,12 +1,12 @@
-import { GITHUB_TOKEN } from '$env/static/private';
-import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$lib/constants';
-import { default_project_files } from '$lib/default_project_files';
-import { replSchema } from '$lib/schemas';
+import { GITHUB_TOKEN } from '$app/env/private';
+import { PUBLIC_TEMPLATE_COOKIE_NAME } from '#lib/constants.js';
+import { default_project_files } from '#lib/default_project_files/index.js';
+import { replSchema } from '#lib/schemas.js';
 import { redirect } from '@sveltejs/kit';
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 import type PoketBase from 'pocketbase';
 import type { LayoutServerLoad } from './$types';
-import { base64_to_ui8a, ui8a_to_string } from '$lib/utils';
+import { base64_to_ui8a, ui8a_to_string } from '#lib/utils.js';
 
 export const ssr = false;
 

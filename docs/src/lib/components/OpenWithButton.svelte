@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
+	import { dev } from '$app/env';
 	import { copy_to_clipboard } from '$lib/util';
 	import { toast } from '@zerodevx/svelte-toast';
 

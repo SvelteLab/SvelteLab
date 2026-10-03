@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { on_command } from '$lib/command_runner/commands';
-	import VoidEditor from '$lib/components/VoidEditor.svelte';
-	import { editor_config, editor_preferences } from '$lib/stores/editor_config_store';
-	import font_preferences from '$lib/font_preferences';
-	import { diagnostic_store } from '$lib/stores/editor_errors_store';
-	import { js_snippets, svelte_snippets } from '$lib/svelte-snippets';
-	import { current_tab } from '$lib/tabs';
-	import { get_character_from_pos } from '$lib/utils';
-	import { webcontainer } from '$lib/webcontainer';
+	import { on_command } from '#lib/command_runner/commands.js';
+	import VoidEditor from '#lib/components/VoidEditor.svelte';
+	import { editor_config, editor_preferences } from '#lib/stores/editor_config_store.js';
+	import font_preferences from '#lib/font_preferences.js';
+	import { diagnostic_store } from '#lib/stores/editor_errors_store.js';
+	import { js_snippets, svelte_snippets } from '#lib/svelte-snippets.js';
+	import { current_tab } from '#lib/tabs.js';
+	import { get_character_from_pos } from '#lib/utils.js';
+	import { webcontainer } from '#lib/webcontainer.js';
 	import { HighlightStyle, LanguageSupport, syntaxHighlighting } from '@codemirror/language';
 	import type { Diagnostic } from '@codemirror/lint';
 	import type { Extension } from '@codemirror/state';

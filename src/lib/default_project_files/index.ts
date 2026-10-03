@@ -1,6 +1,6 @@
 import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 
-const project = import.meta.glob('./**/!(package-lock.json)', {
+const project = import.meta.glob(['./**/*'], {
 	query: '?raw',
 	import: 'default',
 	eager: true,

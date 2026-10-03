@@ -1,6 +1,6 @@
-import { dev } from '$app/environment';
-import { get_file_from_path, get_subtree_from_path, is_dir } from '$lib/file_system';
-import { terminal } from '$lib/terminal';
+import { dev } from '$app/env';
+import { get_file_from_path, get_subtree_from_path, is_dir } from '#lib/file_system.js';
+import { terminal } from '#lib/terminal.js';
 import {
 	WebContainer,
 	type DirEnt,
@@ -582,7 +582,9 @@ export const webcontainer = {
 			return;
 		}
 		webcontainer_instance = await WebContainer.boot();
-		webcontainer_instance.setPreviewScript(`window.parent.postMessage(JSON.stringify({ url: location.href }), '*');`);
+		webcontainer_instance.setPreviewScript(
+			`window.parent.postMessage(JSON.stringify({ url: location.href }), '*');`,
+		);
 		webcontainer_instance.on('server-ready', (port, url) => {
 			// we run svelte-check after the server is ready
 			// to avoid not having the updated types from the sveltekit dev server
@@ -746,8 +748,8 @@ export const webcontainer = {
 					},
 				}),
 			);
-			await process.exit;
 
+			await process.exit;
 			webcontainer.sync_file_system();
 			expand_path(destination.slice(0, -1));
 

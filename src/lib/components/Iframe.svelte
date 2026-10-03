@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { webcontainer } from '$lib/webcontainer';
+	import { webcontainer } from '#lib/webcontainer.js';
 	import { onMount, tick } from 'svelte';
 	import InstallDeps from '~icons/line-md/downloading-loop';
 	import Booting from '~icons/line-md/loading-alt-loop';

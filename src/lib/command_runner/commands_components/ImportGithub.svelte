@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { build_import_href, github_regex } from '$lib/github_import_regex';
+	import { build_import_href, github_regex } from '#lib/github_import_regex.js';
 
 	export let value = 'https://github.com/';
 	$: repo = value.split('github.com/')[1];

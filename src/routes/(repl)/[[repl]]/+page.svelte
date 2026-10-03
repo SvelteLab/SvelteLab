@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PlaceholderComponent from '$lib/components/PlaceholderComponent.svelte';
-	import VoidEditor from '$lib/components/VoidEditor.svelte';
+	import PlaceholderComponent from '#lib/components/PlaceholderComponent.svelte';
+	import VoidEditor from '#lib/components/VoidEditor.svelte';
 	import type { ComponentType, SvelteComponent } from 'svelte';
 	import { onMount } from 'svelte';
 	import Desktop from './Desktop.svelte';
@@ -12,8 +12,8 @@
 	let Editor: ComponentType<SvelteComponent> = VoidEditor;
 
 	onMount(async () => {
-		Console = (await import('$lib/components/Console.svelte')).default;
-		Editor = (await import('$lib/components/Editor.svelte')).default;
+		Console = (await import('#lib/components/Console.svelte')).default;
+		Editor = (await import('#lib/components/Editor.svelte')).default;
 	});
 
 	let width: number;

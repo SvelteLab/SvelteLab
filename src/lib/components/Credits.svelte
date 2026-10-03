@@ -1,5 +1,5 @@
 <script context="module">
-	import Dialog from '$lib/components/Dialog.svelte';
+	import Dialog from '#lib/components/Dialog.svelte';
 	import { writable } from 'svelte/store';
 	export function open_credits() {
 		show_credits.set(true);
@@ -8,8 +8,8 @@
 </script>
 
 <script lang="ts">
-	import Logo from '$lib/components/Logo.svelte';
-	import deps_json from '$lib/dependency-report.json';
+	import Logo from '#lib/components/Logo.svelte';
+	import deps_json from '#lib/dependency-report.json';
 
 	type Dependency = {
 		department?: string;

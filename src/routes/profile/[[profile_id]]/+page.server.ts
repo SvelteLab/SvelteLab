@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
-import { fork } from '$lib/api/server/fork';
+import { fork } from '#lib/api/server/fork.js';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { profile_id } = params;

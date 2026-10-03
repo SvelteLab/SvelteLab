@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: /.*\.e2e\.ts/,
 	webServer: {
-		command: 'npm run build && npm run preview',
+		command: 'npm run preview',
 		port: 4173,
 	},
 	use: {

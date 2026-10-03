@@ -1,11 +1,12 @@
-import { POCKETBASE_URL } from '$env/static/private';
-import { PUBLIC_THEME_COOKIE_NAME } from '$lib/constants';
-import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
+import type { RequestEvent } from '@sveltejs/kit';
+import { POCKETBASE_URL } from '$app/env/private';
+import { PUBLIC_THEME_COOKIE_NAME } from '#lib/constants.js';
+import { sequence, type Handle } from '@sveltejs/kit/hooks';
 import PocketBase from 'pocketbase';
 
 const routes_og_map = new Map([
 	['default', (event: RequestEvent) => `${event.url.origin}/default_og.png`],
+
 	[
 		'/(repl)/[[repl]]',
 		(event: RequestEvent) => `${event.url.origin}/og?repl_id=${event.params.repl ?? ''}`,
@@ -39,6 +40,7 @@ const handle_poketbase: Handle = async ({ event, resolve }) => {
 		// get an up-to-date auth store state by veryfing and refreshing the loaded auth model (if any)
 		event.locals.pocketbase.authStore.isValid &&
 			(await event.locals.pocketbase.collection('users').authRefresh());
+
 		event.locals.user = structuredClone(event.locals.pocketbase.authStore.model);
 	} catch (_) {
 		// clear the auth store on failed refresh

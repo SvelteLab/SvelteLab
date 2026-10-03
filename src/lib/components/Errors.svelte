@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { diagnostic_store, type Diagnostic } from '$lib/stores/editor_errors_store';
-	import { current_tab } from '$lib/tabs';
+	import { diagnostic_store, type Diagnostic } from '#lib/stores/editor_errors_store.js';
+	import { current_tab } from '#lib/tabs.js';
 	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import ErrorIcon from '~icons/material-symbols/error-circle-rounded-outline';

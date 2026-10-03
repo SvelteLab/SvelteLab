@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { get, writable } from 'svelte/store';
 import { PUBLIC_THEME_COOKIE_NAME } from './constants';
 import { get_cookie } from './cookie';

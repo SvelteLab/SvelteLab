@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { files, webcontainer } from '$lib/webcontainer';
+	import { files, webcontainer } from '#lib/webcontainer.js';
 	import { onMount } from 'svelte';
 	import Running from '~icons/eos-icons/loading';
 	import Play from '~icons/material-symbols/play-arrow-outline-rounded';

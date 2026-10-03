@@ -1,13 +1,13 @@
 <script lang="ts">
+	import Avatar from '#lib/components/Avatar.svelte';
+	import Logo from '#lib/components/Logo.svelte';
+	import { ICON } from '#lib/icons.js';
+	import type { ShareFn } from '#lib/share.js';
+	import { get_theme } from '#lib/theme.js';
+	import { error } from '#lib/toast.js';
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import Logo from '$lib/components/Logo.svelte';
-	import { ICON } from '$lib/icons';
-	import type { ShareFn } from '$lib/share';
-	import { get_theme } from '$lib/theme';
-	import { error } from '$lib/toast';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import SignIn from '~icons/material-symbols/account-circle';
 	import Moon from '~icons/material-symbols/dark-mode-rounded';
@@ -17,13 +17,13 @@
 
 	const theme = get_theme(false);
 
-	let share: ShareFn;
+	let share = $state<ShareFn>();
 
 	onMount(async () => {
-		share = (await import('$lib/share')).share;
+		share = (await import('#lib/share.js')).share;
 	});
 
-	$: ({ user, github_login, profile, REDIRECT_URI } = $page.data ?? {});
+	let { user, github_login, profile, REDIRECT_URI } = $derived(page.data ?? {});
 </script>
 
 <header>
@@ -31,10 +31,10 @@
 		<Logo />
 	</a>
 	<h2>{profile?.username ?? 'nobody'} profile</h2>
-	<div class="grow" />
+	<div class="grow"></div>
 
 	<button
-		on:click={(e) => {
+		onclick={(e) => {
 			if (e.shiftKey) {
 				theme.remove_preference();
 			} else {
@@ -51,12 +51,12 @@
 	</button>
 
 	<button
-		on:click={async () => {
+		onclick={async () => {
 			if (!profile) {
 				error('There was a problem sharing this profile');
 				return;
 			}
-			await share({
+			await share?.({
 				text: 'Take a look at my SvelteLab profile',
 				title: `${profile.username} - SvelteLab`,
 				url: `/profile/${profile.id}`,
@@ -90,7 +90,7 @@
 	{:else}
 		<a
 			class="btn"
-			href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
+			href={`${github_login?.authUrl}${REDIRECT_URI}${page.url.pathname}`}
 			title="Login with GitHub"
 		>
 			<SignIn />

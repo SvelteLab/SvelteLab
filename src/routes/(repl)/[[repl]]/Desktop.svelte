@@ -1,8 +1,8 @@
 <script lang="ts">
-	import FileActions from '$lib/components/FileActions.svelte';
-	import Iframe from '$lib/components/Iframe.svelte';
-	import { is_intro_open } from '$lib/stores/intro_store';
-	import { layout_store } from '$lib/stores/layout_store';
+	import FileActions from '#lib/components/FileActions.svelte';
+	import Iframe from '#lib/components/Iframe.svelte';
+	import { is_intro_open } from '#lib/stores/intro_store.js';
+	import { layout_store } from '#lib/stores/layout_store.js';
 	import type { ComponentType, SvelteComponent } from 'svelte';
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
 	import Intro from '../Intro.svelte';

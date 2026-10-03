@@ -75,8 +75,7 @@ declare module 'highlight.js' {
 			lookahead: (re: RegExp | string) => string
 			either: (
 				...args:
-					| (RegExp | string)[]
-					| [...(RegExp | string)[], RegexEitherOptions]
+					(RegExp | string)[] | [...(RegExp | string)[], RegexEitherOptions]
 			) => string
 			optional: (re: RegExp | string) => string
 			anyNumberOfTimes: (re: RegExp | string) => string

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import font_preferences, { set_default_font_preferences } from '$lib/font_preferences';
+	import font_preferences, { set_default_font_preferences } from '#lib/font_preferences.js';
 	import {
 		editor_preferences,
 		set_default_editor_preferences,
-	} from '$lib/stores/editor_config_store';
+	} from '#lib/stores/editor_config_store.js';
 </script>
 
 <form>

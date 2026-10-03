@@ -1,5 +1,5 @@
-import { is_dir } from '$lib/file_system';
-import { files } from '$lib/webcontainer';
+import { is_dir } from '#lib/file_system.js';
+import { files } from '#lib/webcontainer.js';
 import { derived } from 'svelte/store';
 import { layout_store } from './layout_store';
 

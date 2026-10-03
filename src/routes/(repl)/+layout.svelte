@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
-	import CommandRunner from '$lib/command_runner/CommandRunner.svelte';
-	import { commands } from '$lib/command_runner/commands';
-	import Credits from '$lib/components/Credits.svelte';
-	import Dialog from '$lib/components/Dialog.svelte';
-	import { is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
-	import { webcontainer } from '$lib/webcontainer';
+	import CommandRunner from '#lib/command_runner/CommandRunner.svelte';
+	import { commands } from '#lib/command_runner/commands.js';
+	import Credits from '#lib/components/Credits.svelte';
+	import Dialog from '#lib/components/Dialog.svelte';
+	import { is_repl_to_save, repl_id, repl_name } from '#lib/stores/repl_id_store.js';
+	import { webcontainer } from '#lib/webcontainer.js';
 	import type { LayoutData } from './$types';
 	import GithubLoading from './GithubLoading.svelte';
 	import { handle_load_files } from './handle_load_files';
@@ -23,7 +23,8 @@
 
 	let loading_github_repo = false;
 
-	afterNavigate(async () => {
+	afterNavigate(async ({ shallow }) => {
+		if (shallow) return;
 		if (fix_for_double_after) return;
 		fix_for_double_after = true;
 		await handle_load_files(data, (value) => {
@@ -34,7 +35,9 @@
 		(window as any).wc = webcontainer;
 	});
 
-	beforeNavigate(({ cancel, type, to }) => {
+	beforeNavigate(({ cancel, type, to, shallow }) => {
+		if (shallow) return;
+
 		if ($is_repl_to_save && !url_to_navigate_to) {
 			// if the repl is to save we call cancel
 			cancel();
@@ -57,7 +60,7 @@
 
 <h2 class="screen-reader-only">{repl_name}</h2>
 
-<slot />
+<slot></slot>
 
 <CommandRunner commands={$commands} />
 <Credits />

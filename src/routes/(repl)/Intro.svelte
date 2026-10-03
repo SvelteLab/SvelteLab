@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Logo from '$lib/components/Logo.svelte';
-	import { intro_hidden_forever, is_intro_open } from '$lib/stores/intro_store';
+	import Logo from '#lib/components/Logo.svelte';
+	import { intro_hidden_forever, is_intro_open } from '#lib/stores/intro_store.js';
 	import { marked } from 'marked';
 	import Close from '~icons/material-symbols/close-rounded';
 	import HideForever from '~icons/material-symbols/hide-source-outline-rounded';

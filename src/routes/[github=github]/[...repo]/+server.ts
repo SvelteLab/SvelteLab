@@ -1,4 +1,4 @@
-import { build_import_href } from '$lib/github_import_regex';
+import { build_import_href } from '#lib/github_import_regex.js';
 import { redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 

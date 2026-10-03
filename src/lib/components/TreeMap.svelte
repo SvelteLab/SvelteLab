@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { is_dir } from '$lib/file_system';
+	import { is_dir } from '#lib/file_system.js';
 	import type { DirectoryNode, FileSystemTree } from '@webcontainer/api';
 	export let tree: FileSystemTree;
 	export let file_color = 'var(--sk-text-1)';

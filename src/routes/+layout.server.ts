@@ -1,6 +1,6 @@
-import { GITHUB_VERIFIER_COOKIE_NAME } from '$lib/constants';
-import { templates } from '$lib/default_project_files';
-import { REDIRECT_URI } from '$lib/env.server';
+import { GITHUB_VERIFIER_COOKIE_NAME } from '#lib/constants.js';
+import { templates } from '#lib/default_project_files/index.js';
+import { REDIRECT_URI } from '#lib/env.server.js';
 import { ClientResponseError } from 'pocketbase';
 import type { LayoutServerLoad } from './$types';
 
@@ -19,7 +19,7 @@ export const load: LayoutServerLoad = async ({ locals, depends, cookies }) => {
 	// in a cookie
 	try {
 		const auth_methods = await locals.pocketbase.collection('users').listAuthMethods();
-		github_login = auth_methods.oauth2.providers.find((p) => p.name === 'github');
+		github_login = auth_methods.oauth2?.providers.find((p) => p.name === 'github');
 	} catch (e) {
 		console.error(e);
 		if (e instanceof ClientResponseError) {

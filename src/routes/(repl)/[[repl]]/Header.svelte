@@ -1,33 +1,42 @@
 <script lang="ts">
+	import { save_repl } from '#lib/api/client/repls.js';
+	import { commands, on_command } from '#lib/command_runner/commands.js';
+	import AsyncButton from '#lib/components/AsyncButton.svelte';
+	import Avatar from '#lib/components/Avatar.svelte';
+	import DropdownMenu from '#lib/components/DropdownMenu.svelte';
+	import Logo from '#lib/components/Logo.svelte';
+	import MenuItem from '#lib/components/MenuItem.svelte';
+	import { stringify } from '#lib/components/parsers.js';
+	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '#lib/constants.js';
+	import { ICON } from '#lib/icons.js';
+	import { share_with_hash } from '#lib/share.js';
+	import { command_runner } from '#lib/stores/command_runner_store.js';
+	import { layout_store } from '#lib/stores/layout_store.js';
+	import {
+		is_repl_saving,
+		is_repl_to_save,
+		repl_id,
+		repl_name,
+	} from '#lib/stores/repl_id_store.js';
+	import { tabs } from '#lib/tabs.js';
+	import { get_theme } from '#lib/theme.js';
+	import { webcontainer } from '#lib/webcontainer.js';
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { save_repl } from '$lib/api/client/repls';
-	import { commands, on_command } from '$lib/command_runner/commands';
-	import AsyncButton from '$lib/components/AsyncButton.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
-	import Logo from '$lib/components/Logo.svelte';
-	import MenuItem from '$lib/components/MenuItem.svelte';
-	import { stringify } from '$lib/components/parsers';
-	import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
-	import { ICON } from '$lib/icons';
-	import { share_with_hash } from '$lib/share';
-	import { command_runner } from '$lib/stores/command_runner_store';
-	import { layout_store } from '$lib/stores/layout_store';
-	import { is_repl_saving, is_repl_to_save, repl_id, repl_name } from '$lib/stores/repl_id_store';
-	import { tabs } from '$lib/tabs';
-	import { get_theme } from '$lib/theme';
-	import { webcontainer } from '$lib/webcontainer';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import SearchDocsIcon from '~icons/sveltelab/svelte-search';
 	import MenuBar from './MenuBar.svelte';
 	// TODO: dedupe header and profile header (use slots for specific buttons?)
 
 	const theme = get_theme();
-	$: ({ user, github_login, owner_id, REDIRECT_URI } = $page.data ?? {});
-	export let mobile = false;
-	let forking = false;
+	let { user, github_login, owner_id, REDIRECT_URI } = $derived(page.data ?? {});
+	interface Props {
+		mobile?: boolean;
+	}
+
+	let { mobile = false }: Props = $props();
+	let forking = $state(false);
 
 	onMount(() => {
 		return on_command('fork', async () => {
@@ -37,7 +46,7 @@
 		});
 	});
 
-	let a_hover = false;
+	let a_hover = $state(false);
 
 	const save_repl_then_navigate = async ({ detail: e }: { detail: MouseEvent }) => {
 		e.preventDefault();
@@ -63,8 +72,8 @@
 		href="/"
 		title="New REPL"
 		class="logo"
-		on:mouseenter={() => (a_hover = true)}
-		on:mouseleave={() => (a_hover = false)}
+		onmouseenter={() => (a_hover = true)}
+		onmouseleave={() => (a_hover = false)}
 	>
 		{#if !a_hover}
 			<Logo />
@@ -79,7 +88,7 @@
 		<div class="searches">
 			<button
 				class="search-docs"
-				on:click={() => {
+				onclick={() => {
 					command_runner.open('search-svelte-docs');
 				}}
 				title="Search svelte documentation"
@@ -87,7 +96,7 @@
 			</button>
 			<button
 				class="search-docs"
-				on:click={() => {
+				onclick={() => {
 					command_runner.open('search-kit-docs');
 				}}
 				title="Search sveltekit documentation"
@@ -99,7 +108,7 @@
 		<button
 			class="supplemental"
 			title="Toggle File Browser"
-			on:click={layout_store.toggle_file_tree}
+			onclick={layout_store.toggle_file_tree}
 			aria-pressed={$layout_store.file_tree !== 0}
 		>
 			<ICON.FileBrowser />
@@ -108,7 +117,7 @@
 		<button
 			class="supplemental"
 			title="Toggle Terminal"
-			on:click={layout_store.toggle_terminal}
+			onclick={layout_store.toggle_terminal}
 			aria-pressed={$layout_store.terminal !== 0}
 		>
 			<ICON.Terminal />
@@ -116,7 +125,7 @@
 	{/if}
 	<button
 		class="supplemental"
-		on:click={(e) => {
+		onclick={(e) => {
 			if (e.shiftKey) {
 				theme.remove_preference();
 			} else {
@@ -136,7 +145,7 @@
 	</a>
 	<button
 		class="supplemental"
-		on:click={() => {
+		onclick={() => {
 			command_runner.open('> ');
 		}}
 		title="Open Command Runner (CTRL+K)"
@@ -175,7 +184,7 @@
 	{/if}
 	<!-- Share button or dropdown -->
 	<button
-		on:click={async () => {
+		onclick={async () => {
 			if (!$repl_id && $tabs.length === 0) {
 				share_with_hash();
 			} else {
@@ -189,13 +198,13 @@
 	{#if user}
 		<!-- Profile or login -->
 		<DropdownMenu indicator>
-			<svelte:fragment slot="trigger">
+			{#snippet trigger()}
 				{#if user.avatarUrl}
 					<Avatar alt={`${user.name} profile`} src={`./proxy/?url=${user.avatarUrl}`} />
 				{:else}
 					<ICON.Profile />
 				{/if}
-			</svelte:fragment>
+			{/snippet}
 			<MenuItem href="/profile"><ICON.Profile /> Your profile</MenuItem>
 			<form
 				use:enhance={() => {
@@ -214,13 +223,13 @@
 		</DropdownMenu>
 	{:else}
 		<DropdownMenu indicator>
-			<svelte:fragment slot="trigger">
+			{#snippet trigger()}
 				<ICON.Login />
-			</svelte:fragment>
+			{/snippet}
 			{#if github_login}
 				<MenuItem
 					on:click={save_repl_then_navigate}
-					href={`${github_login?.authUrl}${REDIRECT_URI}${$page.url.pathname}`}
+					href={`${github_login?.authUrl}${REDIRECT_URI}${page.url.pathname}`}
 				>
 					<ICON.Github /> Login with GitHub
 				</MenuItem>

@@ -3,12 +3,13 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { build, files, prerendered, version } from '$service-worker';
+import { version } from '$app/env';
+import { assets, immutable, prerendered } from '$app/manifest';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
-const precache_list = [...build, ...files, ...prerendered].map((s) => ({
-	url: s,
+const precache_list = [...immutable, ...assets, ...prerendered].map(({ path }) => ({
+	url: path,
 	revision: version,
 }));
 

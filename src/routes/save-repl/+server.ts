@@ -1,5 +1,4 @@
-import { replSchema } from '$lib/schemas';
-import { json } from '@sveltejs/kit';
+import { replSchema } from '#lib/schemas.js';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, request }) => {
@@ -7,7 +6,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	let to_save;
 	try {
 		to_save = replSchema.parse({ id, files, name, user: locals.user?.id });
-	} catch (e) {
+	} catch (_e) {
 		return new Response('Parsing error', {
 			status: 500,
 		});
@@ -27,12 +26,12 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 			created = await repl_collection.create(to_save);
 		}
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return new Response((e as Error).message, {
 			status: 500,
 		});
 	}
-	return json({
+	return Response.json({
 		id: created?.id,
 	});
 };

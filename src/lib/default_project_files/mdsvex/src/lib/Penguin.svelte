@@ -1,6 +1,4 @@
 <script>
-	
-	
 	/** @type {{walk?: boolean}} */
 	let { walk = false } = $props();
 </script>

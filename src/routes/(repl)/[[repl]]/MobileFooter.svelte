@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import { mobile_showing, showing_files } from '#lib/stores/mobile_showing_store.js';
 	import IFrame from '~icons/material-symbols/browse-activity-outline-rounded';
 	import Code from '~icons/material-symbols/code-rounded';
 	import FileBrowser from '~icons/material-symbols/menu-rounded';

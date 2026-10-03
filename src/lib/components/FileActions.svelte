@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Pane, Splitpanes } from 'svelte-splitpanes';
-	import { base_path } from '$lib/stores/base_path_store';
+	import { base_path } from '#lib/stores/base_path_store.js';
 	import FileTree from './file_tree/FileTree.svelte';
 	import RunScripts from './RunScripts.svelte';
 	import MenuBar from '../../routes/(repl)/[[repl]]/MenuBar.svelte';
-	import { commands } from '$lib/command_runner/commands';
+	import { commands } from '#lib/command_runner/commands.js';
 	export let min_size = 5;
 	export let mobile = false;
 </script>

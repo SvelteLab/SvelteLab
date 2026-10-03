@@ -1,9 +1,8 @@
 <script>
-	import { page } from '$app/stores';
-	import { ICON } from '$lib/icons';
+	import { ICON } from '#lib/icons.js';
+	import { page } from '$app/state';
 
-	export let data;
-	export let form;
+	let { data, form } = $props();
 </script>
 
 <form method="POST">
@@ -29,7 +28,7 @@
 	<hr />
 
 	{#if data.github_login}
-		<a href={`${data.github_login?.authURL}${data.REDIRECT_URI}${$page.url.pathname}`}>
+		<a href={`${data.github_login?.authURL}${data.REDIRECT_URI}${page.url.pathname}`}>
 			<ICON.Github /> Login with GitHub
 		</a>
 	{/if}

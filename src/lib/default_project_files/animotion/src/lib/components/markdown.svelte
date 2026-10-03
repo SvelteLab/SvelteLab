@@ -1,10 +1,10 @@
 <script lang="ts">
 	interface Props {
-		file: string;
-		children?: import('svelte').Snippet;
+		file: string
+		children?: import('svelte').Snippet
 	}
 
-	let { file, children }: Props = $props();
+	let { file, children }: Props = $props()
 </script>
 
 {#if file}

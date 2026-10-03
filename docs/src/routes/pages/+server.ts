@@ -1,5 +1,4 @@
 import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit';
 
 type ComponentModule = {
 	metadata?: Record<string, string>;
@@ -26,5 +25,5 @@ export const GET: RequestHandler = async () => {
 		.sort((pageA, pageB) => {
 			return parseInt(pageA.metadata?.order ?? '0') - parseInt(pageB.metadata?.order ?? '0');
 		});
-	return json(pages);
+	return Response.json(pages);
 };

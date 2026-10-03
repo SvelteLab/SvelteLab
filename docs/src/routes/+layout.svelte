@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { clickOutside } from 'as-comps';
 	import '../styles/global.css';
@@ -10,13 +10,15 @@
 	let open = $state(false);
 
 	$effect(() => {
-		$page.url;
+		page.url;
 		// reset the menu when page change
 		// (using this insteas of aftyerNavigate to also trigger on hash change)
 		open = false;
 	});
 
-	afterNavigate(() => {
+	afterNavigate(({ shallow }) => {
+		if (shallow) return;
+
 		document.querySelector('main')?.scrollTo(0, 0);
 	});
 </script>
@@ -37,7 +39,7 @@
 	>
 		<ul>
 			{#each data.pages as doc (doc.link)}
-				{@const current = $page.url.pathname.includes(doc.link)}
+				{@const current = page.url.pathname.includes(doc.link)}
 				<li aria-current={current}><a href={doc.link}>{doc.metadata?.title ?? doc.link}</a></li>
 				{#if current}
 					<ul>

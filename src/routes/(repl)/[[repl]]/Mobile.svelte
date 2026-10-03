@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Dialog from '$lib/components/Dialog.svelte';
-	import FileActions from '$lib/components/FileActions.svelte';
-	import Iframe from '$lib/components/Iframe.svelte';
-	import { is_intro_open } from '$lib/stores/intro_store';
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import Dialog from '#lib/components/Dialog.svelte';
+	import FileActions from '#lib/components/FileActions.svelte';
+	import Iframe from '#lib/components/Iframe.svelte';
+	import { is_intro_open } from '#lib/stores/intro_store.js';
+	import { mobile_showing, showing_files } from '#lib/stores/mobile_showing_store.js';
 	import { Dialog as RawDialog } from 'as-comps';
 	import { tick } from 'svelte';
 	import { fly } from 'svelte/transition';

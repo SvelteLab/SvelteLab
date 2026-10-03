@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Logo from '$lib/components/Logo.svelte';
+	import Logo from '#lib/components/Logo.svelte';
 	import FlyingPaper from './FlyingPaper.svelte';
 	import GitHub from '~icons/mdi/github';
 	import { get_random_cloning_message } from './cloning_messages';
