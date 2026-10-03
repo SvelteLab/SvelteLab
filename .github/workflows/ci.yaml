@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  lint&build:
+  lint_and_build:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
