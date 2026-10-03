@@ -32,4 +32,7 @@
 	div :global(.xterm) {
 		height: 100%;
 	}
+	div :global(.xterm-viewport) {
+		background-color: var(--sk-back-3);
+	}
 </style>
