@@ -22,8 +22,8 @@ export const GET: RequestHandler = async () => {
 				metadata: component.metadata
 			};
 		})
-		.sort((pageA, pageB) => {
-			return parseInt(pageA.metadata?.order ?? '0') - parseInt(pageB.metadata?.order ?? '0');
+		.sort((page_a, page_b) => {
+			return parseInt(page_a.metadata?.order ?? '0') - parseInt(page_b.metadata?.order ?? '0');
 		});
 	return Response.json(pages);
 };

@@ -38,11 +38,12 @@ const handle_poketbase: Handle = async ({ event, resolve }) => {
 
 	try {
 		// get an up-to-date auth store state by veryfing and refreshing the loaded auth model (if any)
-		event.locals.pocketbase.authStore.isValid &&
-			(await event.locals.pocketbase.collection('users').authRefresh());
+		if (event.locals.pocketbase.authStore.isValid) {
+			await event.locals.pocketbase.collection('users').authRefresh();
+		}
 
 		event.locals.user = structuredClone(event.locals.pocketbase.authStore.model);
-	} catch (_) {
+	} catch (_e) {
 		// clear the auth store on failed refresh
 		event.locals.pocketbase.authStore.clear();
 		event.locals.user = null;

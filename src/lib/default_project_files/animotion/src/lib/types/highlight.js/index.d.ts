@@ -2,8 +2,6 @@
  Yoinked from https://github.com/highlightjs/highlight.js/blob/main/types/index.d.ts
 */
 
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-use-before-define */
 // For TS consumers who use Node and don't have dom in their tsconfig lib, import the necessary types here.
 /// <reference lib="dom" />
 

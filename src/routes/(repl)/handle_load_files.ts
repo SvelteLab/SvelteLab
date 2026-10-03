@@ -39,7 +39,7 @@ export async function handle_load_files(
 		try {
 			const project = parse(stored_project);
 			await webcontainer.set_file_system(project);
-		} catch (e) {
+		} catch (_e) {
 			/* empty */
 		}
 		window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
@@ -52,7 +52,7 @@ export async function handle_load_files(
 			try {
 				const to_mount = parse(project);
 				await webcontainer.set_file_system(to_mount);
-			} catch (e) {
+			} catch (_e) {
 				/* empty */
 			}
 		}

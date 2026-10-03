@@ -67,6 +67,7 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@iconify/json": "catalog:",
 		"@playwright/test": "catalog:",
 		"@resvg/resvg-js": "catalog:",
@@ -83,6 +84,7 @@
 		"eslint": "catalog:",
 		"eslint-config-prettier": "catalog:",
 		"eslint-plugin-svelte": "catalog:",
+		"globals": "^17.13.0",
 		"marked": "catalog:",
 		"postcss": "catalog:",
 		"prettier": "catalog:",
@@ -95,6 +97,7 @@
 		"sveltekit-search-params": "catalog:",
 		"tslib": "catalog:",
 		"typescript": "catalog:",
+		"typescript-eslint": "^8.71.0",
 		"unplugin-icons": "catalog:",
 		"vite": "catalog:",
 		"vitest": "catalog:",

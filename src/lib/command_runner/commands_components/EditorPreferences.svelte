@@ -41,7 +41,7 @@
 			<span> Use Ligatures </span>
 			<input type="checkbox" bind:checked={$font_preferences.ligatures} />
 			<span>
-				<code> {'=>'} </code>
+				<code> =&gt; </code>
 				<code> !== </code>
 				<code> >= </code>
 			</span>

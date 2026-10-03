@@ -11,9 +11,8 @@
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console;
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+
 	export let Editor;
 
 	let update_height: () => void;

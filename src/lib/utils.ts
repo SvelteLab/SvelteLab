@@ -1,8 +1,8 @@
 export function deferred_promise() {
 	type PromiseArgs = (value?: unknown) => void;
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
+
 	let resolve: PromiseArgs = () => {};
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
+
 	let reject: PromiseArgs = () => {};
 	const promise = new Promise((res, rej) => {
 		resolve = res;
@@ -85,7 +85,7 @@ export class MapOfSet<K, V extends Set<TSet>, TSet = unknown> extends Map<K, V> 
 		if (!this.has(key)) {
 			this.set(key, new Set() as V);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 		return super.get(key)!;
 	}
 }

@@ -25,7 +25,7 @@ export type Tree = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 const Index = flexsearch.Index ?? flexsearch;
 
 /** If the search is already initialized */

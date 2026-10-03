@@ -8,9 +8,8 @@
 	import Intro from '../Intro.svelte';
 	import Header from './Header.svelte';
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console: ComponentType<SvelteComponent>;
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+
 	export let Editor: ComponentType<SvelteComponent>;
 
 	function handle_pane() {

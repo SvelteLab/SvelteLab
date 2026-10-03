@@ -13,7 +13,8 @@
 		</header>
 		<h1>The #1 REPL for SvelteKit projects!</h1>
 		<p>
-			{'Head on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by svelte lovers and start hacking around with SvelteKit at the speed of light.'}
+			Head on https://sveltelab.dev, the supercharged SvelteKit REPL made with svelte, for svelte by
+			svelte lovers and start hacking around with SvelteKit at the speed of light.
 		</p>
 	</div>
 </div>

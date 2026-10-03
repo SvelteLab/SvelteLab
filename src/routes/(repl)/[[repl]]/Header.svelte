@@ -57,10 +57,9 @@
 				PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME,
 				stringify(await webcontainer.get_tree_from_container(true)),
 			);
-		} catch (e) {
+		} catch (_e) {
 			if (!window.confirm('You will lose progress on this project...do you want to continue?')) {
-				// this will prevent the actual navigation
-				throw new Error('');
+				return;
 			}
 		}
 		window.location.assign((e.target as HTMLAnchorElement).href);

@@ -269,7 +269,7 @@
 					on:blur={() => {
 						marked_command = null;
 					}}
-					placeholder={`🔍 Search files... (Type ">" for commands)`}
+					placeholder="🔍 Search files... (Type &quot;>&quot; for commands)"
 				/>
 			</form>
 		</section>
