@@ -12,7 +12,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: copy .env.sample
         run: cp .env.sample .env
-      - uses: actions/setup-node@v4
       - uses: pnpm/setup@v3
         name: Install pnpm
         id: pnpm-install
@@ -41,7 +40,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: copy .env.sample
         run: cp .env.sample .env
-      - uses: actions/setup-node@v4
       - uses: pnpm/setup@v3
         name: Install pnpm
         id: pnpm-install
