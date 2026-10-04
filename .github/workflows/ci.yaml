@@ -13,24 +13,6 @@ jobs:
       - name: copy .env.sample
         run: cp .env.sample .env
       - uses: pnpm/setup@v3
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          install: false
-      # - name: Get pnpm store directory
-      #   id: pnpm-cache
-      #   shell: bash
-      #   run: |
-      #     echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      # - uses: actions/cache@v4
-      #   name: Setup pnpm cache
-      #   with:
-      #     path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-      #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pnpm-store-
-      - name: Install dependencies
-        run: pnpm install
       - run: pnpm lint
       - run: pnpm build
   test:
@@ -41,34 +23,12 @@ jobs:
       - name: copy .env.sample
         run: cp .env.sample .env
       - uses: pnpm/setup@v3
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          run_install: false
-      # - name: Get pnpm store directory
-      #   id: pnpm-cache
-      #   shell: bash
-      #   run: |
-      #     echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      # - uses: actions/cache@v4
-      #   name: Setup pnpm cache
-      #   with:
-      #     path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-      #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pnpm-store-
-      - name: Install dependencies
-        run: pnpm install
       - name: Download Pocketbase
         run: curl -L https://github.com/pocketbase/pocketbase/releases/download/v0.16.8/pocketbase_0.16.8_linux_amd64.zip -o pocketbase.zip
-      - name: Unzip Pocketbase
-        run: unzip pocketbase.zip
-      - name: Run Pocketbase
-        run: pnpm run pocketbase &
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
-      - name: Run Playwright tests
-        run: pnpm run test
+      - run: unzip pocketbase.zip
+      - run: pnpm run pocketbase &
+      - run: npx playwright install chromium --with-deps
+      - run: pnpm run test
       - uses: actions/upload-artifact@v4
         if: always()
         with:
