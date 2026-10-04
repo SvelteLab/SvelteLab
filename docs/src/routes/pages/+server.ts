@@ -11,7 +11,7 @@ function assert_component(maybe_component: unknown): asserts maybe_component is 
 }
 
 export const GET: RequestHandler = async () => {
-	const pages_components = await import.meta.glob('$lib/pages/**/index.svx', {
+	const pages_components = await import.meta.glob('#lib/pages/**/index.svx', {
 		eager: true
 	});
 	const pages = Object.entries(pages_components)

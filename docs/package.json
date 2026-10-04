@@ -41,5 +41,9 @@
 		"unist-util-visit": "catalog:",
 		"unplugin-icons": "catalog:",
 		"vite": "catalog:"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
 	}
 }
