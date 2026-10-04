@@ -58,7 +58,7 @@ catalog:
   marked: ^15.0.12
   material-icon-theme: ^5.39.0
   mdast-util-to-string: ^4.0.0
-  mdsvex: ^0.11.2
+  mdsvex: ^0.12.0
   pocketbase: ^0.25.2
   postcss: ^8.5.28
   prettier: ^3.9.9
