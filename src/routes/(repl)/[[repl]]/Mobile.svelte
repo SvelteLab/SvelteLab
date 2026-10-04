@@ -19,7 +19,6 @@
 
 	$: handle_showing_change($mobile_showing);
 
-	 
 	async function handle_showing_change(_: typeof $mobile_showing) {
 		await tick();
 		if (update_height) update_height();
