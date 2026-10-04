@@ -59,7 +59,7 @@ catalog:
   material-icon-theme: ^5.39.0
   mdast-util-to-string: ^4.0.0
   mdsvex: ^0.11.2
-  pocketbase: ^0.25.2
+  pocketbase: ^0.28.0
   postcss: ^8.5.28
   prettier: ^3.9.9
   prettier-plugin-svelte: ^3.5.2
