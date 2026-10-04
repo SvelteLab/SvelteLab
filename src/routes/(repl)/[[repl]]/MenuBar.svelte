@@ -1,8 +1,8 @@
 <script lang="ts">
-	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
-	import MenuItem from '$lib/components/MenuItem.svelte';
-	import { command_runner } from '$lib/stores/command_runner_store';
-	import type { Command } from '$lib/types';
+	import DropdownMenu from '#lib/components/DropdownMenu.svelte';
+	import MenuItem from '#lib/components/MenuItem.svelte';
+	import { command_runner } from '#lib/stores/command_runner_store.js';
+	import type { Command } from '#lib/types.js';
 	import Cmd from '~icons/material-symbols/keyboard-command-key';
 	export let commands = [] as Command[];
 

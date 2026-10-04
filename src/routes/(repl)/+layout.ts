@@ -1,4 +1,4 @@
-import { parse } from '$lib/components/parsers';
+import { parse } from '#lib/components/parsers.js';
 import type { FileSystemTree } from '@webcontainer/api';
 import type { LayoutLoad, LayoutServerData } from './$types';
 

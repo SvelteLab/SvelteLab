@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script context="module" lang="ts">
 	let index = 0
 </script>
@@ -10,13 +9,7 @@
 	type Bool = boolean | null
 	type String = string | null
 	type Transition =
-		| 'none'
-		| 'fade'
-		| 'slide'
-		| 'convex'
-		| 'concave'
-		| 'zoom'
-		| null
+		'none' | 'fade' | 'slide' | 'convex' | 'concave' | 'zoom' | null
 
 	export let animate: Bool = null
 	export let animateEasing: String = null

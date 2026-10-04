@@ -1,3 +1,5 @@
+import adapter from '@sveltejs/adapter-vercel';
+import preprocess from 'svelte-preprocess';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
@@ -40,7 +42,19 @@ function coep_plugin(): Plugin {
 
 export default defineConfig({
 	plugins: [
-		sveltekit(),
+		sveltekit({
+			// Consult https://kit.svelte.dev/docs/integrations#preprocessors
+			// for more information about preprocessors
+			preprocess: preprocess(),
+			adapter: adapter({ regions: ['iad1'] }),
+			inspector: true,
+			dynamicCompileOptions({ filename }) {
+				if (filename.includes('/og/OG.svelte')) {
+					return { css: 'injected' };
+				}
+			},
+		}),
+
 		Icons({
 			compiler: 'svelte',
 			customCollections: {

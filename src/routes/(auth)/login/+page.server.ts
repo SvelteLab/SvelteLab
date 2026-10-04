@@ -25,7 +25,7 @@ export const actions = {
 				});
 			}
 			if (error instanceof ClientResponseError) {
-				return fail(400, { error: 'Did you use the correct email and password?.' });
+				return fail(400, { error: 'Did you use the correct email and password?' });
 			}
 			return fail(400, { error: 'Something unexpected happen. Sorry :/' });
 		}

@@ -1,40 +1,42 @@
 <script lang="ts">
+	import DropdownMenu from '#lib/components/DropdownMenu.svelte';
+	import MenuItem from '#lib/components/MenuItem.svelte';
+	import TreeMap from '#lib/components/TreeMap.svelte';
+	import type { ShareFn } from '#lib/share.js';
 	import { enhance } from '$app/forms';
-	import TreeMap from '$lib/components/TreeMap.svelte';
-	import type { ShareFn } from '$lib/share';
+	import RelativeTime from '@yaireo/relative-time';
 	import { onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { queryParam, ssp } from 'sveltekit-search-params';
+	import { queryParameters, ssp } from 'sveltekit-search-params';
 	import Pending from '~icons/eos-icons/loading';
+	import ArrowDownward from '~icons/material-symbols/arrow-downward';
+	import ArrowUpward from '~icons/material-symbols/arrow-upward';
 	import TrashCan from '~icons/material-symbols/delete-forever-outline';
 	import Fork from '~icons/material-symbols/fork-right-rounded';
+	import NoneFound from '~icons/material-symbols/sad-tab-outline-rounded';
 	import Share from '~icons/material-symbols/share';
 	import type { PageData } from './$types';
 	import ProfileHeader from './ProfileHeader.svelte';
-	import NoneFound from '~icons/material-symbols/sad-tab-outline-rounded';
-	import RelativeTime from '@yaireo/relative-time';
-	import DropdownMenu from '$lib/components/DropdownMenu.svelte';
-	import MenuItem from '$lib/components/MenuItem.svelte';
-	import ArrowUpward from '~icons/material-symbols/arrow-upward';
-	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	type SortByKey = 'created' | 'updated' | 'name';
 	type SortOrder = 'asc' | 'desc';
-	let share: ShareFn;
+	let share: ShareFn = $state();
 
 	onMount(async () => {
-		share = (await import('$lib/share')).share;
+		share = (await import('#lib/share.js')).share;
 	});
 
-	const search = queryParam('s', ssp.string(), {
-		pushHistory: false,
-	});
+	const query = $state(queryParameters({ s: ssp.string() }, { pushHistory: false }));
 
-	let loading = [] as string[];
-	let sort_by: SortByKey = 'updated';
-	let sort_order: SortOrder = 'desc';
+	let loading = $state([] as string[]);
+	let sort_by: SortByKey = $state('updated');
+	let sort_order: SortOrder = $state('desc');
 
 	const sort_functions: Record<
 		SortByKey,
@@ -54,9 +56,11 @@
 			sort_order === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
 	};
 
-	$: repls = data.repls
-		.filter((repl) => repl.name.toLowerCase().includes($search?.toLowerCase() ?? ''))
-		.sort(sort_functions[sort_by](sort_order));
+	let repls = $derived(
+		data.repls
+			.filter((repl) => repl.name.toLowerCase().includes(query.s?.toLowerCase() ?? ''))
+			.sort(sort_functions[sort_by](sort_order)),
+	);
 
 	const relative_time = new RelativeTime();
 	const sort_options: SortByKey[] = ['created', 'updated', 'name'];
@@ -69,7 +73,7 @@
 <main>
 	<div id="top-bar">
 		<input
-			bind:value={$search}
+			bind:value={() => query.s, (v) => (query.s = v)}
 			placeholder="🔍 Search..."
 			aria-label="Search for a repl"
 			type="search"
@@ -77,7 +81,7 @@
 		<div class="sort-wrapper">
 			<button
 				class="sort-order-button"
-				on:click={() => (sort_order = sort_order === 'asc' ? 'desc' : 'asc')}
+				onclick={() => (sort_order = sort_order === 'asc' ? 'desc' : 'asc')}
 			>
 				{#if sort_order === 'asc'}
 					<ArrowUpward />
@@ -87,9 +91,11 @@
 			</button>
 
 			<DropdownMenu indicator>
-				<div slot="trigger" class="dropdown-trigger">
-					Sort by {sort_by}
-				</div>
+				{#snippet trigger()}
+					<div class="dropdown-trigger">
+						Sort by {sort_by}
+					</div>
+				{/snippet}
 
 				{#each sort_options as option (option)}
 					{#if sort_by !== option}
@@ -109,7 +115,7 @@
 			}}
 		>
 			<div>
-				<a data-sveltekit-preload-data="off" href="/{project.id}">
+				<a data-sveltekit-preload-data="false" href="/{project.id}">
 					<p>
 						{project.name}
 					</p>
@@ -121,7 +127,7 @@
 				</a>
 				<div class="buttons">
 					<button
-						on:click={() => {
+						onclick={() => {
 							share?.({
 								text: `Take a look at my REPL`,
 								title: `SvelteLab - ${project.name}`,
@@ -146,7 +152,7 @@
 						>
 							<input name="id" type="hidden" value={project.id} />
 							<button
-								on:click={(e) => {
+								onclick={(e) => {
 									if (!window.confirm(`Are you sure you want to fork "${project.name}"`)) {
 										e.stopPropagation();
 										e.preventDefault();
@@ -174,7 +180,7 @@
 						>
 							<input name="id" type="hidden" value={project.id} />
 							<button
-								on:click={(e) => {
+								onclick={(e) => {
 									if (!window.confirm(`Are you sure you want to delete "${project.name}"`)) {
 										e.stopPropagation();
 										e.preventDefault();
@@ -188,7 +194,7 @@
 					{/if}
 				</div>
 			</div>
-			<a data-sveltekit-preload-data="off" href="/{project.id}" class="tree">
+			<a data-sveltekit-preload-data="false" href="/{project.id}" class="tree">
 				<TreeMap
 					tree={{
 						dir: {

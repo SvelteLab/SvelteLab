@@ -1,5 +1,5 @@
-import { error, success } from '$lib/toast';
-import { webcontainer } from '$lib/webcontainer';
+import { error, success } from '#lib/toast.js';
+import { webcontainer } from '#lib/webcontainer.js';
 import { get } from 'svelte/store';
 import {
 	repl_id,
@@ -7,9 +7,9 @@ import {
 	is_repl_saving,
 	is_repl_to_save,
 	file_status,
-} from '$lib/stores/repl_id_store';
-import { stringify } from '$lib/components/parsers';
-import { pushState } from '$app/navigation';
+} from '#lib/stores/repl_id_store.js';
+import { stringify } from '#lib/components/parsers.js';
+import { goto } from '$app/navigation';
 
 /**
  * This function does what it takes to save the repl, it set the state
@@ -47,7 +47,7 @@ export async function save_repl(is_forking = false) {
 			// means it's the first time the user saves this project,
 			// we push with the history api because we just want the url
 			// to change there's no need to run the load function again
-			pushState(`/${created.id}`, {});
+			goto(`/${created.id}`, { shallow: true });
 			repl_id.set(created.id);
 		}
 	} else {

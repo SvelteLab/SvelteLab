@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
-	import { copy_to_clipboard } from '$lib/util';
+	import { dev } from '$app/env';
+	import { copy_to_clipboard } from '#lib/util.js';
 	import { toast } from '@zerodevx/svelte-toast';
 
 	const logos = ['dark_short', 'dark_wide', 'light_short', 'light_wide'];

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LogoLong from '$lib/components/LogoLong.svelte';
+	import LogoLong from '#lib/components/LogoLong.svelte';
 	import { onMount } from 'svelte';
 
 	export let data;

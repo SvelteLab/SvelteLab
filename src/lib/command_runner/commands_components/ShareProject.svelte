@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { get_file_icon } from '$lib/file_icons';
-	import { ICON } from '$lib/icons';
-	import { share_with_hash, share_with_id } from '$lib/share';
-	import { repl_id } from '$lib/stores/repl_id_store';
-	import { current_tab, tabs } from '$lib/tabs';
+	import { get_file_icon } from '#lib/file_icons.js';
+	import { ICON } from '#lib/icons.js';
+	import { share_with_hash, share_with_id } from '#lib/share.js';
+	import { repl_id } from '#lib/stores/repl_id_store.js';
+	import { current_tab, tabs } from '#lib/tabs.js';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatcher = createEventDispatcher();

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { get_file_icon } from '$lib/file_icons';
-	import { is_dir } from '$lib/file_system';
-	import { files, webcontainer } from '$lib/webcontainer';
+	import { get_file_icon } from '#lib/file_icons.js';
+	import { is_dir } from '#lib/file_system.js';
+	import { files, webcontainer } from '#lib/webcontainer.js';
 	import type { FileSystemTree } from '@webcontainer/api';
 	import { createEventDispatcher, tick } from 'svelte';
 	import TS from '~icons/vscode-icons/file-type-typescript-official';
@@ -114,19 +114,19 @@ export const GET: RequestHandler = async () => {
 		'+error.svelte': {
 			js:
 				`<script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 </scri` +
 				`pt>
 
-<h1>{$page.status}: {$page.error?.message}</h1>
+<h1>{page.status}: {page.error?.message}</h1>
 `,
 			ts:
 				`<script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 </scri` +
 				`pt>
 
-<h1>{$page.status}: {$page.error?.message}</h1>
+<h1>{page.status}: {page.error?.message}</h1>
 `,
 		},
 	};

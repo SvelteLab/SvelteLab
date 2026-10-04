@@ -1,5 +1,5 @@
 <script>
-	import { apply_font_preferences } from '$lib/font_preferences';
+	import { apply_font_preferences } from '#lib/font_preferences.js';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../styles/global.css';
 	import LoadingIndicator from './LoadingIndicator.svelte';

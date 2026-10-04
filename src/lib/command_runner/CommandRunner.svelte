@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { get_file_icon } from '$lib/file_icons';
-	import { command_runner } from '$lib/stores/command_runner_store';
-	import type { Command } from '$lib/types';
+	import { get_file_icon } from '#lib/file_icons.js';
+	import { command_runner } from '#lib/stores/command_runner_store.js';
+	import type { Command } from '#lib/types.js';
 	import { onDestroy, tick } from 'svelte';
 	import { parseKeybinding, type KeyBindingMap, tinykeys } from 'tinykeys';
 	import Back from '~icons/material-symbols/arrow-back-rounded';
@@ -269,7 +269,7 @@
 					on:blur={() => {
 						marked_command = null;
 					}}
-					placeholder={`🔍 Search files... (Type ">" for commands)`}
+					placeholder="🔍 Search files... (Type &quot;>&quot; for commands)"
 				/>
 			</form>
 		</section>

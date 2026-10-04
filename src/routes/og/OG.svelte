@@ -1,6 +1,6 @@
 <script lang="ts">
-	import LogoLong from '$lib/components/LogoLong.svelte';
-	import TreeMap from '$lib/components/TreeMap.svelte';
+	import LogoLong from '#lib/components/LogoLong.svelte';
+	import TreeMap from '#lib/components/TreeMap.svelte';
 	import type { FileSystemTree } from '@webcontainer/api';
 
 	const {

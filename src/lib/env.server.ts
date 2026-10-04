@@ -1,4 +1,4 @@
-import { PUBLIC_GITHUB_REDIRECT_URI } from '$env/static/public';
+import { PUBLIC_GITHUB_REDIRECT_URI } from '$app/env/public';
 
 // on vercel this is setupped to replace_me for every preview branch
 // except hackaton.sveltelab.dev

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Dialog from '$lib/components/Dialog.svelte';
-	import FileActions from '$lib/components/FileActions.svelte';
-	import Iframe from '$lib/components/Iframe.svelte';
-	import { is_intro_open } from '$lib/stores/intro_store';
-	import { mobile_showing, showing_files } from '$lib/stores/mobile_showing_store';
+	import Dialog from '#lib/components/Dialog.svelte';
+	import FileActions from '#lib/components/FileActions.svelte';
+	import Iframe from '#lib/components/Iframe.svelte';
+	import { is_intro_open } from '#lib/stores/intro_store.js';
+	import { mobile_showing, showing_files } from '#lib/stores/mobile_showing_store.js';
 	import { Dialog as RawDialog } from 'as-comps';
 	import { tick } from 'svelte';
 	import { fly } from 'svelte/transition';
@@ -11,16 +11,14 @@
 	import Header from './Header.svelte';
 	import MobileFooter from './MobileFooter.svelte';
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
 	export let Console;
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+
 	export let Editor;
 
 	let update_height: () => void;
 
 	$: handle_showing_change($mobile_showing);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async function handle_showing_change(_: typeof $mobile_showing) {
 		await tick();
 		if (update_height) update_height();

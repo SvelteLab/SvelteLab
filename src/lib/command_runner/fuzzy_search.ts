@@ -1,4 +1,4 @@
-import type { Command } from '$lib/types';
+import type { Command } from '#lib/types.js';
 import { byStartAsc, extendedMatch, Fzf } from 'fzf';
 
 export const fuzzy_search_command = (items: Command[], search: string) =>

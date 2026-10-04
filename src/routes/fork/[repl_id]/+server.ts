@@ -1,6 +1,5 @@
-import type { RequestHandler } from './$types';
 import type { RecordModel as Record } from 'pocketbase';
-import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ locals, params: { repl_id } }) => {
 	const repls = locals.pocketbase.collection('repls');
@@ -11,7 +10,7 @@ export const POST: RequestHandler = async ({ locals, params: { repl_id } }) => {
 		delete existing_repl.id;
 		existing_repl.user = locals.user?.id;
 		const created = await repls.create(existing_repl);
-		return json({ id: created.id });
+		return Response.json({ id: created.id });
 	} catch (e) {
 		console.log(e);
 		return new Response(null, { status: 404 });

@@ -3,7 +3,7 @@ import type { Theme } from './theme';
 export async function update_terminal_theme(theme: Theme, update_terminal = true) {
 	if (!update_terminal) return;
 	const { terminal } = await import('./terminal');
-	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 	const { sk_code_bg, sk_code_fg } = variables_mapping.get(theme)!;
 	terminal.options.theme = {
 		...terminal.options.theme,

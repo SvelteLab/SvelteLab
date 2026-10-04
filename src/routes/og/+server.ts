@@ -1,5 +1,5 @@
-import { default_project_files } from '$lib/default_project_files';
-import { replSchema, type Directory, type Repl } from '$lib/schemas';
+import { default_project_files } from '#lib/default_project_files/index.js';
+import { replSchema, type Directory, type Repl } from '#lib/schemas.js';
 import { Resvg } from '@resvg/resvg-js';
 import he from 'he';
 import type PoketBase from 'pocketbase';

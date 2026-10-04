@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_folder_icon, get_file_icon } from '$lib/file_icons';
+	import { get_folder_icon, get_file_icon } from '#lib/file_icons.js';
 	import { createEventDispatcher } from 'svelte';
 	import Close from '~icons/material-symbols/close';
 	import Check from '~icons/material-symbols/done';

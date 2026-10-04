@@ -1,8 +1,8 @@
 <script lang="ts">
-	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
-	import { draggable, dropzone } from '$lib/dnd';
-	import { get_file_icon } from '$lib/file_icons';
-	import { editor_config } from '$lib/stores/editor_config_store';
+	import FileStatusIndicator from '#lib/components/FileStatusIndicator.svelte';
+	import { draggable, dropzone } from '#lib/dnd.js';
+	import { get_file_icon } from '#lib/file_icons.js';
+	import { editor_config } from '#lib/stores/editor_config_store.js';
 	import {
 		close_all_tabs,
 		close_file,
@@ -10,7 +10,7 @@
 		open_file,
 		reorder_tabs,
 		tabs,
-	} from '$lib/tabs';
+	} from '#lib/tabs.js';
 	import { onDestroy } from 'svelte';
 	import Vim from '~icons/file-icons/macvim';
 	import Routes from '~icons/material-symbols/alt-route';

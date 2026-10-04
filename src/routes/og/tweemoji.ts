@@ -1,3 +1,4 @@
+/*eslint-disable*/
 /**
  * Modified version of https://github.com/vercel/satori/blob/main/playground/utils/twemoji.ts
  */

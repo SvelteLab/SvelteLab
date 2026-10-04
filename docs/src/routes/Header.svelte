@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DocsLogo from '$lib/components/DocsLogo.svelte';
+	import DocsLogo from '#lib/components/DocsLogo.svelte';
 	import GitHub from '~icons/mdi/github';
 	import Discord from '~icons/mdi/discord';
 	import Hamburger from '~icons/mdi/menu';

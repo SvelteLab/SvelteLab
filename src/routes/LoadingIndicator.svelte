@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
+	import { navigating } from '$app/state';
 
-	let loading: 'no' | 'yes' | 'closing' = 'no';
+	let loading: 'no' | 'yes' | 'closing' = $state('no');
 
-	$: {
-		if ($navigating) {
+	$effect(() => {
+		if (navigating.to) {
 			loading = 'yes';
 		} else {
 			loading = 'closing';
@@ -12,15 +12,15 @@
 				loading = 'no';
 			}, 300);
 		}
-	}
+	});
 
-	let percentage = 0;
+	let percentage = $state(0);
 
-	$: {
+	$effect(() => {
 		if (loading === 'closing') {
 			percentage = 1;
 		}
-	}
+	});
 
 	function load(_node: Node) {
 		let timeout: ReturnType<typeof setTimeout>;
@@ -41,7 +41,7 @@
 </script>
 
 {#if loading !== 'no'}
-	<div use:load style:--percentage={percentage} />
+	<div use:load style:--percentage={percentage}></div>
 {/if}
 
 <style>

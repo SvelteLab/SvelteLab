@@ -1,5 +1,4 @@
 import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit';
 
 type ComponentModule = {
 	metadata?: Record<string, string>;
@@ -12,7 +11,7 @@ function assert_component(maybe_component: unknown): asserts maybe_component is 
 }
 
 export const GET: RequestHandler = async () => {
-	const pages_components = await import.meta.glob('$lib/pages/**/index.svx', {
+	const pages_components = await import.meta.glob('#lib/pages/**/index.svx', {
 		eager: true
 	});
 	const pages = Object.entries(pages_components)
@@ -23,8 +22,8 @@ export const GET: RequestHandler = async () => {
 				metadata: component.metadata
 			};
 		})
-		.sort((pageA, pageB) => {
-			return parseInt(pageA.metadata?.order ?? '0') - parseInt(pageB.metadata?.order ?? '0');
+		.sort((page_a, page_b) => {
+			return parseInt(page_a.metadata?.order ?? '0') - parseInt(page_b.metadata?.order ?? '0');
 		});
-	return json(pages);
+	return Response.json(pages);
 };

@@ -3,7 +3,7 @@ migrate((db) => {
     "id": "4231um01lpl5v14",
     "created": "2023-06-26 20:50:39.199Z",
     "updated": "2023-06-26 20:50:39.199Z",
-    "name": "repls",
+    "name": "profile_repls",
     "type": "base",
     "system": false,
     "schema": [

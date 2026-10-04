@@ -1,33 +1,36 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { PUBLIC_TEMPLATE_COOKIE_NAME } from '$lib/constants';
-	import { get_cookie, set_cookie } from '$lib/cookie';
+	import { preventDefault } from 'svelte/legacy';
+	import { PUBLIC_TEMPLATE_COOKIE_NAME } from '#lib/constants.js';
+	import { get_cookie, set_cookie } from '#lib/cookie.js';
+	import { page } from '$app/state';
 	import { createEventDispatcher } from 'svelte';
 	import { fix_title, template_icon_map } from './template_helpers';
 
 	const dispatcher = createEventDispatcher();
 
-	let selected = get_cookie(PUBLIC_TEMPLATE_COOKIE_NAME) || 'basic';
+	let selected = $state(get_cookie(PUBLIC_TEMPLATE_COOKIE_NAME) || 'basic');
 </script>
 
 <form
-	on:submit|preventDefault={() => {
+	onsubmit={preventDefault(() => {
 		set_cookie(PUBLIC_TEMPLATE_COOKIE_NAME, selected);
 		dispatcher('completed');
-	}}
+	})}
 >
 	<ul class="action-selection-grid">
-		{#each $page.data.templates ?? [] as template}
+		{#each page.data.templates ?? [] as template}
 			{@const icons = template_icon_map.get(template)}
 			<li>
 				<label>
 					<input type="radio" value={template} bind:group={selected} />
 					{#if icons}
 						{#if !Array.isArray(icons)}
-							<svelte:component this={icons} />
+							{@const SvelteComponent = icons}
+							<SvelteComponent />
 						{:else}
 							{#each icons as icon}
-								<svelte:component this={icon} />
+								{@const SvelteComponent_1 = icon}
+								<SvelteComponent_1 />
 							{/each}
 						{/if}
 					{/if}

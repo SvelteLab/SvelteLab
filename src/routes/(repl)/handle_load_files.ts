@@ -1,7 +1,7 @@
-import { parse } from '$lib/components/parsers';
-import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '$lib/constants';
-import { error } from '$lib/toast';
-import { webcontainer } from '$lib/webcontainer';
+import { parse } from '#lib/components/parsers.js';
+import { PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME } from '#lib/constants.js';
+import { error } from '#lib/toast.js';
+import { webcontainer } from '#lib/webcontainer.js';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import type { LayoutData } from './$types';
 
@@ -39,7 +39,7 @@ export async function handle_load_files(
 		try {
 			const project = parse(stored_project);
 			await webcontainer.set_file_system(project);
-		} catch (e) {
+		} catch (_e) {
 			/* empty */
 		}
 		window.localStorage.removeItem(PUBLIC_SAVE_IN_LOCAL_STORAGE_NAME);
@@ -52,7 +52,7 @@ export async function handle_load_files(
 			try {
 				const to_mount = parse(project);
 				await webcontainer.set_file_system(to_mount);
-			} catch (e) {
+			} catch (_e) {
 				/* empty */
 			}
 		}

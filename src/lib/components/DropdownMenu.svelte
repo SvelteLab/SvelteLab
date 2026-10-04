@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { click_outside } from '$lib/click_outside';
+	import { click_outside } from '#lib/click_outside.js';
 	import { computePosition, shift } from '@floating-ui/dom';
 	import { setContext } from 'svelte';
 	import MoreVert from '~icons/material-symbols/more-vert';

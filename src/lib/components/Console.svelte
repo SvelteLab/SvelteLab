@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { layout_store } from '$lib/stores/layout_store';
-	import { fit_addon, terminal } from '$lib/terminal';
+	import { layout_store } from '#lib/stores/layout_store.js';
+	import { fit_addon, terminal } from '#lib/terminal.js';
 
 	export const update_height = () => {
 		fit_addon.fit();

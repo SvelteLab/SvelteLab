@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { terminal } from '$lib/terminal';
-	import { webcontainer } from '$lib/webcontainer';
+	import { terminal } from '#lib/terminal.js';
+	import { webcontainer } from '#lib/webcontainer.js';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { createEventDispatcher } from 'svelte';
 	import Imagetools from '~icons/material-symbols/imagesmode';

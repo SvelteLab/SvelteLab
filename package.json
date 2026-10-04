@@ -4,14 +4,16 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
+		"prepare": "svelte-kit sync || echo ''",
 		"build": "pnpm run partytown && vite build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dependency-report": "npx --yes license-report@latest --output=json > ./src/lib/dependency-report.json",
-		"dev": "vite dev",
-		"format": "prettier --plugin prettier-plugin-svelte --write .",
-		"postinstall": "svelte-kit sync && pnpm dependency-report",
-		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
+		"dev": "concurrently --names sk,pb --prefix-colors auto \"pnpm dev:sk\" \"pnpm dev:pb\"",
+		"dev:sk": "vite dev",
+		"dev:pb": "./pocketbase serve",
+		"format": "prettier --write .",
+		"lint": "prettier --check . && eslint .",
 		"partytown": "partytown copylib static/~partytown",
 		"pocketbase": "./pocketbase serve",
 		"preview": "vite preview",
@@ -65,11 +67,12 @@
 		"zod": "catalog:"
 	},
 	"devDependencies": {
+		"@eslint/js": "^10.0.1",
 		"@iconify/json": "catalog:",
 		"@playwright/test": "catalog:",
 		"@resvg/resvg-js": "catalog:",
-		"@sveltejs/adapter-vercel": "catalog:",
-		"@sveltejs/kit": "catalog:",
+		"@sveltejs/adapter-vercel": "^7.0.0",
+		"@sveltejs/kit": "^3.0.0",
 		"@sveltejs/vite-plugin-svelte": "catalog:",
 		"@types/he": "catalog:",
 		"@types/node": "catalog:",
@@ -77,9 +80,11 @@
 		"@typescript-eslint/eslint-plugin": "catalog:",
 		"@typescript-eslint/parser": "catalog:",
 		"@zerodevx/svelte-toast": "catalog:",
+		"concurrently": "^9.2.1",
 		"eslint": "catalog:",
 		"eslint-config-prettier": "catalog:",
 		"eslint-plugin-svelte": "catalog:",
+		"globals": "^17.13.0",
 		"marked": "catalog:",
 		"postcss": "catalog:",
 		"prettier": "catalog:",
@@ -92,13 +97,22 @@
 		"sveltekit-search-params": "catalog:",
 		"tslib": "catalog:",
 		"typescript": "catalog:",
+		"typescript-eslint": "^8.71.0",
 		"unplugin-icons": "catalog:",
 		"vite": "catalog:",
 		"vitest": "catalog:",
 		"workbox-precaching": "catalog:"
 	},
 	"engines": {
-		"node": ">=18"
+		"runtime": {
+			"name": "node",
+			"version": "^22.0.0",
+			"onFail": "download"
+		}
 	},
-	"packageManager": "pnpm@12.0.0"
+	"packageManager": "pnpm@12.0.0",
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	}
 }

@@ -4,19 +4,19 @@
 </script>
 
 <script lang="ts">
-	import FileStatusIndicator from '$lib/components/FileStatusIndicator.svelte';
-	import { draggable, dropzone } from '$lib/dnd';
-	import { get_file_icon, get_folder_icon } from '$lib/file_icons';
-	import { get_subtree_from_path, is_dir } from '$lib/file_system';
-	import { ICON } from '$lib/icons';
-	import { base_path as base_path_store } from '$lib/stores/base_path_store';
-	import { expand_path, expanded_paths, toggle_path } from '$lib/stores/expanded_paths';
-	import { layout_store } from '$lib/stores/layout_store';
-	import { repl_name } from '$lib/stores/repl_id_store';
-	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '$lib/tabs';
-	import { error } from '$lib/toast';
-	import { drop_assets, handle_files } from '$lib/upload_assets';
-	import { files as files_store, webcontainer } from '$lib/webcontainer';
+	import FileStatusIndicator from '#lib/components/FileStatusIndicator.svelte';
+	import { draggable, dropzone } from '#lib/dnd.js';
+	import { get_file_icon, get_folder_icon } from '#lib/file_icons.js';
+	import { get_subtree_from_path, is_dir } from '#lib/file_system.js';
+	import { ICON } from '#lib/icons.js';
+	import { base_path as base_path_store } from '#lib/stores/base_path_store.js';
+	import { expand_path, expanded_paths, toggle_path } from '#lib/stores/expanded_paths.js';
+	import { layout_store } from '#lib/stores/layout_store.js';
+	import { repl_name } from '#lib/stores/repl_id_store.js';
+	import { close_all_subpath, close_file, current_tab, open_file, rename_tab } from '#lib/tabs.js';
+	import { error } from '#lib/toast.js';
+	import { drop_assets, handle_files } from '#lib/upload_assets.js';
+	import { files as files_store, webcontainer } from '#lib/webcontainer.js';
 	import Plus from '~icons/material-symbols/add-rounded';
 	import FolderAdd from '~icons/material-symbols/create-new-folder-outline-rounded';
 	import Delete from '~icons/material-symbols/delete-outline-rounded';

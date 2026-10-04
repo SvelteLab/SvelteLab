@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Tree } from '$lib/workers/search';
-	import { get_search_docs } from '$lib/workers/search-docs';
+	import type { Tree } from '#lib/workers/search.js';
+	import { get_search_docs } from '#lib/workers/search-docs.js';
 	import { onMount } from 'svelte';
 	import SearchResults from './SearchResults.svelte';
 

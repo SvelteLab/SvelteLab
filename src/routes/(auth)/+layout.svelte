@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Logo from '$lib/components/Logo.svelte';
-	import { ICON } from '$lib/icons';
+	import Logo from '#lib/components/Logo.svelte';
+	import { ICON } from '#lib/icons.js';
 
 	let a_hover = false;
 </script>
