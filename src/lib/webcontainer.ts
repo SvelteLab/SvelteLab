@@ -1,6 +1,6 @@
-import { dev } from '$app/env';
 import { get_file_from_path, get_subtree_from_path, is_dir } from '#lib/file_system.js';
 import { terminal } from '#lib/terminal.js';
+import { dev } from '$app/env';
 import {
 	WebContainer,
 	type DirEnt,
@@ -8,7 +8,6 @@ import {
 	type WebContainerProcess,
 } from '@webcontainer/api';
 import { compressToEncodedURIComponent } from 'lz-string';
-import semver from 'semver';
 import { tick } from 'svelte';
 import { get, writable, type Writable } from 'svelte/store';
 import { stringify } from './components/parsers';

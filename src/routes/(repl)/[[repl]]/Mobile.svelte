@@ -19,7 +19,7 @@
 
 	$: handle_showing_change($mobile_showing);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	 
 	async function handle_showing_change(_: typeof $mobile_showing) {
 		await tick();
 		if (update_height) update_height();
