@@ -67,7 +67,7 @@ catalog:
   remark-slug: ^7.0.1
   remark-toc: ^9.0.0
   rollup-plugin-visualizer: ^5.14.0
-  satori: ^0.12.2
+  satori: ^0.60.0
   satori-html: ^0.3.2
   semver: ^7.8.5
   svelte: ^5.57.1
